@@ -1,6 +1,4 @@
-<? session_start();
-
-include('config.php');
+<? include('config.php');
 if (!function_exists('endsWith')) {
     function endsWith($haystack, $needle)
     {

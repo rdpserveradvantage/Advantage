@@ -349,6 +349,8 @@
                                                 $oldMaterialDetails = $_POST['oldMaterialDetails'];
                                                 $statement = "insert into mis_history (mis_id,type,attachment,attachment2,remark,status,created_at,created_by) values('".$id."','".$status."','".$link."','".$link2."','".$remark."','1','".$date."','".$userid."')" ;
                                                 mysqli_query($con,"update mis_details set close_date = '".$date."' where id = '".$id."'");
+                                                mysqli_query($con,"update mis set status = '".$status."' where id = '".$mis_id."'");
+                                                
                                             }
                                             
                                             

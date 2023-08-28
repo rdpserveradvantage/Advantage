@@ -44,7 +44,7 @@ $mainmenu    = array_unique($mainmenu);
                             <ul class="pcoded-item pcoded-left-item">
                                 
                         <li class="">
-                                    <a href="home.php">
+                                    <a href="index.php">
                                         <span class="pcoded-micon"><i class="feather icon-home"></i></span>
                                         <span class="pcoded-mtext">Home</span>
                                     </a>

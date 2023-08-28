@@ -3,8 +3,9 @@
 
 
 $query1 = "select count(1) as count from mis where status='open'";
+$query2 = "select count(1) as count from mis where status='close'";
 
-$queries = [$query1];
+$queries = [$query1,$query2];
 $results = [];
 
 foreach ($queries as $query) {
@@ -14,15 +15,15 @@ foreach ($queries as $query) {
 }
 
 $titles = [
-    "Total Open Calls"
+    "Total Open Calls","Total Close Calls"
 ];
 
 $links = [
-    "sitestest.php",
+    "sitestest.php","sitestest.php"
 ];
 
 $icon = [
-    "uil-list-ul",
+    "uil-list-ul","uil-list-ul"
 ];
 
 
@@ -83,6 +84,7 @@ echo '
         <tr class="table-primary">
             <th>Sr No</th>
             <th>ATMID</th>
+            <th>Ticket ID</th>
             <th>Aging</th>
             <th>LHO</th>
             <th>City</th>
@@ -93,22 +95,29 @@ echo '
     <tbody>
 ';
 $agingCount=1 ; 
-$highagingsql = mysqli_query($con,"select * from mis where status='open' order by created_at asc limit 10 ");
+$highagingsql = mysqli_query($con,"select a.atmid,a.lho,a.state,a.city,a.location,b.ticket_id,b.id from mis a
+INNER JOIN mis_details b on a.id=b.mis_id
+where a.status='open' order by a.created_at asc limit 10 ");
 while($highagingsql_result = mysqli_fetch_assoc($highagingsql)){
     $createdAtTimestamp = strtotime($highagingsql_result['created_at']);
     $currentTime = time();
     $agingInSeconds = $currentTime - $createdAtTimestamp;
     $agingFormatted = gmdate("H:i:s", $agingInSeconds); // Format aging as HH:MM:SS
+    $ticket_id = $highagingsql_result['ticket_id'];
+    $detail_id = $highagingsql_result['id'];
 
-        echo "<tr>
-            <td>{$agingCount}</td>
-            <td>{$highagingsql_result['atmid']}</td>
-            <td>{$agingFormatted}</td>
-            <td>{$highagingsql_result['lho']}</td>
-            <td>{$highagingsql_result['city']}</td>
-            <td>{$highagingsql_result['state']}</td>
-            <td>{$highagingsql_result['location']}</td>
-        </tr>";
+
+    echo "<tr>
+        <td>{$agingCount}</td>
+        <td>{$highagingsql_result['atmid']}</td>
+        <td><a href=\"mis_details.php?id={$detail_id}\">{$ticket_id}</a></td>
+        <td>{$agingFormatted}</td>
+        <td>{$highagingsql_result['lho']}</td>
+        <td>{$highagingsql_result['city']}</td>
+        <td>{$highagingsql_result['state']}</td>
+        <td>{$highagingsql_result['location']}</td>
+    </tr>";
+
 
     $agingCount++ ; 
 }

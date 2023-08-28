@@ -231,11 +231,11 @@
                                                     
                                                     <?php if($mis_status == 'open' || $mis_status == 'Open') {?>
                                                         <option value="">Select</option>
-                                                        <option value="schedule"> Schedule</option>    
+                                                        <!-- <option value="schedule"> Schedule</option>    
                                                         <option value="fund_required"> Fund Requirement</option>
                                                         <option value="material_requirement">Material Requirement</option>
                                                         <option value="permission_require">Permission Required</option>
-                                                        <option value="MRS">Material Pending</option>
+                                                        <option value="MRS">Material Pending</option> -->
                                                         <option value="close">close</option>
                                                     <?php } 
                                                     
@@ -335,106 +335,21 @@
                                         
                                         if(isset($_POST['status'])){
 
-                                            if($_POST['status']=='dispatch' || $_POST['status']=='MRS' || $_POST['status'] =='permission_require' || $_POST['status']=='broadband' || $_POST['status']=='material_not_available' || $_POST['status'] =='material_available_in_branch'){
-                                                $remark = $_POST['remark'];
-                                                $status = $_POST['status'] ;
-                                                echo $statement = "insert into mis_history (mis_id,type,remark,status,created_at,created_by) values('".$id."','".$status."','".$remark."','1','".$date."','".$userid."')" ;
-                                            }
-                                            elseif($_POST['status']=='schedule'){
-                                                $status = $_POST['status'] ;
-                                                $engineer = $_POST['engineer'];
-                                                $remark = $_POST['remark'];
-                                                $schedule_date = $_POST['schedule_date']; 
-                                                $statement = "insert into mis_history (mis_id,type,engineer,remark,schedule_date,status,created_at,created_by,atmid) 
-                                                values('".$id."','".$status."','".$engineer."','".$remark."','".$schedule_date."','1','".$date."','".$userid."','".$atmid."')" ;
-                                                mysqli_query($con,"update mis_details  set engineer = '".$engineer."' where id = '".$id."'");
-                                                
-                                            }
-                                            elseif($_POST['status']=='material_requirement'){
-                                                $address = $_POST['address'];
-                                                $status = $_POST['status'] ;
-                                                $material = $_POST['material'];
-                                                $material_condition = $_POST['material_condition'];
-                                                $remark = $_POST['remark'];
-                                                
-                                                $contact_name= $_POST['Contactperson_name'];
-                                                $contact_mob = $_POST['Contactperson_mob'];
-                                                // $delivery_add = $_POST['address_type'];
-                                                $statement = "insert into mis_history (mis_id,type,material,material_condition,remark,status,created_at,created_by,delivery_address,contact_person_name,contact_person_mob) values('".$id."','".$status."','".$material."','".$material_condition."','".$remark."','1','".$date."','".$userid."','".$address."','".$contact_name."','".$contact_mob."')" ;
-                                                
-                                                mysqli_query($con,"insert into pre_material_inventory(mis_id,material,material_condition,remark,status,created_at,created_by,delivery_address) values('".$id."','".$material."','".$material_condition."','".$remark."','1','".$date."','".$userid."','".$delivery_address."')");
-                                                
-                                            }
-                                            elseif($_POST['status']=='material_dispatch'){
-                                                $status = $_POST['status'] ;
-                                                $courier = $_POST['courier'];
-                                                $pod = $_POST['pod'];
-                                                $dispatch_date = $_POST['dispatch_date'];
-                                                $remark = $_POST['remark'];
-                                                $statement = "insert into mis_history (mis_id,type,courier_agency,pod,dispatch_date,remark,status,created_at,created_by) values('".$id."','".$status."','".$courier."','".$pod."','".$dispatch_date."','".$remark."','1','".$date."','".$userid."')" ;
-                                            }
-                                            elseif($_POST['status']=='material_delivered'){
-                                                $status = $_POST['status'] ;
-                                                $delivery_date = $_POST['delivery_date'];
-                                                $statement = "insert into mis_history (mis_id,type,status,created_at,created_by,delivery_date) values('".$id."','".$status."','1','".$date."','".$userid."','".$delivery_date."')" ;
-                                            }
-                                            elseif($_POST['status']=='paste_control'){
-                                                $status = $_POST['status'] ;
-                                                
-                                                if(!is_dir('close_uploads/'.$year .'/'. $month.'/'.$atmid)){
-                                                    mkdir('close_uploads/'.$year .'/'. $month .'/'.$atmid , 0777 , true) ; 
-                                                }
-                                                $target_dir = 'close_uploads/'.$year .'/'. $month.'/'. $atmid ;
-
-                                                $image = $_FILES['image']['name'];
-                                                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir .'/' .$image )) {
-                                                    $link  = $target_dir . '/' .$image ;
-                                                    $remark = $_POST['remark'];
-                                                    $statement = "insert into mis_history (mis_id,type,status,created_at,created_by,attachment) values('".$id."','".$status."','1','".$date."','".$userid."','".$link."')" ;
-                                                 }   
-                                            }
-                                            elseif($_POST['status']=='close'){
+                                            
+                                            if($_POST['status']=='close'){
                                                 $status = $_POST['status'] ;
                                                 $year = date('Y');
                                                 $month = date('m');
-                                                $close_type = $_POST['close_type'];
-                                                $serial_no = $_POST['sno'];
-                                                if(!is_dir('close_uploads/'.$year .'/'. $month.'/'.$atmid)){
-                                                    mkdir('close_uploads/'.$year .'/'. $month .'/'.$atmid , 0777 , true) ; 
-                                                }
                                                 $target_dir = 'close_uploads/'.$year .'/'. $month.'/'. $atmid ;
                                                 $link = "";
                                                 $link2 = "";
-                                                $image = $_FILES['image']['name'];
-                                                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir .'/' .$image )) {
-                                                    $link  = $target_dir . '/' .$image ;
-                                                }
-                                                 
-                                                $image2 = $_FILES['image2']['name'];
-                                                if (move_uploaded_file($_FILES["image2"]["tmp_name"], $target_dir .'/' .$image2 )) {
-                                                    $link2  = $target_dir . '/' .$image2 ;
-                                                }
                                                 
                                                 $engineer = $_POST['engineer'];
                                                 $remark = $_POST['remark'];
                                                 $oldMaterialDetails = $_POST['oldMaterialDetails'];
-                                                $statement = "insert into mis_history (mis_id,type,attachment,attachment2,remark,status,created_at,created_by,close_type,serial_number,oldMaterialDetails) values('".$id."','".$status."','".$link."','".$link2."','".$remark."','1','".$date."','".$userid."','".$close_type."','".$sno."','".$oldMaterialDetails."')" ;
-                                                mysqli_query($con,"update mis_details  set close_date = '".$date."' where id = '".$id."'");
+                                                $statement = "insert into mis_history (mis_id,type,attachment,attachment2,remark,status,created_at,created_by) values('".$id."','".$status."','".$link."','".$link2."','".$remark."','1','".$date."','".$userid."')" ;
+                                                mysqli_query($con,"update mis_details set close_date = '".$date."' where id = '".$id."'");
                                             }
-                                            elseif($_POST['status']=='fund_required' || $_POST['status']=='customer_dependency'){
-                                                $remark = $_POST['remark'];
-                                                $status = $_POST['status'];
-                                                $statement = "insert into mis_history (mis_id,type,remark,created_at,created_by) values('".$id."','".$status."','".$remark."','".$date."','".$userid."')" ;
-                                            }
-                                            elseif($_POST['status']=='reopen'){
-                                                $remark = $_POST['remark'];
-                                                $status = $_POST['status'];
-                                                $statement = "insert into mis_history (mis_id,type,remark,created_at,created_by) values('".$id."','".$status."','".$remark."','".$date."','".$userid."')" ;
-                                                
-                                                mysqli_query($con,"update mis_details set status = 'open', close_date = '' where id = '".$id."' ");
-                                            }
-                                            
-                                            
                                             
                                             
                                             if(mysqli_query($con,$statement)){
@@ -558,25 +473,41 @@
                 </div>
             </div>
                     
-                    
-    <? include('footer.php'); ?>
+            <script>
 
-<script src="./datatable/jquery.dataTables.js"></script>
-<script src="./datatable/dataTables.bootstrap.js"></script>
-<script src="./datatable/dataTables.buttons.min.js"></script>
-<script src="./datatable/buttons.flash.min.js"></script>
-<script src="./datatable/jszip.min.js"></script>
+$(document).on('change','#status',function(){
+    
+    var status = $(this).val();
+    $("#status_col").html('');
+    
 
-<script src="./datatable/pdfmake.min.js"></script>
-<script src="./datatable/vfs_fonts.js"></script>
-<script src="./datatable/buttons.html5.min.js"></script>
-<script src="./datatable/buttons.print.min.js"></script>
-<script src="./datatable/jquery-datatable.js"></script>
+         if(status == 'close'){
+            var html = `<input type="hidden" name="status" value="close">
+            <div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div>
+            
+            <div class="col-sm-12 oldMaterialDetails" style="display:none;">
+            <br />
+                <label>Old Material Details</label>
+                <select name="oldMaterialDetails" id="oldMaterialDetails" class="form-control">
+                  <option>-- Select --</option>
+                  <option value="Old Material with Engineer">Old Material with Engineer</option>
+                  <option value="Old Material Missing">Old Material Missing</option>
+                  <option value="Old Material Scrap">Old Material Scrap</option>
+                  <option value="Old Material in Service Center">Old Material in Service Center</option>
+                  <option value="Old Material in Branch Office">Old Material in Branch Office</option>
+                  <option value="Old Material in Dispached to Mumbai">Old Material in Dispached to Mumbai</option>
+                </select>  
+                </div>
 
-<script>
+            <div class="col-sm-12"><br><br><input class="btn btn-primary" value="Close" type="submit" name="submit"></div>` ;
+        }
+        
+        $("#status_col").html(html);
+});
 
 
-  function throttle(f, delay){
+
+function throttle(f, delay){
         var timer = null;
         return function(){
             var context = this, args = arguments;
@@ -615,121 +546,8 @@
             //  $('#address').show();
         }
     }
-    $(document).ready(function() {
 
-    $("#status").on("change",function(){
-        debugger;    
-    var status = $(this).val();
-    $("#status_col").html('');
-        
-        
-    
-    
-        if(status == 'dispatch'){
-            var html = '<input type="hidden" name="status" value="dispatch"><div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        else if(status == 'schedule'){
-            var html = '<input type="hidden" name="status" value="schedule"><div class="col-sm-4"><label>Engineer</label><select name="engineer" class="form-control js-example-basic-single"><option value="">Select</option><? $eng_sql = mysqli_query($con,"select * from vendorUsers where vendorId='".$RailTailVendorID."' and level=3 and user_status=1"); while($eng_sql_result = mysqli_fetch_assoc($eng_sql)){ ?> <option value="<? echo $eng_sql_result['id'];?>"><? echo $eng_sql_result['name'];?></option> <? }?></select></div><div class="col-sm-4"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><label>Schedule Date</label><input type="date" name="schedule_date" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        else if(status == 'material_requirement'){
-           var html = `<input type="hidden" name="status" value="material_requirement">
-           <div class="col-sm-6">
-           <label>Request Material For Site</label>
-           <select class="form-control" name="material">
-           <option value="">Select</option>
-           <? $mat_sql =mysqli_query($con,"select * from material where status=1 "); 
-           while($mat_sql_result = mysqli_fetch_assoc($mat_sql)){ ?>
-           <option value="<? echo $mat_sql_result['material'] ; ?>">
-           <? echo $mat_sql_result['material'] ; ?></option> <? } ?>
-           </select>
-           </div>
-           <div class="col-sm-6"><label>Material Conditions</label><select class="form-control" name="material_condition"><option value="">Select</option><option value="Missing">Missing</option><option value="Faulty">Faulty</option><option value="Not Installed">Not Installed - By Project Team</option></select></div>
-           <div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div>
-           <?php if ($address_history != '') {?> 
-           <div class="col-sm-12"><label>Dispatch Address 1 </label><input class="form-control" name="address" id="address" value="<?php echo $address_history; ?>" ></div>
-           <?php } else {?> <div class="col-sm-12"><label> Dispatch Address 2</label>
-           <input list="item_name" class="form-control" name="address" id="address" value="<?php echo $address_history; ?>">
-           <datalist id="item_name">  </datalist>
-           </div> <?php } if ($name != '') {?>
-           <div class="col-sm-4" id="Contactperson_name"><label for="Contactperson_name">Contact Person Name</label><input type="text" class="form-control" name="Contactperson_name" id="Contactperson_name_text" value="<?php echo $name; ?>" readonly="readonly"></div> 
-           <?php } else {?> <div class="col-sm-4" id="Contactperson_name"><label for="Contactperson_name">Contact Person Name</label><input type="text" class="form-control" name="Contactperson_name" id="Contactperson_name_text" value="<?php echo $name; ?>"></div>
-           <?php }  if ($mobile != '') {?> <div class="col-sm-4" id="Contactperson_mob"><label for="Contactperson_mob">Contact Person Mobile</label><input type="text" class="form-control" name="Contactperson_mob" id="Contactperson_mob_text" value="<?php echo $mobile; ?>" readonly="readonly"></div> 
-           <?php } else {?> <div class="col-sm-4" id="Contactperson_mob"><label for="Contactperson_mob">Contact Person Mobile</label><input type="text" class="form-control" name="Contactperson_mob" id="Contactperson_mob_text" value="<?php echo $mobile; ?>"></div> <?php }?> 
-           <div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>`;  
-            
-        }
-        else if(status == 'material_dispatch'){
-            var html = '<input type="hidden" name="status" value="material_dispatch"><div class="col-sm-3"><label>Courier Agency</label><input type="text" name="courier" class="form-control"></div><div class="col-sm-3"><label>POD</label><input type="text" name="pod" class="form-control"></div><div class="col-sm-3"><label>Dispatch Date</label><input type="date" name="dispatch_date" class="form-control"></div><div class="col-sm-3"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-primary" type="submit" value="Update" name="submit"></div>';
-        }
-        else if(status == 'close'){
-            var html = `<input type="hidden" name="status" value="close">
-            <div class="col-sm-3"><label>Before Work</label><input type="file" name="image" class="form-control"></div>
-            <div class="col-sm-3"><label>After Work</label><input type="file" name="image2" class="form-control" required></div>
-            <div class="col-sm-3"><label>Serial No</label><input type="text" name="sno" class="form-control"></div>
-            <div class="col-sm-3"><label>Close Type</label><select name="close_type" id="close_type" class="form-control" required><option value=""> Select </option><option value="replace"> Replace </option><option value="repair"> Repair </option><option value="Footage Call"> Footage Call </option></select></div>
-            <div class="col-sm-12 oldMaterialDetails" style="display:none;">
-            <br />
-                <label>Old Material Details</label>
-                <select name="oldMaterialDetails" id="oldMaterialDetails" class="form-control">
-                  <option>-- Select --</option>
-                  <option value="Old Material with Engineer">Old Material with Engineer</option>
-                  <option value="Old Material Missing">Old Material Missing</option>
-                  <option value="Old Material Scrap">Old Material Scrap</option>
-                  <option value="Old Material in Service Center">Old Material in Service Center</option>
-                  <option value="Old Material in Branch Office">Old Material in Branch Office</option>
-                  <option value="Old Material in Dispached to Mumbai">Old Material in Dispached to Mumbai</option>
-                </select>  
-                </div>
-            <div class="col-sm-4"><br><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><label>Engineer</label><select name="engineer" class="form-control"><option value="">Select</option> <?php $branch_sql = mysqli_query($con,"select distinct(engineer_user_id) as engid from mis_newsite where branch = '".$branch."' and engineer_user_id<>'' "); if(mysqli_num_rows($branch_sql)>0) { while($branchsqlres = mysqli_fetch_assoc($branch_sql)){ $eng_userid = $branchsqlres['engid']; $eng_sql = mysqli_query($con,"select name, id from mis_loginusers where id = '".$eng_userid."' "); $eng_sql_result = mysqli_fetch_assoc($eng_sql); ?><option value="<? echo $eng_sql_result['id'];?>"><? echo $eng_sql_result['name'];?></option> <?php } }?></select></div><div class="col-sm-4"><br><br><input class="btn btn-danger" value="Close" type="submit" name="submit"></div>` ;
-        }
-        else if(status == 'paste_control'){
-            var html = '<input type="hidden" name="status" value="paste_control"><div class="col-sm-4"><label>Attache File</label><input type="file" name="image" class="form-control"></div><div class="col-sm-4"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-danger" value="Submit" type="submit" name="submit"></div>' ;
-        }
-        else if(status == 'material_available_in_branch'){
-                var html = '<input type="hidden" name="status" value="material_available_in_branch"><div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        else if(status == 'material_not_available'){
-                var html = '<input type="hidden" name="status" value="material_not_available"><div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        else if(status == 'broadband'){
-                var html = '<input type="hidden" name="status" value="broadband"><div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        else if(status == 'permission_require'){
-                var html = '<input type="hidden" name="status" value="permission_require"><div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        else if(status == 'reopen'){
-                var html = '<input type="hidden" name="status" value="reopen"><div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        else if(status == 'material_delivered'){
-                var html = '<input type="hidden" name="status" value="material_delivered"><div class="col-sm-6"><label>Delivery Date</label><input type="date" name="delivery_date" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        else if(status == 'MRS'){
-                var html = '<input type="hidden" name="status" value="MRS"><div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        else if(status == 'fund_required'){
-                var html = '<input type="hidden" name="status" value="fund_required"><div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        else if(status == 'customer_dependency'){
-                var html = '<input type="hidden" name="status" value="customer_dependency"><div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div><div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>';
-        }
-        
-        
-        $("#status_col").html(html);
-        // $(".js-example-basic-single").select2();
-        // $(".engsearch").select2();
-    });
 
-});
-
-$(document).on('change','#close_type',function(){
-    let close_type = $("#close_type").val();
-    
-    if(close_type=='replace'){
-        $(".oldMaterialDetails").css('display','block');
-    }else{
-        $(".oldMaterialDetails").css('display','none');
-    }
-})
 
 
 $(document).on('keyup','#address',throttle(function(){
@@ -748,8 +566,25 @@ $(document).on('keyup','#address',throttle(function(){
           });
 //   alert(add);
 }));
-    
-    </script>
-</body>
 
-</html>
+
+
+            </script>
+
+
+
+
+
+<script src="./datatable/jquery.dataTables.js"></script>
+<script src="./datatable/dataTables.bootstrap.js"></script>
+<script src="./datatable/dataTables.buttons.min.js"></script>
+<script src="./datatable/buttons.flash.min.js"></script>
+<script src="./datatable/jszip.min.js"></script>
+
+<script src="./datatable/pdfmake.min.js"></script>
+<script src="./datatable/vfs_fonts.js"></script>
+<script src="./datatable/buttons.html5.min.js"></script>
+<script src="./datatable/buttons.print.min.js"></script>
+<script src="./datatable/jquery-datatable.js"></script>
+
+    <? include('footer.php'); ?>

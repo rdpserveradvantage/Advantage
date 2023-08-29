@@ -24,9 +24,9 @@ if (!function_exists('verifyToken')) {
 
 <!DOCTYPE html>
 <html lang="en" 
-style="text-transform: uppercase;"
->
 
+>
+<!-- style="text-transform: uppercase;" -->
 
 <head>
     <title> Advantage </title>

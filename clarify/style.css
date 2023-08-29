@@ -374,3 +374,7 @@ input:focus , select:focus{
 table td{
     font-size: 13px;
 }
+
+.border-checkbox-section .border-checkbox-group .border-checkbox-label{
+    display: block !important;
+}

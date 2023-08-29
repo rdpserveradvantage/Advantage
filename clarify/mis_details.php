@@ -114,7 +114,7 @@
                                 
                                 
                                 
-                                                                <div class="card">
+                                <div class="card">
                                     <div class="card-block">
 
                                         <h5>CALL INFORMATION</h5>
@@ -229,105 +229,24 @@
                                             <div class="col-sm-12">
                                                 <select class="form-control" name="status" id="status">
                                                     
-                                                    <?php if($mis_status == 'open' || $mis_status == 'Open') {?>
+
                                                         <option value="">Select</option>
+                                                        
+                                                        <option value="reassign"> Re-assign </option>
+                                                        <option value="material_requirement">Material Requirement</option>                                                        
                                                         <!-- <option value="schedule"> Schedule</option>    
                                                         <option value="fund_required"> Fund Requirement</option>
-                                                        <option value="material_requirement">Material Requirement</option>
                                                         <option value="permission_require">Permission Required</option>
                                                         <option value="MRS">Material Pending</option> -->
-                                                        <option value="close">close</option>
-                                                    <?php } 
-                                                    
-                                                    if($mis_status == 'schedule') {?>
-                                                        <option value="">Select</option>
-                                                        <option value="material_requirement">Material Requirement</option>
-                                                        <option value="permission_require">Permission Required</option>
-                                                        <option value="fund_required"> Fund Requirement</option>
-                                                        <option value="schedule"> Schedule</option> 
-                                                        <option value="close">close</option>
-                                                    <?php } 
-                                                    
-                                                    if($mis_status == 'material_requirement') {?>
-                                                        <option value="">Select</option>
-                                                        <option value="schedule"> Schedule</option>
-                                                        <option value="material_dispatch">Material Dispatch</option>
-                                                        <option value="material_in_process">Material in Process</option>
-                                                        <option value="close">close</option>
-                                                    <?php }
-                                                    
-                                                   
-                                                    
-                                                    if($mis_status == 'fund_required') {?>
-                                                        <option value="">Select</option>
-                                                        <option value="material_requirement">Material Requirement</option>
-                                                        <option value="schedule">Schedule</option>
-                                                        <option value="close">close</option>
-                                                    <?php } 
-                                                    
-                                                    if($mis_status == 'material_dispatch') {?>
-                                                        <option value="">Select</option>
-                                                        <option value="schedule"> Schedule</option>    
-                                                        <option value="fund_required"> Fund Requirement</option>
-                                                        <option value="permission_require">Permission Required</option>     
-                                                        <option value="close">close</option>
-                                                    <?php } 
-                                                    
-                                                    if($mis_status == 'close') {?>
-                                                        <option value="">Select</option>
-                                                        <option value="reopen">Reopen</option>
-                                                    <?php } 
-                                                    
-                                                    if($mis_status == 'permission_require') {?>
-                                                        <option value="">Select</option>
-                                                        <option value="schedule"> Schedule</option>    
-                                                        <option value="fund_required"> Fund Requirement</option>
-                                                        <option value="material_requirement">Material Requirement</option> 
-                                                        <option value="close">close</option>
-                                                    <?php } 
-                                                   
-                                                    if($mis_status == 'available') {?>
-                                                        <option value="">Select</option>
-                                                        <option value="schedule"> Schedule</option>    
-                                                        <option value="fund_required"> Fund Requirement</option>
-                                                        <option value="material_dispatch">Material Dispatch</option> 
-                                                        <option value="permission_require">Permission Required</option>     
-                                                        <option value="close">close</option>
-                                                    <?php } 
-                                                    
-                                                    if($mis_status == 'cancelled') {?>
-                                                        <option value="">Select</option>
-                                                        <option value="schedule"> Schedule</option> 
-                                                        <option value="material_requirement">Material Requirement</option>
-                                                        <option value="close">close</option>
-                                                    <?php } 
-                                                    
-                                                    if($mis_status == 'MRS') {?>
-                                                        <option value="">Select</option>
-                                                        <option value="material_dispatch">Material Dispatch</option> 
-                                                        <option value="fund_required"> Fund Requirement</option>
-                                                        <option value="material_requirement">Material Requirement</option> 
-                                                        <option value="schedule"> Schedule</option> 
-                                                        <option value="close">close</option>
-                                                    <?php } 
-                                                    
-                                                    if($mis_status == 'material_in_process') {?>
-                                                        <option value="">Select</option>
                                                         <option value="close">Close</option>
-                                                    <?php } 
-                                                    
-                                                    if($mis_status == 'material_delivered') {?>
-                                                        <option value="">Select</option>
-                                                        <option value="close">Close</option>
-                                                    <?php } 
-                                                    ?>
+
                                                 </select> 
                                             </div>
                                         </div>
                                         
                                         <hr>
                                         
-                                        
+
                                         
                                         
                                         
@@ -335,22 +254,37 @@
                                         
                                         if(isset($_POST['status'])){
 
-                                            
-                                            if($_POST['status']=='close'){
-                                                $status = $_POST['status'] ;
+                                             $status = $_POST['status'] ; 
+                                            if($status=='close'){
                                                 $year = date('Y');
                                                 $month = date('m');
                                                 $target_dir = 'close_uploads/'.$year .'/'. $month.'/'. $atmid ;
                                                 $link = "";
-                                                $link2 = "";
                                                 
+                                                $image = $_FILES['image']['name'];
+                                                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir .'/' .$image )) {
+                                                    $link  = $target_dir . '/' .$image ;
+                                                }
+
                                                 $engineer = $_POST['engineer'];
                                                 $remark = $_POST['remark'];
                                                 $oldMaterialDetails = $_POST['oldMaterialDetails'];
-                                                $statement = "insert into mis_history (mis_id,type,attachment,attachment2,remark,status,created_at,created_by) values('".$id."','".$status."','".$link."','".$link2."','".$remark."','1','".$date."','".$userid."')" ;
+                                                $statement = "insert into mis_history (mis_id,type,attachment,remark,status,created_at,created_by) 
+                                                values('".$id."','".$status."','".$link."','".$remark."','1','".$date."','".$userid."')" ;
+                                                
                                                 mysqli_query($con,"update mis_details set close_date = '".$date."' where id = '".$id."'");
                                                 mysqli_query($con,"update mis set status = '".$status."' where id = '".$mis_id."'");
                                                 
+                                            }else if($status=='material_requirement'){
+
+                                                $requiredMaterial = $_REQUEST['requiredMaterial'];
+                                                $requiredMaterial = implode(', ', $requiredMaterial);
+                                                
+                                                mysqli_query($con,"update mis set status='material_requirement' WHERE id = $id");
+    
+                                                $statement = "insert into mis_history (mis_id,type,material,material_condition,remark,status,created_at,created_by,dependency) 
+                                                values('".$id."','".$status."','".$requiredMaterial."','".$_REQUEST['material_condition']."','".$remark."','1','".$date."','".$userid."','Advantage')" ;
+
                                             }
                                             
                                             
@@ -360,6 +294,7 @@
                                                 } else {
                                                     $status = $_POST['status'];
                                                 }
+
                                             mysqli_query($con,"update mis_details  set status = '".$status."' where id = '".$id."'");
                                             
                                             ?>
@@ -367,10 +302,10 @@
                                             <script>
                                                 swal("Great !", "Call Updated Successfully !", "success");
                                                 
-                                                    setTimeout(function(){ 
-                                                        window.location.href="mis_details.php?id=<? echo $id ; ?>";
+                                                    // setTimeout(function(){ 
+                                                        // window.location.href="mis_details.php?id=<? echo $id ; ?>";
                                                         // window.location.reload();
-                                                    }, 2000);
+                                                    // }, 2000);
 
                                             </script>
                                             <? }else{ 
@@ -424,8 +359,7 @@
                                                     <th>Material Delivered Date</th>
                                                     <th>Address (Material Requirement)</th>
                                                     <th>Serial Number</th>
-                                                    <th>Contact Person Name</th>
-                                                    <th>Contact Person Mobile</th>
+                                                    <th>Dependency</th>
                                                 </tr>
 
                                             </thead>
@@ -454,10 +388,8 @@
                                                         <td><? if($his_sql_result['delivery_date']!='0000-00-00'){ echo $his_sql_result['delivery_date']; }  ?></td>
                                                         <td><? echo $his_sql_result['delivery_address'];  ?></td>
                                                         <td><? echo $his_sql_result['serial_number'];  ?></td>
+                                                        <td><? echo $his_sql_result['dependency'];  ?></td>
                                                         
-                                                        
-                                                        <td><? echo $his_sql_result['contact_person_name'];  ?></td>
-                                                        <td><? echo $his_sql_result['contact_person_mob'];  ?></td>
                                                         
                                                     </tr>
                                                 <? $i++ ; } ?>
@@ -485,8 +417,25 @@ $(document).on('change','#status',function(){
 
          if(status == 'close'){
             var html = `<input type="hidden" name="status" value="close">
+
+            <div class="col-sm-12"><label>Snap</label><br /><input type="file" name="image" required></div>
             <div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div>
-            
+            <div class="col-sm-12"><label>Something</label>
+                <select name="" required>
+                    <option value="Antena relocated">Antenna relocated</option>
+                    <option value="Antena replaced">Antenna replaced</option>
+                    <option value="Loose connection fixed">Loose connection fixed</option>
+                    <option value="Power turned on">Power turned on</option>
+                    <option value="Router rebooted">Router rebooted</option>
+                    <option value="Lab cable replaced or label fixed (if damaged).">Lab cable replaced or label fixed (if damaged).</option>
+                    <option value="Electrical wiring done">Electrical wiring done</option>
+                    <option value="SIM replaced">SIM replaced</option>
+                    <option value="SIM re-inserted">SIM re-inserted</option>
+                    <option value="No issue found">No issue found</option>
+                </select>
+                </div>
+
+
             <div class="col-sm-12 oldMaterialDetails" style="display:none;">
             <br />
                 <label>Old Material Details</label>
@@ -502,6 +451,47 @@ $(document).on('change','#status',function(){
                 </div>
 
             <div class="col-sm-12"><br><br><input class="btn btn-primary" value="Close" type="submit" name="submit"></div>` ;
+        }else if(status == 'material_requirement'){
+            var html = `
+                <input type="hidden" name="status" value="material_requirement">
+                <div class="col-sm-12">
+                    <label>Please Select Material </label>
+                    <br />
+                    <div class="border-checkbox-section" style="margin: auto 40px;">
+                    <?
+                    $matLoopCount=1;
+                    $mat_sql = mysqli_query($con,"select * from boq where status=1");
+                    while($mat_sqlResult = mysqli_fetch_assoc($mat_sql)){
+                        $value = $mat_sqlResult['value'] ; ?>
+                        <div class="border-checkbox-group border-checkbox-group-primary">
+                            <input class="border-checkbox" name="requiredMaterial[]" type="checkbox" id="checkbox<?= $matLoopCount; ?>" value="<?= trim($value); ?>">
+                            <label class="border-checkbox-label" for="checkbox<?= $matLoopCount; ?>"><?= trim($value); ?></label>
+                        </div>
+                        
+                        <?  $matLoopCount++ ;  } ?>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label>Material Conditions</label>
+                        <select class="form-control" name="material_condition">
+                            <option value="">Select</option>
+                            <option value="Missing">Missing</option>
+                            <option value="Faulty">Faulty</option>
+                            <option value="Not Installed">Not Installed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-sm-12">
+                        <label>Remarks</label>
+                        <input type="text" name="remarks" class="form-control" required />
+                    </div>
+                    <div class="col-sm-12">
+                        <br />
+                        <input type="submit" name="submit" class="btn btn-primary" />
+                    </div>
+                    
+                </div>
+            `;
         }
         
         $("#status_col").html(html);
@@ -526,7 +516,7 @@ function throttle(f, delay){
         $(".js-example-basic-single").select2();
     });
      
-    // $("#address_type").on("change",function(){ debugger; 
+
     function setaddress(){ 
         var address_type = $('#address_type').val();
         if(address_type=='Branch'){

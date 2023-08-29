@@ -1,7 +1,5 @@
 prevent root index
 
-
-
 dependency by default advantage
 and adv guys can select bank or advantage
 
@@ -17,7 +15,7 @@ backroom key access
 
 
 
-prevent  reopen - 
+prevent  reopen -
 
 view mis
     show vendor on view mis and add filters

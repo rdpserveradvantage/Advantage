@@ -23,6 +23,11 @@ $query5_result = mysqli_fetch_assoc($query5);
 $materialSend = $query5_result['count']; 
 
 
+$query5 = "SELECT COUNT(1) AS count FROM projectInstallation where isDone=1 and vendor='".$vendorId."' ";
+$totalInstallationSql = mysqli_query($con,$query5);
+$totalInstallationSqlResult = mysqli_fetch_assoc($totalInstallationSql);
+$totalInstallationDone = $totalInstallationSqlResult['count'];
+
     $vendorName = $row['vendorName'];
     $siteAllocated = $row['siteAllocated'];
     $assignEngineer = $row['assignEngineer'];
@@ -35,7 +40,7 @@ $materialSend = $query5_result['count'];
         "feasibiltyDone" => $feasibiltyDone,
         "materialRequest" => $materialRequest,
         "materialSend" => $materialSend,
-        "project" => 0
+        "project" => $totalInstallationDone
     );
 }
 

@@ -217,10 +217,9 @@
                                                 $atm_id = $row['atmid'];
                                                 $getverificationStatus = $row['verificationStatus'];
                                                 
-                                                $baseurl = 'https://sarmicrosystems.in/project/API/';
+                                                $baseurl = 'http://103.216.208.241:8080/clarity/API/';
 
                                                 echo '<div class="accordion-panel">';
-                                                
                                                 echo '<div class="accordion-heading" role="tab" id="heading' . $i . '">';
                                                 echo '<h3 class="card-title accordion-title">';
                                                 echo '<a class="accordion-msg" data-toggle="collapse" data-parent="#accordion" href="#collapse' . $i . '" aria-expanded="true" aria-controls="collapse' . $i . '">';

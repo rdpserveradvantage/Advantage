@@ -123,9 +123,9 @@
                                                 $getverificationStatus = $row['verificationStatus'];
                                                 
                                                 if($isVendor){
-                                                    $baseurl = 'https://sarmicrosystems.in/project/API/';
+                                                    $baseurl = 'http://103.216.208.241:8080/clarity/API/';
                                                 }else{
-                                                    $baseurl = 'https://sarmicrosystems.in/advantage/API/';
+                                                    $baseurl = 'http://103.216.208.241:8080/advantage/API/';
                                                 }
                                                 
                                                 echo '<div class="accordion-panel">';

@@ -91,7 +91,7 @@
                                                 while($sql_result = mysqli_fetch_assoc($sql)){
                                                 $id = $sql_result['id'];
                                                 $isVendor = $sql_result['isVendor'];
-                                                $baseurl = 'https://sarmicrosystems.in/project/API/';
+                                                $baseurl = 'http://103.216.208.241:8080/clarity/API/';
                                                 
                                                 ?>
 

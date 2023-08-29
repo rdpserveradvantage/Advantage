@@ -100,7 +100,7 @@ include('header.php');
                                                 if($isVendor){
                                                     $baseurl = 'https://sarmicrosystems.in/RailTailVendor/API/';
                                                 }else{
-                                                    $baseurl = 'https://sarmicrosystems.in/advantage/API/';
+                                                    $baseurl = 'http://103.216.208.241:8080/advantage/API/';
                                                 }
                                                 
                                                 ?>

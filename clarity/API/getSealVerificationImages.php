@@ -1,6 +1,6 @@
 <? include('config.php');
 
-$path = 'https://sarmicrosystems.in/project/';
+$path = 'http://103.216.208.241:8080/clarity/';
 $siteid = $_REQUEST['siteid'];
 $atmid = $_REQUEST['atmid'];
 

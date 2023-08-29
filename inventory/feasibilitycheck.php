@@ -644,7 +644,7 @@ form .form-control {
         if (atmID !== '') {
           // AJAX request to fetch ATM details
           $.ajax({
-            url: 'https://sarmicrosystems.in/advantage/API/getATMIDInfo.php?ATMID1=' + atmID,
+            url: 'http://103.216.208.241:8080/advantage/API/getATMIDInfo.php?ATMID1=' + atmID,
             type: 'GET',
             dataType: 'json',
             success: function(response) {

@@ -29,7 +29,7 @@
                                             while ($row = $result->fetch_assoc()) {
                                                 $isVendor = $row['isVendor'];
 
-                                                    $baseurl = 'https://sarmicrosystems.in/project/API/';
+                                                    $baseurl = 'http://103.216.208.241:8080/clarity/API/';
                                                 
                                                 echo '<div class="accordion-panel">';
                                                 echo '<div class="accordion-heading" role="tab" id="heading' . $i . '">';

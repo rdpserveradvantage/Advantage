@@ -94,8 +94,8 @@ if (!function_exists('verifyToken')) {
            .content-right img {
             
             width: 60%;
-            -webkit-animation: bounce 3s ease-in-out infinite;
-            animation: bounce 3s ease-in-out infinite;
+            // -webkit-animation: bounce 3s ease-in-out infinite;
+            // animation: bounce 3s ease-in-out infinite;
             -webkit-transition: -webkit-transform 300ms cubic-bezier(0,0,0.3,1);
             transition: -webkit-transform 300ms cubic-bezier(0,0,0.3,1);
             -o-transition: transform 300ms cubic-bezier(0,0,0.3,1);
@@ -121,12 +121,14 @@ if (!function_exists('verifyToken')) {
 
 
     <div class="limiter" style="height: 100vh;">
-        <div class="container-login100" style="zoom:0.8;height: inherit;background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);" >
+        <div class="container-login100" style="zoom:0.8;height: inherit;
+        
+        " >
             <div class="content-right wrap-login100" style="background:transparent ; ">
-                <img src="https://mycolor.space/img/color-gradient-spacecraft.svg" alt="color gradient spacecraft" title="color gradient spacecraft">
+                <img src="assets/customer-service_2706962.png" alt="color gradient spacecraft" title="color gradient spacecraft">
             </div>
 
-            <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+            <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54" style="    border: 1px solid;">
 
                 <form id="loginForm" class="login100-form validate-form" method="POST">
 

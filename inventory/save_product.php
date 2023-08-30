@@ -1,11 +1,14 @@
 <?php include('config.php');
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 
 if (isset($_POST['submit'])) {
+
+    $inventoryType = $_REQUEST['inventoryType'];
+
     $date = date('Y-m-d h:i:s a', time());
     $only_date = date('Y-m-d');
     $target_dir = 'PHPExcel/';
@@ -59,8 +62,8 @@ if (isset($_POST['submit'])) {
         $po_number = $rowData[$i][0][15];
 
         // Insert the data into the Inventory table
-        $sql = "INSERT INTO Inventory (material, material_make, model_no, serial_no, challan_no, amount, gst, amount_with_gst, courier_detail, tracking_details, date_of_receiving, receiver_name, vendor_name, vendor_contact, po_date, po_number, created_at,created_by)
-                VALUES ('$material', '$material_make', '$model_no', '$serial_no', '$challan_no', $amount, $gst, $amount_with_gst, '$courier_detail', '$tracking_details', '$date_of_receiving', '$receiver_name', '$vendor_name', '$vendor_contact', '$po_date', '$po_number', '$created_at','$userid')";
+        $sql = "INSERT INTO Inventory (material, material_make, model_no, serial_no, challan_no, amount, gst, amount_with_gst, courier_detail, tracking_details, date_of_receiving, receiver_name, vendor_name, vendor_contact, po_date, po_number, created_at,created_by,inventoryType)
+                VALUES ('$material', '$material_make', '$model_no', '$serial_no', '$challan_no', $amount, $gst, $amount_with_gst, '$courier_detail', '$tracking_details', '$date_of_receiving', '$receiver_name', '$vendor_name', '$vendor_contact', '$po_date', '$po_number', '$created_at','$userid','$inventoryType')";
 
         // Execute the query
         if (mysqli_query($con, $sql)) {

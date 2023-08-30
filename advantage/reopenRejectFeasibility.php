@@ -26,7 +26,7 @@ if(isset($reopen_redelegation) && !empty($reopen_redelegation)){
     
     
     loggingRecords('sites', $siteid,'log_before');
-    if(mysqli_query($con,"update sites set delegatedToVendorId = 1,delegatedToVendorId='".$vendor."',delegatedToVendorName='".$vendorName."',isFeasibiltyDone=0,verificationStatus='' where id='".$siteid."'")){
+    if(mysqli_query($con,"update sites set delegatedToVendorId='".$vendor."',delegatedToVendorName='".$vendorName."',isFeasibiltyDone=0,verificationStatus='' where id='".$siteid."'")){
     loggingRecords('sites', $siteid,'log_after');
             reopenRedelegateToVendor($siteid,$atmid,'');
             

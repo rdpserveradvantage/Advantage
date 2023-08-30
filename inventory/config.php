@@ -7,12 +7,13 @@ error_reporting(0);
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
-
-$host="localhost";
-$user="sarmicrosystems_advantage";
-$pass="Advantage@2023";
+$host="10.63.21.6";
+$user="advantage";
+$pass="qwerty121";
 $dbname="sarmicrosystems_advantage";
 $con = new mysqli($host, $user, $pass, $dbname);
+
+
 // Check connection
 if ($con->connect_error) {
     // die("Connection failed: " . $con->connect_error);

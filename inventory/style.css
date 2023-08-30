@@ -267,3 +267,32 @@ label {
     box-shadow: 0px 0px 10px 2px rgb(0 0 0 /40%);
     margin: 20px auto;
 }
+
+.pagination {
+  display: flex;
+    margin: 10px 0;
+    padding: 0;
+    justify-content: center;
+}
+
+.pagination li {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #555;
+  text-decoration: none;
+}
+
+.pagination li.active {
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: #fff;
+}
+
+.pagination li:hover:not(.active) {
+  background-color: #f5f5f5;
+  border-color: #007bff;
+  color: #007bff;
+}

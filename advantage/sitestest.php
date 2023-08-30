@@ -335,7 +335,7 @@
                                                         echo (
     $verificationStatus
     ? ($verificationStatus==='Verify' ? '<button class="btn btn-success btn-icon" title="Verification Approved">&#10004;</button>' 
-    : '<button class="btn btn-danger btn-icon" title="Verification Reject ">R</button> | <a href="reopenRejectFeasibility.php?id=' . $id . '&atmid=' . $atmid . '&action=reopen_redelegation">Reopen <span style="color:red">⟳</span></a>')
+    : '<button class="btn btn-danger btn-icon" title="Verification Reject ">R</button> | <a href="reopenRejectFeasibility.php?id=' . $id . '&atmid=' . $atmid . '&action=reopen_redelegation&vendor='.$projectInstallationVendor.'">Reopen <span style="color:red">⟳</span></a>')
         . (
         
         $projectInstallation

@@ -1,7 +1,4 @@
-<?php include('header.php');
-
-
-?>
+<?php include('header.php'); ?>
 
 
 <div class="pcoded-content">
@@ -36,7 +33,7 @@
                                                 
                                                 <div class="col-sm-6">
                                                     <label>Serial Number</label>
-                                                    <input type="text" name="serialNumber" class="form-control" value="<? echo $_REQUEST['serialNumber']; ?>" placeholder="Enter Serial Number ..." />
+                                                    <input type="text" name="serialNumber" class="form-control" value="<?= $_REQUEST['serialNumber']; ?>" placeholder="Enter Serial Number ..." />
                                                 </div>
 
                                             </div>
@@ -55,7 +52,7 @@
                             // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                             $sqlappCount = "select count(1) as total from Inventory where 1 " ;
                             $atm_sql = "select id,material,material_make,model_no,serial_no,challan_no,amount,gst,amount_with_gst,courier_detail,tracking_details,
-                            date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at
+                            date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at,inventoryType
                                 from Inventory where 1 ";
                                 
                             
@@ -97,7 +94,7 @@
                         <div class="card-block" style="overflow:auto;">
 
                                  <div style="display:flex;justify-content:space-around;">
-                                        <h5 style="text-align:center;">All Stocks - <p>Total Records- <? echo $total_records ;  ?></p></h5>
+                                        <h5 style="text-align:center;">All Stocks - <p>Total Records- <?= $total_records ;  ?></p></h5>
 
                                         <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show Filters</a>
                                     </div>
@@ -124,7 +121,8 @@
                                             <th>vendor_contact</th>
                                             <th>po_date</th>
                                             <th>po_number</th>
-                            
+                                            <th>Type</th>
+
                                             <!-- Add other column headers here -->
                                         </tr>
                                     </thead>
@@ -151,29 +149,30 @@
                                             $vendor_contact = $row['vendor_contact'] ;  
                                             $po_date = $row['po_date'] ;  
                                             $po_number = $row['po_number'] ;  
-                                            
+                                            $inventoryType = $row['inventoryType'];
                             
                                             echo '<tr>';
                             ?>
                             
-                            <td><? echo $counter; ?></td>
-                            <td><? echo $material; ?></td>
-                            <td><? echo $material_make; ?></td>
-                            <td><? echo $model_no; ?></td>
-                            <td><? echo $serial_no; ?></td>
-                            <td><? echo $challan_no; ?></td>
-                            <td><? echo $amount; ?></td>
-                            <td><? echo $gst; ?></td>
-                            <td><? echo $amount_witd_gst; ?></td>
-                            <td><? echo $courier_detail; ?></td>
-                            <td><? echo $tracking_details; ?></td>
-                            <td><? echo $date_of_receiving; ?></td>
-                            <td><? echo $receiver_name; ?></td>
-                            <td><? echo $vendor_name; ?></td>
-                            <td><? echo $vendor_contact; ?></td>
-                            <td><? echo $po_date; ?></td>
-                            <td><? echo $po_number; ?></td>
-                            
+                            <td><?= $counter; ?></td>
+                            <td><?= $material; ?></td>
+                            <td><?= $material_make; ?></td>
+                            <td><?= $model_no; ?></td>
+                            <td><?= $serial_no; ?></td>
+                            <td><?= $challan_no; ?></td>
+                            <td><?= $amount; ?></td>
+                            <td><?= $gst; ?></td>
+                            <td><?= $amount_witd_gst; ?></td>
+                            <td><?= $courier_detail; ?></td>
+                            <td><?= $tracking_details; ?></td>
+                            <td><?= $date_of_receiving; ?></td>
+                            <td><?= $receiver_name; ?></td>
+                            <td><?= $vendor_name; ?></td>
+                            <td><?= $vendor_contact; ?></td>
+                            <td><?= $po_date; ?></td>
+                            <td><?= $po_number; ?></td>
+                            <td><?= $inventoryType; ?></td>
+
                             
                             <? 
                             
@@ -198,8 +197,8 @@ if ($start_window > 1) {
 for ($i = $start_window; $i <= $end_window; $i++) {
 ?>
     <li class="<? if ($i == $current_page) { echo 'active'; }?>" >
-        <a href="?page=<? echo $i; ?>&&material=<? echo $material_name; ?>" >
-            <? echo $i;  ?>
+        <a href="?page=<?= $i; ?>&&material=<?= $material_name; ?>" >
+            <?= $i;  ?>
         </a>        
     </li>
 
@@ -217,39 +216,7 @@ echo '</ul></div>';
 
 
 
-										
-										
-									<style>
-.pagination {
-  display: flex;
-    margin: 10px 0;
-    padding: 0;
-    justify-content: center;
-}
-
-.pagination li {
-  display: inline-block;
-  margin: 0 5px;
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  color: #555;
-  text-decoration: none;
-}
-
-.pagination li.active {
-  border: 1px solid #007bff;
-  background-color: #007bff;
-  color: #fff;
-}
-
-.pagination li:hover:not(.active) {
-  background-color: #f5f5f5;
-  border-color: #007bff;
-  color: #007bff;
-}
-									</style>
-									
+																			
 
                         </div>
                     </div>
@@ -272,6 +239,4 @@ echo '</ul></div>';
     });
 
 </script>
-<?php
-include('footer.php');
-?>
+<?php include('footer.php'); ?>

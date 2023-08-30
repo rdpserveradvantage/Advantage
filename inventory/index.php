@@ -1,9 +1,4 @@
-<? session_start();
-
-if($_SESSION['username']){ 
-
-include('header.php');
-?>
+<? include('header.php'); ?>
 
         <script src="https://code.highcharts.com/highcharts.js"></script>
      
@@ -34,15 +29,4 @@ include('header.php');
     
       
                     
-    <? include('footer.php');
-    }
-else{ ?>
-    
-    <script>
-        window.location.href="login.php";
-    </script>
-<? }
-    ?>
-</body>
-
-</html>
+    <? include('footer.php') ; ?>

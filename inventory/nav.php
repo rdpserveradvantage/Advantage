@@ -47,10 +47,10 @@ $mainmenu    = array_unique($mainmenu);
                         
                             <ul class="pcoded-item pcoded-left-item">
                                 
-                        <li class="">
+                        <li <?php if(basename($_SERVER['REQUEST_URI'])=='index.php'){ echo "class='active'"; }?>>
                                     <a href="index.php">
                                         <span class="pcoded-micon"><i class="feather icon-home"></i></span>
-                                        <span class="pcoded-mtext">Home</span>
+                                        <span class="pcoded-mtext">Dashboard</span>
                                     </a>
                                 </li>
                         
@@ -116,9 +116,16 @@ $mainmenu    = array_unique($mainmenu);
                                         while($submenu_sql_result = mysqli_fetch_assoc($submenu_sql)){ 
                                         $page = $submenu_sql_result['page'];
                                         $submenu_name = $submenu_sql_result['sub_menu'];
+                                        
+                                        if(basename($_SERVER['REQUEST_URI'])==$page){
+                                            $className = 'active' ; 
+                                        }else{
+                                            $className = '' ; 
+                                        }
+                                        
                                         ?>
                                             
-                                            <li class=" ">
+                                            <li class="<? echo $className; ?>">
                                                 <a href="<? echo $page; ?>">
                                                     <span class="pcoded-mtext"><? echo $submenu_name; ?></span>
                                                 </a>
@@ -147,8 +154,10 @@ $mainmenu    = array_unique($mainmenu);
                     <? } ?>
                     
                     
-                    
-                    <script>
+<script>
+$(document).ready(function() {
+    $('.pcoded-submenu li.active').parents('li.pcoded-hasmenu').addClass('pcoded-trigger');
+});
 window.addEventListener('load', () => {
   // Delay the override to ensure the CDN file has loaded
   setTimeout(() => {

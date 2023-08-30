@@ -14,7 +14,7 @@
                                         $atmid = $_REQUEST['atmid'];
                                         
                                         $sql = "update sites set isDelegated=0,isFeasibiltyDone=0,ESD='0000-00-00 00:00:00',ASD='0000-00-00 00:00:00',
-                                        delegatedToVendorId=0,delegatedToVendorName='',delegatedByVendor=0,verificationStatus='' where id='".$siteid."' and atmid='".$atmid."'";
+                                        delegatedByVendor=0,verificationStatus='' where id='".$siteid."' and atmid='".$atmid."'";
                                         
                                         if(mysqli_query($con,$sql)){
                                         unholdInstallation($siteid,$atmid,'');

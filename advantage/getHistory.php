@@ -29,12 +29,12 @@ $description = $sql_result['event_description'];
 $created_at = $sql_result['event_timestamp'];
 ?>  
     <tr>
-        <td><? echo $i; ?></td>
-        <td><? echo $atmid; ?></td>
-        <td><? echo $portal; ?></td>
-        <td><? echo $event; ?></td>
-        <td><? echo $description; ?></td>
-        <td><? echo $created_at; ?></td>
+        <td><?= $i; ?></td>
+        <td class="strong"><?= $atmid; ?></td>
+        <td><?= $portal; ?></td>
+        <td><?= $event; ?></td>
+        <td><?= $description; ?></td>
+        <td><?= $created_at; ?></td>
     </tr>
     
 <? $i++; } ?>

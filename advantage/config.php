@@ -330,5 +330,12 @@ function fetchNotifications($recipientType, $userid)
     }
 }
 
+function isImageFile($fileName) {
+    $imageExtensions = array('jpg', 'jpeg', 'png', 'gif'); // Add more extensions if needed
+    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+    
+    return in_array(strtolower($fileExtension), $imageExtensions);
+}
+
 
 ?>

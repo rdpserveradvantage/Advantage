@@ -129,7 +129,7 @@ $totalPages = ceil($totalRecords / $recordsPerPage);
                 
                             <tr>
                                 <td class="strong"><?= $vendorName; ?></td>
-                                <td><?= $atmid; ?></td>
+                                <td class="strong"><?= $atmid; ?></td>
                                 <td><?= $created_at; ?></td>
                                 <td><?= $duration; ?></td> <!-- Display the calculated duration -->
                                 <td><?= $sbiTicketId; ?></td>

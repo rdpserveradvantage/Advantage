@@ -6,7 +6,78 @@
                     <div class="main-body">
                         <div class="page-wrapper">
                             <div class="page-body">
+
+                <?
+                
+                $statement = "select * from projectInstallation where isDone=1 and status=1 " ; 
+                $sqlappCount = "select count(1) as totalCount from projectInstallation where isDone=1 and status=1 ";
+
+
+                if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
+                    $atmid = $_REQUEST['atmid'];
+                    $statement .= "and atmid like '%" . trim($atmid) . "%'";
+                    $sqlappCount .= "and atmid like '%" . trim($atmid) . "%'";
+                }
+
+
+                if(isset($_POST['submit'])){
+                    $_GET['page']=1 ;  
+                }
+                $statement .= "order by id desc" ;
+                
+                $page_size = 10;
+                $result = mysqli_query($con, $sqlappCount);
+                $row = mysqli_fetch_assoc($result);
+                $total_records = $row['totalCount'];
+
+                $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+                $offset = ($current_page - 1) * $page_size;
+                $total_pages = ceil($total_records / $page_size);
+                $window_size = 10;
+                $start_window = max(1, $current_page - floor($window_size / 2));
+                $end_window = min($start_window + $window_size - 1, $total_pages);
+                $sql_query = "$statement LIMIT $offset, $page_size";
+
+
+
+                ?>
+
+
+                                <div class="card" id="filter">
+                                    <div class="card-block">
+                                        <form action="<? $_SERVER['PHP_SELF']; ?>" method="POST">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label>ATMID</label>
+                                                    <input type="text" name="atmid" class="form-control" value="<?= $atmid; ?>">
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <br />
+                                                    <input type="submit" name="submit" class="btn btn-primary">
+                                                    <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
+
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
                                 <div class="card">
+                                    <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show
+                                        Filters</a>
+                                    <div class="card-header">
+                                        <h5>Total Records: <strong class="record-count">
+                                                <?= $total_records; ?>
+                                            </strong></h5>
+
+                                        <hr />
+                                        <form action="exportsites.php" method="POST">
+                                            <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
+                                            <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
+                                        </form>
+
+                                    </div>
                                     <div class="card-block overflow_auto">
                                         
                                         <table class="table table-hover table-styling table-xs">
@@ -34,8 +105,8 @@
                                                 
 
                                         <?
-                                        $counter=1 ; 
-                                        $sql = mysqli_query($con,"select * from projectInstallation where isDone=1 and status=1 order by id desc");
+                                        $counter = ($current_page - 1) * $page_size + 1;
+                                        $sql = mysqli_query($con,$sql_query);
                                         while($sql_result = mysqli_fetch_assoc($sql)){
                                             $siteid = $sql_result['siteid'];
                                             $atmid = $sql_result['atmid'];
@@ -98,6 +169,43 @@
                                         
                                         
                                     </div>
+
+                                    <?
+
+$atmid = $_REQUEST['atmid'];
+
+echo '<div class="pagination"><ul>';
+if ($start_window > 1) {
+
+    echo "<li><a href='?page=1&&atmid=$atmid'>First</a></li>";
+    echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '">Prev</a></li>';
+}
+
+for ($i = $start_window; $i <= $end_window; $i++) {
+    ?>
+    <li class="<? if ($i == $current_page) {
+        echo 'active';
+    } ?>">
+        <a
+            href="?page=<?= $i; ?>&&atmid=<?= $atmid; ?>">
+            <?= $i; ?>
+        </a>
+    </li>
+
+<? }
+
+if ($end_window < $total_pages) {
+
+    echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '">Next</a></li>';
+    echo '<li><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '">Last</a></li>';
+}
+echo '</ul></div>';
+
+?>
+
+
+
+
                                 </div>
                             </div>
                         </div>
@@ -108,4 +216,16 @@
             </div>
                     
                     
+<script>
+        $("#show_filter").css('display', 'none');
+        $("#hide_filter").on('click', function() {
+            $("#filter").css('display', 'none');
+            $("#show_filter").css('display', 'block');
+        });
+        $("#show_filter").on('click', function() {
+            $("#filter").css('display', 'block');
+            $("#show_filter").css('display', 'none');
+        });
+    </script>
+
     <? include('footer.php'); ?>

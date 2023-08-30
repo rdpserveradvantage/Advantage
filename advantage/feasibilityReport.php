@@ -217,7 +217,8 @@
                                                 $atm_id = $row['atmid'];
                                                 $getverificationStatus = $row['verificationStatus'];
                                                 
-                                                $baseurl = 'http://103.216.208.241:8080/clarity/API/';
+                                                $baseurl = 'http://'.$_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'].'/clarity/API/' ; 
+                                                // $baseurl = 'http://103.216.208.241:8080/clarity/API/';
 
                                                 echo '<div class="accordion-panel">';
                                                 echo '<div class="accordion-heading" role="tab" id="heading' . $i . '">';
@@ -297,7 +298,20 @@
     </tr>
     <tr>
         <th>backroom Network Snap</th>
-        <td><a href="<?= $baseurl.$backroomNetworkSnap; ?>" target="_blank">View Image</a></td>
+        <td>
+        <?
+        $imageFileName = pathinfo($baseurl.$backroomNetworkSnap, PATHINFO_BASENAME);
+        if (isImageFile($imageFileName)) {
+            echo '<a href="' . $baseurl.$backroomNetworkSnap . '" target="_blank">View</a>';
+        } else {
+            echo 'No Image Found';
+        }
+        ?>    
+
+
+
+
+        </td>
     </tr>
     <tr>
     <th>Antenna Routingdetail</th>
@@ -422,41 +436,128 @@
 </tr>
 <tr>
     <th>router Antena Snap</th>
-    <td><a href="<?= $baseurl.$routerAntenaSnap; ?>" target="_blank">View Image</a></td>
+    <td>
+    <?
+        $imageFileName = pathinfo($baseurl.$routerAntenaSnap, PATHINFO_BASENAME);
+        if (isImageFile($imageFileName)) {
+            echo '<a href="' . $baseurl.$routerAntenaSnap . '" target="_blank">View</a>';
+        } else {
+            echo 'No Image Found';
+        }
+        ?>    
+
+
+    </td>
 </tr>
 <tr>
     <th>Antenna Routing Snap</th>
-    <td><a href="<?= $baseurl.$AntennaRoutingSnap; ?>" target="_blank">View Image</a></td>
+    <td>
+    <?
+        $imageFileName = pathinfo($baseurl.$AntennaRoutingSnap, PATHINFO_BASENAME);
+        if (isImageFile($imageFileName)) {
+            echo '<a href="' . $baseurl.$AntennaRoutingSnap . '" target="_blank">View</a>';
+        } else {
+            echo 'No Image Found';
+        }
+        ?>    
+    </td>
 </tr>
 
 
 <tr>
     <th>U P S Available Snap</th>
-    <td><a href="<?= $baseurl.$UPSAvailableSnap; ?>" target="_blank">View Image</a></td>
+    <td>
+    <?
+        $imageFileName = pathinfo($baseurl.$UPSAvailableSnap, PATHINFO_BASENAME);
+        if (isImageFile($imageFileName)) {
+            echo '<a href="' . $baseurl.$UPSAvailableSnap . '" target="_blank">View</a>';
+        } else {
+            echo 'No Image Found';
+        }
+        ?>    
+
+    </td>
 </tr>
 <tr>
     <th>No Of Ups Snap</th>
-    <td><a href="<?= $baseurl.$NoOfUpsSnap; ?>" target="_blank">View Image</a></td>
+    <td>
+    <?
+        $imageFileName = pathinfo($baseurl.$NoOfUpsSnap, PATHINFO_BASENAME);
+        if (isImageFile($imageFileName)) {
+            echo '<a href="' . $baseurl.$NoOfUpsSnap . '" target="_blank">View</a>';
+        } else {
+            echo 'No Image Found';
+        }
+        ?>    
+    </td>
 </tr>
 <tr>
     <th>ups Working Snap</th>
-    <td><a href="<?= $baseurl.$upsWorkingSnap; ?>" target="_blank">View Image</a></td>
+    <td>
+    <?
+        $imageFileName = pathinfo($baseurl.$upsWorkingSnap, PATHINFO_BASENAME);
+        if (isImageFile($imageFileName)) {
+            echo '<a href="' . $baseurl.$upsWorkingSnap . '" target="_blank">View</a>';
+        } else {
+            echo 'No Image Found';
+        }
+        ?>    
+
+    </td>
 </tr>
 <tr>
     <th>power Socket Availability Snap</th>
-    <td><a href="<?= $baseurl.$powerSocketAvailabilitySnap; ?>" target="_blank">View Image</a></td>
+    <td>
+    <?
+        $imageFileName = pathinfo($baseurl.$powerSocketAvailabilitySnap, PATHINFO_BASENAME);
+        if (isImageFile($imageFileName)) {
+            echo '<a href="' . $baseurl.$powerSocketAvailabilitySnap . '" target="_blank">View</a>';
+        } else {
+            echo 'No Image Found';
+        }
+        ?>    
+
+    </td>
 </tr>
 <tr>
     <th>earthing Snap</th>
-    <td><a href="<?= $baseurl.$earthingSnap; ?>" target="_blank">View Image</a></td>
+    <td>
+    <?
+        $imageFileName = pathinfo($baseurl.$earthingSnap, PATHINFO_BASENAME);
+        if (isImageFile($imageFileName)) {
+            echo '<a href="' . $baseurl.$earthingSnap . '" target="_blank">View</a>';
+        } else {
+            echo 'No Image Found';
+        }
+        ?>    
+    </td>
 </tr>
 <tr>
     <th>power Fluctuation Snap</th>
-    <td><a href="<?= $baseurl.$powerFluctuationSnap; ?>" target="_blank">View Image</a></td>
+    <td>
+    <?
+        $imageFileName = pathinfo($baseurl.$powerFluctuationSnap, PATHINFO_BASENAME);
+        if (isImageFile($imageFileName)) {
+            echo '<a href="' . $baseurl.$powerFluctuationSnap . '" target="_blank">View</a>';
+        } else {
+            echo 'No Image Found';
+        }
+        ?>    
+
+    </td>
 </tr>
 <tr>
     <th>remarks Snap</th>
-    <td><a href="<?= $baseurl.$remarksSnap; ?>" target="_blank">View Image</a></td>
+    <td>
+    <?
+        $imageFileName = pathinfo($baseurl.$remarksSnap, PATHINFO_BASENAME);
+        if (isImageFile($imageFileName)) {
+            echo '<a href="' . $baseurl.$remarksSnap . '" target="_blank">View</a>';
+        } else {
+            echo 'No Image Found';
+        }
+        ?>    
+    </td>
 </tr>
 <tr>
     <th>created_at</th>
@@ -468,7 +569,9 @@
 </tr>
 <tr>
     <th>power Socket Availability U P S Snap</th>
-    <td><a href="<?= $baseurl.$powerSocketAvailabilityUPSSnap; ?>" target="_blank">View Image</a></td>
+    <td>
+        <a href="<?= $baseurl.$powerSocketAvailabilityUPSSnap; ?>" target="_blank">View Image</a>
+    </td>
 </tr>
 <tr>
     <th>operator2</th>
@@ -486,7 +589,9 @@
 </tr>
 <tr>
     <th>backroom Network Snap2</th>
-    <td><a href="<?= $baseurl.$backroomNetworkSnap2; ?>" target="_blank">View Image</a></td>
+    <td>
+        <a href="<?= $baseurl.$backroomNetworkSnap2; ?>" target="_blank">View Image</a>
+    </td>
 </tr>
 <tr>
     <th>created_by</th>
@@ -510,15 +615,21 @@
 </tr>
 <tr>
     <th>A T M I D1 Snap</th>
-    <td><a href="<?= $baseurl.$ATMID1Snap; ?>" target="_blank">View Image</a></td>
+    <td>
+        <a href="<?= $baseurl.$ATMID1Snap; ?>" target="_blank">View Image</a>
+    </td>
 </tr>
 <tr>
     <th>A T M I D2 Snap</th>
-    <td><a href="<?= $baseurl.$ATMID2Snap; ?>" target="_blank">View Image</a></td>
+    <td>
+        <a href="<?= $baseurl.$ATMID2Snap; ?>" target="_blank">View Image</a>
+    </td>
 </tr>
 <tr>
     <th>A T M I D3 Snap</th>
-    <td><a href="<?= $baseurl.$ATMID3Snap; ?>" target="_blank">View Image</a></td>
+    <td>
+        <a href="<?= $baseurl.$ATMID3Snap; ?>" target="_blank">View Image</a>
+    </td>
 </tr>
 
         

@@ -48,14 +48,13 @@ sort($mainmenu);
                                     </a>
                                 
                             <ul class="pcoded-submenu">
-                               
-                                   <li <?php if(basename($_SERVER['REQUEST_URI'])=='index.php'){ echo "class='active'"; }?>>
+                                   <li <?php if(basename($_SERVER['PHP_SELF'],PATHINFO_BASENAME)=='index.php'){ echo "class='active'"; }?>>
 
                                     <a href="index.php">
                                         <span class="pcoded-mtext">Analytical</span>
                                     </a>
                                 </li>
-                               <li <?php if(basename($_SERVER['REQUEST_URI'])=='dashboard2.php'){ echo "class='active'"; }?>>
+                               <li <?php if(basename($_SERVER['PHP_SELF'],PATHINFO_BASENAME)=='dashboard2.php'){ echo "class='active'"; }?>>
 
                                     <a href="dashboard2.php">
                                         <span class="pcoded-mtext">Operational</span>
@@ -125,7 +124,7 @@ sort($mainmenu);
                                         while($submenu_sql_result = mysqli_fetch_assoc($submenu_sql)){ 
                                         $page = $submenu_sql_result['page'];
                                         $submenu_name = $submenu_sql_result['sub_menu'];
-                                        if(basename($_SERVER['REQUEST_URI'])==$page){
+                                        if(basename($_SERVER['PHP_SELF'],PATHINFO_BASENAME)==$page){
                                             $className = 'active' ; 
                                         }else{
                                             $className = '' ; 

@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
 
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $response[] = 'http://103.216.208.241:8080/clarity/'.$row['imageUrl'];
+            $response[] = 'http://'.$_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'].'/clarity/'.$row['imageUrl'];
         }
         echo json_encode(array("success" => true, "images" => $response));
     } else {

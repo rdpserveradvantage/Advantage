@@ -58,18 +58,7 @@ if (!function_exists('verifyToken')) {
     <?  if(verifyToken($token)!=1){ ?>
 
 <script>
-
-                    Swal.fire({
-                        title: "Your Session Has Expired !",
-                        text: "Redirecting...",
-                        icon: "error",
-                        showConfirmButton: false,
-                        timer: 1500,
-                        didClose: () => {
-                            window.location.href = 'login.php';
-                        },
-                    });
-
+window.location.href="login.php";
 </script>        
 <? }  ?>
 

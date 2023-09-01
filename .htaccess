@@ -1,2 +1,22 @@
 Options -Indexes
 ErrorDocument 403 /forbidden.html
+
+RewriteEngine On
+
+# Redirect requests from 103.216.208.241/clarity to http://103.216.208.241/clarity
+RewriteCond %{REMOTE_ADDR} ^103\.216\.208\.241$
+RewriteRule ^clarity$ http://103.216.208.241/clarity [P,L]
+
+# Redirect requests from 103.216.208.241/clarify to http://103.216.208.241/clarify
+RewriteCond %{REMOTE_ADDR} ^103\.216\.208\.241$
+RewriteRule ^clarify$ http://103.216.208.241/clarify [P,L]
+
+# Redirect requests from 103.216.208.241/advantage to http://103.216.208.241/advantage
+RewriteCond %{REMOTE_ADDR} ^103\.216\.208\.241$
+RewriteRule ^advantage$ http://103.216.208.241/advantage [P,L]
+
+RewriteCond %{REMOTE_ADDR} ^103\.216\.208\.241$
+RewriteRule ^vendor$ http://103.216.208.241/RailTelVendor [P,L]
+
+RewriteCond %{REMOTE_ADDR} ^103\.216\.208\.241$
+RewriteRule ^inventory$ http://103.216.208.241/inventory [P,L]

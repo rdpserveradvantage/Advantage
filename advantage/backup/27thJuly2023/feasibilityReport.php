@@ -123,9 +123,9 @@
                                                 $getverificationStatus = $row['verificationStatus'];
                                                 
                                                 if($isVendor){
-                                                    $baseurl = 'http://103.216.208.241:8080/clarity/API/';
+                                                    $baseurl = 'http://clarity.advantagesb.com/API/';
                                                 }else{
-                                                    $baseurl = 'http://103.216.208.241:8080/advantage/API/';
+                                                    $baseurl = 'http://advantage.advantagesb.com/API/';
                                                 }
                                                 
                                                 echo '<div class="accordion-panel">';

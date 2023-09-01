@@ -217,8 +217,7 @@
                                                 $atm_id = $row['atmid'];
                                                 $getverificationStatus = $row['verificationStatus'];
                                                 
-                                                $baseurl = 'http://'.$_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'].'/clarity/API/' ; 
-                                                // $baseurl = 'http://103.216.208.241:8080/clarity/API/';
+                                                $baseurl = 'http://clarity.advantagesb.com/API/';
 
                                                 echo '<div class="accordion-panel">';
                                                 echo '<div class="accordion-heading" role="tab" id="heading' . $i . '">';

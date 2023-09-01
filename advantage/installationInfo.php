@@ -1,4 +1,7 @@
-<? include('header.php'); ?>
+<? include('header.php'); 
+
+$baseurl = 'http://clarity.advantagesb.com';
+?>
 
      
             <div class="pcoded-content">
@@ -183,8 +186,8 @@
                                             <tr>
                                                 <td><label for="routerFixedSnaps">Snaps:</label></td>
                                                 <td>
-                                                    <a href="<?= '../project/'.$routerFixedSnaps; ?>" target="_blank">
-                                                        <img class="installationImage" src="<?= '../project/'.$routerFixedSnaps; ?>" />                                                            
+                                                    <a href="<?= $baseurl.$routerFixedSnaps; ?>" target="_blank">
+                                                        <img class="installationImage" src="<?= $baseurl.$routerFixedSnaps; ?>" />                                                            
                                                     </a>
 
                                                 </td>
@@ -208,8 +211,8 @@
                                             <tr>
                                                 <td><label for="routerStatusSnaps">Snaps:</label></td>
                                                 <td>
-                                                    <a href="<?= '../project/'.$routerStatusSnaps; ?>" target="_blank">
-                                                        <img class="installationImage" src="<?= '../project/'.$routerStatusSnaps; ?>" />                                                            
+                                                    <a href="<?= $baseurl.$routerStatusSnaps; ?>" target="_blank">
+                                                        <img class="installationImage" src="<?= $baseurl.$routerStatusSnaps; ?>" />                                                            
                                                     </a>
 
 
@@ -231,7 +234,7 @@
                                             <tr>
                                                 <td><label for="adaptorSnaps">Snaps:</label></td>
                                                 <td>
-                                                    <img class="installationImage" src="<?= '../project/'.$adaptorSnaps; ?>" />
+                                                    <img class="installationImage" src="<?= $baseurl.$adaptorSnaps; ?>" />
 
                                                     </td>
                                             </tr>
@@ -255,7 +258,7 @@
                                                 <td><label for="adaptorStatusSnaps">Snaps:</label></td>
                                                 
                                                 <td>
-                                                <img class="installationImage" src="<?= '../project/'.$adaptorStatusSnaps; ?>" />
+                                                <img class="installationImage" src="<?= $baseurl.$adaptorStatusSnaps; ?>" />
                                                     <!--<input type="file" id="adaptorStatusSnaps" name="adaptorStatusSnaps" />-->
                                                 </td>
                                             </tr>
@@ -279,7 +282,7 @@
                                             <tr>
                                                 <td><label for="lanCableInstallSnap">Snaps:</label></td>
                                                 <td>
-                                                    <img class="installationImage" src="<?= '../project/'.$lanCableInstallSnap; ?>" />
+                                                    <img class="installationImage" src="<?= $baseurl.$lanCableInstallSnap; ?>" />
                                                     <!--<input type="file" id="lanCableInstallSnap" name="lanCableInstallSnap" />-->
                                                 </td>
                                             </tr>
@@ -308,7 +311,7 @@
                                             <tr>
                                                 <td><label for="lanCableInstallSnap">Snaps:</label></td>
                                                 <td>
-                                                <img class="installationImage" src="<?= '../project/'.$lanCableStatusSnap; ?>" />
+                                                <img class="installationImage" src="<?= $baseurl.$lanCableStatusSnap; ?>" />
                                                     <!--<input type="file" id="lanCableStatusSnap" name="lanCableStatusSnap" />-->
                                                 </td>
                                             </tr>
@@ -333,7 +336,7 @@
                                             <tr>
                                                 <td><label for="antennaSnaps">Snaps:</label></td>
                                                 <td>
-                                                <img class="installationImage" src="<?= '../project/'.$antennaSnaps; ?>" />
+                                                <img class="installationImage" src="<?= $baseurl.$antennaSnaps; ?>" />
                                                     <!--<input type="file" id="antennaSnaps" name="antennaSnaps" />-->
                                                 </td>
                                             </tr>
@@ -359,7 +362,7 @@
                                             <tr>
                                                 <td><label for="antennaStatusSnaps">Snaps:</label></td>
                                                 <td>
-                                                <img class="installationImage" src="<?= '../project/'.$antennaStatusSnaps; ?>" />
+                                                <img class="installationImage" src="<?= $baseurl.$antennaStatusSnaps; ?>" />
                                                     <!--<input type="file" id="antennaStatusSnaps" name="antennaStatusSnaps" />-->
                                                 </td>
                                             </tr>
@@ -384,7 +387,7 @@
                                             <tr>
                                                 <td><label for="gpsSnaps">Snaps:</label></td>
                                                 <td>
-                                                    <img class="installationImage" src="<?= '../project/'.$gpsSnaps; ?>" />
+                                                    <img class="installationImage" src="<?= $baseurl.$gpsSnaps; ?>" />
                                                     <!--<input type="file" id="gpsSnaps" name="gpsSnaps" />-->
                                                     </td>
                                                 
@@ -410,7 +413,7 @@
                                             <tr>
                                                 <td><label for="gpsStatusSnaps">Snaps:</label></td>
                                                 <td>
-                                                    <img class="installationImage" src="<?= '../project/'.$gpsStatusSnaps; ?>" />
+                                                    <img class="installationImage" src="<?= $baseurl.$gpsStatusSnaps; ?>" />
                                                     <!--<input type="file" id="gpsStatusSnaps" name="gpsStatusSnaps" />-->
                                                 </td>
                                             </tr>
@@ -436,7 +439,7 @@
                                             <tr>
                                                 <td><label for="wifiSnaps">Snaps:</label></td>
                                                 <td>
-                                                <img class="installationImage" src="<?= '../project/'.$wifiSnaps; ?>" />
+                                                <img class="installationImage" src="<?= $baseurl.$wifiSnaps; ?>" />
                                                     <!--<input type="file" id="wifiSnaps" name="wifiSnaps" />-->
                                                 </td>
                                             </tr>
@@ -461,7 +464,7 @@
                                             <tr>
                                                 <td><label for="wifiStatusSnaps">Snaps:</label></td>
                                                 <td>
-                                                <img class="installationImage" src="<?= '../project/'.$wifiStatusSnaps; ?>" />
+                                                <img class="installationImage" src="<?= $baseurl.$wifiStatusSnaps; ?>" />
                                                     <!--<input type="file" id="wifiStatusSnaps" name="wifiStatusSnaps" />-->
                                                 </td>
                                             </tr>
@@ -487,7 +490,7 @@
                                             <tr>
                                                 <td><label for="airtelSimSnaps">Snaps:</label></td>
                                                 <td>
-                                                <img class="installationImage" src="<?= '../project/'.$airtelSimSnaps; ?>" />
+                                                <img class="installationImage" src="<?= $baseurl.$airtelSimSnaps; ?>" />
                                                     <!--<input type="file" id="airtelSimSnaps" name="airtelSimSnaps" />-->
                                                 </td>
                                             </tr>
@@ -513,7 +516,7 @@
                                             <tr>
                                                 <td><label for="airtelSimStatusSnaps">Snaps:</label></td>
                                                 <td>
-                                                <img class="installationImage" src="<?= '../project/'.$airtelSimStatusSnaps; ?>" />
+                                                <img class="installationImage" src="<?= $baseurl.$airtelSimStatusSnaps; ?>" />
                                                     <!--<input type="file" id="airtelSimStatusSnaps" name="airtelSimStatusSnaps" />-->
                                                 </td>
                                             </tr>
@@ -539,7 +542,7 @@
                                             <tr>
                                                 <td><label for="vodafoneSimSnaps">Snaps:</label></td>
                                                 <td>
-                                                    <img class="installationImage" src="<?= '../project/'.$vodafoneSimSnaps; ?>" />
+                                                    <img class="installationImage" src="<?= $baseurl.$vodafoneSimSnaps; ?>" />
                                                     <!--<input type="file" id="vodafoneSimSnaps" name="vodafoneSimSnaps" />-->
                                                 </td>
                                             </tr>
@@ -565,7 +568,7 @@
                                             <tr>
                                                 <td><label for="vodafoneSimStatusSnaps">Snaps:</label></td>
                                                 <td>
-                                                    <img class="installationImage" src="<?= '../project/'.$vodafoneSimStatusSnaps; ?>" />
+                                                    <img class="installationImage" src="<?= $baseurl.$vodafoneSimStatusSnaps; ?>" />
                                                     <!--<input type="file" id="vodafoneSimStatusSnaps" name="vodafoneSimStatusSnaps" />-->
                                                 </td>
                                             </tr>
@@ -591,7 +594,7 @@
                                             <tr>
                                                 <td><label for="jioSimSnaps">Snaps:</label></td>
                                                 <td>
-                                                    <img class="installationImage" src="<?= '../project/'.$jioSimSnaps; ?>" />
+                                                    <img class="installationImage" src="<?= $baseurl.$jioSimSnaps; ?>" />
                                                     <input type="file" id="jioSimSnaps" name="jioSimSnaps" />
                                                 </td>
                                             </tr>
@@ -617,7 +620,7 @@
                                             <tr>
                                                 <td><label for="jioSimStatusSnaps">Snaps:</label></td>
                                                 <td>
-                                                <img class="installationImage" src="<?= '../project/'.$jioSimStatusSnaps; ?>" />
+                                                <img class="installationImage" src="<?= $baseurl.$jioSimStatusSnaps; ?>" />
                                                     <!--<input type="file" id="jioSimStatusSnaps" name="jioSimStatusSnaps" />-->
                                                 </td>
                                             </tr>
@@ -633,7 +636,7 @@
 
                                                     <br />
                                                     <label for="vendorStamp">Stamp of Vendor:</label>
-                                                    <img class="installationImage" src="<?= '../project/'.$vendorStamp; ?>" />
+                                                    <img class="installationImage" src="<?= $baseurl.$vendorStamp; ?>" />
                                                     <!--<input type="file" id="vendorStamp" name="vendorStamp" />-->
                                                 </td>
                                             </tr>

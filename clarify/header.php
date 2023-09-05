@@ -6,21 +6,6 @@ $token = $_SESSION['isServicePortalToken'] ;
 ?>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>        
 
-<?
-if (!function_exists('verifyToken')) {
-    function verifyToken($token){
-        global $con; 
-        $sql = mysqli_query($con,"select * from vendorUsers where token='".$token."' and user_status=1");
-            if($sql_result = mysqli_fetch_assoc($sql)){
-                return 1 ; 
-        
-            }else{
-                return 0;
-            }    
-    }    
-}    
-
-?>
 
 <!DOCTYPE html>
 <html lang="en" 
@@ -55,12 +40,6 @@ style="text-transform: uppercase;"
 
 <body>
     
-    <?  if(verifyToken($token)!=1){ ?>
-
-<script>
-window.location.href="login.php";
-</script>        
-<? }  ?>
 
 
     <style>

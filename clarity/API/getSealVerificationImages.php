@@ -1,6 +1,6 @@
 <? include('config.php');
 
-$path = 'http://103.216.208.241:8080/clarity/';
+$path = 'http://clarity.advantagesb.com/';
 $siteid = $_REQUEST['siteid'];
 $atmid = $_REQUEST['atmid'];
 

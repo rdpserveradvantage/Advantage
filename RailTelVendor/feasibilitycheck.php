@@ -612,7 +612,7 @@
             if (atmID !== "") {
                 // AJAX request to fetch ATM details
                 $.ajax({
-                    url: "http://103.216.208.241:8080/advantage/API/getATMIDInfo.php?ATMID1=" + atmID,
+                    url: "http://advantage.advantagesb.com/API/getATMIDInfo.php?ATMID1=" + atmID,
                     type: "GET",
                     dataType: "json",
                     success: function (response) {

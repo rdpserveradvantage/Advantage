@@ -158,6 +158,18 @@ if($level!=1){
                                 
                                 
                         <? } ?>
+                        <li class="">
+                                    <a href="http://clarity.advantagesb.com/" target="_blank">
+                                        <span class="pcoded-micon"><i class="feather icon-check-circle" style="color: #23ff23;"></i></span>
+                                        <span class="pcoded-mtext">Clarity - Project</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="http://clarify.advantagesb.com/autoLogin.php?id=<?= $userid; ?>" target="_blank">
+                                        <span class="pcoded-micon"><i class="feather icon-navigation-2" style="color: #4eeffa;"></i></span>
+                                        <span class="pcoded-mtext">Clarify - Service</span>
+                                    </a>
+                                </li>
                         
 
                         <li class="">

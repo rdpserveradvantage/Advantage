@@ -34,8 +34,8 @@ if(verifyToken($token)!=1 || $token=='NA'){
 <head>
     <meta property="og:title" content=" AdvantageSB Communications Private Limited ">
     <meta property="og:description" content="Advantage provides world-class connectivity solution with the latest generation of 4G LTE & 5G technology enabling exceptional throughput and assured uptime of 99.5% at the last mile">
-    <meta property="og:image" content="http://103.216.208.241:8080/advantage/assets/advantage.png">
-    <meta property="og:url" content="http://103.216.208.241:8080/advantage/">
+    <meta property="og:image" content="http://advantage.advantagesb.com/assets/advantage.png">
+    <meta property="og:url" content="http://advantage.advantagesb.com/">
     <meta property="og:type" content="Advantage CRM">
     
     

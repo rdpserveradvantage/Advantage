@@ -260,7 +260,7 @@ table.table-bordered.dataTable tbody td {
 
 ::-webkit-scrollbar-thumb {
     background: #01a9ac;
-    border-radius: 5px;
+    border-radius: 15px;
     /* Adjust the height of the vertical scrollbar */
     height: 15px;
 }

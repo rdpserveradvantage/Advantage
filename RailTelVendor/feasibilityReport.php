@@ -28,8 +28,7 @@
                                             $i=1 ; 
                                             while ($row = $result->fetch_assoc()) {
                                                 $isVendor = $row['isVendor'];
-
-                                                    $baseurl = 'http://103.216.208.241:8080/clarity/API/';
+                                                $baseurl = 'http://clarity.advantagesb.com/API/';
                                                 
                                                 echo '<div class="accordion-panel">';
                                                 echo '<div class="accordion-heading" role="tab" id="heading' . $i . '">';

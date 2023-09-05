@@ -98,9 +98,9 @@ include('header.php');
                                                 while($sql_result = mysqli_fetch_assoc($sql)){
                                                 $isVendor = $sql_result['isVendor'];
                                                 if($isVendor){
-                                                    $baseurl = 'https://sarmicrosystems.in/RailTailVendor/API/';
+                                                    $baseurl = 'http://vendor.advantagesb.com/API/';
                                                 }else{
-                                                    $baseurl = 'http://103.216.208.241:8080/advantage/API/';
+                                                    $baseurl = 'http://advantage.advantagesb.com/API/';
                                                 }
                                                 
                                                 ?>

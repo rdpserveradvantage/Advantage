@@ -44,8 +44,13 @@ if($_SESSION['SERVICE_level']==5){
     $call_receive = $_POST['call_receive'];
 }
 
-$noProblemOccurs = $_REQUEST['noProblemOccurs'];
-$noProblemOccursStr = implode(',',$noProblemOccurs);
+if(isset($_REQUEST['noProblemOccurs'])){
+    $noProblemOccurs = $_REQUEST['noProblemOccurs'];
+    $noProblemOccursStr = implode(',',$noProblemOccurs);
+}else{
+    $noProblemOccursStr = '';
+}
+
 
 $statement = "INSERT INTO mis(atmid, bank, customer, zone, city, state, location, call_receive_from, remarks, status, created_by, created_at, branch, bm, call_type, serviceExecutive,lho,noProblemOccurs) 
 VALUES ('".$atmid."','".$bank."','".$customer."','".$zone."','".$city."','".$state."','".$location."','".$call_receive."','".$remarks."','open','".$created_by."','".$created_at."','".$branch."','".$bm."','".$call_type."','".$serviceExecutive."','".$lho."','".$noProblemOccursStr."')";
@@ -76,7 +81,7 @@ if(mysqli_query($con,$statement)) {
     $response['message'] = "Call Logged successfully ! TICKET ID : "  . $ticket_id ;
     
 } else {
-    echo mysqli_error($con);
+    // echo mysqli_error($con);
     $response['message'] = "An error occurred while saving the form data.";
 }
 

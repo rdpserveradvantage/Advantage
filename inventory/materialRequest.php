@@ -26,21 +26,23 @@ function getMaterialRequestStatus($siteid){
                             <div class="page-body">
                                 <div class="card">
                                     <div class="card-block" style="overflow:auto;">
-                                        <h5>All Material Request</h5>
-                                        <hr />
                                         
                                         <?
                                         $siteidsql = mysqli_query($con,"SELECT siteid FROM `material_requests` where status='pending' group by siteid");
                                         while($siteidsql_result = mysqli_fetch_assoc($siteidsql)){
                                             $siteids[] = $siteidsql_result['siteid'];
                                         }
+                                        $siteids_ar = $siteids ; 
                                         $siteids=json_encode($siteids);
                                         $siteids=str_replace( array('[',']','"') , ''  , $siteids);
                                         $siteids=explode(',',$siteids);
                                         $siteids = "'" . implode ( "', '", $siteids )."'";
                                         
                                         
-                                        ?>
+                                        if($siteids_ar){ ?>
+                                        <h5>All Material Request</h5>
+                                        <hr />
+
                                          <table class="table table-hover table-styling table-xs">
                                             <thead>
                                                 <tr class="table-primary">
@@ -67,18 +69,18 @@ function getMaterialRequestStatus($siteid){
                                                     ?>
                                                     
                                                    <tr>
-                                                       <td><? echo $i ; ?></td>
-                                                       <td><? echo $atmid; ?></td>
-                                                       <td><? echo $address; ?></td>
-                                                       <td><? echo $city; ?></td>
-                                                       <td><? echo $state; ?></td>
-                                                       <td><? echo getMaterialRequestInitiatorName($siteid); ?></td>
+                                                       <td><?= $i ; ?></td>
+                                                       <td><?= $atmid; ?></td>
+                                                       <td><?= $address; ?></td>
+                                                       <td><?= $city; ?></td>
+                                                       <td><?= $state; ?></td>
+                                                       <td><?= getMaterialRequestInitiatorName($siteid); ?></td>
                                                        
                                                        <td>
-                                                           <a href="sendMaterial.php?siteid=<? echo $siteid; ?>">Send Material</a>
+                                                           <a href="sendMaterial.php?siteid=<?= $siteid; ?>">Send Material</a>
                                                        </td>
                                                        <td>
-                                                           <? echo getMaterialRequestStatus($siteid) ; ?>
+                                                           <?= getMaterialRequestStatus($siteid) ; ?>
                                                        </td>
                                                    </tr>
                                                     
@@ -86,6 +88,19 @@ function getMaterialRequestStatus($siteid){
 
                                             </tbody>
                                         </table>                                        
+                                    
+
+                                        <? }else{
+
+
+                                            echo '
+                                            
+                                            <div class="noRecordsContainer">
+                                                <img src="assets/no_records.jpg">
+                                            </div>';
+
+                                            
+                                        } ?>
                                     
                                     
                                         

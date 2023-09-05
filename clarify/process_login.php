@@ -42,7 +42,7 @@ function authenticateUser($username, $password) {
     global $con ; 
     $response = array('success' => false);
 
-    $user = getUserFromTable( 'vendorUsers', $username, $password);
+    $user = getUserFromTable(  $username, $password);
 
 
     if ($user) {
@@ -78,13 +78,25 @@ function authenticateUser($username, $password) {
     return $response;
 }
 
-function getUserFromTable($table, $username, $password) {
+function getUserFromTable($username, $password) {
     global $con; 
-    $query = "SELECT * FROM $table WHERE uname = '$username' AND password = '$password' AND user_status = 1";    
-    
-    
+
+    $table = 'mis_loginusers';
+    $query = "SELECT * FROM $table WHERE (uname = '$username' OR contact = '$username') AND pwd = '$password' AND user_status = 1";    
     $result = mysqli_query($con, $query);
     $user = mysqli_fetch_assoc($result);
+    if($user){
+        $_SESSION['FROM_PORTAL'] = 'Advantage';
+        return $user;
+    }else{
+        $table = 'vendorUsers';
+        $query = "SELECT * FROM $table WHERE (uname = '$username' OR contact = '$username') AND password = '$password' AND user_status = 1";    
+        $result = mysqli_query($con, $query);
+        $user = mysqli_fetch_assoc($result);
+        $_SESSION['FROM_PORTAL'] = 'Clarify';
+
+        return $user ; 
+    }
     
-    return $user;
+
 }

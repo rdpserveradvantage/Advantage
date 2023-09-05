@@ -70,7 +70,7 @@
                                                             <td>
 
                                                                 <button type="button" class="esd-link btn btn-primary" data-siteid="<?php echo $siteid; ?>" data-atmid="<?php echo $atmid; ?>" <? if ($isFeasibiltyDone == 1) { echo 'disabled'; } ?> >
-                                                                    <i class="icofont icofont-info-square"></i> ESD
+                                                                    <i class="icofont icofont-info-square"></i> ETA
                                                                 </button>
                                                                 <? 
                                                                 if($esd!='0000-00-00 00:00:00'){
@@ -81,7 +81,7 @@
                                                                     ?>
                                                                 |   
                                                                 <button type="button" class="asd-link btn btn-primary" data-siteid="<?php echo $siteid; ?>" data-atmid="<?php echo $atmid; ?>" <? if ($isFeasibiltyDone == 1) { echo 'disabled'; } ?>>
-                                                                    <i class="icofont icofont-info-square"></i> ASD
+                                                                    <i class="icofont icofont-info-square"></i> ATT
                                                                 </button>
                                                                    <? echo $asd ;  } ?>
 

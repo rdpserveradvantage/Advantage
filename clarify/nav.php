@@ -1,5 +1,11 @@
 <?
-    $user = "select * from vendorUsers where id=".$userid;
+    
+    if($_SESSION['FROM_PORTAL']=='Advantage'){
+        $logintable = 'mis_loginusers' ; 
+    }else{
+        $logintable = 'vendorusers' ; 
+    }
+    $user = "select * from $logintable where id=".$userid;
     $usersql = mysqli_query($con,$user);
     $usersql_result = mysqli_fetch_assoc($usersql);
     

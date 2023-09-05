@@ -7,11 +7,10 @@
     .card-data{
         overflow-x: auto;
     }
-        
+   
 </style>
 <link rel="stylesheet" type="text/css" href="../datatable/dataTables.bootstrap.css">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-     
             <div class="pcoded-content">
                 <div class="pcoded-inner-content">
                     <div class="main-body">
@@ -128,7 +127,7 @@ if(isset($_POST['submit'])){
                     
                 }else{
                 
-                    $sql = "insert into sites(activity,customer,bank,atmid,atmid2,atmid3,address,city,state,zone,LHO,LHO_Contact_Person,LHO_Contact_Person_No,
+                   $sql = "insert into sites(activity,customer,bank,atmid,atmid2,atmid3,address,city,state,zone,LHO,LHO_Contact_Person,LHO_Contact_Person_No,
                     LHO_Contact_Person_email,LHO_Adv_Person,LHO_Adv_Contact,LHO_Adv_email,Project_Coordinator_Name,Project_Coordinator_No,Project_Coordinator_email,
                     Customer_SLA,Our_SLA,Vendor,Cash_Management,CRA_VENDOR,ID_on_Make,Model,SiteType,PopulationGroup,XPNET_RemoteAddress,CONNECTIVITY,Connectivity_Type,
                     Site_data_Received_for_Feasiblity_date,status,created_at,created_by,po,po_date,latitude,longitude) values('".$activity."','".$customer."','".$bank."','".$atmid."','".$atmid2."','".$atmid3."',
@@ -182,6 +181,6 @@ if(isset($_POST['submit'])){
 
 <? include('footer.php'); ?>
 
-<script src="files/assets/pages/jquery.filer/js/jquery.filer.min.js"></script>
+<!-- <script src="files/assets/pages/jquery.filer/js/jquery.filer.min.js"></script>
 <script src="files/assets/pages/filer/custom-filer.js" type="text/javascript"></script>
-<script src="files/assets/pages/filer/jquery.fileuploads.init.js" type="text/javascript"></script>
+<script src="files/assets/pages/filer/jquery.fileuploads.init.js" type="text/javascript"></script> -->

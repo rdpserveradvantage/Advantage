@@ -9,7 +9,15 @@
                                 <div class="card">
                                     <div class="card-block overflow_auto">
                                         
-                                        <table class="table table-hover table-styling table-xs">
+                                    <?
+                                    $counter=1 ; 
+                                        $sql = mysqli_query($con,"select siteid, atmid, vendorId, vendorName, engineerId, engineerName, customerDependency, electricalDependency, hardwareDependency, powerIssue, softwareDependency, upsIssue, created_at, created_by, status, 
+                                        portal from holdInstallation where status=1");
+                                      
+                                        if (mysqli_num_rows($sql) > 0) { ?>
+
+
+<table class="table table-hover table-styling table-xs">
                                             <thead>
                                                 <tr class="table-primary">
                                                     <th>Sr No</th>
@@ -31,9 +39,7 @@
                                                 
 
                                         <?
-                                        $counter=1 ; 
-                                        $sql = mysqli_query($con,"select siteid, atmid, vendorId, vendorName, engineerId, engineerName, customerDependency, electricalDependency, hardwareDependency, powerIssue, softwareDependency, upsIssue, created_at, created_by, status, 
-                                        portal from holdInstallation where status=1");
+                                    
                                         while($sql_result = mysqli_fetch_assoc($sql)){
                                             
 
@@ -81,7 +87,25 @@
                                         
                                             </tbody>
                                         </table>
+
+
+
+
+                                        <? } else{
+
+                                                echo '
+                                                                                            
+                                                <div class="noRecordsContainer">
+                                                    <img src="assets/no_records.jpg">
+                                                </div>';
+
+                                        } ?>
+
                                         
+
+                                        
+
+
                                         
                                     </div>
                                 </div>

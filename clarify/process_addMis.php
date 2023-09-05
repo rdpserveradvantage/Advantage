@@ -1,10 +1,10 @@
 <?php include('config.php');
 
-// // ini_set('display_errors', 1);
-// // ini_set('display_startup_errors', 1);
-// // error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
-
+// echo '111';
 // var_dump($_REQUEST);
 // Initialize response arrays
 $response = array();
@@ -44,8 +44,11 @@ if($_SESSION['SERVICE_level']==5){
     $call_receive = $_POST['call_receive'];
 }
 
-$statement = "INSERT INTO mis(atmid, bank, customer, zone, city, state, location, call_receive_from, remarks, status, created_by, created_at, branch, bm, call_type, serviceExecutive,lho) 
-VALUES ('".$atmid."','".$bank."','".$customer."','".$zone."','".$city."','".$state."','".$location."','".$call_receive."','".$remarks."','open','".$created_by."','".$created_at."','".$branch."','".$bm."','".$call_type."','".$serviceExecutive."','".$lho."')";
+$noProblemOccurs = $_REQUEST['noProblemOccurs'];
+$noProblemOccursStr = implode(',',$noProblemOccurs);
+
+$statement = "INSERT INTO mis(atmid, bank, customer, zone, city, state, location, call_receive_from, remarks, status, created_by, created_at, branch, bm, call_type, serviceExecutive,lho,noProblemOccurs) 
+VALUES ('".$atmid."','".$bank."','".$customer."','".$zone."','".$city."','".$state."','".$location."','".$call_receive."','".$remarks."','open','".$created_by."','".$created_at."','".$branch."','".$bm."','".$call_type."','".$serviceExecutive."','".$lho."','".$noProblemOccursStr."')";
 
 if(mysqli_query($con,$statement)) {
     $mis_id = $con->insert_id;
@@ -62,8 +65,8 @@ if(mysqli_query($con,$statement)) {
 
             
              $detai_statement = "insert into mis_details(mis_id,atmid,component,subcomponent,engineer,docket_no,status,created_at,ticket_id,
-             mis_city,zone,call_type,case_type,branch) 
-             values('".$mis_id."','".$atmid."','".$comp."','".$subcomp."','".$engineer_user_id."','".$docket_no[$i]."','".$status."','".$created_at."','".$ticket_id."','".$mis_city."','".$zone."','Service','".$call_receive."','".$branch."')" ;
+             mis_city,zone,call_type,case_type,branch,noProblemOccurs) 
+             values('".$mis_id."','".$atmid."','".$comp."','".$subcomp."','".$engineer_user_id."','".$docket_no[$i]."','".$status."','".$created_at."','".$ticket_id."','".$mis_city."','".$zone."','Service','".$call_receive."','".$branch."','".$noProblemOccursStr."')" ;
             if(mysqli_query($con,$detai_statement)){ 
             
         }       
@@ -73,6 +76,7 @@ if(mysqli_query($con,$statement)) {
     $response['message'] = "Call Logged successfully ! TICKET ID : "  . $ticket_id ;
     
 } else {
+    echo mysqli_error($con);
     $response['message'] = "An error occurred while saving the form data.";
 }
 

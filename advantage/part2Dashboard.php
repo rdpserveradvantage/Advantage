@@ -76,12 +76,12 @@ $installationDone = $query6_result['count'];
             type: 'column'
         },
         title: {
-            text: 'Vendor Wise Summary'
+            text: 'Contractors Wise Summary'
         },
         xAxis: {
             categories: data.map(item => item.Vendor),
             title: {
-                text: 'Vendor'
+                text: 'Contractors'
             }
         },
         yAxis: {

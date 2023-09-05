@@ -7,6 +7,8 @@ if($_SESSION['ADVANTAGE_username']){
     $usersql = mysqli_query($con,$user);
     $usersql_result = mysqli_fetch_assoc($usersql);
     
+
+    $level = $usersql_result['level'];
     $permission = $usersql_result['permission'];
     $permission = explode(',',$permission);
     sort($permission);
@@ -17,7 +19,13 @@ $cpermission=explode(',',$cpermission);
 $cpermission = "'" . implode ( "', '", $cpermission )."'";
     $mainmenu = [];
     foreach($permission as $key=>$val){
-        $sub_menu_sql = mysqli_query($con,"select * from sub_menu where id='".$val."' and status=1");
+        if($level==1){
+            $sub_menu_sql = mysqli_query($con,"select * from sub_menu where id='".$val."' and status=1");
+
+        }else{
+            $sub_menu_sql = mysqli_query($con,"select * from sub_menu where id='".$val."' and status=1 and main_menu<>1");
+
+        }
         if(mysqli_num_rows($sub_menu_sql)>0){
           $sub_menu_sql_result = mysqli_fetch_assoc($sub_menu_sql);
           $mainmenu[] = $sub_menu_sql_result['main_menu'];
@@ -25,14 +33,10 @@ $cpermission = "'" . implode ( "', '", $cpermission )."'";
     }
 $mainmenu    = array_unique($mainmenu);
 sort($mainmenu);
+
 ?>
     
-
-
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-
-
-
 <nav class="pcoded-navbar">
                         <div class="pcoded-inner-navbar main-menu">
                             <div class="pcoded-navigatio-lavel">Navigation</div>
@@ -119,20 +123,28 @@ sort($mainmenu);
                                     
                                     <ul class="pcoded-submenu">                                    
                                         <?
-                                        
-                                        $submenu_sql = mysqli_query($con,"select * from sub_menu where main_menu = '".$menu_id."' and id in ($cpermission) and status=1");
+
+if($level!=1){
+    $submenu_sql = mysqli_query($con,"select * from sub_menu where main_menu = '".$menu_id."' and id in ($cpermission) and status=1 and main_menu<>1");
+}else{
+    $submenu_sql = mysqli_query($con,"select * from sub_menu where main_menu = '".$menu_id."' and id in ($cpermission) and status=1");
+}
+
+
+    
                                         while($submenu_sql_result = mysqli_fetch_assoc($submenu_sql)){ 
-                                        $page = $submenu_sql_result['page'];
+                                        
+                                        
+                                            $page = $submenu_sql_result['page'];
                                         $submenu_name = $submenu_sql_result['sub_menu'];
+
                                         if(basename($_SERVER['PHP_SELF'],PATHINFO_BASENAME)==$page){
                                             $className = 'active' ; 
                                         }else{
                                             $className = '' ; 
                                         }
                                             
-                                        
                                         ?>
-                                            
                                             <li class="<? echo $className; ?>">
                                                 <a href="<? echo $page; ?>">
                                                     <span class="pcoded-mtext"><? echo $submenu_name; ?></span>

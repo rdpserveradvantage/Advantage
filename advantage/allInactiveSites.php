@@ -8,7 +8,13 @@
                             <div class="page-body">
                                 <div class="card">
                                     <div class="card-block">
-                                        
+                                      
+                                    <?
+                                                $counter=1;
+                                                $sql = mysqli_query($con,"select * from inactiveSites where status=1");
+                                                if (mysqli_num_rows($sql) > 0) { ?>
+
+
                                         <table class="table table-hover table-styling table-xs">
                                             <thead>
                                                 <tr class="table-primary">
@@ -20,9 +26,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?
-                                                $counter=1;
-                                                $sql = mysqli_query($con,"select * from inactiveSites where status=1");
+                                      <?
                                                 while($sql_result = mysqli_fetch_assoc($sql)){
                                                     
                                                     $siteid = $sql_result['siteid'];
@@ -44,7 +48,20 @@
                                                     </td>
                                                 </tr>    
                                                     
-                                                <? $counter++; } ?>
+                                                <? $counter++; } 
+
+                                                 } else{
+
+echo '
+                                            
+<div class="noRecordsContainer">
+    <img src="assets/no_records.jpg">
+</div>';
+
+} ?>
+
+
+
                                             </tbody>
                                         </table>
                                         

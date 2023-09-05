@@ -1,6 +1,10 @@
 <? include('config.php');
 $siteId = $_REQUEST['siteId'];
 
+$i=1 ; 
+
+$sql = mysqli_query($con,"select * from event_log where site_id='".$siteId."'");
+if (mysqli_num_rows($sql) > 0) { 
 
 ?>
 
@@ -16,10 +20,7 @@ $siteId = $_REQUEST['siteId'];
         </tr>
     </thead>
     <tbody>
-<?  
-$i=1 ; 
-
-$sql = mysqli_query($con,"select * from event_log where site_id='".$siteId."'");
+<?
 while($sql_result = mysqli_fetch_assoc($sql)){
 
 $atmid = $sql_result['atmid'];
@@ -40,3 +41,12 @@ $created_at = $sql_result['event_timestamp'];
 <? $i++; } ?>
 </tbody>
 </table>
+<? } else{
+
+echo '
+                                            
+<div class="noRecordsContainer">
+    <img src="assets/no_records.jpg">
+</div>';
+
+} ?>

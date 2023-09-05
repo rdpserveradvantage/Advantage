@@ -433,3 +433,12 @@ h6 {
 .table-hover tbody tr:hover {
     background-color: rgb(1 169 172/15%);
 }
+
+
+.noRecordsContainer{
+    text-align: center;
+    overflow: auto;
+}
+.noRecordsContainer img{
+    width:50%;
+}

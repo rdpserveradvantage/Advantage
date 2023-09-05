@@ -71,6 +71,12 @@
                     $statement .= " and b.atmid = '" . $_REQUEST['atmid'] . "'";
                     $sqlappCount.= " and b.atmid = '" . $_REQUEST['atmid'] . "'";
                 }
+
+                if (isset($_REQUEST['call_receive_from']) && $_REQUEST['call_receive_from'] != '') {
+                    $statement .= " and a.call_receive_from = '" . $_REQUEST['call_receive_from'] . "'";
+                    $sqlappCount.= " and a.call_receive_from = '" . $_REQUEST['call_receive_from'] . "'";
+                }
+                
                 
                 if (isset($_REQUEST['fromdt']) && $_REQUEST['fromdt'] != '' && isset($_REQUEST['todt']) && $_REQUEST['todt'] != '') {
 
@@ -271,6 +277,14 @@ $end_window = min($start_window + $window_size - 1, $total_pages);
                                             </select>
                                         </div>
 
+                                        <div class="col-md-3">
+                                            <label>Call Receive From </label>
+                                            <select name="call_receive_from" id="call_receive_from" class="form-control">
+                                                <option value="">Select</option>
+                                                <option value="Customer / Bank" <? if($_REQUEST['call_receive_from']=='Customer / Bank'){ echo 'selected'; }?> >Customer / Bank</option>
+                                                <option value="Internal" <? if($_REQUEST['call_receive_from']=='Internal'){ echo 'selected'; }?>>Internal</option>
+                                            </select>
+                                        </div>
 
                                         
 
@@ -532,7 +546,7 @@ $status = $_REQUEST['status'] ;
 $status = http_build_query(array('status' => $status));
 
 
-
+$call_receive_from = $_REQUEST['call_receive_from'];
 $atmid = $_REQUEST['atmid'];
 $fromdt = $_REQUEST['fromdt'];
 $todt = $_REQUEST['todt'];
@@ -543,14 +557,14 @@ $todt = $_REQUEST['todt'];
 echo '<div class="pagination"><ul>';
 if ($start_window > 1) {
 
-    echo "<li><a href='?page=1&&atmid=$atmid&&$customer&&fromdt=$fromdt&&todt=$todt&&call_type=$call_type&&$status'>First</a></li>";
-    echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid='.$atmid.'&&'.$customer.'&&fromdt='.$fromdt.'&&todt='.$todt.'&&call_type='.$call_type.'&&'.$status.'">Prev</a></li>';
+    echo "<li><a href='?page=1&&atmid=$atmid&&$customer&&fromdt=$fromdt&&todt=$todt&&call_type=$call_type&&status=$status&&call_receive_from=$call_receive_from'>First</a></li>";
+    echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid='.$atmid.'&&'.$customer.'&&fromdt='.$fromdt.'&&todt='.$todt.'&&call_type='.$call_type.'&&status'.$status.'&&call_receive_from='.$call_receive_from.'">Prev</a></li>';
 }
 
 for ($i = $start_window; $i <= $end_window; $i++) {
 ?>
     <li class="<? if ($i == $current_page) { echo 'active'; }?>" >
-        <a href="?page=<? echo $i; ?>&&atmid=<? echo $atmid; ?>&&<? echo $customer; ?>&&fromdt=<? echo $fromdt; ?>&&todt=<? echo $todt; ?>&&call_type=<? echo $call_type; ?>&&<? echo $status; ?>" >
+        <a href="?page=<? echo $i; ?>&&atmid=<? echo $atmid; ?>&&<? echo $customer; ?>&&fromdt=<? echo $fromdt; ?>&&todt=<? echo $todt; ?>&&call_type=<? echo $call_type; ?>&&<? echo $status; ?>&&call_receive_from=<?= $call_receive_from; ?>" >
             <? echo $i;  ?>
         </a>        
     </li>
@@ -559,8 +573,8 @@ for ($i = $start_window; $i <= $end_window; $i++) {
 
 if ($end_window < $total_pages) {
 
-    echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid='.$atmid.'&&'.$customer.'&&fromdt='.$fromdt.'&&todt='.$todt.'&&call_type='.$call_type.'&&'.$status.'">Next</a></li>';
-    echo '<li><a href="?page=' . $total_pages . '&&atmid='.$atmid.'&&'.$customer.'&&fromdt='.$fromdt.'&&todt='.$todt.'&&call_type='.$call_type.'&&'.$status.'">Last</a></li>';
+    echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid='.$atmid.'&&'.$customer.'&&fromdt='.$fromdt.'&&todt='.$todt.'&&call_type='.$call_type.'&&status='.$status.'&&call_receive_from='.$call_receive_from.'">Next</a></li>';
+    echo '<li><a href="?page=' . $total_pages . '&&atmid='.$atmid.'&&'.$customer.'&&fromdt='.$fromdt.'&&todt='.$todt.'&&call_type='.$call_type.'&&status'.$status.'&&call_receive_from='.$call_receive_from.'">Last</a></li>';
 }
 echo '</ul></div>';
 										

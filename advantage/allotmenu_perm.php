@@ -39,6 +39,8 @@
                                         $user_permission = $usersql_result['permission'];
                                         $user_permission = explode (",", $user_permission);
                                         
+                                        $level = $usersql_result['level'];
+
                                         if(isset($_POST['submit'])){
                                         $permission =$_POST['sub_menu'];
                                         $permission = implode(',',$permission);
@@ -72,8 +74,12 @@
                                             
                                             
                                             
-                                            
-                                            $mainsql = mysqli_query($con,"select * from main_menu where $statusColumn=1");
+                                            if($level==1){
+                                                $mainsql = mysqli_query($con,"select * from main_menu where $statusColumn=1");
+                                            }else{
+                                                $mainsql = mysqli_query($con,"select * from main_menu where $statusColumn=1 and id<>1");
+                                            }
+
                                             while($mainsql_result = mysqli_fetch_assoc($mainsql)){
                                             $main_id = $mainsql_result['id'];
                                             ?>
@@ -121,6 +127,13 @@
                                         </div>
                                     </div>
                                 </div>
+
+
+
+
+
+
+                                
                             </div>
                         </div>
 

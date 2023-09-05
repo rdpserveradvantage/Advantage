@@ -25,6 +25,7 @@
                                     if($userLevel==1){
                                         $statement = "select * from vendorSitesDelegation where vendorid='".$RailTailVendorID."' and status=1" ; 
                                         $sql = mysqli_query($con,$statement);
+                                   
                                         while($sql_result = mysqli_fetch_assoc($sql)){    
                                             $siteids[] = $sql_result['siteid'];
                                         }
@@ -224,7 +225,23 @@
                                 <div class="card">
                                     <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show Filters</a>
                                     <div class="card-body" style="overflow:auto;">
-                                        <table class="table table-hover table-styling" style="width:100%;">
+                                    
+                                    
+                                    <? 
+                                    
+                                    $i = 1 ;
+                                                
+                                    $counter = ($current_page - 1) * $page_size + 1;
+                                    $atm_sql_res = mysqli_query($con,$sql_query);
+
+                                    
+                                    if (mysqli_num_rows($atm_sql_res) > 0) { ?>
+
+?>
+
+
+                                    
+                                    <table class="table table-hover table-styling" style="width:100%;">
                                             <thead>
                                                 <tr class="table-primary">
                                                     <th>#</th>
@@ -275,10 +292,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php $i = 1 ;
-                                                
-                                                $counter = ($current_page - 1) * $page_size + 1;
-                                                $atm_sql_res = mysqli_query($con,$sql_query);
+                                                <?php 
                                                 while($atm_sql_result = mysqli_fetch_assoc($atm_sql_res)){
                                                         
                                                         $isFeasibiltyDone = $atm_sql_result['isFeasibiltyDone'];
@@ -429,8 +443,19 @@
                                                  </tr>
                                             <?  $counter++ ;   } ?>
                                             </tbody>
-                                        </table>
-                                    </div>
+                                    </table>
+                                    
+                                    <? } else{
+
+echo '
+                                            
+<div class="noRecordsContainer">
+    <img src="assets/no_records.jpg">
+</div>';
+
+} ?>
+
+                                  </div>
                                     
                                     
                                     

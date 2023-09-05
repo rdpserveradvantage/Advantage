@@ -223,9 +223,10 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
   height: 15px;
 }
 
+
 /* Horizontal scrollbar */
 ::-webkit-scrollbar:horizontal {
-  height: 5px; /* Adjust the height of the horizontal scrollbar */
+  height: 15px; /* Adjust the height of the horizontal scrollbar */
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
@@ -374,7 +375,13 @@ input:focus , select:focus{
 table td{
     font-size: 13px;
 }
-
 .border-checkbox-section .border-checkbox-group .border-checkbox-label{
-    display: block !important;
+    width: 50%;
+}
+label {
+    font-weight: 600;
+}
+
+.pcoded .pcoded-navbar[active-item-theme="theme1"] .pcoded-item li .pcoded-submenu li.active>a, .pcoded .pcoded-navbar[active-item-theme="theme1"] .pcoded-item li .pcoded-submenu li:hover>a {
+    color: #FE8A7D !important;
 }

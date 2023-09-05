@@ -1,5 +1,4 @@
-<?php session_start();
-include('config.php') ; ?>
+<?php include('config.php') ; ?>
 <html>
     <head>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>        
@@ -20,7 +19,7 @@ if($vendorName){
         
         
             <script>
-               swal("Good job!", "vendor Added Successfully !", "success");
+               swal("Good job!", "Contractor Added Successfully !", "success");
         
                    setTimeout(function(){ 
                       window.location.href="vendor.php";

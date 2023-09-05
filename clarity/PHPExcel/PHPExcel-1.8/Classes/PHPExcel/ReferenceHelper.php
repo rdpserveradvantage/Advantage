@@ -872,34 +872,47 @@ class PHPExcel_ReferenceHelper
      * @throws    PHPExcel_Exception
      */
     private function updateSingleCellReference($pCellReference = 'A1', $pBefore = 'A1', $pNumCols = 0, $pNumRows = 0)
-    {
-        if (strpos($pCellReference, ':') === false && strpos($pCellReference, ',') === false) {
-            // Get coordinates of $pBefore
-            list($beforeColumn, $beforeRow) = PHPExcel_Cell::coordinateFromString($pBefore);
+{
+    // Check if $pCellReference is not a range (contains neither ':' nor ',')
+    if (strpos($pCellReference, ':') === false && strpos($pCellReference, ',') === false) {
+        // Get coordinates of $pBefore
+        list($beforeColumn, $beforeRow) = PHPExcel_Cell::coordinateFromString($pBefore);
 
-            // Get coordinates of $pCellReference
-            list($newColumn, $newRow) = PHPExcel_Cell::coordinateFromString($pCellReference);
+        // Get coordinates of $pCellReference
+        list($newColumn, $newRow) = PHPExcel_Cell::coordinateFromString($pCellReference);
 
-            // Verify which parts should be updated
-            $updateColumn = (($newColumn{0} != '$') && ($beforeColumn{0} != '$') && (PHPExcel_Cell::columnIndexFromString($newColumn) >= PHPExcel_Cell::columnIndexFromString($beforeColumn)));
-            $updateRow = (($newRow{0} != '$') && ($beforeRow{0} != '$') && $newRow >= $beforeRow);
+        // Determine whether to update the column and/or row
+        $updateColumn = (!$this->isAbsoluteColumn($newColumn) && !$this->isAbsoluteColumn($beforeColumn) && (PHPExcel_Cell::columnIndexFromString($newColumn) >= PHPExcel_Cell::columnIndexFromString($beforeColumn)));
+        $updateRow = (!$this->isAbsoluteRow($newRow) && !$this->isAbsoluteRow($beforeRow) && $newRow >= $beforeRow);
 
-            // Create new column reference
-            if ($updateColumn) {
-                $newColumn    = PHPExcel_Cell::stringFromColumnIndex(PHPExcel_Cell::columnIndexFromString($newColumn) - 1 + $pNumCols);
-            }
-
-            // Create new row reference
-            if ($updateRow) {
-                $newRow    = $newRow + $pNumRows;
-            }
-
-            // Return new reference
-            return $newColumn . $newRow;
-        } else {
-            throw new PHPExcel_Exception("Only single cell references may be passed to this method.");
+        // Update the column reference if necessary
+        if ($updateColumn) {
+            $newColumn = PHPExcel_Cell::stringFromColumnIndex(PHPExcel_Cell::columnIndexFromString($newColumn) - 1 + $pNumCols);
         }
+
+        // Update the row reference if necessary
+        if ($updateRow) {
+            $newRow += $pNumRows;
+        }
+
+        // Return the new reference
+        return $newColumn . $newRow;
+    } else {
+        throw new PHPExcel_Exception("Only single cell references may be passed to this method.");
     }
+}
+
+// Helper functions to check if a column or row reference is absolute
+private function isAbsoluteColumn($column)
+{
+    return ($column[0] == '$');
+}
+
+private function isAbsoluteRow($row)
+{
+    return ($row[0] == '$');
+}
+
 
     /**
      * __clone implementation. Cloning should not be allowed in a Singleton!

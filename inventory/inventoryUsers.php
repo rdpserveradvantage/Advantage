@@ -101,7 +101,7 @@
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <br>
-                                                    <input type="submit" name="submit" class="btn btn-danger">
+                                                    <input type="submit" name="submit" class="btn btn-primary">
                                                 </div>                                                
                                             </div>
 
@@ -117,9 +117,9 @@
                                 
                                 <div class="card">
                                     <div class="card-body" style="overflow:auto;">
-                                        <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
+                                        <table id="example" class="table table-hover table-styling" style="width:100%">
                                             <thead>
-                                                <tr>
+                                                <tr class="table-primary">
                                                     <th>#</th>
                                                     <th>User ID</th>
                                                     <th>Name</th>
@@ -131,8 +131,6 @@
                                                     <th>action</th>
                                                     <th>Active / Inactive </th>
                                                     <th>Designation</th>
-
-
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -172,7 +170,7 @@
                                                         <td style="text-transform: initial;"><? echo $sql_result['contact']; ?></td>
                                                         <td class="<? echo $status_class; ?>"><? echo $user_status;?></td>
                                                         <td>
-                                                            <a class="btn btn-danger" href="allot_perm.php?id=<? echo $sql_result['id']; ?>&table=inventoryUsers">Permission</a>
+                                                            <a class="btn btn-primary" href="allot_perm.php?id=<? echo $sql_result['id']; ?>&table=inventoryUsers">Permission</a>
                                                             <a class="btn btn-warning" href="allotmenu_perm.php?id=<? echo $sql_result['id'];  ?>&table=inventoryUsers">Menu Permission</a>
                                                         </td>
                                                         <td><a href="#" class="btn btn-danger" onclick="disable(<? echo $sql_result['id']; ?>)"><? echo $makeuser_status;?></a></td>

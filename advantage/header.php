@@ -105,6 +105,9 @@ label{
         .loader-block + #pcoded {
             visibility: visible;
         }
+        .swal2-popup{
+            background: white !important;
+        }
 </style>
 </head>
 

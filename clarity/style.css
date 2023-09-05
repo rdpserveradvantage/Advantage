@@ -225,7 +225,7 @@ table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td
 
 /* Horizontal scrollbar */
 ::-webkit-scrollbar:horizontal {
-  height: 5px; /* Adjust the height of the horizontal scrollbar */
+  height: 15px; /* Adjust the height of the horizontal scrollbar */
 }
 
 ::-webkit-scrollbar-thumb:horizontal {

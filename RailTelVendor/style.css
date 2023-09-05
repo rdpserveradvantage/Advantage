@@ -273,3 +273,12 @@ label {
     box-shadow: 9px 13px 11px rgba(0,0,0,0.13) !important;
     z-index: 1029;
 }
+
+
+.noRecordsContainer{
+    text-align: center;
+    overflow: auto;
+}
+.noRecordsContainer img{
+    width:50%;
+}

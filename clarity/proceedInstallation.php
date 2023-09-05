@@ -886,10 +886,9 @@ function previewImage(event) {
     
     
     $(document).ready(function () {
-        var requiredFields = ["atmId", "atmId2", "atmId3", "address", "city", "lho", "state",
-        "routerFixedSnaps","adaptorSnaps","adaptorStatusSnaps","lanCableInstallSnap","antennaSnaps",
-        "antennaStatusSnaps","gpsSnaps","gpsStatusSnaps","wifiStatusSnaps"];
-
+        var requiredFields = ["atmId", "atmId2", "atmId3", "address", "city", "lho", "state"];
+        // "routerFixedSnaps","adaptorSnaps","adaptorStatusSnaps","lanCableInstallSnap","antennaSnaps",
+        // "antennaStatusSnaps","gpsSnaps","gpsStatusSnaps","wifiStatusSnaps"
         requiredFields.forEach(function (fieldName) {
             $("#" + fieldName).prop("required", true);
         });
@@ -961,9 +960,9 @@ function previewImage(event) {
         loadingIndicator.style.display = "block";
 
         // Perform validation before submitting the form
-        var requiredFields = ["atmId",  "address", "city",  "lho", "state",
-        "routerFixedSnaps","adaptorSnaps","adaptorStatusSnaps","lanCableInstallSnap","antennaSnaps",
-        "antennaStatusSnaps","gpsSnaps","gpsStatusSnaps","wifiStatusSnaps"
+        var requiredFields = ["atmId",  "address", "city",  "lho", "state"
+        // "routerFixedSnaps","adaptorSnaps","adaptorStatusSnaps","lanCableInstallSnap","antennaSnaps",
+        // "antennaStatusSnaps","gpsSnaps","gpsStatusSnaps","wifiStatusSnaps"
     ];
 
         var missingFields = [];

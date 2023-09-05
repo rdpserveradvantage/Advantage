@@ -199,6 +199,10 @@
                                                                                 <th scope="row">Remark</th>
                                                                                 <td><? echo $sql1_result['remarks']; ?></td>
                                                                             </tr>
+                                                                            <tr>
+                                                                                <th scope="row">Hardware</th>
+                                                                                <td><? echo $sql1_result['noProblemOccurs']; ?></td>
+                                                                            </tr>
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
@@ -256,11 +260,16 @@
 
                                              $status = $_POST['status'] ; 
                                             if($status=='close'){
+                                                
                                                 $year = date('Y');
                                                 $month = date('m');
-                                                $target_dir = 'close_uploads/'.$year .'/'. $month.'/'. $atmid ;
+                                                $target_dir = 'mis_images/close_uploads/'.$year .'/'. $month.'/'. $atmid ;
                                                 $link = "";
                                                 
+                                                if (!file_exists($target_dir)) {
+                                                    mkdir($target_dir, 0777, true); // Set appropriate permissions (modify as needed)
+                                                }
+
                                                 $image = $_FILES['image']['name'];
                                                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir .'/' .$image )) {
                                                     $link  = $target_dir . '/' .$image ;
@@ -284,6 +293,30 @@
     
                                                 $statement = "insert into mis_history (mis_id,type,material,material_condition,remark,status,created_at,created_by,dependency) 
                                                 values('".$id."','".$status."','".$requiredMaterial."','".$_REQUEST['material_condition']."','".$remark."','1','".$date."','".$userid."','Advantage')" ;
+
+                                            }else if($status=='reassign'){
+
+                                                $remark = $_REQUEST['remark'];
+                                                mysqli_query($con,"update mis set status='reassign' WHERE id = $id");
+    
+
+                                                $year = date('Y');
+                                                $month = date('m');
+                                                $target_dir = 'reassign_uploads/'.$year .'/'. $month.'/'. $atmid ;
+                                                $link = "";
+
+                                                if (!file_exists($target_dir)) {
+                                                    mkdir($target_dir, 0777, true); // Set appropriate permissions (modify as needed)
+                                                }
+
+
+                                                $image = $_FILES['image']['name'];
+                                                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir .'/' .$image )) {
+                                                    $link  = $target_dir . '/' .$image ;
+                                                }
+
+                                                $statement = "insert into mis_history (mis_id,type,attachment,remark,status,created_at,created_by,dependency) 
+                                                values('".$id."','".$status."','".$link."','".$remark."','1','".$date."','".$userid."','Bank')" ;
 
                                             }
                                             
@@ -407,10 +440,34 @@
                 </div>
             </div>
                     
-            <script>
+<script>
+
+console.clear();
+
+function handleCheckboxChange(checkbox, matLoopCount) {
+    // Get the corresponding select and input elements based on the matLoopCount
+    var selectElement = document.getElementById("select_" + matLoopCount);
+    var inputElement = document.getElementById("input_" + matLoopCount);
+
+    // Check if the select and input elements exist before setting the 'required' attribute
+    if (selectElement && inputElement) {
+        if (checkbox.checked) {
+            selectElement.required = true;
+            inputElement.required = true;
+        } else {
+            selectElement.required = false;
+            inputElement.required = false;
+        }
+    }
+}
+
+
+    $(document).ready(function () {
 
 $(document).on('change','#status',function(){
     
+    console.log("Checkbox:", this);
+
     var status = $(this).val();
     $("#status_col").html('');
     
@@ -419,9 +476,9 @@ $(document).on('change','#status',function(){
             var html = `<input type="hidden" name="status" value="close">
 
             <div class="col-sm-12"><label>Snap</label><br /><input type="file" name="image" required></div>
-            <div class="col-sm-12"><label>Remark</label><input type="text" name="remark" class="form-control"></div>
-            <div class="col-sm-12"><label>Something</label>
-                <select name="" required>
+            <div class="col-sm-12"><br><label>Remark</label><input type="text" name="remark" class="form-control"></div>
+            <div class="col-sm-12"><br><label>Resolution</label>
+                <select name="" class="form-control" required>
                     <option value="Antena relocated">Antenna relocated</option>
                     <option value="Antena replaced">Antenna replaced</option>
                     <option value="Loose connection fixed">Loose connection fixed</option>
@@ -465,22 +522,22 @@ $(document).on('change','#status',function(){
                         $value = $mat_sqlResult['value'] ; ?>
                         <div class="border-checkbox-group border-checkbox-group-primary">
                             <input class="border-checkbox" name="requiredMaterial[]" type="checkbox" id="checkbox<?= $matLoopCount; ?>" value="<?= trim($value); ?>">
+
                             <label class="border-checkbox-label" for="checkbox<?= $matLoopCount; ?>"><?= trim($value); ?></label>
+
+                            <select id="select_<?= $matLoopCount; ?>" name="material_condition[]">
+                                <option value="">Select</option>
+                                <option value="Missing">Missing</option>
+                                <option value="Faulty">Faulty</option>
+                                <option value="Not Installed">Not Installed</option>
+                            </select>
+
+                            <input id="input_<?= $matLoopCount; ?>" type="file" name="material_requirement_images[]" />
                         </div>
                         
                         <?  $matLoopCount++ ;  } ?>
                     </div>
 
-                    <div class="col-sm-6">
-                        <label>Material Conditions</label>
-                        <select class="form-control" name="material_condition">
-                            <option value="">Select</option>
-                            <option value="Missing">Missing</option>
-                            <option value="Faulty">Faulty</option>
-                            <option value="Not Installed">Not Installed</option>
-                        </select>
-                    </div>
-                    
                     <div class="col-sm-12">
                         <label>Remarks</label>
                         <input type="text" name="remarks" class="form-control" required />
@@ -492,12 +549,57 @@ $(document).on('change','#status',function(){
                     
                 </div>
             `;
+        }else if(status == 'reassign'){
+            var html = `<input type="hidden" name="status" value="reassign">
+
+
+            <div class="border-checkbox-section highlight" style="width:75%">
+                                            <div class="border-checkbox-group border-checkbox-group-primary">
+                                                <input class="border-checkbox" name="noProblemOccurs[]" type="checkbox"
+                                                    id="checkbox1" value="Ups Wroking">
+                                                <label class="border-checkbox-label" for="checkbox1">Ups Not Wroking</label>
+                                            </div>
+                                            <div class="border-checkbox-group border-checkbox-group-primary">
+                                                <input class="border-checkbox" name="noProblemOccurs[]" type="checkbox"
+                                                    id="checkbox2" value="No Power Outage">
+                                                <label class="border-checkbox-label" for="checkbox2">Power Outage</label>
+                                            </div>
+                                            <div class="border-checkbox-group border-checkbox-group-primary">
+                                                <input class="border-checkbox" name="noProblemOccurs[]" type="checkbox"
+                                                    id="checkbox3" value="No Problen in Machine Hardware">
+                                                <label class="border-checkbox-label" for="checkbox3">Machine Hardware Issue</label>
+                                            </div>
+
+                                        </div>
+
+
+            <div class="col-sm-12">
+                <label>Snap</label><br />
+                <input type="file" name="image" required>
+            </div>
+            <div class="col-sm-12">
+            <br />
+                <label>Remark</label>
+                <input type="text" name="remark" class="form-control">
+            </div>
+
+            <div class="col-sm-12">
+                        <br />
+                        <input type="submit" name="submit" class="btn btn-primary" />
+                    </div>
+                    
+            `;
         }
         
         $("#status_col").html(html);
 });
 
-
+$(document).on('change', '.border-checkbox', function () {
+        // Get the matLoopCount from the checkbox's ID
+        var matLoopCount = this.id.replace('checkbox', '');
+        handleCheckboxChange(this, matLoopCount);
+    });
+});
 
 function throttle(f, delay){
         var timer = null;

@@ -67,8 +67,8 @@
                                         <form action="process_vendor.php" method="POST">
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <label>vendor Name</label>
-                                                    <input type="text" name="vendorName" class="form-control">
+                                                    <label>Contractor Name</label>
+                                                    <input type="text" name="vendorName" class="form-control" required>
                                                 </div>
                                             </div>
                                             
@@ -96,7 +96,7 @@
                                             <thead>
                                                 <tr class="table-primary">
                                                     <th>#</th>
-                                                    <th>Vendor Name</th>
+                                                    <th>Contractor Name</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -111,7 +111,7 @@
                                                         <td><?php echo $i; ?></td>
                                                         <td class="strong"><?php echo $sql_result['vendorName']; ?></td>
                                                         <td>
-                                                            <a href="#" class="btn btn-success createVendorUserLink" data-vendorid="<?php echo $id; ?>">Create Vendor User</a>
+                                                            <a href="#" class="btn btn-success createVendorUserLink" data-vendorid="<?php echo $id; ?>">Create Contractor User</a>
                                                             | 
                                                             <a class="btn btn-primary" href="viewVendorUser.php?vendor=<? echo $id; ?>">View Users</a>
                                                             |
@@ -148,7 +148,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="createVendorUserModalLabel">Create Vendor User</h5>
+        <h5 class="modal-title" id="createVendorUserModalLabel">Create Contractor User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -216,6 +216,8 @@ $(document).ready(function() {
     var vendorId = $(this).data('vendorid');
     $('#createVendorUserModal').modal('show');
     $('#saveVendorUser').data('vendorid', vendorId);
+    $('#createVendorUserModal').modal('hide');
+
   });
 
   // Save Vendor User click event
@@ -245,6 +247,7 @@ $('#saveVendorUser').click(function() {
           text: response.response,
           icon: 'error',
         });
+        $('#createVendorUserModal').modal('hide');
       }
     },
     error: function(xhr, status, error) {

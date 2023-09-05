@@ -296,3 +296,10 @@ label {
   border-color: #007bff;
   color: #007bff;
 }
+.noRecordsContainer{
+    text-align: center;
+    overflow: auto;
+}
+.noRecordsContainer img{
+    width:50%;
+}

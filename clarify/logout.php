@@ -1,10 +1,5 @@
 <? session_start();
-
-
-session_destroy();
-
-
-?>
+session_destroy();?>
 
 <html>
     <head>
@@ -28,5 +23,3 @@ session_destroy();
 </script>        
     </body>
 </html>
-        
-

@@ -16,6 +16,12 @@ echo '
 
     ';
 
+    $agingCount=1 ; 
+    $highagingsql = mysqli_query($con,"select a.created_at,a.atmid,a.lho,a.state,a.city,a.location,b.ticket_id,b.id from mis a
+    INNER JOIN mis_details b on a.id=b.mis_id
+    where a.status='open' order by a.created_at asc limit 10 ");
+
+    if (mysqli_num_rows($highagingsql) > 0) {
 
 echo '
 <table class="table table-hover table-styling table-xs">
@@ -34,10 +40,7 @@ echo '
 </thead>
 <tbody>
 ';
-$agingCount=1 ; 
-$highagingsql = mysqli_query($con,"select a.created_at,a.atmid,a.lho,a.state,a.city,a.location,b.ticket_id,b.id from mis a
-INNER JOIN mis_details b on a.id=b.mis_id
-where a.status='open' order by a.created_at asc limit 10 ");
+
 while($highagingsql_result = mysqli_fetch_assoc($highagingsql)){
 
 
@@ -76,6 +79,16 @@ $agingCount++ ;
 echo '</tbody>
 </table>';
 
+} else{
+
+    echo '
+                                                
+    <div class="noRecordsContainer">
+        <img src="assets/no_records.jpg">
+    </div>';
+
+}
+
 echo '
     </div>
 </div>    
@@ -92,6 +105,11 @@ echo '
     
         ';
 
+        $agingCount=1 ; 
+        $highagingsql = mysqli_query($con,"select a.created_at,a.atmid,a.lho,a.state,a.city,a.location,b.ticket_id,b.id from mis a
+        INNER JOIN mis_details b on a.id=b.mis_id
+        where a.status='open' and a.call_receive_from='Customer / Bank' order by a.created_at asc limit 10 ");
+        if (mysqli_num_rows($highagingsql) > 0) {
 
 echo '
 <table class="table table-hover table-styling table-xs">
@@ -110,10 +128,7 @@ echo '
     </thead>
     <tbody>
 ';
-$agingCount=1 ; 
-$highagingsql = mysqli_query($con,"select a.created_at,a.atmid,a.lho,a.state,a.city,a.location,b.ticket_id,b.id from mis a
-INNER JOIN mis_details b on a.id=b.mis_id
-where a.status='open' and a.call_receive_from='Customer / Bank' order by a.created_at asc limit 10 ");
+
 while($highagingsql_result = mysqli_fetch_assoc($highagingsql)){
 
 
@@ -151,6 +166,18 @@ while($highagingsql_result = mysqli_fetch_assoc($highagingsql)){
 }
 echo '</tbody>
     </table>';
+
+
+} else{
+
+    echo '
+                                                
+    <div class="noRecordsContainer">
+        <img src="assets/no_records.jpg">
+    </div>';
+
+}
+
 
 echo '
         </div>

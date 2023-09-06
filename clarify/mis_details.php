@@ -1,4 +1,11 @@
-<?php include('header.php');  ?>
+<?php include('header.php');  
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
+?>
 
 
   
@@ -228,21 +235,27 @@
                                 <div class="card">
                                     <div class="card-block">
                                         <h5>Change Status</h5>
-                                                                                <hr>
+                                        <hr>
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <select class="form-control" name="status" id="status">
+
+                                                <?php if($mis_status == 'open' || $mis_status == 'Open') {?>
+                                                            <option value="">Select</option>
+                                                            <option value="reassign"> Re-assign </option>
+                                                            <option value="material_requirement">Material Requirement</option>                                                        
+                                                            <option value="close">Close</option>
+                                                        <?php } 
+
+                                                        if($mis_status == 'material_requirement') {?>
+                                                            <option value="">Select</option>
+                                                            <option value="schedule">Schedule</option>
+                                                            <option value="material_dispatch">Material Dispatch</option>
+                                                            <option value="material_in_process">Material in Process</option>
+                                                            <option value="close">Close</option>
+                                                    <?php } ?>
                                                     
 
-                                                        <option value="">Select</option>
-                                                        
-                                                        <option value="reassign"> Re-assign </option>
-                                                        <option value="material_requirement">Material Requirement</option>                                                        
-                                                        <!-- <option value="schedule"> Schedule</option>    
-                                                        <option value="fund_required"> Fund Requirement</option>
-                                                        <option value="permission_require">Permission Required</option>
-                                                        <option value="MRS">Material Pending</option> -->
-                                                        <option value="close">Close</option>
 
                                                 </select> 
                                             </div>
@@ -285,14 +298,56 @@
                                                 mysqli_query($con,"update mis set status = '".$status."' where id = '".$mis_id."'");
                                                 
                                             }else if($status=='material_requirement'){
+                                                $remark = $_POST['remark'];
+                                                $requiredMaterials = $_REQUEST['requiredMaterial'];
+                                                $requiredMaterial = implode(', ', $requiredMaterials);
 
-                                                $requiredMaterial = $_REQUEST['requiredMaterial'];
-                                                $requiredMaterial = implode(', ', $requiredMaterial);
+                                                $material_condition = $_REQUEST['material_condition'];
+                                                $material_conditionStr = implode(',' , $material_condition);
+
+                                                $totalMaterialCount = count($material_condition);
+
+
+
+
+
+                                                $year = date('Y');
+                                                $month = date('m');
+                                                $targetDir = 'materialRequirement/'.$year .'/'. $month.'/'. $atmid ;
+                                                $link = "";
+
+                                                if (!file_exists($targetDir)) {
+                                                    mkdir($targetDir, 0777, true); // Set appropriate permissions (modify as needed)
+                                                }
+
+
+
                                                 
+
+                                                for ($i = 0; $i < count($requiredMaterials); $i++) {
+                                                    $imageFileName = uniqid() . "_" . $_FILES['material_requirement_images']['name'][$i];
+                                                    $imagePath = $targetDir . '/' . $imageFileName;
+
+                                                    move_uploaded_file($_FILES['material_requirement_images']['tmp_name'][$i], $imagePath);                                                
+                                                    
+                                                    $sql = "INSERT INTO mis_materialrequirement (mis_id, materialName, materialImage, materialCondition, status, created_at, created_by, portal)
+                                                            VALUES ('$id', '$requiredMaterials[$i]', '$imagePath', '$material_condition[$i]', '1', '$datetime', '$userid', 'Service')";
+                                                    
+                                                    if (mysqli_query($con, $sql)) {
+                                                    } else {
+                                                        echo "Error: " . $sql . "<br>" . mysqli_error($con);
+                                                    }
+                                                }
+                                                
+                                                
+
+
+
+
                                                 mysqli_query($con,"update mis set status='material_requirement' WHERE id = $id");
-    
+
                                                 $statement = "insert into mis_history (mis_id,type,material,material_condition,remark,status,created_at,created_by,dependency) 
-                                                values('".$id."','".$status."','".$requiredMaterial."','".$_REQUEST['material_condition']."','".$remark."','1','".$date."','".$userid."','Advantage')" ;
+                                                values('".$id."','".$status."','".$requiredMaterial."','".$material_conditionStr."','".$remark."','1','".$date."','".$userid."','Advantage')" ;
 
                                             }else if($status=='reassign'){
 
@@ -300,6 +355,9 @@
                                                 mysqli_query($con,"update mis set status='reassign' WHERE id = $id");
     
 
+
+                                                $ProblemOccurs = $_REQUEST['noProblemOccurs'];
+                                                $ProblemOccursStr = implode(',',$ProblemOccurs);
                                                 $year = date('Y');
                                                 $month = date('m');
                                                 $target_dir = 'reassign_uploads/'.$year .'/'. $month.'/'. $atmid ;
@@ -315,8 +373,8 @@
                                                     $link  = $target_dir . '/' .$image ;
                                                 }
 
-                                                $statement = "insert into mis_history (mis_id,type,attachment,remark,status,created_at,created_by,dependency) 
-                                                values('".$id."','".$status."','".$link."','".$remark."','1','".$date."','".$userid."','Bank')" ;
+                                                $statement = "insert into mis_history (mis_id,type,attachment,remark,status,created_at,created_by,dependency,ProblemOccurs) 
+                                                values('".$id."','".$status."','".$link."','".$remark."','1','".$date."','".$userid."','Bank','".$ProblemOccursStr."')"  ;
 
                                             }
                                             
@@ -540,7 +598,7 @@ $(document).on('change','#status',function(){
 
                     <div class="col-sm-12">
                         <label>Remarks</label>
-                        <input type="text" name="remarks" class="form-control" required />
+                        <input type="text" name="remark" class="form-control" required />
                     </div>
                     <div class="col-sm-12">
                         <br />
@@ -589,6 +647,47 @@ $(document).on('change','#status',function(){
                     </div>
                     
             `;
+        }
+        else if(status == 'schedule'){
+            var html = `<input type="hidden" name="status" value="schedule">
+            <div class="col-sm-4">
+            <label>Engineer</label>
+            <select name="engineer" class="form-control">
+            <option value="">Select</option>
+            <? $eng_sql = mysqli_query($con,"select * from vendorusers where level=3 order by name asc"); 
+            while($eng_sql_result = mysqli_fetch_assoc($eng_sql)){ ?> 
+            <option value="<? echo $eng_sql_result['id'];?>">
+            <?= ucwords(strtolower($eng_sql_result['name']));?>
+            </option> <? }?>
+            
+            </select>
+            </div>
+            <div class="col-sm-4"><label>Remark</label><input type="text" name="remark" class="form-control"></div>
+            <div class="col-sm-4"><label>Schedule Date</label><input type="date" name="schedule_date" class="form-control"></div>
+            <div class="col-sm-4"><br><input class="btn btn-success" type="submit" name="submit"></div>`;
+        } else if(status == 'material_dispatch'){
+            var html = `
+            <input type="hidden" name="status" value="material_dispatch">
+            <div class="col-sm-3">
+            <label>Courier Agency</label>
+            <input type="text" name="courier" class="form-control">
+            </div>
+            <div class="col-sm-3">
+            <label>POD</label>
+            <input type="text" name="pod" class="form-control">
+            </div>
+            <div class="col-sm-3">
+            <label>Dispatch Date</label>
+            <input type="date" name="dispatch_date" class="form-control">
+            </div>
+            <div class="col-sm-3">
+            <label>Remark</label>
+            <input type="text" name="remark" class="form-control">
+            </div>
+            <div class="col-sm-4">
+            <br>
+            <input class="btn btn-primary" type="submit" value="Update" name="submit">
+            </div>`;
         }
         
         $("#status_col").html(html);

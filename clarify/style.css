@@ -385,3 +385,12 @@ label {
 .pcoded .pcoded-navbar[active-item-theme="theme1"] .pcoded-item li .pcoded-submenu li.active>a, .pcoded .pcoded-navbar[active-item-theme="theme1"] .pcoded-item li .pcoded-submenu li:hover>a {
     color: #FE8A7D !important;
 }
+
+
+.noRecordsContainer{
+    text-align: center;
+    overflow: auto;
+}
+.noRecordsContainer img{
+    width:50%;
+}

@@ -1,106 +1,92 @@
-<?php include('config.php') ; ?>
-<html>
-    <head>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>        
-    </head>
-    <body>
-        
-
-
-<?php
-
+<?php include('config.php');
 require "vendor/autoload.php";
 use \Firebase\JWT\JWT;
 
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
-$uname = $_REQUEST['username'];
+$username = $_REQUEST['username'];
 $password = $_REQUEST['password'];
-if($uname && $password){
 
+if ($username && $password) {
+    $response = authenticateUser( $username, $password);
 
-    $sql = mysqli_query($con,"select * from vendorUsers where uname = '".$uname."' and password='".$password."' and user_status=1 and level=3");
-    $result = mysqli_num_rows($sql);
-    if($result>0){
-        $sql_result = mysqli_fetch_assoc($sql);
-        if($sql_result['user_status']==1){
-                $_SESSION['PROJECT_auth']=1;
-                $_SESSION['PROJECT_isProjectPortal'] = 1 ; 
-                $_SESSION['PROJECT_username']=$sql_result['name'];
-                $_SESSION['PROJECT_userid'] = $sql_result['id'];
-                $_SESSION['PROJECT_level'] = $sql_result['level'];
-                $_SESSION['PROJECT_RailTailVendorID'] = $sql_result['vendorId'];
-                $_SESSION['PROJECT_branch'] = $sql_result['branch'];
-                $_SESSION['PROJECT_zone'] = $sql_result['zone'];
-                $_SESSION['PROJECT_cust_id'] = $sql_result['cust_id'];
-                
-                $userid = $sql_result['id'];
-                $secret_key = "RailTailProject";
-        		$issuedat_claim = time(); // issued at
-        		$notbefore_claim = $issuedat_claim + 10; //not before in seconds
-        		$expire_claim = $issuedat_claim + 60; // expire time in seconds
-        		
-                $token = array(
-                    "nbf" => $notbefore_claim,
-                    "exp" => $expire_claim,
-                    "data" => array(
-                        "id" => $userid,
-                        "fullname" => $fname,
-                        "email" => $email,
-                ));
-                $jwt = JWT::encode($token, $secret_key,"HS256");
-                $token_sql = "update vendorUsers set token='".$jwt."' , updated_at = '".$datetime."' where id='".$userid."'";
-                    mysqli_query($con,$token_sql) ;                
-                    
-                
-                $_SESSION['PROJECT_isProjectPortalToken'] = $jwt ;
-                
-                
-                ?>
-               <script>
-               swal("Good job!", "Login Success !", "success");
+    if ($response['success']) {
+        // Successful authentication
+        $_SESSION['PROJECT_auth'] = true;
+        $_SESSION['PROJECT_isServicePortal'] = 1;
+        $_SESSION['PROJECT_username'] = $response['user']['name'];
+        $_SESSION['PROJECT_userid'] = $response['user']['id'];
+        $_SESSION['PROJECT_level'] = $response['user']['level'];
         
-                   setTimeout(function(){ 
-                      window.location.href="index.php";
-                   }, 3000);
-        
-               </script> 
-        <? }else{
-        $_SESSION['PROJECT_isVendorPortal'] = 0 ; 
-                
-        ?>       
-                <script>
-                   swal("Error", "You are inactive !", "error");
-                      
-                       setTimeout(function(){ 
-                          window.history.back();
-                       }, 3000);
-            
-                   </script>
-        <? } ?>           
-    <? }else{ ?>
-       <script>
-       swal("Error", "Incorrect Username or Password !", "error");
-           swal('error','','Login Error');
-           setTimeout(function(){ 
-              window.history.back();
-           }, 3000);
+        $_SESSION['PROJECT_branch'] = $response['user']['branch'];
+        $_SESSION['PROJECT_zone'] = $response['user']['zone'];
+        $_SESSION['isServicePortalToken'] = $response['jwt'];
 
-       </script>
-<? }
+        // $_SESSION['PROJECT_RailTailVendorID'] = $response['user']['vendorId'];
 
-    
-    
+        $response['redirect'] = 'index.php'; // Change this to your actual redirect URL
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+} else {
+    $response['success'] = false;
+    $response['message'] = 'Please provide both username and password';
+    header('Content-Type: application/json');
+    echo json_encode($response);
 }
-else{ ?>
-       <script>
-       swal("Error", "Please Put Username and Password  !", "error");
-            setTimeout(function(){ 
-              window.history.back();
-           }, 3000);
 
-       </script>
-<? }
+function authenticateUser($username, $password) {
+    global $con ; 
+    $response = array('success' => false);
 
-?>
-    </body>
-</html>
+    $user = getUserFromTable(  $username, $password);
+
+
+    if ($user) {
+        $response['success'] = true;
+        $response['user'] = $user;
+
+        $datetime = date('Y-m-d H:i:s');
+        $userid = $user['id'];
+        $secret_key = "RailTailService";
+        $issuedat_claim = time();
+        $notbefore_claim = $issuedat_claim + 10;
+        $expire_claim = $issuedat_claim + 60;
+        $fname = $user['name'];
+        $email = $user['uname'];
+
+        $token = array(
+            "nbf" => $notbefore_claim,
+            "exp" => $expire_claim,
+            "data" => array(
+                "id" => $userid,
+                "fullname" => $fname,
+                "email" => $email,
+            )
+        );
+        $jwt = JWT::encode($token, $secret_key, "HS256");
+        $token_sql = mysqli_query($con, "update vendorUsers set token='" . $jwt . "' , updated_at = '" . $datetime . "' where id='" . $userid . "'");
+
+        $response['jwt'] = $jwt;
+    } else {
+        $response['message'] = 'Invalid username or password';
+    }
+
+    return $response;
+}
+
+function getUserFromTable($username, $password) {
+    global $con; 
+
+
+        $sql = mysqli_query($con,"select * from vendorUsers where uname = '".$username."' and password='".$password."' and user_status=1 and level=3");
+        $user = mysqli_fetch_assoc($sql);
+        $_SESSION['FROM_PORTAL'] = 'Clarify';
+
+        return $user ; 
+    
+
+}

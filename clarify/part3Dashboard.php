@@ -10,6 +10,12 @@ echo '<div class="card">
     
         <div class="card-block">';
 
+        // LHO wise open calls
+$lhowiseSrno=1 ; 
+$lhosql = mysqli_query($con,"select lho,count(1) as count from mis where status='open' group by lho order by lho asc");
+if (mysqli_num_rows($lhosql) > 0) {
+
+
 echo '
 <table class="table table-hover table-styling table-xs">
     <thead>
@@ -22,9 +28,7 @@ echo '
     <tbody>
     ';
 
-// LHO wise open calls
-$lhowiseSrno=1 ; 
-$lhosql = mysqli_query($con,"select lho,count(1) as count from mis where status='open' group by lho order by lho asc");
+
 while($lhosql_result = mysqli_fetch_assoc($lhosql)){
     echo "<tr>
             <td>{$lhowiseSrno}</td>
@@ -39,7 +43,20 @@ while($lhosql_result = mysqli_fetch_assoc($lhosql)){
 
 echo '
 </tbody>
-</table>
+</table>';
+
+} else{
+
+    echo '
+                                                
+    <div class="noRecordsContainer">
+        <img src="assets/no_records.jpg">
+    </div>';
+
+}
+
+
+echo '
         </div>
     </div>
     ';
@@ -60,6 +77,11 @@ echo '
     
         ';
 
+        $agingCount=1 ; 
+$highagingsql = mysqli_query($con,"select a.created_at,a.atmid,a.lho,a.state,a.city,a.location,b.ticket_id,b.id from mis a
+INNER JOIN mis_details b on a.id=b.mis_id
+where a.status='open' order by a.created_at desc limit 10 ");
+if (mysqli_num_rows($highagingsql) > 0) {
 
 echo '
 <table class="table table-hover table-styling table-xs">
@@ -78,10 +100,7 @@ echo '
     </thead>
     <tbody>
 ';
-$agingCount=1 ; 
-$highagingsql = mysqli_query($con,"select a.created_at,a.atmid,a.lho,a.state,a.city,a.location,b.ticket_id,b.id from mis a
-INNER JOIN mis_details b on a.id=b.mis_id
-where a.status='open' order by a.created_at desc limit 10 ");
+
 while($highagingsql_result = mysqli_fetch_assoc($highagingsql)){
     
     $createdAtTimestamp = strtotime($highagingsql_result['created_at']);
@@ -119,6 +138,19 @@ while($highagingsql_result = mysqli_fetch_assoc($highagingsql)){
 }
 echo '</tbody>
     </table>';
+
+
+} else{
+
+    echo '
+                                                
+    <div class="noRecordsContainer">
+        <img src="assets/no_records.jpg">
+    </div>';
+
+}
+
+
 
 echo '
         </div>

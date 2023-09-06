@@ -1,5 +1,4 @@
 <?
-    
     if($_SESSION['FROM_PORTAL']=='Advantage'){
         $logintable = 'mis_loginusers' ; 
     }else{

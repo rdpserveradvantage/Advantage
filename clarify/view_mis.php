@@ -16,7 +16,7 @@
     <style>
         
     html{
-        text-transform: inherit !important;
+        /* text-transform: inherit !important; */
     }
     
     td a { color: #01a9ac;text-decoration: none;}

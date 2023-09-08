@@ -1,28 +1,20 @@
-<? include('header.php'); ?>
-
-        <script src="https://code.highcharts.com/highcharts.js"></script>
-     
-            <div class="pcoded-content">
-                <div class="pcoded-inner-content">
-                    <div class="main-body">
-                        <div class="page-wrapper">
-                            <div class="page-body">
-                                <div class="row" id="part1" page="part1Dashboard"></div>
-                                <div class="row" id="part2" page="part2Dashboard"></div>
-                                <div class="row" id="part3" page="part3Dashboard"></div>
-
-                            </div>
-                        </div>
-                    </div>
+<?php include('header.php'); ?>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="page-wrapper">
+                <div class="page-body">
+                    <div class="row" id="part1" page="part1Dashboard"></div>
+                    <div class="row" id="part2" page="part2Dashboard"></div>
+                    <div class="row" id="part3" page="part3Dashboard"></div>
+                    <div class="row" id="part4" page="part4Dashboard"></div>
                 </div>
             </div>
-              
-                  
-                  
-
-    
-    
-      <script>
+        </div>
+    </div>
+</div>
+<script>
     $(document).ready(function() {
         // Load content for part1 asynchronously
         $.ajax({
@@ -48,7 +40,7 @@
             }
         });
 
-        // // Load content for part3 asynchronously
+        // Load content for part3 asynchronously
         $.ajax({
             url: 'part3Dashboard.php',
             method: 'GET',
@@ -73,5 +65,4 @@
         
     });
 </script>
-                    
-    <? include('footer.php'); ?>
+<?php include('footer.php'); ?>

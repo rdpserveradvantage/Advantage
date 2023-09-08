@@ -22,10 +22,7 @@ if ($inbox) {
 
 
 
-
-
-
-return ; 
+return ;
 
 
 
@@ -48,7 +45,6 @@ if($atmIdValue){
     
     $invoiceNoLine = extractInvoiceNoLine($body);
         $invoiceNoValue = extractInvoiceNoValue($invoiceNoLine);
-        
         
         $problemLine = findProblemLine($body);
         $problemValue = extractProblemValue($problemLine);

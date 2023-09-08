@@ -16,6 +16,7 @@ echo '
 
     ';
 
+
     $agingCount=1 ; 
     $highagingsql = mysqli_query($con,"select a.created_at,a.atmid,a.lho,a.state,a.city,a.location,b.ticket_id,b.id from mis a
     INNER JOIN mis_details b on a.id=b.mis_id
@@ -63,9 +64,16 @@ $detail_id = $highagingsql_result['id'];
 
 echo "<tr>
     <td>{$agingCount}</td>
-    <td  class='strong'>{$highagingsql_result['atmid']}</td>
-    <td><a href=\"mis_details.php?id={$detail_id}\">{$ticket_id}</a></td>
-    <td>{$highagingsql_result['created_at']}</td>
+    <td  class='strong'>{$highagingsql_result['atmid']}</td> <td>";
+    
+    if ($SERVICE_LEVEL != 5) {
+        echo "<a href=\"mis_details.php?id={$detail_id}\">{$ticket_id}</a>";
+    } else {
+        echo "<a href=\"#\">{$ticket_id}</a>";
+    }
+
+
+    echo "</td><td>{$highagingsql_result['created_at']}</td>
     <td>{$agingFormatted}</td>
     <td>{$highagingsql_result['lho']}</td>
     <td>{$highagingsql_result['city']}</td>
@@ -151,9 +159,16 @@ while($highagingsql_result = mysqli_fetch_assoc($highagingsql)){
 
     echo "<tr>
         <td>{$agingCount}</td>
-        <td  class='strong'>{$highagingsql_result['atmid']}</td>
-        <td><a href=\"mis_details.php?id={$detail_id}\">{$ticket_id}</a></td>
-        <td>{$highagingsql_result['created_at']}</td>
+        <td  class='strong'>{$highagingsql_result['atmid']}</td><td>";
+    
+        if ($SERVICE_LEVEL != 5) {
+            echo "<a href=\"mis_details.php?id={$detail_id}\">{$ticket_id}</a>";
+        } else {
+            echo "<a href=\"#\">{$ticket_id}</a>";
+        }
+    
+    
+        echo "</td><td>{$highagingsql_result['created_at']}</td>
         <td>{$agingFormatted}</td>
         <td>{$highagingsql_result['lho']}</td>
         <td>{$highagingsql_result['city']}</td>
@@ -187,5 +202,3 @@ echo '
 
 
     ';
-
-    ?>

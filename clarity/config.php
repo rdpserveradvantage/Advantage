@@ -50,7 +50,7 @@ $userid = $_SESSION['PROJECT_userid'];
 $datetime = date('Y-m-d H:i:s');
 $RailTailVendorID = $_SESSION['PROJECT_RailTailVendorID'] ; 
 $RailTailVendorName = getUsername($RailTailVendorID);
-
+$PROJECT_level = $_SESSION['PROJECT_level'];
 // if($userid>0){
                 
 //         $assign_cust_sql = mysqli_query($con,"select cust_id,permission from vendorUsers where id ='".$userid."'");

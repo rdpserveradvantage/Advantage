@@ -82,7 +82,7 @@ function getUserFromTable($username, $password) {
     global $con; 
 
 
-        $sql = mysqli_query($con,"select * from vendorUsers where uname = '".$username."' and password='".$password."' and user_status=1 and level=3");
+        $sql = mysqli_query($con,"select * from vendorUsers where uname = '".$username."' and password='".$password."' and user_status=1 and level in (3,5)");
         $user = mysqli_fetch_assoc($sql);
         $_SESSION['FROM_PORTAL'] = 'Clarify';
 

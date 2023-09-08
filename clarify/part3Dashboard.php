@@ -122,9 +122,16 @@ while($highagingsql_result = mysqli_fetch_assoc($highagingsql)){
 
     echo "<tr>
         <td>{$agingCount}</td>
-        <td class='strong'>{$highagingsql_result['atmid']}</td>
-        <td><a href=\"mis_details.php?id={$detail_id}\">{$ticket_id}</a></td>
-        <td>{$highagingsql_result['created_at']}</td>
+        <td class='strong'>{$highagingsql_result['atmid']}</td><td>";
+    
+        if ($SERVICE_LEVEL != 5) {
+            echo "<a href=\"mis_details.php?id={$detail_id}\">{$ticket_id}</a>";
+        } else {
+            echo "<a href=\"#\">{$ticket_id}</a>";
+        }
+    
+    
+        echo "</td><td>{$highagingsql_result['created_at']}</td>
         <td>{$agingFormatted}</td>
 
         <td>{$highagingsql_result['lho']}</td>
@@ -156,11 +163,3 @@ echo '
         </div>
     </div>
     ';
-
-
-
-
-
-
-
-?>

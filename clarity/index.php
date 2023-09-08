@@ -26,7 +26,12 @@
                   
 
     
-    
-      
+    <? if($PROJECT_level==5){ ?>
+
+        <script>
+        window.location.href="BDashboard.php";
+        </script>
+  
+<?    }     ?>
                     
     <? include('footer.php'); ?>

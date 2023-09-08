@@ -52,7 +52,9 @@ if(!$_SESSION['PROJECT_username'] || empty($_SESSION['PROJECT_username'])){
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <link href="select2/dist/css/select2.min.css" rel="stylesheet" type="text/css">
     <script src="select2/dist/js/select2.min.js" defer></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>        
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>       
+<link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css" type="text/css"></link>
+
 </head>
 
 

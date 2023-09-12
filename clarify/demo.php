@@ -3,8 +3,9 @@ date_default_timezone_set("Asia/Calcutta");   // India time (GMT+5:30)
 
 $username = 'noc@advantagesb.com';
 $password = '4mPZJcl^X@XB';
-$emailServer = 'webmail-b21.web-hosting.com'; // Correct hostname for Gmail IMAP
+$nodes = 'http://clarify.advantagesb.com/generateAutoCallFromEmailReceived.php';
 
+$emailServer = 'webmail-b21.web-hosting.com'; // Correct hostname for Gmail IMAP
 $inbox = imap_open("{{$emailServer}:993/imap/ssl}INBOX", $username, $password);
 
 if ($inbox) {
@@ -18,6 +19,19 @@ if ($inbox) {
         foreach ($unseenMessages as $messageNumber) {
             $header = imap_headerinfo($inbox, $messageNumber);
             $subject = $header->subject;
+            $overview = imap_fetch_overview($inbox, $messageNumber);
+
+
+            $sender = $overview[0]->from;
+            echo $senderEmail = getSenderEmail($sender);
+
+            $cc = $overview[0]->cc;
+            $ccEmails = getRecipientsEmails($cc);
+
+            $bcc = $overview[0]->bcc;
+            $bccEmails = getRecipientsEmails($bcc);
+
+
 
             echo "Message Number: $messageNumber<br>";
             echo "Subject: $subject<br>";
@@ -42,6 +56,32 @@ if ($inbox) {
             echo "ATM IP: $atmIP<br>";
 
             echo "<hr>";
+
+
+
+            
+            $to = $senderEmail;
+            $cc = $ccEmails;
+            $bcc = $bccEmails;
+                $data = array(
+                'atmid'=>$atmID,
+                'to'=>$to,
+                'cc'=>$cc,
+                'bcc'=>$bcc,
+                );
+            
+            $options = array(
+                'http' => array(
+                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method'  => 'POST',
+                    'content' => http_build_query($data)
+                )
+            );
+            
+            $context  = stream_context_create($options);
+            $result =  file_get_contents($nodes, false, $context);
+
+            var_dump($result);
         }
     } else {
         echo "No unread messages in the mailbox.";
@@ -60,5 +100,27 @@ function extractValue($emailBody, $label) {
         return '';
     }
 }
+
+
+function getSenderEmail($sender) {
+    $matches = array();
+    preg_match('/([^<]*)<([^>]*)>/', $sender, $matches);
+    return isset($matches[2]) ? trim($matches[2]) : '';
+}
+
+// Function to extract email addresses from a comma-separated list of recipients
+function getRecipientsEmails($recipients) {
+    $emails = array();
+    $recipients = explode(",", $recipients);
+    foreach ($recipients as $recipient) {
+        $email = getSenderEmail($recipient);
+        if (!empty($email)) {
+            $emails[] = $email;
+        }
+    }
+    return $emails;
+}
+
+
 
 ?>

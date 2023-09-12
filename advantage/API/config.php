@@ -7,12 +7,17 @@ header('Access-Control-Allow-Headers: *');
 header('Content-Type: application/json; charset=utf-8');
 
 
-
-$host="localhost";
-$user="sarmicrosystems_advantage";
-$pass="Advantage@2023";
+$host="10.63.21.6";
+$user="advantage";
+$pass="qwerty121";
 $dbname="sarmicrosystems_advantage";
 $con = new mysqli($host, $user, $pass, $dbname);
+
+// $host="localhost";
+// $user="sarmicrosystems_advantage";
+// $pass="Advantage@2023";
+// $dbname="sarmicrosystems_advantage";
+// $con = new mysqli($host, $user, $pass, $dbname);
 
 if ($con->connect_error) {
     // die("Connection failed: " . $con->connect_error);

@@ -1,7 +1,9 @@
 <?php include('config.php');
 require "vendor/autoload.php";
-use \Firebase\JWT\JWT;
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 $userid = $_REQUEST['id'];
 
@@ -77,7 +79,9 @@ function authenticateUser($username, $password)
                 "email" => $email,
             )
         );
-        $jwt = JWT::encode($token, $secret_key, "HS256");
+
+        $jwt = generateRandomString(120); // Adjust the length as needed
+
 
         $response['jwt'] = $jwt;
     } else {

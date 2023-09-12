@@ -6,5 +6,8 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
+    'Ddeboer\\Transcoder\\Tests\\' => array($vendorDir . '/ddeboer/transcoder/tests'),
+    'Ddeboer\\Transcoder\\' => array($vendorDir . '/ddeboer/transcoder/src'),
+    'Ddeboer\\Imap\\Tests\\' => array($vendorDir . '/ddeboer/imap/tests'),
+    'Ddeboer\\Imap\\' => array($vendorDir . '/ddeboer/imap/src'),
 );

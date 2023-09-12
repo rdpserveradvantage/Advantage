@@ -7,16 +7,31 @@ namespace Composer\Autoload;
 class ComposerStaticInit42a0ca89527a91be10363616fd36b1f0
 {
     public static $prefixLengthsPsr4 = array (
-        'F' => 
+        'D' => 
         array (
-            'Firebase\\JWT\\' => 13,
+            'Ddeboer\\Transcoder\\Tests\\' => 25,
+            'Ddeboer\\Transcoder\\' => 19,
+            'Ddeboer\\Imap\\Tests\\' => 19,
+            'Ddeboer\\Imap\\' => 13,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Firebase\\JWT\\' => 
+        'Ddeboer\\Transcoder\\Tests\\' => 
         array (
-            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+            0 => __DIR__ . '/..' . '/ddeboer/transcoder/tests',
+        ),
+        'Ddeboer\\Transcoder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ddeboer/transcoder/src',
+        ),
+        'Ddeboer\\Imap\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ddeboer/imap/tests',
+        ),
+        'Ddeboer\\Imap\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ddeboer/imap/src',
         ),
     );
 

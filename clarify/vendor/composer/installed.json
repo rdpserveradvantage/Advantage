@@ -1,69 +1,133 @@
 {
     "packages": [
         {
-            "name": "firebase/php-jwt",
-            "version": "v6.3.1",
-            "version_normalized": "6.3.1.0",
+            "name": "ddeboer/imap",
+            "version": "0.5.2",
+            "version_normalized": "0.5.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "ddfaddcb520488b42bca3a75e17e9dd53c3667da"
+                "url": "https://github.com/ddeboer/imap.git",
+                "reference": "b1939740d62e427a8105312a3fb574deb62dcf68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/ddfaddcb520488b42bca3a75e17e9dd53c3667da",
-                "reference": "ddfaddcb520488b42bca3a75e17e9dd53c3667da",
+                "url": "https://api.github.com/repos/ddeboer/imap/zipball/b1939740d62e427a8105312a3fb574deb62dcf68",
+                "reference": "b1939740d62e427a8105312a3fb574deb62dcf68",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1||^8.0"
+                "ddeboer/transcoder": "~1",
+                "ext-imap": "*",
+                "php": ">=5.4.0"
             },
             "require-dev": {
-                "guzzlehttp/guzzle": "^6.5||^7.4",
-                "phpspec/prophecy-phpunit": "^1.1",
-                "phpunit/phpunit": "^7.5||^9.5",
-                "psr/cache": "^1.0||^2.0",
-                "psr/http-client": "^1.0",
-                "psr/http-factory": "^1.0"
+                "ext-iconv": "*",
+                "ext-mbstring": "*",
+                "phpunit/phpunit": "~4.0"
             },
-            "suggest": {
-                "paragonie/sodium_compat": "Support EdDSA (Ed25519) signatures when libsodium is not present"
-            },
-            "time": "2022-11-01T21:20:08+00:00",
+            "time": "2015-12-03T13:23:36+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Firebase\\JWT\\": "src"
+                    "Ddeboer\\Imap\\": "src/",
+                    "Ddeboer\\Imap\\Tests\\": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause"
+                "MIT"
             ],
             "authors": [
                 {
-                    "name": "Neuman Vong",
-                    "email": "neuman+pear@twilio.com",
-                    "role": "Developer"
+                    "name": "David de Boer",
+                    "email": "david@ddeboer.nl"
                 },
                 {
-                    "name": "Anant Narayanan",
-                    "email": "anant@php.net",
-                    "role": "Developer"
+                    "name": "Community contributors",
+                    "homepage": "https://github.com/ddeboer/imap/graphs/contributors"
                 }
             ],
-            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
-            "homepage": "https://github.com/firebase/php-jwt",
+            "description": "Object-oriented IMAP for PHP",
             "keywords": [
-                "jwt",
-                "php"
+                "email",
+                "imap",
+                "mail"
             ],
             "support": {
-                "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.3.1"
+                "issues": "https://github.com/ddeboer/imap/issues",
+                "source": "https://github.com/ddeboer/imap/tree/master"
             },
-            "install-path": "../firebase/php-jwt"
+            "install-path": "../ddeboer/imap"
+        },
+        {
+            "name": "ddeboer/transcoder",
+            "version": "1.0.0",
+            "version_normalized": "1.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ddeboer/transcoder.git",
+                "reference": "8781195ad1334add26dca66a4a823b7973639754"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ddeboer/transcoder/zipball/8781195ad1334add26dca66a4a823b7973639754",
+                "reference": "8781195ad1334add26dca66a4a823b7973639754",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "ext-iconv": "For using the IconvTranscoder",
+                "ext-mbstring": "For using the MbTranscoder"
+            },
+            "time": "2015-01-23T14:32:33+00:00",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Ddeboer\\Transcoder\\": "src/",
+                    "Ddeboer\\Transcoder\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David de Boer",
+                    "email": "david@ddeboer.nl"
+                },
+                {
+                    "name": "Community contributors",
+                    "homepage": "https://github.com/ddeboer/transcoder/graphs/contributors"
+                }
+            ],
+            "description": "Better encoding conversion for PHP",
+            "keywords": [
+                "charset",
+                "encoding",
+                "iconv",
+                "iso",
+                "mb",
+                "multibyte",
+                "utf-8"
+            ],
+            "support": {
+                "issues": "https://github.com/ddeboer/transcoder/issues",
+                "source": "https://github.com/ddeboer/transcoder/tree/master"
+            },
+            "install-path": "../ddeboer/transcoder"
         }
     ],
     "dev": true,

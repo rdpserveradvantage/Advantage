@@ -1,6 +1,5 @@
 <?php include('config.php');
 require "vendor/autoload.php";
-use \Firebase\JWT\JWT;
 
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
@@ -67,7 +66,9 @@ function authenticateUser($username, $password) {
                 "email" => $email,
             )
         );
-        $jwt = JWT::encode($token, $secret_key, "HS256");
+        $jwt = generateRandomString(120); // Adjust the length as needed
+
+
         $token_sql = mysqli_query($con, "update vendorUsers set token='" . $jwt . "' , updated_at = '" . $datetime . "' where id='" . $userid . "'");
 
         $response['jwt'] = $jwt;

@@ -49,3 +49,16 @@ mis_details
                 
 
     downtime will be zero if reassign and no dependency of advantage
+
+
+// Email For Auto ticket Log
+
+Subject : Docket Number xxxxxxx ATM ID : xxxxxx
+
+Thanks for your mail. We have noted the concern and will get back to you shortly. Refer the docket number xxxxxxx for your future reference. 
+
+Best Regards, 
+Team Railtel
+Toll free No : 1800 2102 004
+
+ 

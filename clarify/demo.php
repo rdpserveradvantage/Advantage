@@ -1,99 +1,124 @@
-<?
-date_default_timezone_set("Asia/Calcutta");   // India time (GMT+5:30)
+<?php
+date_default_timezone_set("Asia/Calcutta"); // India time (GMT+5:30)
+error_reporting(E_ALL); // Enable error reporting for debugging
 
 $username = 'noc@advantagesb.com';
 $password = '4mPZJcl^X@XB';
-$nodes = 'http://clarify.advantagesb.com/generateAutoCallFromEmailReceived.php';
-
-$emailServer = 'webmail-b21.web-hosting.com'; // Correct hostname for Gmail IMAP
+$emailServer = 'webmail-b21.web-hosting.com';
+// $nodes = 'http://clarify.advantagesb.com/generateAutoCallFromEmailReceived.php';
 $inbox = imap_open("{{$emailServer}:993/imap/ssl}INBOX", $username, $password);
 
 if ($inbox) {
 
-    $unseenMessages = imap_search($inbox, 'UNSEEN');
+    // Calculate the date 1 days ago (read emails from last 24 hours)
+    $date = date("d M Y", strtotime("-1 days"));
+    $searchCriteria = 'SINCE "' . $date . '"';
+
+    $unseenMessages = imap_search($inbox, $searchCriteria);
+
+
 
     if ($unseenMessages) {
-        echo "Number of unread messages: " . count($unseenMessages);
-        echo '<br>';
 
         foreach ($unseenMessages as $messageNumber) {
-            $header = imap_headerinfo($inbox, $messageNumber);
-            $subject = $header->subject;
-            $overview = imap_fetch_overview($inbox, $messageNumber);
 
 
-            $sender = $overview[0]->from;
-            echo $senderEmail = getSenderEmail($sender);
-
-            $cc = $overview[0]->cc;
-            $ccEmails = getRecipientsEmails($cc);
-
-            $bcc = $overview[0]->bcc;
-            $bccEmails = getRecipientsEmails($bcc);
-
-
-
-            echo "Message Number: $messageNumber<br>";
-            echo "Subject: $subject<br>";
 
             // Fetch the email body
             $emailBody = imap_fetchbody($inbox, $messageNumber, 1); // Assuming the body is in MIME type 1 (text/plain)
 
             // Extract ATM ID and other details from email body
             $atmID = extractValue($emailBody, 'ATM ID');
-            $siteAddress = extractValue($emailBody, 'SITE ADDRESS');
-            $city = extractValue($emailBody, 'CITY');
-            $circle = extractValue($emailBody, 'CIRCLE');
-            $linkVendor = extractValue($emailBody, 'LINK VENDOR');
-            $atmIP = extractValue($emailBody, 'ATM IP');
 
-            // Display the extracted information
-            echo "ATM ID: $atmID<br>";
-            echo "SITE ADDRESS: $siteAddress<br>";
-            echo "CITY: $city<br>";
-            echo "CIRCLE: $circle<br>";
-            echo "LINK VENDOR: $linkVendor<br>";
-            echo "ATM IP: $atmIP<br>";
-
-            echo "<hr>";
+            if (isset($atmID) && !empty($atmID)) {
+                $siteAddress = extractValue($emailBody, 'SITE ADDRESS');
+                $city = extractValue($emailBody, 'CITY');
+                $circle = extractValue($emailBody, 'CIRCLE');
+                $linkVendor = extractValue($emailBody, 'LINK VENDOR');
+                $atmIP = extractValue($emailBody, 'ATM IP');
 
 
 
-            
-            $to = $senderEmail;
-            $cc = $ccEmails;
-            $bcc = $bccEmails;
+                $header = imap_headerinfo($inbox, $messageNumber);
+                $subject = $header->subject;
+                $overview = imap_fetch_overview($inbox, $messageNumber);
+                $emailHeaders = imap_fetchheader($inbox, $messageNumber);
+
+
+                // Parse the headers into an associative array
+                $headerInfo = imap_rfc822_parse_headers($emailHeaders);
+
+
+                // Get the "To" recipients
+                $toRecipients = isset($headerInfo->to) ? $headerInfo->to : [];
+                $toEmails = getRecipientsEmails($toRecipients);
+
+                echo '$toEmails';
+                var_dump($toEmails);
+                echo '<br>';
+
+                $fromaddress = isset($headerInfo->fromaddress) ? $headerInfo->fromaddress : [];
+                // Get the "Cc" recipients
+                $ccRecipients = isset($headerInfo->cc) ? $headerInfo->cc : [];
+
+
+                if (is_array($ccRecipients) || is_object($ccRecipients)) {
+                    foreach ($ccRecipients as $ccValue) {
+                        if (is_array($ccValue) || is_object($ccValue)) {
+                            $ccEmails[] = $ccValue->mailbox . '@' . $ccValue->host;
+                        }
+                    }
+                }
+
+
+                $sender = $overview[0]->from;
+                echo $senderEmail = getSenderEmail($sender);
+
+                $toEmails[] = $senderEmail;
+
+                echo '<br>';
+                echo '<br>';
+                var_dump($toEmails);
+
+                echo '<br>';
+                echo '<br>';
+
+
+                $to = $senderEmail;
                 $data = array(
-                'atmid'=>$atmID,
-                'to'=>$to,
-                'cc'=>$cc,
-                'bcc'=>$bcc,
+                    'atmid' => $atmID,
+                    'to' => $toEmails,
+                    'cc' => $ccEmails,
                 );
-            
-            $options = array(
-                'http' => array(
-                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                    'method'  => 'POST',
-                    'content' => http_build_query($data)
-                )
-            );
-            
-            $context  = stream_context_create($options);
-            $result =  file_get_contents($nodes, false, $context);
 
-            var_dump($result);
+                $options = array(
+                    'http' => array(
+                        'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                        'method' => 'POST',
+                        'content' => http_build_query($data)
+                    )
+                );
+
+                $context = stream_context_create($options);
+                $result = file_get_contents($nodes, false, $context);
+
+                var_dump($result);
+
+            }
+
+
         }
     } else {
-        echo "No unread messages in the mailbox.";
+        // echo "No unread messages in the mailbox.";
     }
 } else {
-    echo "Failed to connect to the IMAP server: " . imap_last_error();
 }
 
 imap_close($inbox);
 
 // Function to extract a value based on a label from email body
-function extractValue($emailBody, $label) {
+function extractValue($emailBody, $label)
+{
     if (preg_match("/$label\s+(.+)/i", $emailBody, $matches)) {
         return trim($matches[1]);
     } else {
@@ -102,25 +127,29 @@ function extractValue($emailBody, $label) {
 }
 
 
-function getSenderEmail($sender) {
+function getSenderEmail($sender)
+{
     $matches = array();
     preg_match('/([^<]*)<([^>]*)>/', $sender, $matches);
     return isset($matches[2]) ? trim($matches[2]) : '';
 }
 
-// Function to extract email addresses from a comma-separated list of recipients
-function getRecipientsEmails($recipients) {
+function getRecipientsEmails($recipients)
+{
     $emails = array();
-    $recipients = explode(",", $recipients);
-    foreach ($recipients as $recipient) {
-        $email = getSenderEmail($recipient);
-        if (!empty($email)) {
-            $emails[] = $email;
+    if (is_array($recipients) || is_object($recipients)) {
+        foreach ($recipients as $recipient) {
+            if (is_array($recipient) || is_object($recipient)) {
+                $emails[] = $recipient->mailbox . '@' . $recipient->host;
+            }
         }
     }
     return $emails;
 }
 
-
-
-?>
+// Function to extract CC recipients from email headers
+function getCCRecipientsFromHeaders($emailHeaders)
+{
+    preg_match('/^Cc:\s*(.*)$/mi', $emailHeaders, $matches);
+    return isset($matches[1]) ? trim($matches[1]) : '';
+}

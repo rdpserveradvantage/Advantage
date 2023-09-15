@@ -537,7 +537,8 @@ error_reporting(E_ALL);
             <div class="col-sm-12"><br><label>Remark</label><input type="text" name="remark" class="form-control"></div>
             <div class="col-sm-12"><br><label>Resolution</label>
                 <select name="" class="form-control" required>
-                    <option value="Antena relocated">Antenna relocated</option>
+                <option value="Spares Replaced">Spares Replaced</option>
+                <option value="Antena relocated">Antenna relocated</option>
                     <option value="Antena replaced">Antenna replaced</option>
                     <option value="Loose connection fixed">Loose connection fixed</option>
                     <option value="Power turned on">Power turned on</option>

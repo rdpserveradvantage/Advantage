@@ -1,4 +1,12 @@
-<?php include('header.php'); ?>
+<?php include('header.php'); 
+
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
+
+?>
+
 
 
             <div class="pcoded-content">
@@ -10,6 +18,8 @@
                                 
 
                         <?php
+                        
+                        
                             // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                             $sqlappCount = "select count(1) as total from sites where 1 " ;
                             $atm_sql = "select po,po_date,id,activity,customer,bank,atmid,address,city,state,zone,LHO,LHO_Contact_Person,LHO_Contact_Person_No,
@@ -18,6 +28,7 @@
                                 XPNET_RemoteAddress,CONNECTIVITY,Connectivity_Type,Site_data_Received_for_Feasiblity_date,isDelegated,created_at,created_by,
                                 isFeasibiltyDone,latitude,longitude,verificationStatus,delegatedtoVendorId,ESD,ASD
                                 from sites where 1 ";
+                                
                                 
                             if(isset($_REQUEST['atmid']) && $_REQUEST['atmid']!=''){
                                 $atmid = $_REQUEST['atmid'];
@@ -51,6 +62,14 @@
                                 $sqlappCount .=  "and state= '".$_REQUEST['state']."' ";
                             }
                             
+                            if($ADVANTAGE_level==2 || $ADVANTAGE_level==5){
+            
+ 
+                                $atm_sql .=  "and LHO = '".$assignedLho."' ";
+                                $sqlappCount .=  "and LHO= '".$assignedLho."' ";                                
+                                
+                            }
+                            
                         function getBranchName($id){
                             global $con ;
                             $sql = mysqli_query($con,"select * from mis_city where id='".$id."'");
@@ -59,6 +78,8 @@
                         }
                         
                         
+                
+                
                 
                         $atm_sql .=  "and status=1 order by id desc";
                         $sqlappCount .=  "and status=1";
@@ -74,8 +95,8 @@
                         $start_window = max(1, $current_page - floor($window_size / 2));
                         $end_window = min($start_window + $window_size - 1, $total_pages);
                         $sql_query = "$atm_sql LIMIT $offset, $page_size";
-                            // }
                             
+                        // echo $sql_query ; 
                                
                                ?>
                                

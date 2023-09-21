@@ -27,6 +27,7 @@ if($uname && $password){
                 $_SESSION['ADVANTAGE_designation']=$sql_result['designation'];
                 $_SESSION['ADVANTAGE_userid'] = $sql_result['id'];
                 $_SESSION['ADVANTAGE_level'] = $sql_result['level'];
+                $_SESSION['ADVANTAGE_uname'] = $sql_result['uname'];
                 
                 $_SESSION['ADVANTAGE_branch'] = $sql_result['branch'];
                 $_SESSION['ADVANTAGE_zone'] = $sql_result['zone'];

@@ -1,12 +1,14 @@
 <? include('config.php');
 
-$query = "SELECT v.id,v.vendorName, COUNT(s.delegatedToVendorId) AS siteAllocated, 
-          COALESCE(SUM(s.delegatedByVendor = 1), 0) AS assignEngineer,
-          COALESCE(SUM(s.isFeasibiltyDone = 1), 0) AS feasibiltyDone
-          FROM vendor v
-          INNER JOIN sites s ON v.id = s.delegatedToVendorId
-          where v.status=1
-          GROUP BY v.id";
+                                
+if($assignedLho){
+$query = "SELECT v.id,v.vendorName, COUNT(s.delegatedToVendorId) AS siteAllocated,  COALESCE(SUM(s.delegatedByVendor = 1), 0) AS assignEngineer, COALESCE(SUM(s.isFeasibiltyDone = 1), 0) AS feasibiltyDone FROM vendor v
+          INNER JOIN sites s ON v.id = s.delegatedToVendorId where v.status=1  and s.LHO like '".$assignedLho."' GROUP BY v.id";
+}else{
+$query = "SELECT v.id,v.vendorName, COUNT(s.delegatedToVendorId) AS siteAllocated,  COALESCE(SUM(s.delegatedByVendor = 1), 0) AS assignEngineer, COALESCE(SUM(s.isFeasibiltyDone = 1), 0) AS feasibiltyDone FROM vendor v
+      INNER JOIN sites s ON v.id = s.delegatedToVendorId where v.status=1 GROUP BY v.id";
+}
+          
 $result = mysqli_query($con, $query);
 
 $data = array();
@@ -18,11 +20,24 @@ $query4 = mysqli_query($con,"SELECT COUNT(DISTINCT siteid) AS count FROM materia
 $query4_result = mysqli_fetch_assoc($query4);
 $materialRequest = $query4_result['count'];
 
-$query5 = mysqli_query($con,"SELECT COUNT(1) AS count FROM material_send where vendorId='".$vendorId."'");
+if($assignedLho){
+    $query5 = mysqli_query($con,"SELECT COUNT(1) AS count FROM material_send a INNER JOIN sites s ON a.atmid=s.atmid where a.vendorId='".$vendorId."' and s.LHO like '".$assignedLho."'");    
+
+    $query6 = mysqli_query($con,"SELECT COUNT(1) AS count FROM projectInstallation a INNER JOIN sites s ON a.atmid=s.atmid where a.vendor='".$vendorId."' and isDone=1 and s.LHO like '".$assignedLho."'");
+    
+}else{
+    $query5 = mysqli_query($con,"SELECT COUNT(1) AS count FROM material_send where vendorId='".$vendorId."'");    
+    $query6 = mysqli_query($con,"SELECT COUNT(1) AS count FROM projectInstallation where vendor='".$vendorId."' and isDone=1");
+    
+}
+
+
+
+
 $query5_result = mysqli_fetch_assoc($query5);
 $materialSend = $query5_result['count']; 
 
-$query6 = mysqli_query($con,"SELECT COUNT(1) AS count FROM projectInstallation where vendor='".$vendorId."' and isDone=1");
+
 $query6_result = mysqli_fetch_assoc($query6);
 $installationDone = $query6_result['count']; 
 

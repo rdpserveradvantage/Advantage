@@ -1,3 +1,5 @@
+
+<? return ;?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +17,8 @@
 </head>
 <body>
 <select>
-    <optgroup label="ADV">
+
+    <option class="divider" disabled>---------------------------ADV---------------------------------------------</option> <!-- Divider option -->
         <option value="spares-replaced">Spares Replaced</option>
         <option value="antenna-relocated">Antenna Relocated</option>
         <option value="antenna-replaced">Antenna Replaced</option>
@@ -25,14 +28,14 @@
         <option value="sim-replaced">SIM Replaced</option>
         <option value="sim-reinserted">SIM Re-Inserted</option>
         <option value="no-issue-found">No Issue Found</option>
-    </optgroup>
-    <option class="divider" disabled>----</option> <!-- Divider option -->
-    <optgroup label="Bank">
-        <option value="atm-shutter-down">ATM Shutter Down</option>
+
+    <option class="divider" disabled>---------------------------BANK---------------------------------------------</option> <!-- Divider option -->
+    <option value="atm-shutter-down">ATM Shutter Down</option>
         <option value="permission-issue">Permission Issue</option>
         <option value="back-room-key">Back Room Key</option>
         <option value="back-room-em-lock">Back Room EM Lock</option>
         <option value="atm-machine-down">ATM Machine Down</option>
+
         <optgroup label="Power Issue">
             <option value="area-power-failure">Area Power Failure</option>
             <option value="atm-power-disconnect">ATM Power Disconnect by EB Department Due Bill Not Paid</option>
@@ -53,7 +56,7 @@
         <option value="Rodent-Issue">Rodent issue</option>
         <option value="LL-Rent-Issue">LL rent issue</option>
         <option value="ATM-Renovation">ATM Renovation</option>
-    </optgroup>
+
 </select>
 </body>
 </html>

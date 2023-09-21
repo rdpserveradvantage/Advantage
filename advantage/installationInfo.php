@@ -1,6 +1,6 @@
 <? include('header.php'); 
 
-$baseurl = 'http://clarity.advantagesb.com';
+$baseurl = 'http://clarity.advantagesb.com/';
 ?>
 
      

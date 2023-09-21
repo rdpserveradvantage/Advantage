@@ -4,18 +4,30 @@ $totalPendingInstallation = array();
 $categories = array();
 $i = 1;
 
+if($assignedLho){
+    $sql = mysqli_query($con, "SELECT p.vendor, v.status, COUNT(1) as totalSites 
+                           FROM projectInstallation p
+                           INNER JOIN sites s ON p.atmid=s.atmid
+                           LEFT JOIN vendor v ON p.vendor = v.id
+                           WHERE p.status = 1 AND p.isDone = 0 and v.status=1
+                           and s.LHO like '".$assignedLho."'
+                           GROUP BY p.vendor
+                           ");
+}else{
 $sql = mysqli_query($con, "SELECT p.vendor, v.status, COUNT(1) as totalSites 
                            FROM projectInstallation p
                            LEFT JOIN vendor v ON p.vendor = v.id
                            WHERE p.status = 1 AND p.isDone = 0 and v.status=1 
-                           GROUP BY p.vendor");
+                           GROUP BY p.vendor
+                           ");    
+}
+
 
 while ($sql_result = mysqli_fetch_assoc($sql)) {
     $vendor = $sql_result['vendor'];
     $vendorName = getVendorName($vendor);
     $totalSites = (int)$sql_result['totalSites']; // Convert to integer
     $vendorStatus = (int)$sql_result['status']; // Convert to integer (1 for active, 0 for non-active)
-
     if ($vendorStatus === 1) {
         if ($i == 1) {
             $totalPendingInstallation[] = array('name' => $vendorName, 'y' => $totalSites, 'sliced' => true, 'selected' => true);
@@ -26,8 +38,12 @@ while ($sql_result = mysqli_fetch_assoc($sql)) {
         $i++;
     }
 }
+if($assignedLho){
+$sqlStatement = "SELECT * FROM projectInstallation a INNER JOIN sites s ON a.atmid=s.atmid WHERE a.isDone = 0 and s.LHO like '".$assignedLho."' ORDER BY a.created_at ASC ";    
+}else{
+$sqlStatement = "SELECT * FROM projectInstallation WHERE isDone = 0 ORDER BY created_at ASC ";    
+}
 
-$sqlStatement = "SELECT * FROM projectInstallation WHERE isDone = 0 ORDER BY created_at ASC ";
 ?>
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -67,12 +83,22 @@ $sqlStatement = "SELECT * FROM projectInstallation WHERE isDone = 0 ORDER BY cre
                         <?php
                         $i = 1;
                         
+if($assignedLho){
                         $pendingInstallationSql = mysqli_query($con, "select 
+                        p.vendor,p.atmid,p.created_at,p.sbiTicketId,v.status
+                        from projectInstallation p
+                        INNER JOIN sites s ON p.atmid = s.atmid
+                        LEFT JOIN vendor v ON p.vendor = v.id
+                        where p.isDone=0 and v.status=1 and s.LHO like '".$assignedLho."' order by p.created_at asc limit 7");
+                            
+}else{
+                            $pendingInstallationSql = mysqli_query($con, "select 
                         p.vendor,p.atmid,p.created_at,p.sbiTicketId,v.status
                         from projectInstallation p 
                         LEFT JOIN vendor v ON p.vendor = v.id
                         where isDone=0 and v.status=1 order by created_at asc limit 7");
-                        
+}
+
                         while ($pendingInstallationSqlResult = mysqli_fetch_assoc($pendingInstallationSql)) {
                             
     $vendorStatus = (int)$pendingInstallationSqlResult['status']; // Convert to integer (1 for active, 0 for non-active)

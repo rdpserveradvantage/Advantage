@@ -7,15 +7,20 @@
                         <div class="page-wrapper">
                             <div class="page-body">
 
-                <?
-                
-                $statement = "select * from projectInstallation where isDone=1 and status=1 " ; 
-                $sqlappCount = "select count(1) as totalCount from projectInstallation where isDone=1 and status=1 ";
-
+<?
+if($assignedLho){
+    $statement = "select * from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.isDone=1 and a.status=1 and s.LHO like '".$assignedLho."'" ; 
+    $sqlappCount = "select count(1) as totalCount from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.isDone=1 and a.status=1  
+    and s.LHO like '".$assignedLho."'";
+}else{
+    $statement = "select * from projectInstallation a where a.isDone=1 and a.status=1 "; 
+    $sqlappCount = "select count(1) as totalCount from projectInstallation where isDone=1 and status=1 ";
+}             
+    
 
                 if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
                     $atmid = $_REQUEST['atmid'];
-                    $statement .= "and atmid like '%" . trim($atmid) . "%'";
+                    $statement .= "and a.atmid like '%" . trim($atmid) . "%'";
                     $sqlappCount .= "and atmid like '%" . trim($atmid) . "%'";
                 }
 
@@ -23,7 +28,7 @@
                 if(isset($_POST['submit'])){
                     $_GET['page']=1 ;  
                 }
-                $statement .= "order by id desc" ;
+                $statement .= "order by a.id desc" ;
                 
                 $page_size = 10;
                 $result = mysqli_query($con, $sqlappCount);
@@ -38,6 +43,7 @@
                 $end_window = min($start_window + $window_size - 1, $total_pages);
                 $sql_query = "$statement LIMIT $offset, $page_size";
 
+// echo $sql_query ; 
 
 
                 ?>

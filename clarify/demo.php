@@ -5,13 +5,13 @@ error_reporting(E_ALL); // Enable error reporting for debugging
 $username = 'noc@advantagesb.com';
 $password = '4mPZJcl^X@XB';
 $emailServer = 'webmail-b21.web-hosting.com';
-// $nodes = 'http://clarify.advantagesb.com/generateAutoCallFromEmailReceived.php';
+$nodes = 'http://clarify.advantagesb.com/generateAutoCallFromEmailReceived.php';
 $inbox = imap_open("{{$emailServer}:993/imap/ssl}INBOX", $username, $password);
 
 if ($inbox) {
 
     // Calculate the date 1 days ago (read emails from last 24 hours)
-    $date = date("d M Y", strtotime("-1 days"));
+    $date = date("d M Y", strtotime("-10 days"));
     $searchCriteria = 'SINCE "' . $date . '"';
 
     $unseenMessages = imap_search($inbox, $searchCriteria);
@@ -31,6 +31,9 @@ if ($inbox) {
             $atmID = extractValue($emailBody, 'ATM ID');
 
             if (isset($atmID) && !empty($atmID)) {
+                
+                echo $atmID ;
+                echo '<br>';
                 $siteAddress = extractValue($emailBody, 'SITE ADDRESS');
                 $city = extractValue($emailBody, 'CITY');
                 $circle = extractValue($emailBody, 'CIRCLE');
@@ -53,14 +56,8 @@ if ($inbox) {
                 $toRecipients = isset($headerInfo->to) ? $headerInfo->to : [];
                 $toEmails = getRecipientsEmails($toRecipients);
 
-                echo '$toEmails';
-                var_dump($toEmails);
-                echo '<br>';
-
                 $fromaddress = isset($headerInfo->fromaddress) ? $headerInfo->fromaddress : [];
-                // Get the "Cc" recipients
                 $ccRecipients = isset($headerInfo->cc) ? $headerInfo->cc : [];
-
 
                 if (is_array($ccRecipients) || is_object($ccRecipients)) {
                     foreach ($ccRecipients as $ccValue) {
@@ -75,6 +72,16 @@ if ($inbox) {
                 echo $senderEmail = getSenderEmail($sender);
 
                 $toEmails[] = $senderEmail;
+
+
+$emailToRemove = "noc@advantagesb.com";
+
+foreach ($toEmails as $key => $email) {
+    if ($email === $emailToRemove) {
+        unset($toEmails[$key]);
+    }
+}
+
 
                 echo '<br>';
                 echo '<br>';
@@ -100,9 +107,9 @@ if ($inbox) {
                 );
 
                 $context = stream_context_create($options);
-                $result = file_get_contents($nodes, false, $context);
+                // $result = file_get_contents($nodes, false, $context);
 
-                var_dump($result);
+                // var_dump($result);
 
             }
 

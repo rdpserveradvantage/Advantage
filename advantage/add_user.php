@@ -92,6 +92,7 @@
                                                         <option value="1">Admin</option>
                                                         <option value="2">Project Executive</option>
                                                         <option value="5">Bank Executive</option>
+                                                        <option value="6">LHO</option>
                                                         
                                                     </select>
                                                 </div>
@@ -126,6 +127,7 @@
                                                 <tr class="table-primary">
                                                     <th>#</th>
                                                     <th>User ID</th>
+
                                                     <th>Name</th>
                                                     <th>Desgination</th>
                                                     <th>Username</th>
@@ -165,6 +167,7 @@
                                                     <tr>
                                                         <td><? echo $i; ?></td>
                                                         <td><? echo $sql_result['id']; ?></td>
+                                                        
                                                         <td><? echo $sql_result['name']; ?></td>
                                                         <td><? echo $designation; ?></td>
                                                         <td style="text-transform: initial;"><? echo $sql_result['uname']; ?></td>

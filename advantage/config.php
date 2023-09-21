@@ -11,6 +11,9 @@ $pass="qwerty121";
 $dbname="sarmicrosystems_advantage";
 $con = new mysqli($host, $user, $pass, $dbname);
 
+
+$ADVANTAGE_level = $_SESSION['ADVANTAGE_level'] ; 
+$ADVANTAGE_uname = $_SESSION['ADVANTAGE_uname'];
 define('PORTAL', 'ADVANTAGE');
 
 
@@ -20,7 +23,13 @@ if ($con->connect_error) {
 }
 
 
-
+                                $getLhoSql =  "select a.contactPersonEmail , b.lho
+                                                from lhoADVContactDetails a INNER JOIN lho b ON a.lhoid = b.id where a.contactPersonEmail like '%".$ADVANTAGE_uname."%'" ;
+                                $lhosql = mysqli_query($con,$getLhoSql);
+                                $lhosqlResult = mysqli_fetch_assoc($lhosql);
+                                $assignedLho = $lhosqlResult['lho'] ;
+                                
+                                
 
 // if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
 //     $redirectURL = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];

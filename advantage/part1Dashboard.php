@@ -1,9 +1,20 @@
 <?php include('config.php');
 
-$query1 = "SELECT COUNT(1) AS count FROM sites WHERE status = 1";
-$query2 = "SELECT COUNT(1) AS count FROM sites WHERE isDelegated = 1";
-$query3 = "SELECT COUNT(1) AS count FROM sites WHERE isfeasibiltyDone = 1";
-$query5 = "SELECT COUNT(1) AS count FROM projectInstallation where isDone=1";
+                                
+if($assignedLho){
+    $query1 = "SELECT COUNT(1) AS count FROM sites WHERE status = 1 and LHO like '".$assignedLho."'";
+    $query2 = "SELECT COUNT(1) AS count FROM sites WHERE isDelegated = 1 and LHO like '".$assignedLho."'";
+    $query3 = "SELECT COUNT(1) AS count FROM sites WHERE isfeasibiltyDone = 1 and LHO like '".$assignedLho."'";
+    $query5 = "SELECT COUNT(1) AS count FROM projectInstallation a inner join sites b on a.atmid = b.atmid where isDone=1 and LHO like '".$assignedLho."'";
+    
+
+}else{
+    $query1 = "SELECT COUNT(1) AS count FROM sites WHERE status = 1";
+    $query2 = "SELECT COUNT(1) AS count FROM sites WHERE isDelegated = 1";
+    $query3 = "SELECT COUNT(1) AS count FROM sites WHERE isfeasibiltyDone = 1";
+    $query5 = "SELECT COUNT(1) AS count FROM projectInstallation where isDone=1";    
+}
+
 
 // $queries = [$query1, $query2, $query3, $query4, $query5];
 $queries = [$query1, $query2, $query3,  $query5];

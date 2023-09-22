@@ -48,6 +48,7 @@ if (isset($_POST['submit'])) {
         $material_make = $rowData[$i][0][1];
         $model_no = $rowData[$i][0][2];
         $serial_no = $rowData[$i][0][3];
+        
         $challan_no = $rowData[$i][0][4];
         $amount = $rowData[$i][0][5];
         $gst = $rowData[$i][0][6];
@@ -61,10 +62,19 @@ if (isset($_POST['submit'])) {
         $po_date = $rowData[$i][0][14];
         $po_number = $rowData[$i][0][15];
 
-        // Insert the data into the Inventory table
-        $sql = "INSERT INTO Inventory (material, material_make, model_no, serial_no, challan_no, amount, gst, amount_with_gst, courier_detail, tracking_details, date_of_receiving, receiver_name, vendor_name, vendor_contact, po_date, po_number, created_at,created_by,inventoryType)
+        if(isset($serial_no) && $material=='Router'){
+            $checkSerial = mysqli_query($con,"select * from inventory where serial_no='".$serial_no."'");
+            if($checkSerialResult = mysqli_fetch_assoc($checkSerial)){
+                echo $serial_no . ' Already exists <br>'  ; 
+            }else{
+                $sql = "INSERT INTO Inventory (material, material_make, model_no, serial_no, challan_no, amount, gst, amount_with_gst, courier_detail, tracking_details, date_of_receiving, receiver_name, vendor_name, vendor_contact, po_date, po_number, created_at,created_by,inventoryType)
                 VALUES ('$material', '$material_make', '$model_no', '$serial_no', '$challan_no', $amount, $gst, $amount_with_gst, '$courier_detail', '$tracking_details', '$date_of_receiving', '$receiver_name', '$vendor_name', '$vendor_contact', '$po_date', '$po_number', '$created_at','$userid','$inventoryType')";
+            }
+        }else if($material!='Router' || $material!='router'){
+            $sql = "INSERT INTO Inventory (material, material_make, model_no, serial_no, challan_no, amount, gst, amount_with_gst, courier_detail, tracking_details, date_of_receiving, receiver_name, vendor_name, vendor_contact, po_date, po_number, created_at,created_by,inventoryType)
+            VALUES ('$material', '$material_make', '$model_no', '$serial_no', '$challan_no', $amount, $gst, $amount_with_gst, '$courier_detail', '$tracking_details', '$date_of_receiving', '$receiver_name', '$vendor_name', '$vendor_contact', '$po_date', '$po_number', '$created_at','$userid','$inventoryType')";
 
+        }
         // Execute the query
         if (mysqli_query($con, $sql)) {
             echo 'Inventory data inserted successfully for row ' . $i . '<br>';

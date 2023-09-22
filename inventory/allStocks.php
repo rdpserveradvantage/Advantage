@@ -66,11 +66,10 @@
                             date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at,inventoryType
                                 from Inventory where 1 ";
 
-
                     if (isset($_REQUEST['material']) && $_REQUEST['material'] != '') {
                         $material = $_REQUEST['material'];
-                        $atm_sql .= "and material like '%" . $material . "%'";
-                        $sqlappCount .= "and material like '%" . $material . "%'";
+                        $atm_sql .= "and material like '" . $material . "'";
+                        $sqlappCount .= "and material like '" . $material . "'";
                     }
                     if (isset($_REQUEST['serialNumber']) && $_REQUEST['serialNumber'] != '') {
                         $serialNumber = $_REQUEST['serialNumber'];
@@ -112,12 +111,24 @@
                     <div class="card">
                         <div class="card-block" style="overflow:auto;">
 
-                            <div style="display:flex;justify-content:space-around;">
+                        <div class="card-header">
+                                        <h5>Total Records: <strong class="record-count"><? echo $total_records; ?></strong></h5>
+
+                                        <hr>
+                                        <form action="exportInventoryRecords.php" method="POST">
+                                            <input type="hidden" name="exportSql" value="<?= $atm_sql ; ?>">
+                                            <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
+                                        </form>
+
+                                    </div>
+
+
+                            <!-- <div style="display:flex;justify-content:space-around;">
                                 <h5 style="text-align:center;">All Stocks - <p>Total Records- <?= $total_records;  ?></p>
                                 </h5>
 
                                 <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show Filters</a>
-                            </div>
+                            </div> -->
 
 
 

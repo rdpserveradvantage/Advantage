@@ -329,7 +329,7 @@ a {
 }
 
 .rounded-circle i {
-    color: blue;
+    color: white;
 }
 
 .font-size-16 {
@@ -441,4 +441,28 @@ h6 {
 }
 .noRecordsContainer img{
     width:50%;
+}
+
+.line-on-side {
+    border-bottom: 1px solid #dadada;
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+}
+
+.font-small-3 {
+    font-size: 0.9rem !important;
+}
+.text-muted {
+    color: #818a91 !important;
+}
+.text-xs-center {
+    text-align: center !important;
+}
+.pt-2 {
+    padding-top: 1.5rem !important;
+}
+.line-on-side span {
+background:#f6f7fb;
+    padding: 0 10px;
+    font-size:25px;
 }

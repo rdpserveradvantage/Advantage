@@ -52,6 +52,10 @@ function getMaterialRequestStatus($siteid){
                                                     <th>City</th>
                                                     <th>State</th>
                                                     <th>Vendor</th>
+                                                    
+                                                    <th>IP Configuration</th>
+                                                    <th>Router Configuration</th>
+                                                    
                                                     <th>Action</th>
                                                     <th>Current Status</th>
                                                 </tr>
@@ -61,11 +65,70 @@ function getMaterialRequestStatus($siteid){
                                                 $i=1;
                                                 $sql = mysqli_query($con,"select * from sites where id in($siteids)");
                                                 while($sql_result = mysqli_fetch_assoc($sql)){ 
+                                                    
+                                                    $ipRemark = '' ; 
+                                                    $error = 0 ;
+                                                    
+                                                    $configurationRemark = '' ;
+                                                    $configurationError = 0 ;
+                                                    
                                                     $atmid = $sql_result['atmid'];
                                                     $siteid = $sql_result['id'];
                                                     $city = $sql_result['city'];
                                                     $state = $sql_result['state'];
                                                     $address = $sql_result['address'];
+                                                    
+                                                    $networkIP = $sql_result['networkIP'];
+                                                    $routerIP = $sql_result['routerIP'];
+                                                    $atmIP = $sql_result['atmIP'];
+                                                    $subnetIP = $sql_result['subnetIP'];
+                                                    
+                                                    if($networkIP){
+                                                        $ipRemark .= ' Network IP <i class="fas fa-check" style="color:green;"></i>' ; 
+                                                    }else{
+                                                        $ipRemark .= ' Network IP <i class="fas fa-window-close" style="color:red;"></i>' ;
+                                                        $error++ ; 
+                                                    }
+                                                    if($routerIP){
+                                                        $ipRemark .= ' Router IP <i class="fas fa-check" style="color:green;"></i>' ; 
+                                                    }else{
+                                                        $ipRemark .= ' Router IP <i class="fas fa-window-close"  style="color:red;"></i>' ;
+                                                        $error++ ; 
+                                                    }
+                                                    if($atmIP){
+                                                        $ipRemark .= ' ATM IP <i class="fas fa-check" style="color:green;"></i>' ; 
+                                                    }else{
+                                                        $error++ ; 
+                                                        $ipRemark .= ' ATM IP <i class="fas fa-window-close"  style="color:red;"></i>' ;
+                                                    }
+                                                    if($subnetIP){
+                                                        $ipRemark .= ' Subnet IP <i class="fas fa-check" style="color:green;"></i>' ; 
+                                                    }else{
+                                                        $error++ ; 
+                                                        $ipRemark .= ' Subnet IP <i class="fas fa-window-close"  style="color:red;"></i>' ;
+                                                    }
+                                                    
+                                                    
+                                                    $routerConfiguration = mysqli_query($con,"select * from routerConfiguration where atmid='".$atmid."' and status=1");
+                                                    $routerConfigurationResult = mysqli_fetch_assoc($routerConfiguration);
+                                                    
+                                                    $serialNumber = $routerConfigurationResult['serialNumber'];
+                                                    $sealNumber	= $routerConfigurationResult['sealNumber'];
+                                                    
+                                                    if($serialNumber){
+                                                        $configurationRemark .= ' Serial Number <i class="fas fa-check" style="color:green;"></i>' ; 
+                                                    }else{
+                                                        $configurationRemark .= ' Serial Number <i class="fas fa-window-close" style="color:red;"></i>' ;
+                                                        $configurationError++ ; 
+                                                    }
+                                                    
+                                                    if($sealNumber){
+                                                        $configurationRemark .= ' Seal Number <i class="fas fa-check" style="color:green;"></i>' ; 
+                                                    }else{
+                                                        $configurationRemark .= ' Seal Number <i class="fas fa-window-close" style="color:red;"></i>' ;
+                                                        $configurationError++ ; 
+                                                    }
+                                                    
                                                     ?>
                                                     
                                                    <tr>
@@ -76,23 +139,27 @@ function getMaterialRequestStatus($siteid){
                                                        <td><?= $state; ?></td>
                                                        <td><?= getMaterialRequestInitiatorName($siteid); ?></td>
                                                        
+                                                       
+                                                        <td><?= $ipRemark ; ?></td>
+                                                        <td><?= $configurationRemark; ?></td>
                                                        <td>
-                                                           <a href="sendMaterial.php?siteid=<?= $siteid; ?>">Send Material</a>
+                                                            <?
+                                                           if($configurationError+$error > 0){
+                                                               echo '<label style="color:red;">Pending Details !</label>' ; 
+                                                               
+                                                           }else{ ?>
+                                                              <a href="sendMaterial.php?siteid=<?= $siteid; ?>">Send Material</a>    
+                                                           <? } ?>
                                                        </td>
                                                        <td>
                                                            <?= getMaterialRequestStatus($siteid) ; ?>
                                                        </td>
                                                    </tr>
-                                                    
                                                     <? $i++;  } ?>
 
                                             </tbody>
-                                        </table>                                        
-                                    
-
+                                        </table>
                                         <? }else{
-
-
                                             echo '
                                             
                                             <div class="noRecordsContainer">

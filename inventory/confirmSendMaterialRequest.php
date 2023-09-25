@@ -14,6 +14,7 @@
                         <div class="card-block">
 
                             <?php
+                            
                             $atmid = $_REQUEST['atmid'];
                             $siteid = $_REQUEST['siteid'];
                             $attributes = $_POST['attribute'];
@@ -107,15 +108,19 @@
                                             xhr.open('POST', 'processConfirmSendMaterialRequest.php');
                                             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                                             xhr.onload = function() {
-                                                submitButton.disabled = false;
-                                                if (xhr.status === 200) {
-                                                    alert('Material Send Successfully !')
-                                                    window.location.href="sitestest.php";
-                                                } else {
-                                                    alert('Material Send Error !')
-                                                    console.error(xhr.responseText);
-                                                    console.log('error');
-                                                }
+                                                  submitButton.disabled = false;
+                                                    console.log(xhr.responseText);
+                                                    var response = JSON.parse(xhr.responseText);
+                                                    
+                                                    if (response.status === "200") {
+                                                        alert('Form data saved successfully!');
+                                                        window.location.href="materialSent.php"
+                                                        // You can perform additional actions here upon successful response.
+                                                    } else {
+                                                        alert('Error: ' + response.message);
+                                                        console.error(xhr.responseText);
+                                                        console.log('error');
+                                                    }
                                             };
                                             xhr.send(serializedData);
                                         } else {

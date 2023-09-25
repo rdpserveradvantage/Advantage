@@ -35,7 +35,12 @@ function getSitesInfo($siteid, $parameter)
                                     <?php
                                     $i = 1;
                                     $siteid = $_REQUEST['siteid'];
-                                    $statement = "select * from material_requests where siteid='" . $siteid . "' and status='pending'" ; 
+                                    $statement = "select a.siteid,a.material_name,a.quantity,a.created_at,a.created_by,a.vendorId from 
+                                    material_requests a 
+                                    LEFT JOIN boq b 
+                                    ON a.material_name = b.value 
+                                    where siteid='" . $siteid . "' and a.status='pending' order by b.needSerialNumber desc" ; 
+                                    
                                     $sql = mysqli_query($con,$statement );
                                     while ($sql_result = mysqli_fetch_assoc($sql)) {
 
@@ -48,12 +53,12 @@ function getSitesInfo($siteid, $parameter)
                                         $vendorId = $sql_result['vendorId'];
                                         ?>
                                         <tr>
-                                            <td><?php echo $i; ?></td>
-                                            <td><?php echo $atmid; ?></td>
-                                            <td><?php echo $material_name; ?></td>
-                                            <td><?php echo $quantity; ?></td>
-                                            <td><?php echo $created_at; ?></td>
-                                            <td><?php echo getUsername($created_by, 0); ?></td>
+                                            <td><?= $i; ?></td>
+                                            <td class="strong"><?= $atmid; ?></td>
+                                            <td><?= $material_name; ?></td>
+                                            <td><?= $quantity; ?></td>
+                                            <td><?= $created_at; ?></td>
+                                            <td><?= getUsername($created_by, 0); ?></td>
                                         </tr>
 
                                     <?php $i++;
@@ -91,14 +96,55 @@ function getSitesInfo($siteid, $parameter)
                                 
                                 <div id="attributeFields">
                                     <?php
+                                    // echo $statement ; 
                                     $sql = mysqli_query($con,$statement);
                                     while ($sql_result = mysqli_fetch_assoc($sql)) {
                                         $material_name = $sql_result['material_name']; ?>
                                         <div class="attribute-field">
-                                            <input type="text" name="attribute[]" value="<?php echo $material_name; ?>" style="background-color: #e9ecef;opacity: 1;"readonly>
-                                            <input type="text" name="value[]" placeholder="Value" required>
-                                            <select name="serialNumber[]" class="serial-number-list" required></select>
-                                            <button class="remove-field" onclick="removeAttributeField(event)">Remove</button>
+                                            <input type="text" name="attribute[]" value="<?= $material_name; ?>" style="background-color: #e9ecef;opacity: 1;width: 25%;"readonly>
+                                            <?
+                                            $serialSql = mysqli_query($con,"Select * from boq where value='".$material_name."' order by id desc");
+                                            $serialSqlResult = mysqli_fetch_assoc($serialSql);
+                                            $needSerialNumber = $serialSqlResult['needSerialNumber'];
+                                            if($needSerialNumber==1){ 
+                                                
+                                                $getSerialSql = mysqli_query($con,"SELECT * FROM routerConfiguration where atmid='".$atmid."' order by id desc");
+                                                $getSerialSqlResult = mysqli_fetch_assoc($getSerialSql);
+                                                $serialNumber = $getSerialSqlResult['serialNumber'];
+                                                $sealNumber = $getSerialSqlResult['sealNumber'];
+
+                                                if(trim($material_name)=='Router'){
+                                                    echo '<input type="text" name="value[]" placeholder="Value" style="width: 15%;    background-color: #e9ecef;" value="' . $serialNumber . '" readonly required>
+                                                         <select name="serialNumber[]" class="serial-number-list" style="width: 20%;    background-color: #e9ecef; " required>
+                                                             <option value="'.$serialNumber.'">'.$serialNumber.'</option>
+                                                         </select>';
+                                                         
+                                                }else if(trim($material_name)=='Security seal'){
+                                                    echo '<input type="text" name="value[]" placeholder="Value" style="width: 15%;    background-color: #e9ecef;" value="' . $sealNumber . '" readonly required>
+                                                         <select name="serialNumber[]" class="serial-number-list" style="width: 20%;    background-color: #e9ecef;" required>
+                                                             <option value="'.$sealNumber.'">'.$sealNumber.'</option>
+                                                         </select>';
+                                                         
+                                                }
+                                                	
+                                                else{
+                                                    echo '<input type="text" name="value[]" placeholder="Value" style="width: 15%;" required>
+                                                         <select name="serialNumber[]" class="serial-number-list" style="width: 20%;" required>
+                                                         </select>';
+                                                                                                             
+                                                }
+                                                
+                                            ?>
+                                            <? } 
+                                                if(trim($material_name)=='Router' || trim($material_name)=='Security seal'){
+                                                                                                
+                                                }else{
+                                                    echo '<button class="remove-field" onclick="removeAttributeField(event)" >Remove</button>' ;
+                                                }
+                                            
+                                            ?>
+
+                                            
                                         </div>
                                     <?php
                                     }
@@ -146,9 +192,9 @@ function getSitesInfo($siteid, $parameter)
                                     var attributeField = document.createElement("div");
                                     attributeField.className = "attribute-field";
                                     attributeField.innerHTML = `
-                                      <input type="text" name="attribute[]" value="">
-                                      <input type="text" name="value[]" placeholder="Value" required>
-                                      <select name="serialNumber[]" class="serial-number-list" required>
+                                      <input type="text" name="attribute[]" value="" style="width: 25%;">
+                                      <input type="text" name="value[]" placeholder="Value" style="width: 15%;" required>
+                                      <select name="serialNumber[]" class="serial-number-list" style="width: 20%;" required>
                                               <option value="">-- select --</option>
                                       </select>
                                       <button class="remove-field" onclick="removeAttributeField(event)">Remove</button>

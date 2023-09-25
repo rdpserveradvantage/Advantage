@@ -91,7 +91,10 @@ $mainmenu    = array_unique($mainmenu);
                                                 echo '<i class="fa fa-list-alt"></i>';
                                             }else if($main_name=='Inventory'){
                                                 echo '<i class="feather icon-pie-chart"></i>';
+                                            }else if($main_name=='Configuration'){
+                                                echo '<i class="feather icon-sliders" style="color: #23ff23;"></i>';
                                             }
+                                            
                                             
                                             
                                             

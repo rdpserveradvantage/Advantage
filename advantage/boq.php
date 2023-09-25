@@ -21,12 +21,12 @@
                 <div class="page-body">
                     <div class="card">
                         <div class="card-header">
-                            <div style="display:flex;     justify-content: space-between;">
-                                <h5>BOQ Management </h5>
+
+                                <h3>BOQ Management </h3>
                                 <button type="button" class="btn btn-primary btn-circle" data-toggle="modal" data-target="#addModal" style="float:right;" title="Add BOQ">
                                     <i class="fa fa-plus"></i>
                                 </button>                                
-                            </div>
+
                         </div>
                         <div class="card-block">
                             <table class="table table-styling">
@@ -36,6 +36,7 @@
                                         <th>BOQ</th>
                                         <th>Count</th>
                                         <th>Actions</th>
+                                        <th>Need Serial Number ? </th>
                                     </tr>
                                 </thead>
                                 <tbody id="boq-data"></tbody>
@@ -62,9 +63,16 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="status">Status</label>
-                                                <select class="form-control" id="status">
+                                                <select class="form-control" id="activityStatus">
                                                     <option value="1" selected>Active</option>
                                                     <option value="0">Inactive</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="status">Required Serial Number</label>
+                                                <select class="form-control" id="needSerialNumber">
+                                                    <option value="1" selected>Yes</option>
+                                                    <option value="0">No</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -95,6 +103,11 @@
                     <label for="quantity">Quantity</label>
                     <input type="text" class="form-control" id="quantity" required>
                 </div>
+                <label for="status">Required Serial Number</label>
+                    <select class="form-control" id="needSerialNumber">
+                        <option value="1" selected>Yes</option>
+                        <option value="0">No</option>
+                    </select>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -180,13 +193,21 @@ function addBOQ() {
                 var boqData = "";
                 $.each(data, function (key, value) {
                     var counter = key+1 ; 
+                    
+                    if(value.needSerialNumber==1){
+                        needSerialNumber = 'Yes' ; 
+                    }else{
+                        needSerialNumber = 'No' ;
+                    }
+                    
                     boqData += "<tr>";
                     boqData += '<td>' + counter + '</td>';
-                    boqData += "<td>" + value.value + "</td>";
+                    boqData += "<td class='strong'>" + value.value + "</td>";
                     boqData += "<td>" + value.count + "</td>";
                     boqData += "<td>";
-                    boqData += '<button type="button" class="btn btn-primary btn-outline-primary" onclick="openUpdateModal(' + value.id + ')">Edit | Delete </button>';
+                    boqData += '<button type="button" class="btn btn-primary" onclick="openUpdateModal(' + value.id + ')">Edit | Delete </button>';
                     boqData += "</td>";
+                    boqData += "<td>" + needSerialNumber + "</td>";
                     boqData += "</tr>";
                 });
                 $("#boq-data").html(boqData);
@@ -205,10 +226,10 @@ function addBOQ() {
             dataType: "json",
             success: function (data) {
                 $("#recordId").val(data.id);
-                // $('#attribute').val(data.attribute);
                 $("#value").val(data.value);
                 $("#count").val(data.count);
-                $("#status").val(data.status);
+                $("#activityStatus").val(data.status);
+                $("#needSerialNumber").val(data.needSerialNumber);
                 $("#updateModal").modal("show");
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -221,7 +242,8 @@ function addBOQ() {
     function updateRecord() {
         var id = $("#recordId").val();
         var count = $("#count").val();
-        var status = $("#status").val();
+        var status = $("#activityStatus").val();
+        var needSerialNumber = $("#needSerialNumber").val();
         var value = $("#value").val();
 
         $.ajax({
@@ -232,6 +254,7 @@ function addBOQ() {
                 count: count,
                 status: status,
                 value: value,
+                needSerialNumber: needSerialNumber,
             },
             dataType: "json",
             success: function (data) {

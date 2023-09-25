@@ -121,16 +121,14 @@
                                             <thead>
                                                 <tr class="table-primary">
                                                     <th>#</th>
-                                                    <th>User ID</th>
                                                     <th>Name</th>
                                                     <th>Desgination</th>
                                                     <th>Username</th>
-                                                    <th>Password</th>
+
                                                     <th>Contact No.</th>
                                                     <th>Status</th>
                                                     <th>action</th>
                                                     <th>Active / Inactive </th>
-                                                    <th>Designation</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -162,20 +160,17 @@
                                                 ?>
                                                     <tr>
                                                         <td><? echo $i; ?></td>
-                                                        <td><? echo $sql_result['id']; ?></td>
+
                                                         <td><? echo $sql_result['name']; ?></td>
                                                         <td><? echo $designation; ?></td>
                                                         <td style="text-transform: initial;"><? echo $sql_result['uname']; ?></td>
-                                                        <td style="text-transform: initial;"><? echo $sql_result['password']; ?></td>
+
                                                         <td style="text-transform: initial;"><? echo $sql_result['contact']; ?></td>
                                                         <td class="<? echo $status_class; ?>"><? echo $user_status;?></td>
                                                         <td>
-                                                            <a class="btn btn-primary" href="allot_perm.php?id=<? echo $sql_result['id']; ?>&table=inventoryUsers">Permission</a>
                                                             <a class="btn btn-warning" href="allotmenu_perm.php?id=<? echo $sql_result['id'];  ?>&table=inventoryUsers">Menu Permission</a>
                                                         </td>
                                                         <td><a href="#" class="btn btn-danger" onclick="disable(<? echo $sql_result['id']; ?>)"><? echo $makeuser_status;?></a></td>
-                                                        <td><a href="edit_designation.php?id=<? echo $sql_result['id']; ?>"><input type="submit" name="edit" id="edit" class="btn btn-warning" value="Edit"></a></td>
-
                                                     </tr>    
                                                 <? $i++; }?>
                                                 

@@ -250,6 +250,9 @@ function logEvent($siteId,$atmid, $portal, $eventName, $eventDescription,$table,
 function uploadSitesAtAdvantage($siteId,$atmid,$table) {
     logEvent($siteId, $atmid,'Advantage', 'Sites Uploaded', 'Sites uploaded at Advantage portal',$table);
 }
+function confurationDone($siteId,$atmid,$table) {
+    logEvent($siteId, $atmid,'Advantage', 'Cofigured', 'Configuration Done',$table);
+}
 
 function delegateToVendor($siteId,$atmid,$table) {
     logEvent($siteId,$atmid, 'Advantage', 'Sites Delegated To Vendor', 'Sites delegated to vendor for processing',$table);

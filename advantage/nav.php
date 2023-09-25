@@ -84,7 +84,7 @@ sort($mainmenu);
                                             
                                             <?
                                             if($main_name=='Admin'){
-                                                echo '<i class="fas fa-user-cog	"></i>';
+                                                echo '<i class="fas fa-user-cog" ></i>';
                                                 // echo '<i class="fa fa-american-sign-language-interpreting"></i>';                                                
                                             }else if($main_name=='Sites'){
                                                 echo '<i class="fa fa-sitemap"></i></span>';   
@@ -106,7 +106,10 @@ sort($mainmenu);
                                                 echo '<i class="feather icon-pie-chart"></i>';
                                             }else if($main_name=='Actions'){
                                                 echo '<i class="feather icon-navigation-2"></i>';
+                                            }else if($main_name=='Configuration'){
+                                                echo '<i class="feather icon-sliders" style="color: #23ff23;"></i>';
                                             }
+                                            
                                             
                                             
                                             

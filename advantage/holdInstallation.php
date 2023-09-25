@@ -96,7 +96,7 @@
                                                 echo '
                                                                                             
                                                 <div class="noRecordsContainer">
-                                                    <img src="assets/no_records.jpg">
+                                                    <img src="assets/noRecords.png">
                                                 </div>';
 
                                         } ?>

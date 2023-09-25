@@ -60,7 +60,7 @@
                                             <ul>
                                             <?
                                             
-                                            $mainsql = mysqli_query($con,"select * from main_menu where status=1 and inventory=1");
+                                            $mainsql = mysqli_query($con,"select * from main_menu where inventory=1");
                                             while($mainsql_result = mysqli_fetch_assoc($mainsql)){
                                             $main_id = $mainsql_result['id'];
                                             ?>
@@ -74,7 +74,7 @@
                                                 
                                                 <ul class="showsubmenu">
                                                         
-                                                        <? $sub_sql = mysqli_query($con,"select * from sub_menu where main_menu='".$main_id."' and status=1 and inventory=1");
+                                                        <? $sub_sql = mysqli_query($con,"select * from sub_menu where main_menu='".$main_id."' and inventory=1");
                                                         while($sub_sql_result = mysqli_fetch_assoc($sub_sql)){
                                                         $sub_id = $sub_sql_result['id'];
                                                         ?>

@@ -5,10 +5,33 @@
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
-                    <div class="row" id="part1" page="part1Dashboard"></div>
-                    <div class="row" id="part2" page="part2Dashboard"></div>
-                    <div class="row" id="part3" page="part3Dashboard"></div>
-                    <div class="row" id="part4" page="part4Dashboard"></div>
+                    
+                        <h6 class="card-subtitle line-on-side text-muted text-xs-center font-small-3 pt-2">
+                            <span> Clarity - Project</span>
+                        </h6>
+                        <br>
+                        
+                            <div class="row" id="part1" page="part1Dashboard"></div>
+                            <div class="row" id="part2" page="part2Dashboard"></div>
+                            <div class="row" id="part3" page="part3Dashboard"></div>
+                    
+
+                        <h6 class="card-subtitle line-on-side text-muted text-xs-center font-small-3 pt-2">
+                            <span>Clarify - Service</span>
+                        </h6>
+                        <br>
+                            <div class="row" id="part5" page="part5Dashboard"></div>
+                        
+                        
+                        <h6 class="card-subtitle line-on-side text-muted text-xs-center font-small-3 pt-2">
+                            <span>Inventory</span>
+                        </h6>
+                        <br>
+                            <div class="row" id="part4" page="part4Dashboard"></div>
+                    
+                    
+                    
+                    
                 </div>
             </div>
         </div>
@@ -52,16 +75,27 @@
             }
         });
         
-        // $.ajax({
-        //     url: 'part4Dashboard.php',
-        //     method: 'GET',
-        //     success: function(response) {
-        //         $('#part4').html(response);
-        //     },
-        //     error: function() {
-        //         $('#part4').html('Error loading part4 content.');
-        //     }
-        // });
+        $.ajax({
+            url: 'part4Dashboard.php',
+            method: 'GET',
+            success: function(response) {
+                $('#part4').html(response);
+            },
+            error: function() {
+                $('#part4').html('Error loading part4 content.');
+            }
+        });
+        
+        $.ajax({
+            url: 'part5Dashboard.php',
+            method: 'GET',
+            success: function(response) {
+                $('#part5').html(response);
+            },
+            error: function() {
+                $('#part5').html('Error loading part4 content.');
+            }
+        });
         
     });
 </script>

@@ -92,7 +92,7 @@ echo '</tbody>
     echo '
                                                 
     <div class="noRecordsContainer">
-        <img src="assets/no_records.jpg">
+        <img src="assets/notFound.png">
     </div>';
 
 }
@@ -188,7 +188,7 @@ echo '</tbody>
     echo '
                                                 
     <div class="noRecordsContainer">
-        <img src="assets/no_records.jpg">
+        <img src="assets/notFound.png">
     </div>';
 
 }

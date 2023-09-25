@@ -1,59 +1,68 @@
-<?php 
+<?php
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
- ?>
+?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>File Manager</title>
     <style>
         body {
             font-family: Arial, sans-serif;
         }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
         }
+
         h1 {
             text-align: center;
         }
+
         .item-list {
             list-style-type: none;
             padding: 0;
         }
+
         .item-list li {
             margin: 5px 0;
         }
+
         .folder-icon {
             width: 20px;
             vertical-align: middle;
         }
+
         .file-icon {
             width: 20px;
             vertical-align: middle;
         }
+
         .item-name {
             margin-left: 10px;
             vertical-align: middle;
         }
     </style>
 </head>
+
 <body>
 
 
-<div class="container">
+    <div class="container">
         <h2>Upload a File</h2>
         <form id="uploadForm" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data">
             <input type="file" name="fileToUpload" id="fileToUpload">
             <input type="submit" value="Upload File" id="submitBtn">
         </form>
 
-</div>
+    </div>
 
- <div class="container">
+    <div class="container">
         <h1>File Manager</h1>
         <ul class="item-list">
             <?php
@@ -89,7 +98,7 @@ error_reporting(E_ALL);
 
             sort($folders); // Sort folders in ascending order
             sort($files); // Sort files in ascending order
-
+            
             $items = [];
 
             // Add folders to the combined array
@@ -99,7 +108,7 @@ error_reporting(E_ALL);
                     'name' => $folder,
                 ];
             }
-            
+
             // Add files to the combined array
             foreach ($files as $file) {
                 $items[] = [
@@ -107,7 +116,7 @@ error_reporting(E_ALL);
                     'name' => $file,
                 ];
             }
-            
+
             // Sort the combined array by type (folders first) and then by name in ascending order
             usort($items, function ($a, $b) {
                 if ($a['type'] === $b['type']) {
@@ -115,7 +124,7 @@ error_reporting(E_ALL);
                 }
                 return $a['type'] === 'folder' ? -1 : 1;
             });
-            
+
             // Display the sorted items
             foreach ($items as $item) {
                 if ($item['type'] === 'folder') {
@@ -142,38 +151,39 @@ error_reporting(E_ALL);
 
 
 
-   
 
 
 
-<script>
 
-// Handle click event for opening files in a new tab
-var openFileLinks = document.querySelectorAll('.open-file');
+    <script>
 
-openFileLinks.forEach(function (link) {
-    link.addEventListener('click', function (e) {
-        e.preventDefault();
-        var filename = e.currentTarget.getAttribute('data-filename');
-        var dirParam = '';
+        // Handle click event for opening files in a new tab
+        var openFileLinks = document.querySelectorAll('.open-file');
 
-        // Check if the 'dir' parameter is present in the URL
-        var urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has("dir")) {
-            dirParam = urlParams.get("dir");
-        }
+        openFileLinks.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                var filename = e.currentTarget.getAttribute('data-filename');
+                var dirParam = '';
 
-        // Construct the file's URL based on 'dirParam' or use the root directory
-        var fileUrl = dirParam ? './' + dirParam + '/' + filename : './' + filename;
+                // Check if the 'dir' parameter is present in the URL
+                var urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has("dir")) {
+                    dirParam = urlParams.get("dir");
+                }
 
-        // Open the file in a new tab
-        window.open('./view-file.php?file=' + encodeURIComponent(fileUrl), '_blank');
-    });
-});
+                // Construct the file's URL based on 'dirParam' or use the root directory
+                var fileUrl = dirParam ? './' + dirParam + '/' + filename : './' + filename;
+
+                // Open the file in a new tab
+                window.open('./view-file.php?file=' + encodeURIComponent(fileUrl), '_blank');
+            });
+        });
 
 
     </script>
 </body>
+
 </html>
 
 
@@ -183,11 +193,8 @@ openFileLinks.forEach(function (link) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["fileToUpload"])) {
 
 
-$targetDir = __DIR__.'/file_manager' ; // Change this to your desired upload directory
-    $targetFile =  basename($_FILES["fileToUpload"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
+    $uploadDirectory = $_GET["dir"] ?? "";
+    $targetFile = $uploadDirectory . "/" . basename($_FILES["fileToUpload"]["name"]);
     // Check if the file already exists
     if (file_exists($targetFile)) {
         $response = [
@@ -197,19 +204,6 @@ $targetDir = __DIR__.'/file_manager' ; // Change this to your desired upload dir
         echo json_encode($response);
         exit;
     }
-
-    // Check file size (adjust this value as needed)
-    if ($_FILES["fileToUpload"]["size"] > 500000) {
-        $response = [
-            'success' => false,
-            'message' => 'Sorry, your file is too large.'
-        ];
-        echo json_encode($response);
-        exit;
-    }
-
-
-    // Move the uploaded file to the desired directory
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile)) {
         $response = [
             'success' => true,

@@ -1,10 +1,15 @@
 <?php include('config.php');
 
+
+
+
 $serializedAttributes = $_POST['attribute'];
 $serializedValues = $_POST['values'];
 $serializedSerialNumbers = $_POST['serialNumbers'];
 
 $attributes = unserialize($serializedAttributes);
+// var_dump($attributes);
+
 $values = unserialize($serializedValues);
 $serialNumbers = unserialize($serializedSerialNumbers);
 
@@ -18,20 +23,24 @@ $pod = $_POST['POD'];
 $courier = $_POST['courier'];
 $remark = $_POST['remark'];
 
-$data = [
-    'atmid' => $atmid,
-    'siteid' => $siteid,
-    'vendorId' => $vendorId,
-    'contactPersonName' => $contactPersonName,
-    'contactPersonNumber' => $contactPersonNumber,
-    'pod' => $pod,
-    'courier' => $courier,
-    'remark' => $remark,
-    'address' => $address,
-    'attribute' => $attributes,
-    'values' => $values,
-    'serialNumbers' => $serialNumbers
-];
+
+
+foreach($attributes as $attributesKey=>$attributesVal){
+    $sql = mysqli_query($con,"Select * from boq where needSerialNumber=1 and value like '".trim($attributesVal)."'");
+    if($sqlResult = mysqli_fetch_assoc($sql)){
+        $withSerialAttributes[] =  $sqlResult['value'];
+    }else{
+        $withoutSerialAttributes[] = trim($attributesVal) ; 
+    }
+}
+foreach($serialNumbers as $serialNumbersKey=>$serialNumbersVal){
+     $serialNumbersValAr[] =  $serialNumbersVal;
+}
+
+
+// var_dump($withSerialAttributes,$withoutSerialAttributes,$serialNumbersValAr);
+
+// return ;
 
 $query = "INSERT INTO material_send (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $con->prepare($query);
@@ -40,35 +49,44 @@ $stmt->execute();
 $stmt->close();
 
 $materialSendId = $con->insert_id;
-
 mysqli_query($con,"update material_requests set status='Material Sent' where siteid='".$siteid."' and isProject=1");
 
 
-if (!empty($attributes) && !empty($values) && !empty($serialNumbers)) {
-    $query = "INSERT INTO material_send_details (materialSendId, attribute, value, serialNumber) VALUES (?, ?, ?, ?)";
-    $stmt = $con->prepare($query);
-    $stmt->bind_param("isss", $materialSendId, $attribute, $value, $serialNumber);
-    for ($i = 0; $i < count($attributes); $i++) {
-        $attribute = $attributes[$i];
-        $value = $values[$i];
-        $serialNumber = $serialNumbers[$i];
-        $stmt->execute();
+$counter=0 ; 
+foreach($withSerialAttributes as $withSerialKey=>$withSerialValue){
+    if($withSerialValue=='Router'){
+        $routerSerial = $serialNumbersValAr[$counter] ; 
     }
-    sendMaterialToVendor($siteid,$atmid,'') ;
-    $stmt->close();
+    $query = mysqli_query($con,"INSERT INTO material_send_details (materialSendId, attribute, value, serialNumber) VALUES ('".$materialSendId."', '".$withSerialValue."', '".$serialNumbersValAr[$counter]."', '".$serialNumbersValAr[$counter]."')");
+    $materialNameAr[] = $withSerialValue ; 
+    $serialNumberAr[] = $serialNumbersValAr[$counter] ; 
+    
+    $counter++ ; 
 }
 
+foreach($withoutSerialAttributes as $withoutSerialKeys => $withoutSerialValues){
 
-if (!empty($serialNumbers)) {
-    $status = 'New Status'; 
-    foreach ($serialNumbers as $serialNumber) {
-        $sql = "UPDATE Inventory SET status = '$status' WHERE serial_no = '$serialNumber'";
-        $result = mysqli_query($con, $sql);
-        
+
+        $checkinventory = mysqli_query($con,"select * from inventory where material like '%".$withoutSerialValues."' and status=1 and serial_no='' order by id asc");
+        if($checkinventoryResult = mysqli_fetch_assoc($checkinventory)){
+            $invId = $checkinventoryResult['id'];
+            $lowercaseItemName = strtolower($withoutSerialValues);
+            $thisNewGeneratedSerialNumber = $routerSerial.'_'.str_replace(' ', '_', $lowercaseItemName);
+            
+            $query = mysqli_query($con,"INSERT INTO material_send_details (materialSendId, attribute, value, serialNumber) VALUES ('".$materialSendId."', '".$withoutSerialValues."', '".$thisNewGeneratedSerialNumber."', '".$thisNewGeneratedSerialNumber."')");
+            $invUpdate = mysqli_query($con,"update inventory set serial_no ='".$thisNewGeneratedSerialNumber."',status=0 where id='".$invId."'") ;
+            $materialNameAr[] = $withoutSerialValues ; 
+            $serialNumberAr[] = $thisNewGeneratedSerialNumber ; 
+        }
+}
+
+sendMaterialToVendor($siteid,$atmid,'') ;
+    
+if (!empty($serialNumberAr)) {
+    
+    foreach ($serialNumberAr as $serialNumber) {    
         $inventorySql = mysqli_query($con,"select * from Inventory where serial_no='".$serialNumber."'");
         $inventorySqlResult = mysqli_fetch_assoc($inventorySql);
-        
-        
         
         $material = $inventorySqlResult['material'];
         $material_make = $inventorySqlResult['material_make'];
@@ -85,7 +103,7 @@ if (!empty($serialNumbers)) {
         values('".$vendorId."','".$material."', '".$material_make."', '".$model_no."', '".$serial_no."',  '".$amount."',
         '".$gst."', '".$amount_with_gst."', '".$courier."', '".$po_number."', '".$datetime."', '".$userid."',0)";
         
-        mysqli_query($con,$vendorInventorySql);
+        $result = mysqli_query($con,$vendorInventorySql);
         
         
 
@@ -96,6 +114,9 @@ if (!empty($serialNumbers)) {
         }
     }
 }
+
+
+
 $con->close();
 $response = ['status' => '200', 'message' => 'Form data saved successfully'];
 echo json_encode($response);

@@ -13,7 +13,15 @@
                             <form id="sitesForm" action="<?php echo basename(__FILE__); ?>" method="POST">
                                 <div class="row">
 
-                                    <div class="col-md-4">
+                                    <div class="col-sm-3">
+                                        <label>Stock</label>
+                                        <select name="status" class="form-control">
+                                            <option value="0" <? if($_REQUEST['status']=='0') { echo 'selected';} ?> >ALL</option>
+                                            <option value="1" <? if($_REQUEST['status']=='1') { echo 'selected';} ?>>AVAILABLE</option>
+                                        </select>
+                                    </div>
+                                            
+                                    <div class="col-sm-3">
                                         <label>Material</label>
                                         <select name="material" class="form-control">
                                             <option value="">-- Select Material --</option>
@@ -33,12 +41,12 @@
 
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <label>Serial Number</label>
                                         <input type="text" name="serialNumber" class="form-control" value="<?= $_REQUEST['serialNumber']; ?>" placeholder="Enter Serial Number ..." />
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <label>Type</label>
                                         <select name="thisInventoryType" class="form-control">
                                             <option value="">--Select--</option>
@@ -71,6 +79,21 @@
                         $atm_sql .= "and material like '" . $material . "'";
                         $sqlappCount .= "and material like '" . $material . "'";
                     }
+                    
+                    if (isset($_REQUEST['status']) && $_REQUEST['status'] != '') {
+                        $status = $_REQUEST['status'];
+                        if($status=='0'){
+                            $atm_sql .= " and status in (0,1) ";
+                            $sqlappCount .= " and status in(0,1) ";                            
+                        }else if($status=='1'){
+                            $atm_sql .= " and status in (1) ";
+                            $sqlappCount .= " and status in(1) ";
+                        }
+
+                    }
+                    
+                    
+                    
                     if (isset($_REQUEST['serialNumber']) && $_REQUEST['serialNumber'] != '') {
                         $serialNumber = $_REQUEST['serialNumber'];
                         $atm_sql .= "and serial_no like '%" . $serialNumber . "%'";
@@ -85,8 +108,8 @@
 
 
 
-                    $atm_sql .=  " and status=1 order by id desc";
-                    $sqlappCount .=  " and status=1";
+                    $atm_sql .=  "  order by id desc";
+                    $sqlappCount .=  " ";
 
                     $page_size = 10;
                     $result = mysqli_query($con, $sqlappCount);

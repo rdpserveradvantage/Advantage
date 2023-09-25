@@ -1,169 +1,214 @@
-<? include('config.php');
-// header('Content-Type: application/json; charset=utf-8');
-date_default_timezone_set('Asia/Kolkata');
+<?php include('config.php');
 
-$datetimeString = '2023-08-02 18:10:19';
-$timestamp = strtotime($datetimeString) * 1000; // Convert to Unix timestamp in milliseconds
+                                
 
-echo $timestamp;
-echo '<br>';
+    $query1 = "SELECT COUNT(1) AS count FROM inventory WHERE status in(0,1)";
+    $query2 = "SELECT COUNT(1) AS count FROM inventory WHERE status = 0";
+    $query3 = "SELECT COUNT(1) AS count FROM inventory WHERE status = 1 ";
+    $query4 = "SELECT COUNT(1) AS count FROM material_send WHERE isDelivered = 0 ";
 
-$atmid = 'S1BW006240024';
-$sql = mysqli_query($con, "SELECT * FROM event_log WHERE atmid='".$atmid."' ORDER BY event_timestamp ASC");
 
-$data = []; // Initialize an empty array to hold the chart data
-$prevEventTimestamp = null;
+// $queries = [$query1, $query2, $query3, $query4, $query5];
+$queries = [$query1, $query2, $query3,$query4];
+$results = [];
 
-while ($sql_result = mysqli_fetch_assoc($sql)) {
-    $eventName = $sql_result['event_name'];
-    echo $sql_result['event_timestamp'] ; 
-    echo ' '.$event_timestamp = strtotime($sql_result['event_timestamp']) * 1000; // Convert to milliseconds
-echo '<br />';
-    // Calculate completed amount based on the difference with the previous event's timestamp
-    $completionAmount = 1.0; // Default value for the last event
-
-    if ($prevEventTimestamp !== null) {
-        $timeDifference = ($event_timestamp - $prevEventTimestamp) / (24 * 60 * 60 * 1000); // Convert to days
-        $completionAmount = $timeDifference / 7; // Assuming 1 week duration for 100% completion
-        $completionAmount = min(1.0, $completionAmount); // Ensure it doesn't exceed 100%
-    }
-
-    $dataItem = [
-        'start' => $event_timestamp,
-        'end' => $event_timestamp, // You can adjust this based on your use case
-        'completed' => [
-            'amount' => $completionAmount
-        ],
-        'name' => $eventName
-    ];
-
-    $data[] = $dataItem; // Add the data item to the array
-
-    $prevEventTimestamp = $event_timestamp; // Store the current event timestamp for the next iteration
+foreach ($queries as $query) {
+    $result = mysqli_query($con, $query);
+    $count = mysqli_fetch_assoc($result)['count'];
+    $results[] = $count;
 }
 
+$titles = [
+    "Total Inventories",
+    "Material Out",
+    "On Hand",
+    "In-Transit",
+    // "Total Installation Done"
+];
 
-return ; 
+$links = [
+    "#",
+    "#?isDelegated=1",
+    "#?isFeasibiltyDone=1",
+    "#"
+];
 
-var_dump($data); // Output the array as JSON for use in the Highcharts configuration
+$icon = [
+    "fas fa-warehouse",
+    "uil-navigator",
+    "fas fa-hand-holding-usd",
+    "fas fa-shipping-fast",
+    // "bg-c-yellow"
+];
 
-// return ; 
 
+
+
+
+
+
+ for ($i = 0; $i < count($titles); $i++) { ?>
+ 
+ 
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar">
+                                                    <div class="avatar-title rounded-circle font-size-18" style="background-color: #01a9ac !important;">
+                                                        <i class="uil <?= $icon[$i]; ?> "></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="mb-1 text-truncate text-muted" style="color: #01a9ac !important;">
+                                                    <a href="<?= $links[$i]; ?>" style="font-size: 15px;color: #01a9ac !important;"><?= $titles[$i]; ?></a>
+                                                </p>
+                                                  <h5 class="font-size-16 mb-0"><span class="inventoryCount">0</span></h5>
+                                                <? $inventoryCount[] = $results[$i] ; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+<? } 
+
+
+
+
+
+$query = "select * from boq where status=1";
+$result = mysqli_query($con, $query);
+$data = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $materialName[] = trim($row['value']);
+}
+
+$qty = array(); // Initialize the $qty array
+
+foreach ($materialName as $materialNameKey => $materialNameValue) {
+    $quantitySql = mysqli_query($con, "select count(1) as count from inventory where status=0 and material='" . $materialNameValue . "'");
+    $quantitySqlResult = mysqli_fetch_assoc($quantitySql);
+    $qty[] = $quantitySqlResult['count'];
+}
 ?>
 
-<html lang="en"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="icon" href="data:;base64,iVBORw0KGgo=">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500;600;700&display=swap');
-#container,
-#button-container {
-    max-width: 800px;
-    margin: 1em auto;
-}
-
-#pdf {
-    border: 1px solid silver;
-    border-radius: 3px;
-    background: #a4edba;
-    padding: 0.5em 1em;
-}
-
-#pdf i {
-    margin-right: 1em;
-}
-
-body {
-    max-width: 100%;
-    margin: 0;
-    font-family: "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-    box-sizing: border-box;
-}
-hr {
-    all: initial;
-}
-p.highcharts-description {
-    background-color: #FFF;
-    padding: 0.5em;
-    margin: 0;
-}
-p.highcharts-description code {
-    background-color: #EBEBEB;
-    color: #9E0000;
-}
-</style>
-<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css">
-</head>
-<body>
-<script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
-<script src="https://code.highcharts.com/gantt/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/gantt/modules/accessibility.js"></script>
-
-<div id="container"></div>
-
-
-<div id="button-container">
-	<button id="pdf">
-		<i class="fa fa-download"></i> Download PDF
-	</button>
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-block">
+            <div id="chartdivInventory" style="height: 400px; overflow: hidden; text-align: left;"></div>
+        </div>
+    </div>
 </div>
-<script id="theme-script" src=""></script>
-<script defer="">
-Highcharts.ganttChart('container', {
 
-    title: {
-        text: 'Highcharts Gantt Chart'
-    },
+<script src="https://code.highcharts.com/highcharts.js"></script>
 
-    yAxis: {
-        uniqueNames: true
-    },
+<!-- Chart code -->
+<script>
+    // Check if the container exists before initializing the chart
+    if (document.getElementById('chartdivInventory')) {
+        // Create an array of data points by combining materialName and qty arrays
+        var chartData = [];
+        <?php for ($i = 0; $i < count($materialName); $i++) : ?>
+            chartData.push({
+                materialName: "<?php echo $materialName[$i]; ?>",
+                qty: <?php echo $qty[$i]; ?>
+            });
+        <?php endfor; ?>
 
-    accessibility: {
-        point: {
-            descriptionFormat: '{yCategory}. ' +
-                '{#if completed}Task {(multiply completed.amount 100):.1f}% completed. {/if}' +
-                'Start {x:%Y-%m-%d}, end {x2:%Y-%m-%d}.'
-        }
-    },
+        // Define custom colors for each column
+        var colors = ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1'];
 
-    lang: {
-        accessibility: {
-            axis: {
-                xAxisDescriptionPlural: 'The chart has a two-part X axis showing time in both week numbers and days.'
+        // Initialize Highcharts chart with custom options
+        Highcharts.chart('chartdivInventory', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Material Quantities In Stocks'
+            },
+            xAxis: {
+                categories: chartData.map(item => item.materialName),
+                title: {
+                    text: 'Material Name'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Quantity'
+                }
+            },
+            series: [{
+                name: 'Quantity',
+                data: chartData.map((item, index) => ({
+                    y: item.qty,
+                    color: colors[index] // Assign color from the colors array
+                })),
+                pointPadding: 0.2,
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y}', // Display the quantity on top of columns
+                    style: {
+                        fontSize: '12px'
+                    }
+                }
+            }],
+            plotOptions: {
+                column: {
+                    cursor: 'pointer', // Enable cursor pointer for columns
+                    events: {
+                        click: function (event) {
+                            // Handle click event on columns (add your code here)
+                            console.log('Clicked on column:', event.point.category);
+                        }
+                    }
+                }
+            },
+            tooltip: {
+                formatter: function () {
+                    // Customize the tooltip text
+                    return '<b>' + this.x + '</b><br>Quantity: ' + this.y;
+                }
             }
-        }
-    },
+        });
+    } else {
+        // Handle the case where the chart container does not exist
+        console.error("Chart container 'chartdiv' not found.");
+    }
+</script>
 
-    series: [{
-        name: 'Project 1',
-        data: <? echo json_encode($data); ?>
-    }]
-});
 
-// Activate the custom button
-document.getElementById('pdf').addEventListener('click', function () {
-    Highcharts.charts[0].exportChart({
-        type: 'application/pdf'
+
+
+<script>
+    // Assuming you have received the updated count values in your AJAX response
+    const updatedInventoryCounts = <?= json_encode($inventoryCount); ?>; // Replace with your actual updated counts
+
+    // Select all elements with class "count"
+    const countInventoryElements = document.querySelectorAll('.inventoryCount');
+
+    // Update and animate the count values dynamically on page load and focus
+    window.addEventListener('load', function () {
+        countInventoryElements.forEach((element, index) => {
+            const startCount = parseFloat(element.textContent);
+            const endCount = updatedInventoryCounts[index];
+            const animationDuration = 4; // Animation duration in seconds (adjust as needed)
+
+            animateCount(endCount, animationDuration, element);
+        });
     });
-});
 
+    window.addEventListener('focus', function () {
+        countInventoryElements.forEach((element, index) => {
+            const startCount = parseFloat(element.textContent);
+            const endCount = updatedInventoryCounts[index];
+            const animationDuration = 4; // Animation duration in seconds (adjust as needed)
+
+            animateCount(endCount, animationDuration, element);
+        });
+    });
 </script>
-<script defer="">
-function messageParent(state = 'iframe-resized'){
-    window.parent.postMessage({
-        name: state,
-        boundingRect: window.document.documentElement.getBoundingClientRect(),
-    }, '*');
-}
-
-const resizeObserver = new ResizeObserver((entries) => {
-  messageParent();
-});
-
-resizeObserver.observe(window.document.documentElement)
-
-</script>
-
-</body></html>

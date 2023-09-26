@@ -26,15 +26,8 @@ while ($sql_result = mysqli_fetch_assoc($sql)) {
 ?>
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
-<div class="col-sm-4">
-    <div class="card">
-        <div class="card-block">
-            <div id="container" style="height: 400px; margin: 0px auto; overflow: hidden;"></div>
-        </div>
-    </div>
-</div>
 
-<div class="col-sm-8">
+<div class="col-sm-12">
     <div class="card">
         <div class="card-block">
             <h6 class="strong">Installation Calls with Most Pending Time</h6>

@@ -50,9 +50,11 @@ if (!empty($attributes) && !empty($values) && !empty($serialNumbers)) {
         $value = $values[$i];
         $serialNumber = $serialNumbers[$i];
         $stmt->execute();
+            mysqli_query($con,"update vendorinventory set status=1 where serial_no='".$serialNumber."'") ; 
     }
     sendMaterialToEngineer($siteid,$atmid,'') ;
     $stmt->close();
+
 }
 
 

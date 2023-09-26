@@ -47,7 +47,7 @@ for ($i = 0; $i < count($titles); $i++) { ?>
                                                     <a href="<?= $links[$i]; ?>" style="font-size: 15px;color: #01a9ac !important;"><?= $titles[$i]; ?></a>
                                                 </p>
                                                 
-                                                <h5 class="font-size-16 mb-0"><span class="clarifyCount">0</span></h5>
+                                                <h5 class="font-size-16 mb-0"><span class="clarifyCount"><?= $results[$i]; ?></span></h5>
                                                 <? $clarifyCount[] = $results[$i] ; ?>
                                             </div>
                                         </div>
@@ -70,36 +70,3 @@ for ($i = 0; $i < count($titles); $i++) { ?>
 
 
 ?>
-<script>
-    // Assuming you have received the updated count values in your AJAX response
-    const updatedClarifyCounts = <?= json_encode($clarifyCount); ?>; // Replace with your actual updated counts
-
-    // Select all elements with class "count"
-    const countClarifyElements = document.querySelectorAll('.clarifyCount');
-
-    // Update and animate the count values dynamically on page load and focus
-    console.log('Event listener registered');
-
-    window.addEventListener('load', function () {
-        countClarifyElements.forEach((element, index) => {
-            const startCount = parseFloat(element.textContent);
-            const endCount = updatedClarifyCounts[index];
-            const animationDuration = 4; // Animation duration in seconds (adjust as needed)
-        console.log(`Updating element ${index}: startCount=${startCount}, endCount=${endCount}`);
-
-            animateCount(endCount, animationDuration, element);
-        });
-    });
-
-    window.addEventListener('focus', function () {
-        countClarifyElements.forEach((element, index) => {
-            const startCount = parseFloat(element.textContent);
-            const endCount = updatedClarifyCounts[index];
-            const animationDuration = 4; // Animation duration in seconds (adjust as needed)
-        // console.log(`Updating element ${index}: startCount=${startCount}, endCount=${endCount}`);
-
-            animateCount(endCount, animationDuration, element);
-        });
-    });
-</script>
-

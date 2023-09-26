@@ -154,22 +154,22 @@
                                         echo "<td>$remark</td>";
                                         echo "<td>$date</td>";
                                         echo "</tr>";
-                                        // echo "<tr id='details-$id' class='collapse'>";
-                                        // echo "<td colspan='9'>";
+                                        echo "<tr id='details-$id' class='collapse'>";
+                                        echo "<td colspan='9'>";
 
-                                        // // Retrieve and display the material_send_details
-                                        // $detailsQuery = "SELECT * FROM material_send_details WHERE materialSendId = $id";
-                                        // $detailsResult = mysqli_query($con, $detailsQuery);
-                                        // echo "<table class='table table-bordered'>";
-                                        // echo "<thead><tr><th>Product Name</th><th>Serial Number</th></tr></thead>";
-                                        // echo "<tbody>";
-                                        // while ($detailsRow = mysqli_fetch_assoc($detailsResult)) {
-                                        //     $attribute = $detailsRow['attribute'];
-                                        //     $serialNumber = $detailsRow['serialNumber'];
-                                        //     echo "<tr><td>$attribute</td><td>$serialNumber</td></tr>";
-                                        // }
-                                        // echo "</tbody>";
-                                        // echo "</table>";
+                                        // Retrieve and display the material_send_details
+                                        $detailsQuery = "SELECT * FROM material_send_details WHERE materialSendId = $id";
+                                        $detailsResult = mysqli_query($con, $detailsQuery);
+                                        echo "<table class='table table-bordered'>";
+                                        echo "<thead><tr><th>Product Name</th><th>Serial Number</th></tr></thead>";
+                                        echo "<tbody>";
+                                        while ($detailsRow = mysqli_fetch_assoc($detailsResult)) {
+                                            $attribute = $detailsRow['attribute'];
+                                            $serialNumber = $detailsRow['serialNumber'];
+                                            echo "<tr><td>$attribute</td><td>$serialNumber</td></tr>";
+                                        }
+                                        echo "</tbody>";
+                                        echo "</table>";
 
                                         echo "</td>";
                                         echo "</tr>";

@@ -9,8 +9,8 @@
                         <div class="card-block" style="overflow:auto;">
 
                             <table class="table table-hover table-styling table-xs">
-                              <thead>
-                                <tr class="table-primary">
+                                <thead>
+                                    <tr class="table-primary">
                                         <th>Srno</th>
                                         <th>ATMID</th>
                                         <th>Status</th>
@@ -26,8 +26,8 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $counter = 1 ; 
-                                    $sql = mysqli_query($con, "SELECT * FROM material_send where vendorId='".$RailTailVendorID."'");
+                                    $counter = 1;
+                                    $sql = mysqli_query($con, "SELECT * FROM material_send where vendorId='" . $RailTailVendorID . "'");
                                     while ($sql_result = mysqli_fetch_assoc($sql)) {
                                         $id = $sql_result['id'];
                                         $siteid = $sql_result['siteid'];
@@ -42,33 +42,32 @@
                                         $remark = $sql_result['remark'];
                                         $date = $sql_result['created_at'];
                                         $isDelivered = $sql_result['isDelivered'];
-                                        
-                                        
-                                        $againSend = mysqli_query($con,"select * from vendorMaterialSend where siteid='".$siteid."' and status=1");
-                                        if($againSendResult = mysqli_fetch_assoc($againSend)){
-                                            $isAgainSendStatus = 1 ; 
-                                            $contactPersonName =$againSendResult['contactPersonName']; 
-                                            $contactPersonName = vendorUsersData($contactPersonName,'name') ; 
-                                        }else{
-                                            $isAgainSendStatus = 0 ;
+
+
+                                        $againSend = mysqli_query($con, "select * from vendorMaterialSend where siteid='" . $siteid . "' and status=1");
+                                        if ($againSendResult = mysqli_fetch_assoc($againSend)) {
+                                            $isAgainSendStatus = 1;
+                                            $contactPersonName = $againSendResult['contactPersonName'];
+                                            $contactPersonName = vendorUsersData($contactPersonName, 'name');
+                                        } else {
+                                            $isAgainSendStatus = 0;
                                         }
-                                        
-                                        
-                                        $ifExistTrackingUpdateSql = mysqli_query($con,"select * from trackingDetailsUpdate where atmid='".$atmid."' and siteid='".$siteid."' order by id desc");
-                                        if($ifExistTrackingUpdateSqlResult = mysqli_fetch_assoc($ifExistTrackingUpdateSql)){
-                                            $ifExistTrackingUpdate=1 ;
-                                        }else{
-                                            $ifExistTrackingUpdate= 0 ;
+
+                                        $ifExistTrackingUpdateSql = mysqli_query($con, "select * from trackingDetailsUpdate where atmid='" . $atmid . "' and siteid='" . $siteid . "' order by id desc");
+                                        if ($ifExistTrackingUpdateSqlResult = mysqli_fetch_assoc($ifExistTrackingUpdateSql)) {
+                                            $ifExistTrackingUpdate = 1;
+                                        } else {
+                                            $ifExistTrackingUpdate = 0;
                                         }
-                                        
-                                        
-                                        
+
+
+
                                         echo "<tr class='clickable-row' data-toggle='collapse' data-target='#details-$id'>";
                                         echo "<td>$counter</td>";
                                         echo "<td class='strong'>$atmid</td>";
-                                        echo "<td class='strong'>" . 
-                                        ($isDelivered == 1 ? 'Delivered' : 'In-Transit') . "</td>";
-                                        
+                                        echo "<td class='strong'>" .
+                                            ($isDelivered == 1 ? 'Delivered' : 'In-Transit') . "</td>";
+
                                         echo "<td>" . ($ifExistTrackingUpdate == 1 ? 'View' : "<a href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update</a>") . "</td>";
 
                                         echo "<td>$contactPerson</td>";
@@ -78,22 +77,20 @@
                                         echo "<td>$courier</td>";
                                         echo "<td>$remark</td>";
                                         echo "<td>$date</td>";
-                                        if($isDelivered==1 && $isAgainSendStatus==0){
-                                        echo "<td>
+                                        if ($isDelivered == 1 && $isAgainSendStatus == 0) {
+                                            echo "<td>
                                                     <a href='dispatchMaterial.php?siteid=$siteid&atmid=$atmid&materialSendId=$id' class='btn btn-primary'>Dispatch</a>
-                                              </td>";                                            
-                                        }else if($isDelivered==1 && $isAgainSendStatus==1){
+                                              </td>";
+                                        } else if ($isDelivered == 1 && $isAgainSendStatus == 1) {
                                             echo "<td>
                                                         Material Send to <span class='strong'>$contactPersonName <span>
                                                 </td>";
-
-                                        }else{
+                                        } else {
                                             echo "<td>No Status</td>";
                                         }
 
                                         echo "</tr>";
-                                    $counter++ ; 
-                                        
+                                        $counter++;
                                     }
                                     ?>
                                 </tbody>

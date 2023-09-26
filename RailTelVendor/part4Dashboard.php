@@ -1,11 +1,9 @@
 <?php include('config.php');
 
-                                
-
-    $query1 = "SELECT COUNT(1) AS count FROM inventory WHERE status in(0,1)";
-    $query2 = "SELECT COUNT(1) AS count FROM inventory WHERE status = 0";
-    $query3 = "SELECT COUNT(1) AS count FROM inventory WHERE status = 1 ";
-    $query4 = "SELECT COUNT(1) AS count FROM material_send WHERE isDelivered = 0 ";
+    $query1 = "SELECT COUNT(1) AS count FROM vendorinventory WHERE vendorId= '".$RailTailVendorID."' and status in(0,1)";
+    $query2 = "SELECT COUNT(1) AS count FROM vendorinventory WHERE vendorId= '".$RailTailVendorID."' and status = 0";
+    $query3 = "SELECT COUNT(1) AS count FROM vendorinventory WHERE vendorId= '".$RailTailVendorID."' and status = 1 ";
+    $query4 = "SELECT COUNT(1) AS count FROM material_send WHERE vendorId= '".$RailTailVendorID."' and  isDelivered = 0 ";
 
 
 // $queries = [$query1, $query2, $query3, $query4, $query5];
@@ -90,7 +88,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 $qty = array(); // Initialize the $qty array
 
 foreach ($materialName as $materialNameKey => $materialNameValue) {
-    $quantitySql = mysqli_query($con, "select count(1) as count from inventory where status=0 and material='" . $materialNameValue . "'");
+    $quantitySql = mysqli_query($con, "select count(1) as count from vendorinventory where vendorId= '".$RailTailVendorID."' and  status=0 and material='" . $materialNameValue . "'");
     $quantitySqlResult = mysqli_fetch_assoc($quantitySql);
     $qty[] = $quantitySqlResult['count'];
 }

@@ -7,7 +7,11 @@ error_reporting(E_ALL);
 
 ?>
 
-
+<style>
+    .border-checkbox-section .border-checkbox-group .border-checkbox-label{
+    width: 50%;
+}
+</style>
 
 <link rel="stylesheet" type="text/css" href="./datatable/dataTables.bootstrap.css">
 <div class="pcoded-content">

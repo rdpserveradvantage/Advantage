@@ -503,3 +503,7 @@ background:#f6f7fb;
 table{
     margin:10px auto;
 }
+
+.border-checkbox-section .border-checkbox-group .border-checkbox-label{
+    width: 50%;
+}

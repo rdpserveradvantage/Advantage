@@ -507,3 +507,7 @@ table{
 .card .card-header span{
     margin-top: 0px !important;
 }
+
+.border-checkbox-section .border-checkbox-group .border-checkbox-label{
+    width: 50%;
+}

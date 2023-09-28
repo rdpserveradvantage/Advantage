@@ -40,8 +40,7 @@
                                 
                                 <div class="card">
                                     <div class="card-body" style="overflow:auto;">
-                                        <table id="example" class="table table-hover table-styling" style="width:100%">
-                                            <thead>
+                                        <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">                                            <thead>
                                                 <tr class="table-primary">
                                                     <th>#</th>
                                                     <th>Bank Name</th>
@@ -77,3 +76,17 @@
                     
                     
     <? include('footer.php'); ?>
+    
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script src="./datatable/jquery.dataTables.js"></script>
+<script src="./datatable/dataTables.bootstrap.js"></script>
+<script src="./datatable/dataTables.buttons.min.js"></script>
+<script src="./datatable/buttons.flash.min.js"></script>
+<script src="./datatable/jszip.min.js"></script>
+
+<script src="./datatable/pdfmake.min.js"></script>
+<script src="./datatable/vfs_fonts.js"></script>
+<script src="./datatable/buttons.html5.min.js"></script>
+<script src="./datatable/buttons.print.min.js"></script>
+<script src="./datatable/jquery-datatable.js"></script>

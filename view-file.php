@@ -4,10 +4,14 @@
     <title>File Viewer</title>
     <!-- Include Ace editor library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
-    <!-- Include SweetAlert (Swal) library -->
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Define a style for the Ace editor -->
+    <script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
     <style>
+    
         body {
             margin: 0;
             padding: 0;
@@ -121,6 +125,11 @@
         saveFile();
     }
 });
+
+
+$(document).on('click','#save-button',function(){
+    saveFile(); 
+})
 
 // Function to save the file
 function saveFile() {

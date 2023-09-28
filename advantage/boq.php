@@ -1,5 +1,7 @@
 <? include('header.php'); ?>
 
+<link rel="stylesheet" type="text/css" href="datatable/dataTables.bootstrap.css">
+
 <style>
      .btn-circle {
         border-radius: 50%;

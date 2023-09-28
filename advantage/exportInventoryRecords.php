@@ -8,6 +8,8 @@ require 'vendor/autoload.php';
 // Import necessary classes from PhpSpreadsheet
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 // Create a new Excel spreadsheet
 $spreadsheet = new Spreadsheet();
@@ -18,10 +20,30 @@ header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetm
 header('Content-Disposition: attachment;filename="Inventory.xlsx"');
 header('Cache-Control: max-age=0');
 
+
+
 // Define and execute your database query to fetch data
 $exportSql = $_REQUEST['exportSql']; // Replace with your SQL query
 $sql_app = mysqli_query($con, $exportSql); // Execute the SQL query
 
+
+// Define column headers with coloring
+$headerStyles = [
+    'font' => [
+        'bold' => true, // Make the text bold
+        'color' => ['rgb' => 'FFFFFF'], // Font color (white)
+    ],
+    'fill' => [
+        'fillType' => Fill::FILL_SOLID,
+        'startColor' => ['rgb' => '0070C0'], // Background color (blue)
+    ],
+    'borders' => [
+        'outline' => [
+            'borderStyle' => Border::BORDER_THIN,
+            'color' => ['argb' => 'FF000000'], // Border color (black)
+        ],
+    ],
+];
 
 
 // Define column headers
@@ -46,11 +68,15 @@ $headers = array(
     'Type',
 );
 
-// Set headers in the Excel sheet
+
+// Set headers in the Excel sheet with styles
 foreach ($headers as $index => $header) {
     $column = chr(65 + $index); // A, B, C, ...
     $sheet->setCellValue($column . '1', $header);
+    $sheet->getStyle($column . '1')->applyFromArray($headerStyles); // Apply styles to the header cell
+    $sheet->getColumnDimension($column)->setAutoSize(true); // Auto-fill column width
 }
+
 
 // Initialize the row counter
 $i = 2; // Start from row 2 for data
@@ -75,6 +101,18 @@ while ($row = mysqli_fetch_assoc($sql_app)) {
     $po_date = $row['po_date'];
     $po_number = $row['po_number'];
     $inventoryType = $row['inventoryType'];
+    
+    
+    
+     $sheet->getStyle('A' . $i . ':R' . $i)->applyFromArray([
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => Border::BORDER_THIN,
+                'color' => ['argb' => 'FF000000'], // Border color (black)
+            ],
+        ],
+    ]);
+    
 
     // Set the serial number in the first column
     $sheet->setCellValue('A' . $i, $serial_number);
@@ -100,6 +138,8 @@ while ($row = mysqli_fetch_assoc($sql_app)) {
     // Increment the row counter and serial number
     $i++;
     $serial_number++;
+    
+    
 }
 
 

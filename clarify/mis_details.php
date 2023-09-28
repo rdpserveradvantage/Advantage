@@ -429,9 +429,9 @@ error_reporting(E_ALL);
                             <h5>CALL DISPATCH INFORMATION</h5>
 
                             <hr>
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer">
+                            <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
                                 <thead>
-                                    <tr>
+                                    <tr class="table-primary">
                                         <th>Sn No</th>
                                         <th>Status</th>
                                         <th>Remarks</th>

@@ -155,7 +155,7 @@
 
 
 
-                            <table class="table table-hover table-styling table-xs">
+                            <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
                                 <thead>
                                     <tr class="table-primary">
                                         <th>Sr no</th>
@@ -209,7 +209,7 @@
                                     ?>
 
                                         <td><?= $counter; ?></td>
-                                        <td><?= $material; ?></td>
+                                        <td class="strong"><?= $material; ?></td>
                                         <td><?= $material_make; ?></td>
                                         <td><?= $model_no; ?></td>
                                         <td><?= $serial_no; ?></td>

@@ -237,7 +237,7 @@
                                     
                                     if (mysqli_num_rows($atm_sql_res) > 0) { ?>
 
-?>
+
 
 
                                     
@@ -400,46 +400,58 @@
 );
                                                         
                                                     ?></td>
-                                                    <td><? echo $po; ?></td>
-                                                    <td><? echo $po_date; ?></td>
                                                     
-                                                    <td> <? echo $activity ; ?> </td>
-                                                    <td> <? echo $customer ; ?> </td>
-                                                    <td> <? echo $bank ; ?> </td>
-                                                    <td> <? echo $atmid ; ?> </td>
-                                                    <td> <? echo $atmid2 ; ?> </td>
-                                                    <td> <? echo $atmid3 ; ?> </td>
-                                                    <td> <? echo $address ; ?> </td>
-                                                    <td> <? echo $city ; ?> </td>
-                                                    <td> <? echo $state ; ?> </td>
-                                                    <td> <? echo $zone ; ?> </td>
-                                                    <td> <? echo $LHO ; ?> </td>
-                                                    <td> <? echo $LHO_Contact_Person ; ?> </td>
-                                                    <td> <? echo $LHO_Contact_Person_No ; ?> </td>
-                                                    <td> <? echo $LHO_Contact_Person_email ; ?> </td>
-                                                    <td> <? echo $LHO_Adv_Person ; ?> </td>
-                                                    <td> <? echo $LHO_Adv_Contact ; ?> </td>
-                                                    <td> <? echo $LHO_Adv_email ; ?> </td>
-                                                    <td> <? echo $Project_Coordinator_Name ; ?> </td>
-                                                    <td> <? echo $Project_Coordinator_No ; ?> </td>
-                                                    <td> <? echo $Project_Coordinator_email ; ?> </td>
-                                                    <td> <? echo $Customer_SLA ; ?> </td>
-                                                    <td> <? echo $Our_SLA ; ?> </td>
-                                                    <td> <? echo $Vendor ; ?> </td>
-                                                    <td> <? echo $Cash_Management ; ?> </td>
-                                                    <td> <? echo $CRA_VENDOR ; ?> </td>
-                                                    <td> <? echo $ID_on_Make ; ?> </td>
-                                                    <td> <? echo $Model ; ?> </td>
-                                                    <td> <? echo $SiteType ; ?> </td>
-                                                    <td> <? echo $PopulationGroup ; ?> </td>
-                                                    <td> <? echo $XPNET_RemoteAddress ; ?> </td>
-                                                    <td> <? echo $CONNECTIVITY ; ?> </td>
-                                                    <td> <? echo $Connectivity_Type ; ?> </td>
-                                                    <td> <? echo $Site_data_Received_for_Feasiblity_date ; ?> </td>
-                                                    <td><?= ($ESD!='0000-00-00 00:00:00' ? $ESD : 'NA' ); ?></td>
-                                                    <td><?= ($ASD!='0000-00-00 00:00:00' ? $ASD : 'NA' ); ?></td>
-                                                    <td> <? echo $created_at; ?></td>
-                                                    <td> <? echo $created_by; ?></td>
+                                                    
+                                                    
+                                                    
+                                                    
+                                                 <td><?php echo !empty($po) ? $po : 'NA'; ?></td>
+<td><?php echo !empty($po_date) ? $po_date : 'NA'; ?></td>
+
+<td><?php echo !empty($activity) ? $activity : 'NA'; ?></td>
+<td><?php echo !empty($customer) ? $customer : 'NA'; ?></td>
+<td><?php echo !empty($bank) ? $bank : 'NA'; ?></td>
+<td><?php echo !empty($atmid) ? $atmid : 'NA'; ?></td>
+<td><?php echo !empty($atmid2) ? $atmid2 : 'NA'; ?></td>
+<td><?php echo !empty($atmid3) ? $atmid3 : 'NA'; ?></td>
+<td><?php echo !empty($address) ? $address : 'NA'; ?></td>
+<td><?php echo !empty($city) ? $city : 'NA'; ?></td>
+<td><?php echo !empty($state) ? $state : 'NA'; ?></td>
+<td><?php echo !empty($zone) ? $zone : 'NA'; ?></td>
+<td><?php echo !empty($LHO) ? $LHO : 'NA'; ?></td>
+<td><?php echo !empty($LHO_Contact_Person) ? $LHO_Contact_Person : 'NA'; ?></td>
+<td><?php echo !empty($LHO_Contact_Person_No) ? $LHO_Contact_Person_No : 'NA'; ?></td>
+<td><?php echo !empty($LHO_Contact_Person_email) ? $LHO_Contact_Person_email : 'NA'; ?></td>
+<td><?php echo !empty($LHO_Adv_Person) ? $LHO_Adv_Person : 'NA'; ?></td>
+<td><?php echo !empty($LHO_Adv_Contact) ? $LHO_Adv_Contact : 'NA'; ?></td>
+<td><?php echo !empty($LHO_Adv_email) ? $LHO_Adv_email : 'NA'; ?></td>
+<td><?php echo !empty($Project_Coordinator_Name) ? $Project_Coordinator_Name : 'NA'; ?></td>
+<td><?php echo !empty($Project_Coordinator_No) ? $Project_Coordinator_No : 'NA'; ?></td>
+<td><?php echo !empty($Project_Coordinator_email) ? $Project_Coordinator_email : 'NA'; ?></td>
+<td><?php echo !empty($Customer_SLA) ? $Customer_SLA : 'NA'; ?></td>
+<td><?php echo !empty($Our_SLA) ? $Our_SLA : 'NA'; ?></td>
+<td><?php echo !empty($Vendor) ? $Vendor : 'NA'; ?></td>
+<td><?php echo !empty($Cash_Management) ? $Cash_Management : 'NA'; ?></td>
+<td><?php echo !empty($CRA_VENDOR) ? $CRA_VENDOR : 'NA'; ?></td>
+<td><?php echo !empty($ID_on_Make) ? $ID_on_Make : 'NA'; ?></td>
+<td><?php echo !empty($Model) ? $Model : 'NA'; ?></td>
+<td><?php echo !empty($SiteType) ? $SiteType : 'NA'; ?></td>
+<td><?php echo !empty($PopulationGroup) ? $PopulationGroup : 'NA'; ?></td>
+<td><?php echo !empty($XPNET_RemoteAddress) ? $XPNET_RemoteAddress : 'NA'; ?></td>
+<td><?php echo !empty($CONNECTIVITY) ? $CONNECTIVITY : 'NA'; ?></td>
+<td><?php echo !empty($Connectivity_Type) ? $Connectivity_Type : 'NA'; ?></td>
+<td><?php echo !empty($Site_data_Received_for_Feasibility_date) ? $Site_data_Received_for_Feasibility_date : 'NA'; ?></td>
+<td><?php echo ($ESD != '0000-00-00 00:00:00') ? $ESD : 'NA'; ?></td>
+<td><?php echo ($ASD != '0000-00-00 00:00:00') ? $ASD : 'NA'; ?></td>
+<td><?php echo !empty($created_at) ? $created_at : 'NA'; ?></td>
+<td><?php echo !empty($created_by) ? $created_by : 'NA'; ?></td>
+
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
                                                  </tr>
                                             <?  $counter++ ;   } ?>
                                             </tbody>

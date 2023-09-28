@@ -73,65 +73,12 @@ $icon = [
                                                         <?= $titles[$i]; ?>
                                                     </a>
                                                 </p>
-                                                        <h5 class="font-size-16 mb-0"><span class="count">0</span></h5>
+                                                        <h5 class="font-size-16 mb-0"><span class="count"><?= $results[$i] ; ?></span></h5>
 
-                                                <? $counts[] = $results[$i] ; ?>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 <? } ?>
-
-
-
-
-
-<script>
-    function animateCount(target, duration, countElement) {
-        const start = 0;
-        const increment = Math.floor(target / (duration * 1000 / 60)); // Calculate increment per frame
-
-        let current = start;
-
-        function updateCount() {
-            current += increment;
-            countElement.textContent = current;
-
-            if (current < target) {
-                requestAnimationFrame(updateCount);
-            } else {
-                countElement.textContent = target;
-            }
-        }
-
-        updateCount();
-    }
-
-    // Assuming you have received the updated count values in your AJAX response
-    const updatedCounts = <?= json_encode($counts); ?>; // Replace with your actual updated counts
-
-    // Select all elements with class "count"
-    const countElements = document.querySelectorAll('.count');
-
-    // Update and animate the count values dynamically on page load and focus
-    window.addEventListener('load', function () {
-        countElements.forEach((element, index) => {
-            const startCount = parseFloat(element.textContent);
-            const endCount = updatedCounts[index];
-            const animationDuration = 4; // Animation duration in seconds (adjust as needed)
-
-            animateCount(endCount, animationDuration, element);
-        });
-    });
-
-    window.addEventListener('focus', function () {
-        countElements.forEach((element, index) => {
-            const startCount = parseFloat(element.textContent);
-            const endCount = updatedCounts[index];
-            const animationDuration = 4; // Animation duration in seconds (adjust as needed)
-
-            animateCount(endCount, animationDuration, element);
-        });
-    });
-</script>

@@ -173,7 +173,19 @@ foreach ($materialName as $materialNameKey => $materialNameValue) {
                     // Customize the tooltip text
                     return '<b>' + this.x + '</b><br>Quantity: ' + this.y;
                 }
+            },
+            plotOptions: {
+        column: {
+            pointWidth: 15, // Adjust the width as needed
+            cursor: 'pointer',
+            events: {
+                click: function (event) {
+                    console.log('Clicked on column:', event.point.category);
+                }
             }
+        }
+    },
+
         });
     } else {
         // Handle the case where the chart container does not exist

@@ -89,7 +89,8 @@
                             $sql = mysqli_query($con, "select * from ipconfuration order by id desc");
                             if (mysqli_num_rows($sql) > 0) {
 
-                                echo '<table class="table table-hover table-styling table-xs" style="width:100%;">
+                                echo '
+                                <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
                                 <thead>
                                     <tr class="table-primary">
                                         <th>Sr No</th>
@@ -130,7 +131,7 @@
 
                                     echo "<tr>
                                             <td>{$i}</td>
-                                            <td class='strong' style='color: red;'>{$serialNumber}</td>
+                                            <td class='strong'>{$serialNumber}</td>
                                             <td>{$network_ip}</td>
                                             <td>{$router_ip}</td>
                                             <td>{$atm_ip}</td>

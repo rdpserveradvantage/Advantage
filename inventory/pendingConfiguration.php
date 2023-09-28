@@ -1,5 +1,13 @@
 <?php include('header.php'); ?>
 
+
+<style>
+    .form-control {
+        font-size: 16px !important;
+        border-radius: 2px;
+        border: 1px solid #ccc;
+    }
+</style>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
@@ -11,129 +19,89 @@
                                 <h5>Router Configuration <span style="font-size:12px; color:red;">(add router serial number along with seal number)</span></h5>
                             </div>
                             <hr>
-                                        
-                            
-                            <form id="routerConfigForm" action="processPendingConfiguration.php" method="post">
+                            <form id="routerConfigForm" action="<? $_SERVER['PHP_SELF']; ?>" method="post">
                                 <div class="form-group">
-                                        <label>Atmid</label>
-                                        <input type="text" id="atmid" class="form-control" list="atmidOptions"
-                                            name="atmid">
-                                        <datalist id="atmidOptions"></datalist>
+                                    <label>Serial No</label>
+                                    <input type="text" id="serial_no" class="form-control" list="serial_noOptions" name="serial_no" autocomplete="off" required>
+                                    <datalist id="serial_noOptions"></datalist>
                                 </div>
-                                <div class="form-group">
-                                    <label for="serialNumber">Serial Number</label>
-                                    <input type="text" class="form-control" id="serialNumber" name="serialNumber" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="sealNumber">Seal Number</label>
-                                    <input type="text" class="form-control" id="sealNumber" name="sealNumber" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
-                            </form>
-                            
-                            
-                            
-                            
-                            
-                            <div class="row" id="additionalInfo" style="display:none">
-                                    <div class="col-sm-4">
-                                        <label class="label_label">Region</label>
-                                        <input class="form-control" type="text" name="region" id="region"
-                                            value="<? echo $region; ?>">
+                                <div class="row" id="IPinfoBox" style="display:none">
+                                    <input type="hidden" name="ipID" id="ipID" value="" />
+                                    <div class="col-sm-12" id="msgDiv" style="display:none;">
+                                        Message : <label id="msg"></label>
                                     </div>
 
-                                    <div class="col-sm-4">
-                                        <label class="label_label">City</label>
-                                        <input class="form-control" type="text" name="city" id="city"
-                                            value="<? echo $city; ?>" required>
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <label class="label_label">State</label>
-                                        <select name="state" id="state" class="form-control" required>
-                                            <option value="">Select State</option>
-                                            <?
-                                            $state_sql = mysqli_query($con, "select distinct(state) as state from sites where status=1");
-                                            while ($state_sql_result = mysqli_fetch_assoc($state_sql)) { ?>
-                                                <option value="<? echo $state_sql_result['state']; ?>" <? if ($state == $state_sql_result['state']) {
-                                                       echo 'selected';
-                                                   } ?>>
-                                                    <? echo $state_sql_result['state']; ?>
-                                                </option>
-                                            <? } ?>
-                                        </select>
-
+                                    <div class="col-sm-12">
+                                        <label>Network IP</label>
+                                        <input class="form-control" readonly type="text" name="network_ip" id="network_ip" value="">
                                     </div>
                                     <div class="col-sm-12">
-                                        <label class="label_label">Locations</label>
-                                        <input class="form-control" type="text" name="location" id="location"
-                                            value="<? echo $location; ?>">
+                                        <label>Router IP</label>
+                                        <input class="form-control" readonly type="text" name="router_ip" id="router_ip" value="">
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <label>ATM IP</label>
+                                        <input class="form-control" readonly type="text" name="atm_ip" id="atm_ip" value="">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label>Subnet Mask</label>
+                                        <input class="form-control" readonly type="text" name="subnet_mask" id="subnet_mask" value="">
                                     </div>
                                 </div>
-                                
-                                
+                                <br />
+                                <input type="submit" id="submit" name="submit" class="btn btn-primary" value="Configure">
+                            </form>
                         </div>
                     </div>
-                    
-                    <div class="card">
-                        <div class="card-body">
-                            
-                            <?
-                            $i=1 ; 
-                            $sql = mysqli_query($con,"select * from routerConfiguration where status=1 order by id desc limit 40");
-                          if (mysqli_num_rows($sql) > 0) {      
-                            
-                            echo '<table class="table table-hover table-styling table-xs" style="width:100%;">
-                                <thead>
-                                    <tr class="table-primary">
-                                        <th>Sr No</th>
-                                        <th>Atm id</th>
-                                        <th>Serial Number</th>
-                                        <th>Seal Number</th>
-                                        <th>Created At</th>
-                                        <th>Created By</th>
-                                    </tr>
-                                </thead>
-                                <tbody>';
 
-                                    while($sql_result = mysqli_fetch_assoc($sql)){ 
-                                    
-                                    $atmid = $sql_result['atmid'];
-                                    $serialNumber = $sql_result['serialNumber']; 
-                                    $sealNumber = $sql_result['sealNumber'];
-                                    $created_at = $sql_result['created_at'];
-                                     
-                                    $created_by = $sql_result['created_by'];
-                                    $created_by = getUsername($created_by,false) ;
+                    <?
 
-                                        
-                                        echo "<tr>
-                                            <td>{$i}</td>
-                                            <td>{$atmid}</td>
-                                            <td>{$serialNumber}</td>
-                                            <td>{$sealNumber}</td>
-                                            <td>{$created_at}</td>
-                                            <td>{$created_by}</td>
-                                            
-                                        </tr>";
+                    if (isset($_REQUEST['submit'])) {
 
-                                     $i++;  } 
+                    ?>
 
-                            echo "    </tbody>
-                            </table>";
-                            
-                          } else{
-                                 echo '
-                                    <div class="noRecordsContainer">
-                                        <img src="assets/noRecords.png">
-                                    </div>';
-                          }
-                            
-                    ?>        
+
+
+                        <div class="card">
+                            <div class="card-body">
+                                <?
+
+                                $serial_no = $_REQUEST["serial_no"];
+                                $router_ip = $_REQUEST["router_ip"];
+                                $network_ip = $_REQUEST["network_ip"];
+                                $atm_ip = $_REQUEST["atm_ip"];
+                                $subnet_mask = $_REQUEST["subnet_mask"];
+                                $ipID = $_REQUEST['ipID'];
+
+                                if ($ipID > 0) {
+                                    if (mysqli_query($con, "update inventory set isIPAssign=1 where serial_no='" . $serial_no . "'")) {
+                                        echo '<h5>IP Assigned To Serial Number : ' . $serial_no . '</h5>';
+                                        mysqli_query($con, "update ips set isAssign=1 where id='" . $ipID . "'");
+                                        mysqli_query($con, "insert into ipconfuration(ipID, serial_no, router_ip, network_ip, atm_ip, subnet_ip, created_at, created_by, status)
+                                    values('" . $ipID . "','" . $serial_no . "','" . $router_ip . "','" . $network_ip . "','" . $atm_ip . "','" . $subnet_mask . "','" . $datetime . "','" . $userid . "',1)");
+                                    } else {
+                                        echo '<h5>Error In IP Assigned To Serial Number : ' . $serial_no . '</h5>';
+                                    }
+                                } else {
+                                    echo '<h5>Something Wrong</h5>';
+                                }
+
+
+                                ?>
+                            </div>
                         </div>
-                    </div>
-                    
-                    
+
+
+
+
+                    <? }
+
+
+                    ?>
+
+
+
                 </div>
             </div>
         </div>
@@ -142,78 +110,83 @@
 
 
 <script>
+    $(document).ready(function() {
 
-    $(document).ready(function () {
-        function populateATMData(atmid) {
-            $.ajax({
-                type: "POST",
-                url: 'get_atm_data.php',
-                data: 'atmid=' + atmid,
-                success: function (msg) {
-                    console.log(msg);
-
-                    if (msg != 0) {
-                        var obj = JSON.parse(msg);
-                        var fields = ['customer', 'bank', 'engineer', 'location', 'region', 'state', 'city', 'branch', 'bm', 'lho'];
-
-                        fields.forEach(function (field) {
-                            if (!obj[field]) {
-                                $("#" + field).focus();
-                            } else {
-                                $("#" + field).val(obj[field]);
-                                $('#' + field).attr('readonly', true);
-                            }
-                        });
-
-                        if (obj.customer && obj.bank && obj.location && obj.region && obj.state && obj.city && obj.branch && obj.bm && obj.lho) {
-                            $("#call_receive").focus();
-                        }
-
-                        $("#call_type").focus();
-                        $("#additionalInfo").css('display','flex');
-                    } else {
-                        $("#additionalInfo").css('display','none');
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'No Info With This ATM',
-                        }).then(function () {
-                            // Reset the form
-                            $("#form")[0].reset();
-                        });
-
-                    }
-                }
-            });
-
-        }
-
-        $("#atmid").on('input', function () {
+        $("#serial_no").on('input', function() {
             var input = $(this).val();
 
             $.ajax({
                 type: "POST",
-                url: 'get_suggestions.php',
-                data: { input: input },
-                success: function (response) {
+                url: 'get_serialno_suggestions.php',
+                data: {
+                    input: input
+                },
+                success: function(response) {
                     console.log(response)
-                    var datalist = $("#atmidOptions");
+                    var datalist = $("#serial_noOptions");
                     datalist.empty();
 
                     var suggestions = JSON.parse(response);
 
-                    suggestions.forEach(function (suggestion) {
+                    suggestions.forEach(function(suggestion) {
                         datalist.append($("<option>").attr('value', suggestion).text(suggestion));
                     });
                 }
             });
         });
 
-        $("#atmid").on('change', function () {
-            var atmid = $(this).val();
-            populateATMData(atmid);
+
+        $("#serial_no").on('change', function() {
+            var serial_no = $(this).val();
+
+            $.ajax({
+                type: 'POST',
+                url: 'get_unAssignedIP.php',
+                data: 'serial_no=' + serial_no,
+                success: function(response) {
+                    console.log(response);
+                    if (response == 0) {
+                        alert("No IP addresses available.");
+                        $("#IPinfoBox").css('display', 'none');
+                    } else {
+                        var ipAddresses = JSON.parse(response);
+
+                        $("#router_ip").val(ipAddresses.router_ip);
+                        $("#network_ip").val(ipAddresses.network_ip);
+                        $("#atm_ip").val(ipAddresses.atm_ip);
+                        $("#subnet_mask").val(ipAddresses.subnet_ip);
+                        $("#ipID").val(ipAddresses.id);
+                        if (ipAddresses.msg) {
+                            $("#msgDiv").css('display', 'block')
+                            $("#msg").html(ipAddresses.msg);
+                            $("#submit").css('display', 'none');
+                        } else {
+                            $("#msgDiv").css('display', 'none');
+                            $("#submit").css('display', 'block');
+
+                        }
+                        // Clear the input value from the datalist's options
+                        $("#serial_noOptions option[value='" + serial_no + "']").remove();
+
+                        $("#IPinfoBox").css('display', 'flex');
+
+                        // Change focus to another element, for example, the submit button
+                        $("#router_ip").focus();
+                    }
+                }
+            });
         });
     });
 
+    document.addEventListener("DOMContentLoaded", function() {
+        var form = document.getElementById("routerConfigForm");
+
+        form.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent the form from submitting
+            }
+        });
+    });
 </script>
 
 <?php include('footer.php'); ?>

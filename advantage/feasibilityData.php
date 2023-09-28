@@ -172,7 +172,7 @@ $sqlappCount;
                         <div class="card-block">
 
                             <div class="card-body" style="overflow:auto;">
-                                <table class="table table-hover table-styling table-xs">
+                                <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
                                     <thead>
                                         <tr class="table-primary">
                                             <th>id</th>

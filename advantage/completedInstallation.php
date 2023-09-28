@@ -86,7 +86,7 @@ if($assignedLho){
                                     </div>
                                     <div class="card-block overflow_auto">
                                         
-                                        <table class="table table-hover table-styling table-xs">
+                                        <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
                                             <thead>
                                                 <tr class="table-primary">
                                                     <th>Sr No</th>

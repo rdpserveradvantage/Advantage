@@ -138,19 +138,16 @@
 
         $("#serial_no").on('change', function() {
             var serial_no = $(this).val();
-
             $.ajax({
                 type: 'POST',
                 url: 'get_unAssignedIP.php',
                 data: 'serial_no=' + serial_no,
                 success: function(response) {
-                    console.log(response);
                     if (response == 0) {
                         alert("No IP addresses available.");
                         $("#IPinfoBox").css('display', 'none');
                     } else {
                         var ipAddresses = JSON.parse(response);
-
                         $("#router_ip").val(ipAddresses.router_ip);
                         $("#network_ip").val(ipAddresses.network_ip);
                         $("#atm_ip").val(ipAddresses.atm_ip);
@@ -163,15 +160,11 @@
                         } else {
                             $("#msgDiv").css('display', 'none');
                             $("#submit").css('display', 'block');
-
                         }
-                        // Clear the input value from the datalist's options
                         $("#serial_noOptions option[value='" + serial_no + "']").remove();
-
                         $("#IPinfoBox").css('display', 'flex');
-
-                        // Change focus to another element, for example, the submit button
                         $("#router_ip").focus();
+                                setTimeout(checkIfIPisUnassigned, 5000); 
                     }
                 }
             });
@@ -189,4 +182,94 @@
     });
 </script>
 
+<style>
+        .custom-alert {
+            position: fixed;
+            top: 10%;
+            right: 2%;
+            z-index: 1100;
+            background: #404e67;
+            color: white;
+            width: 20%;
+      animation: shake 0.5s; /* Apply the shake animation */
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-5px);
+            }
+            50% {
+                transform: translateX(5px);
+            }
+            75% {
+                transform: translateX(-5px);
+            }
+            100% {
+                transform: translateX(5px);
+            }
+        }
+    </style>
+
+<script>
+
+        function checkIfIPisUnassigned() {
+            var ipID = $("#ipID").val();
+            $.ajax({
+                type: 'GET',
+                url: 'checkIfIPisunAssign.php',
+                data: 'ipID='+ipID,
+                success: function (response) {
+                    console.log(response)
+                    if (response == 1) {
+                        showTickMark();
+                    } else {
+                        showCross();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        function showTickMark() {
+            // Create a Bootstrap alert with a tick mark icon
+            var alert = '<div class="alert alert-success custom-alert" role="alert">' +
+                        '  <i class="fas fa-check-circle"></i> IP is available' +
+                        '</div>';
+            // Append the alert to the page body
+            $('body').append(alert);
+            
+            // Auto-hide the alert after 5 seconds
+            setTimeout(function () {
+                $('.custom-alert').fadeOut(1000, function () {
+                    $(this).remove();
+                });
+            }, 5000); // 5000 milliseconds = 5 seconds
+            $("#submit").css('display', 'block');
+        }
+
+        function showCross() {
+            // Create a Bootstrap alert with a cross icon
+            var alert = '<div class="alert alert-danger custom-alert" role="alert">' +
+                        '  <i class="fas fa-times-circle"></i> IP is not available' +
+                        '</div>';
+            // Append the alert to the page body
+            $('body').append(alert);
+            
+            // Auto-hide the alert after 5 seconds
+            setTimeout(function () {
+                $('.custom-alert').fadeOut(1000, function () {
+                    $(this).remove();
+                });
+            }, 5000); // 5000 milliseconds = 5 seconds
+            
+            $("#submit").css('display', 'none');
+        }
+
+
+        </script>
+    
 <?php include('footer.php'); ?>

@@ -55,6 +55,218 @@ style="text-transform: uppercase;"
 
 
     <style>
+.loader-block {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+        
+.loading-container {
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  margin: 0 32px;
+}
+.loading-container:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background-color: #fff;
+  bottom: 0;
+  left: 0;
+  border-radius: 10px;
+  -webkit-animation: movingLine 2.4s infinite ease-in-out;
+          animation: movingLine 2.4s infinite ease-in-out;
+}
+
+@-webkit-keyframes movingLine {
+  0% {
+    opacity: 0;
+    width: 0;
+  }
+  33.3%, 66% {
+    opacity: 0.8;
+    width: 100%;
+  }
+  85% {
+    width: 0;
+    left: initial;
+    right: 0;
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    width: 0;
+  }
+}
+
+@keyframes movingLine {
+  0% {
+    opacity: 0;
+    width: 0;
+  }
+  33.3%, 66% {
+    opacity: 0.8;
+    width: 100%;
+  }
+  85% {
+    width: 0;
+    left: initial;
+    right: 0;
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    width: 0;
+  }
+}
+.loading-text {
+  font-size: 5vw;
+  line-height: 64px;
+  letter-spacing: 10px;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.loading-text span {
+  -webkit-animation: moveLetters 2.4s infinite ease-in-out;
+          animation: moveLetters 2.4s infinite ease-in-out;
+  transform: translatex(0);
+  position: relative;
+  display: inline-block;
+  opacity: 0;
+  text-shadow: 0px 2px 10px rgba(46, 74, 81, 0.3);
+}
+
+.loading-text span:nth-child(1) {
+  -webkit-animation-delay: 0.1s;
+          animation-delay: 0.1s;
+}
+
+.loading-text span:nth-child(2) {
+  -webkit-animation-delay: 0.2s;
+          animation-delay: 0.2s;
+}
+
+.loading-text span:nth-child(3) {
+  -webkit-animation-delay: 0.3s;
+          animation-delay: 0.3s;
+}
+
+.loading-text span:nth-child(4) {
+  -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
+}
+
+.loading-text span:nth-child(5) {
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
+}
+
+.loading-text span:nth-child(6) {
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s;
+}
+
+.loading-text span:nth-child(7) {
+  -webkit-animation-delay: 0.7s;
+          animation-delay: 0.7s;
+}
+
+@-webkit-keyframes moveLetters {
+  0% {
+    transform: translateX(-15vw);
+    opacity: 0;
+  }
+  33.3%, 66% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(15vw);
+    opacity: 0;
+  }
+}
+
+@keyframes moveLetters {
+  0% {
+    transform: translateX(-15vw);
+    opacity: 0;
+  }
+  33.3%, 66% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(15vw);
+    opacity: 0;
+  }
+}
+.socials {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.social-link {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  margin-right: 12px;
+}
+
+
+.loader-block{
+width: 100%;
+    height: 140vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: radial-gradient(circle farthest-corner at 10% 20%, #00989b 0.1%, #005e78 94.2%);
+    background-size: 100%;
+    font-family: "Montserrat", sans-serif;
+    overflow: hidden;
+}
+
+    </style>
+
+
+
+
+
+
+
+    
+<div class="loader-block">
+    <div class="loading-container">
+  <div class="loading-text">
+    <span>L</span>
+    <span>O</span>
+    <span>A</span>
+    <span>D</span>
+    <span>I</span>
+    <span>N</span>
+    <span>G</span>
+  </div>
+</div>
+</div>
+
+
+
+    <style>
+    .avatar {
+    height: 3rem;
+    width: 3rem;
+}
         .modal-backdrop {
     position: fixed;
     top: 0;
@@ -262,3 +474,22 @@ style="text-transform: uppercase;"
                     
                     
                     <? include('nav.php');?>
+
+<script>
+  window.addEventListener('load', function() {
+    var loader = document.querySelector('.loader-block');
+    var pcoded = document.querySelector('#pcoded');
+    
+    setTimeout(function() {
+        loader.style.display = 'none';
+        pcoded.style.visibility = 'visible';
+    }, 2500); // 3000 milliseconds = 3 seconds
+});      
+    var mobileMenu = document.getElementById('mobile-collapse');
+    var iconElement = mobileMenu.querySelector('i');
+
+    mobileMenu.addEventListener('click', function() {
+    iconElement.classList.toggle('icon-toggle-right');
+    iconElement.classList.toggle('icon-toggle-left');
+});
+</script>

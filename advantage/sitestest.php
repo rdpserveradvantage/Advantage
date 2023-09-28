@@ -214,7 +214,7 @@
 
                             ?>
 
-                            <table class="table table-hover table-styling" style="width:100%;">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs" style="width:100%;">
                                 <thead>
                                     <tr class="table-primary">
                                         <th>#</th>

@@ -8,10 +8,7 @@
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
-                <h6 class="card-subtitle line-on-side text-muted text-xs-center font-small-3 pt-2">
-                            <span> Clarity - Project</span>
-                        </h6>
-                        <br>
+                
                     <div class="row" id="part2"></div>
                     <div class="row" id="part3"></div>
                     <h6 class="card-subtitle line-on-side text-muted text-xs-center font-small-3 pt-2">

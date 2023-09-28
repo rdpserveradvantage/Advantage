@@ -78,8 +78,8 @@ if($assignedLho){
                                             </strong></h5>
 
                                         <hr />
-                                        <form action="exportsites.php" method="POST">
-                                            <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
+                                        <form action="exportCompletedInstallation.php" method="POST">
+                                            <input type="hidden" name="exportSql" value="<?= $statement; ?>">
                                             <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
                                         </form>
 

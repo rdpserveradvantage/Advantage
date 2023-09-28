@@ -6,10 +6,6 @@
             <div class="page-wrapper">
                 <div class="page-body">
                     
-                        <h6 class="card-subtitle line-on-side text-muted text-xs-center font-small-3 pt-2">
-                            <span> Clarity - Project</span>
-                        </h6>
-                        <br>
                         
                             <div class="row" id="part1" page="part1Dashboard"></div>
                             <div class="row" id="part2" page="part2Dashboard"></div>

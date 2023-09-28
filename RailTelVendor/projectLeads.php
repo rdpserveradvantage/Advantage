@@ -1,239 +1,86 @@
-<? include('header.php'); 
-
-?>
-
-     
-            <div class="pcoded-content">
-                <div class="pcoded-inner-content">
-                    <div class="main-body">
-                        <div class="page-wrapper">
-                            <div class="page-body">
-
-<?
-if($assignedLho){
-    $statement = "select * from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.vendor='".$RailTailVendorID."' and a.isDone=1 and a.status=1 and s.LHO like '".$assignedLho."'" ; 
-    $sqlappCount = "select count(1) as totalCount from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.vendor='".$RailTailVendorID."' and a.isDone=1 and a.status=1  
-    and s.LHO like '".$assignedLho."'";
-}else{
-    $statement = "select * from projectInstallation a where a.vendor='".$RailTailVendorID."' and a.isDone=1 and a.status=1 "; 
-    $sqlappCount = "select count(1) as totalCount from projectInstallation a where a.vendor='".$RailTailVendorID."' and a.isDone=1 and a.status=1 ";
-}             
-    
-
-                if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
-                    $atmid = $_REQUEST['atmid'];
-                    $statement .= "and a.atmid like '%" . trim($atmid) . "%'";
-                    $sqlappCount .= "and atmid like '%" . trim($atmid) . "%'";
-                }
-
-
-
-                if(isset($_POST['submit'])){
-                    $_GET['page']=1 ;  
-                }
-                $statement .= "order by a.id desc" ;
-                
-                $page_size = 10;
-                $result = mysqli_query($con, $sqlappCount);
-                $row = mysqli_fetch_assoc($result);
-                $total_records = $row['totalCount'];
-
-                $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-                $offset = ($current_page - 1) * $page_size;
-                $total_pages = ceil($total_records / $page_size);
-                $window_size = 10;
-                $start_window = max(1, $current_page - floor($window_size / 2));
-                $end_window = min($start_window + $window_size - 1, $total_pages);
-                $sql_query = "$statement LIMIT $offset, $page_size";
-
-
-
-                ?>
-
-
-                                <div class="card" id="filter">
-                                    <div class="card-block">
-                                        <form action="<? $_SERVER['PHP_SELF']; ?>" method="POST">
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <label>ATMID</label>
-                                                    <input type="text" name="atmid" class="form-control" value="<?= $atmid; ?>">
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <br />
-                                                    <input type="submit" name="submit" class="btn btn-primary">
-                                                    <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
-
-                                                </div>
-
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show
-                                        Filters</a>
-                                    <div class="card-header">
-                                        <h5>Total Records: <strong class="record-count">
-                                                <?= $total_records; ?>
-                                            </strong></h5>
-
-                                        <hr />
-                                        <form action="exportsites.php" method="POST">
-                                            <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
-                                            <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
-                                        </form>
-
-                                    </div>
-                                    <div class="card-block overflow_auto">
+<?php include 'header.php'; ?>
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="page-wrapper">
+                <div class="page-body">
+                    
+                    
+                    <div class="card">
+                        <div class="card-block overflow_auto">
+                            <table class="table table-hover table-styling table-xs">
+                                <thead>
+                                    <tr class="table-primary">
+                                        <th>Sr No</th>
+                                        <th>Atmid</th>
+                                        <th>Address</th>
+                                        <th>Assign</th>
+                                        <th>Assigned Date</th>
                                         
-                                        <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
-                                            <thead>
-                                                <tr class="table-primary">
-                                                    <th>Sr No</th>
-                                                    <th>atmid</th>
-                                                    <th>created_at</th>
-                                                    <th>created_by</th>
-                                                    <th>remark</th>
-                                                    <th>vendor</th>
-                                                    <th>scheduleAtmEngineerName</th>
-                                                    <th>scheduleAtmEngineerNumber</th>
-                                                    <th>bankPersonName</th>
-                                                    <th>bankPersonNumber</th>
-                                                    <th>backRoomKeyPersonName</th>
-                                                    <th>backRoomKeyPersonNumber</th>
-                                                    <th>scheduleDate</th>
-                                                    <th>scheduleTime</th>
-                                                    <th>sbiTicketId</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $i = 1;
 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                    $sql = "SELECT a.atmid, a.siteid, MAX(a.created_at) as latest_created_at, MAX(a.isSentToEngineer) as isSentToEngineer,
+                                    MAX(a.isDone) as isDone, MAX(b.assignedToId) as assignedToId, MAX(b.assignedToName) as assignedToName FROM projectInstallation a
+                                    LEFT JOIN assignedInstallation b ON a.siteid = b.siteid AND a.atmid = b.atmid WHERE a.vendor = '".$RailTailVendorID."' AND a.status = 1 
+                                    GROUP BY a.atmid, a.siteid" ; 
+                                    
+                                    // echo $sql = "SELECT distinct(a.atmid) as atmid,a.siteid,a.created_at,a.isSentToEngineer,a.isDone,
+                                    // b.assignedToId, b.assignedToName 
+                                    
+                                    // FROM projectInstallation a 
+                                    // LEFT JOIN assignedInstallation b
+                                    //         ON a.siteid = b.siteid AND a.atmid = b.atmid
+                                    // WHERE a.vendor='$RailTailVendorID' AND a.status=1";
+                                    
+                                    $result = mysqli_query($con, $sql);
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        $id = $row['id'];
+                                        $siteid = $row['siteid'];
+                                        $atmid =  $row['atmid'];
+                                        $created_at = $row['created_at'];
+                                        $isSentToEngineer=$row['isSentToEngineer'];
+                                        $assignedToName = $row['assignedToName'];
+                                        $isDone = $row['isDone'];
+                                        $address = mysqli_fetch_assoc(mysqli_query($con, "SELECT address FROM sites WHERE id='$siteid'"))['address'];
+                                        
+                                    ?>
+                                        <tr>
+                                            <td><?= $i; ?></td>
+                                            <td class="strong"><?= $atmid; ?></td>
+                                            <td><?= $address; ?></td>
+                                            <td>
+                                                <?
+                                                if($isDone==1){
+                                                    echo 'Installation Done !';
+                                                }else{
+                                                    if($isSentToEngineer==1){
+                                                        echo 'Assigned to <strong>' . $assignedToName .'</strong>'; 
+                                                    }else{
+                                                        echo '<a href="assignProjectInstallation.php?id=' . $id . '&siteid=' . $siteid . '&atmid=' . $atmid . '">Assigned to Engineer</a>';
+                                                    }                                                    
+                                                }
+
+                                                ?>
                                                 
-
-                                        <?
-                                        $counter = ($current_page - 1) * $page_size + 1;
-                                        $sql = mysqli_query($con,$sql_query);
-                                        while($sql_result = mysqli_fetch_assoc($sql)){
-                                            $siteid = $sql_result['siteid'];
-                                            $atmid = $sql_result['atmid'];
-                                            $status = $sql_result['status'];
-                                            $created_at = $sql_result['created_at'];
-                                            $created_by = $sql_result['created_by'];
-                                            $isDone = $sql_result['isDone'];
-                                            $remark = $sql_result['remark'];
-                                            $vendor = $sql_result['vendor'];
-                                            $portal = $sql_result['portal'];
-                                            $isSentToEngineer = $sql_result['isSentToEngineer'];
-                                            $scheduleAtmEngineerName = $sql_result['scheduleAtmEngineerName'];
-                                            $scheduleAtmEngineerNumber = $sql_result['scheduleAtmEngineerNumber'];
-                                            $bankPersonName = $sql_result['bankPersonName'];
-                                            $bankPersonNumber = $sql_result['bankPersonNumber'];
-                                            $backRoomKeyPersonName = $sql_result['backRoomKeyPersonName'];
-                                            $backRoomKeyPersonNumber = $sql_result['backRoomKeyPersonNumber'];
-                                            $scheduleDate = $sql_result['scheduleDate'];
-                                            $scheduleTime = $sql_result['scheduleTime'];
-                                            $sbiTicketId = $sql_result['sbiTicketId'];
-
-
-
+                                            </td>
+                                            <td><?= $created_at; ?></td>
                                             
-                                         ?>
-                                         
-                                                <tr>
-                                                    <td><?= $counter ;?></td>
-                                                    
-                                                    <td class="strong">
-                                                        <a href="installationInfo.php?siteid=<?= $siteid; ?>&atmid=<?= $atmid; ?>">
-                                                            <?= $atmid; ?>
-                                                        </a>
-                                                    </td>
-                                                    <td><?= $created_at; ?></td>
-                                                    <td><?= getUsername($created_by,true); ?></td>
-                                                    <td><?= $remark; ?></td>
-                                                    <td><?= getVendorName($vendor); ?></td>
-                                                    <td><?= $scheduleAtmEngineerName; ?></td>
-                                                    <td><?= $scheduleAtmEngineerNumber; ?></td>
-                                                    <td><?= $bankPersonName; ?></td>
-                                                    <td><?= $bankPersonNumber; ?></td>
-                                                    <td><?= $backRoomKeyPersonName; ?></td>
-                                                    <td><?= $backRoomKeyPersonNumber; ?></td>
-                                                    <td><?= $scheduleDate; ?></td>
-                                                    <td><?= $scheduleTime; ?></td>
-                                                    <td><?= $sbiTicketId; ?></td>
-
-
-                                                </tr>
-                                         
-                                         <?
-                                         $counter++ ;   
-                                        }
-                                        
-                                        ?>
-                                        
-                                            </tbody>
-                                        </table>
-                                        
-                                        
-                                    </div>
-
-                                    <?
-
-$atmid = $_REQUEST['atmid'];
-
-echo '<div class="pagination"><ul>';
-if ($start_window > 1) {
-
-    echo "<li><a href='?page=1&&atmid=$atmid'>First</a></li>";
-    echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '">Prev</a></li>';
-}
-
-for ($i = $start_window; $i <= $end_window; $i++) {
-    ?>
-    <li class="<? if ($i == $current_page) {
-        echo 'active';
-    } ?>">
-        <a
-            href="?page=<?= $i; ?>&&atmid=<?= $atmid; ?>">
-            <?= $i; ?>
-        </a>
-    </li>
-
-<? }
-
-if ($end_window < $total_pages) {
-
-    echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '">Next</a></li>';
-    echo '<li><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '">Last</a></li>';
-}
-echo '</ul></div>';
-
-?>
-
-
-
-
-                                </div>
-                            </div>
+                                        </tr>
+                                    <?php
+                                        $i++;
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
-
-
                     </div>
                 </div>
             </div>
-                    
-                    
-<script>
-        $("#show_filter").css('display', 'none');
-        $("#hide_filter").on('click', function() {
-            $("#filter").css('display', 'none');
-            $("#show_filter").css('display', 'block');
-        });
-        $("#show_filter").on('click', function() {
-            $("#filter").css('display', 'block');
-            $("#show_filter").css('display', 'none');
-        });
-    </script>
-
-    <? include('footer.php'); ?>
+        </div>
+    </div>
+</div>
+<?php include 'footer.php'; ?>

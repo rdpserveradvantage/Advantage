@@ -131,9 +131,9 @@ if ($_SESSION['ADVANTAGE_username']) {
                             <?
 
                             if ($level != 1) {
-                                $submenu_sql = mysqli_query($con, "select * from sub_menu where main_menu = '" . $menu_id . "' and id in ($cpermission) and status=1 and main_menu<>1");
+                                $submenu_sql = mysqli_query($con, "select * from sub_menu where main_menu = '" . $menu_id . "' and id in ($cpermission) and status=1 and main_menu<>1 order by sub_menu asc");
                             } else {
-                                $submenu_sql = mysqli_query($con, "select * from sub_menu where main_menu = '" . $menu_id . "' and id in ($cpermission) and status=1");
+                                $submenu_sql = mysqli_query($con, "select * from sub_menu where main_menu = '" . $menu_id . "' and id in ($cpermission) and status=1 order by sub_menu asc");
                             }
 
 

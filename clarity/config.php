@@ -13,6 +13,20 @@ $dbname="sarmicrosystems_advantage";
 $con = new mysqli($host, $user, $pass, $dbname);
 
 
+
+if (!function_exists('vendorUsersData')) {
+        function vendorUsersData($id,$parameter){
+        global $con;
+            $sql = mysqli_query($con,"select $parameter from vendorUsers where id ='".$id."'");
+            $sql_result = mysqli_fetch_assoc($sql);
+            return $sql_result[$parameter];
+
+    }
+}
+
+
+
+
 // $host="localhost";
 // $user="sarmicrosystems_advantage";
 // $pass="Advantage@2023";
@@ -156,4 +170,3 @@ function projectTeamInstallation($siteId,$atmid,$table) {
 function projectTeamInstallationHold($siteId,$atmid,$table) {
     logEvent($siteId,$atmid, 'Project', 'Installation Hold', 'Installation Hold By Project Team Engineer',$table);
 }
-?>

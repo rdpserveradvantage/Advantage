@@ -4,8 +4,6 @@
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
-                    
-                    
                     <div class="card">
                         <div class="card-block overflow_auto">
                             <table class="table table-hover table-styling table-xs">
@@ -16,37 +14,25 @@
                                         <th>Address</th>
                                         <th>Assign</th>
                                         <th>Assigned Date</th>
-                                        
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $i = 1;
-
                                     $sql = "SELECT a.atmid, a.siteid, MAX(a.created_at) as latest_created_at, MAX(a.isSentToEngineer) as isSentToEngineer,
                                     MAX(a.isDone) as isDone, MAX(b.assignedToId) as assignedToId, MAX(b.assignedToName) as assignedToName FROM projectInstallation a
-                                    LEFT JOIN assignedInstallation b ON a.siteid = b.siteid AND a.atmid = b.atmid WHERE a.vendor = '".$RailTailVendorID."' AND a.status = 1 
-                                    GROUP BY a.atmid, a.siteid" ; 
-                                    
-                                    // echo $sql = "SELECT distinct(a.atmid) as atmid,a.siteid,a.created_at,a.isSentToEngineer,a.isDone,
-                                    // b.assignedToId, b.assignedToName 
-                                    
-                                    // FROM projectInstallation a 
-                                    // LEFT JOIN assignedInstallation b
-                                    //         ON a.siteid = b.siteid AND a.atmid = b.atmid
-                                    // WHERE a.vendor='$RailTailVendorID' AND a.status=1";
-                                    
+                                    LEFT JOIN assignedInstallation b ON a.siteid = b.siteid AND a.atmid = b.atmid WHERE a.vendor = '" . $RailTailVendorID . "' AND a.status = 1 
+                                    GROUP BY a.atmid, a.siteid";
                                     $result = mysqli_query($con, $sql);
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         $id = $row['id'];
                                         $siteid = $row['siteid'];
                                         $atmid =  $row['atmid'];
                                         $created_at = $row['created_at'];
-                                        $isSentToEngineer=$row['isSentToEngineer'];
+                                        $isSentToEngineer = $row['isSentToEngineer'];
                                         $assignedToName = $row['assignedToName'];
                                         $isDone = $row['isDone'];
                                         $address = mysqli_fetch_assoc(mysqli_query($con, "SELECT address FROM sites WHERE id='$siteid'"))['address'];
-                                        
                                     ?>
                                         <tr>
                                             <td><?= $i; ?></td>
@@ -54,21 +40,18 @@
                                             <td><?= $address; ?></td>
                                             <td>
                                                 <?
-                                                if($isDone==1){
+                                                if ($isDone == 1) {
                                                     echo 'Installation Done !';
-                                                }else{
-                                                    if($isSentToEngineer==1){
-                                                        echo 'Assigned to <strong>' . $assignedToName .'</strong>'; 
-                                                    }else{
+                                                } else {
+                                                    if ($isSentToEngineer == 1) {
+                                                        echo 'Assigned to <strong>' . $assignedToName . '</strong>';
+                                                    } else {
                                                         echo '<a href="assignProjectInstallation.php?id=' . $id . '&siteid=' . $siteid . '&atmid=' . $atmid . '">Assigned to Engineer</a>';
-                                                    }                                                    
+                                                    }
                                                 }
-
                                                 ?>
-                                                
                                             </td>
                                             <td><?= $created_at; ?></td>
-                                            
                                         </tr>
                                     <?php
                                         $i++;

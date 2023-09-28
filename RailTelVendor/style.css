@@ -503,3 +503,7 @@ background:#f6f7fb;
 table{
     margin:10px auto;
 }
+
+.card .card-header span{
+    margin-top: 0px !important;
+}

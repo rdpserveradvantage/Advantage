@@ -1,4 +1,4 @@
-<?php include('header.php');?>
+<?php include('header.php'); ?>
 
 <style>
     .border-checkbox-section .border-checkbox-group .border-checkbox-label {
@@ -15,16 +15,19 @@
                     <div class="card">
                         <div class="card-block">
                             <h5>SITE INFORMATION</h5>
+                        
                             <hr>
                             <?
                             $id = $_GET['id'];
                             $sql = mysqli_query($con, "select * from mis_details  where id= '" . $id . "'");
                             $sql_result = mysqli_fetch_assoc($sql);
-
                             $mis_id = $sql_result['mis_id'];
-
-
                             $atmid = $sql_result['atmid'];
+
+                            $sitesSql = mysqli_query($con, "select * from sites where atmid='" . $atmid . "' order by id desc");
+                            $sitesSqlResult = mysqli_fetch_assoc($sitesSql);
+                            $siteid = $sitesSqlResult['id'];
+
                             $date = date('Y-m-d');
 
 
@@ -32,15 +35,10 @@
                             $detail_history = mysqli_query($con, "select * from mis_history  where mis_id = '" . $ide . "' ");
                             $fetch_detail_history = mysqli_fetch_assoc($detail_history);
 
-                            // $address_history = $fetch_detail_history['delivery_address'];
-                            // $mobile = $fetch_detail_history['contact_person_mob'];
-                            // $name = $fetch_detail_history['contact_person_name'];
-                            // echo "<script> alert($name); </script>";
-
                             $sql1 = mysqli_query($con, "select * from mis where id = '" . $mis_id . "'");
                             $sql1_result = mysqli_fetch_assoc($sql1);
                             $branch = $sql1_result['branch'];
-
+                            $ticketid = $sql_result['ticket_id'] ; 
 
                             ?>
                             <div class="view-info">
@@ -54,7 +52,7 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <th scope="row">Ticket ID </th>
-                                                                    <td><? echo $sql_result['ticket_id']; ?></td>
+                                                                    <td><? echo $ticketid; ?></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">ATM ID</th>
@@ -77,7 +75,7 @@
                                                 <!-- end of table col-lg-6 -->
                                                 <div class="col-lg-12 col-xl-6">
                                                     <div class="table-responsive">
-                                                        <table class="table">
+                                                        <table class="table m-0">
                                                             <tbody>
                                                                 <tr>
                                                                 <tr>
@@ -156,7 +154,7 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <th scope="row">Ticket ID </th>
-                                                                    <td><? echo $sql_result['ticket_id']; ?></td>
+                                                                    <td><? echo $ticketid; ?></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Assigned Engineer</th>
@@ -181,7 +179,7 @@
                                                 <!-- end of table col-lg-6 -->
                                                 <div class="col-lg-12 col-xl-6">
                                                     <div class="table-responsive">
-                                                        <table class="table">
+                                                        <table class="table m-0">
                                                             <tbody>
                                                                 <tr>
                                                                     <th scope="row">Created On</th>
@@ -300,11 +298,6 @@
                                     $material_conditionStr = implode(',', $material_condition);
 
                                     $totalMaterialCount = count($material_condition);
-
-
-
-
-
                                     $year = date('Y');
                                     $month = date('m');
                                     $targetDir = 'materialRequirement/' . $year . '/' . $month . '/' . $atmid;
@@ -317,6 +310,9 @@
 
 
 
+                                    $checkMaterialSend = mysqli_query($con, "select * from material_send where atmid='" . $atmid . "' order by id desc");
+                                    $checkMaterialSendResult = mysqli_fetch_assoc($checkMaterialSend);
+                                    $sendid = $checkMaterialSendResult['id'];
 
                                     for ($i = 0; $i < count($requiredMaterials); $i++) {
                                         $imageFileName = uniqid() . "_" . $_FILES['material_requirement_images']['name'][$i];
@@ -324,13 +320,28 @@
 
                                         move_uploaded_file($_FILES['material_requirement_images']['tmp_name'][$i], $imagePath);
 
-                                        $sql = "INSERT INTO mis_materialrequirement (mis_id, materialName, materialImage, materialCondition, status, created_at, created_by, portal)
-                                                            VALUES ('$id', '$requiredMaterials[$i]', '$imagePath', '$material_condition[$i]', '1', '$datetime', '$userid', 'Service')";
 
-                                        if (mysqli_query($con, $sql)) {
-                                        } else {
-                                            echo "Error: " . $sql . "<br>" . mysqli_error($con);
+                                        $sendDetailsSql = mysqli_query($con, "Select * from material_send_details where materialSendId='" . $sendid . "' and attribute='" . $requiredMaterials[$i] . "'");
+                                        if ($sendDetailsSqlResult = mysqli_fetch_assoc($sendDetailsSql)) {
+                                            $serialNumber = $sendDetailsSqlResult['serialNumber'];
+                                            $MaterialID = getInventoryIDBySerialNumber($serialNumber);
+
+                                            $faultyStatement = "insert into faultymaterialrequests(MaterialID,MaterialName,MaterialSerialNumber,materialImage,siteid,atmid,RequestedBy,RequestedFor,description,status,created_at,portal,ticketid) 
+                                                values('" . $MaterialID . "','" . $requiredMaterials[$i] . "','" . $serialNumber . "','" . $imagePath . "','" . $siteid . "','" . $atmid . "','" . $userid . "','" . $RailTailVendorID . "','',1,'" . $datetime . "','Clarify','".$ticketid."')";
+                                            if (mysqli_query($con, $faultyStatement)) {
+                                            } else {
+                                                echo "Error: " . $sql . "<br>" . mysqli_error($con);
+                                            }
                                         }
+
+
+                                        // $sql = "INSERT INTO mis_materialrequirement (mis_id, materialName, materialImage, materialCondition, status, created_at, created_by, portal)
+                                        //                     VALUES ('$id', '$requiredMaterials[$i]', '$imagePath', '$material_condition[$i]', '1', '$datetime', '$userid', 'Service')";
+
+                                        // if (mysqli_query($con, $sql)) {
+                                        // } else {
+                                        //     echo "Error: " . $sql . "<br>" . mysqli_error($con);
+                                        // }
                                     }
 
 
@@ -383,24 +394,25 @@
                             ?>
 
                                     <script>
-                                        swal("Great !", "Call Updated Successfully !", "success");
-
-                                        // setTimeout(function(){ 
-                                        // window.location.href="mis_details.php?id=<? echo $id; ?>";
-                                        // window.location.reload();
-                                        // }, 2000);
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Call Updated Successfully !',
+                                            confirmButtonText: 'OK'
+                                        }).then(function() {
+                                            window.location.href = "mis_details.php?id=<? echo $id; ?>";
+                                        });
                                     </script>
                                 <? } else {
-
                                     echo mysqli_error($con);
                                 ?>
-
                                     <script>
-                                        swal("Oops !", "Call Updated Error !", "error");
-
-                                        setTimeout(function() {
-                                            // window.location.href="mis_details.php?id=<? echo $id; ?>";
-                                        }, 2000);
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops !", "Call Updated Error !',
+                                            confirmButtonText: 'OK'
+                                        }).then(function() {
+                                            window.location.href = "mis_details.php?id=<? echo $id; ?>";
+                                        });
                                     </script>
 
                             <? }

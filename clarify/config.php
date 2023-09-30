@@ -21,7 +21,15 @@ if ($con->connect_error) {
 }
 
 
-function generateRandomString($length = 10) {
+function getUsers_Vendor($userid){
+    global $con;
+    $sql = mysqli_query($con,"select * from vendorusers where id='".$userid."'");
+    $sql_result = mysqli_fetch_assoc($sql);
+    return $sql_result['vendorId'];
+}
+
+function generateRandomString($length = 10)
+{
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $randomString = '';
     for ($i = 0; $i < $length; $i++) {
@@ -59,10 +67,9 @@ if (!function_exists('getUsername')) {
 
 $userid = $_SESSION['SERVICE_userid'];
 $datetime = date('Y-m-d H:i:s');
-$RailTailVendorID = $_SESSION['SERVICE_RailTailVendorID'];
+$RailTailVendorID = getUsers_Vendor($userid);
 $RailTailVendorName = getUsername($RailTailVendorID, true);
 $SERVICE_LEVEL = $_SESSION['SERVICE_level'];
-
 
 // if($userid>0){
 
@@ -170,3 +177,13 @@ function projectTeamInstallationHold($siteId, $atmid, $table)
 {
     logEvent($siteId, $atmid, 'Project', 'Installation Hold', 'Installation Hold By Project Team Engineer', $table);
 }
+
+
+function getInventoryIDBySerialNumber($serialNumber)
+{
+    global $con;
+    $sql = mysqli_query($con, "Select * from inventory where serial_no='" . $serialNumber . "'");
+    $sql_result = mysqli_fetch_assoc($sql);
+    return $sql_result['id'];
+}
+

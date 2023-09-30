@@ -58,11 +58,17 @@ if (!function_exists('getUsername')) {
 
 
 
+function getUsers_Vendor($userid){
+    global $con;
+    $sql = mysqli_query($con,"select * from vendorusers where id='".$userid."'");
+    $sql_result = mysqli_fetch_assoc($sql);
+    return $sql_result['vendorId'];
+}
 
 
 $userid = $_SESSION['PROJECT_userid'];
 $datetime = date('Y-m-d H:i:s');
-$RailTailVendorID = $_SESSION['PROJECT_RailTailVendorID'] ; 
+$RailTailVendorID = getUsers_Vendor($userid);
 $RailTailVendorName = getUsername($RailTailVendorID);
 $PROJECT_level = $_SESSION['PROJECT_level'];
 // if($userid>0){

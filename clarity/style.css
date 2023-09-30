@@ -1,3 +1,5 @@
+
+
 html {
     /*font-size:13px;*/
 }
@@ -508,6 +510,16 @@ table{
     margin-top: 0px !important;
 }
 
-.border-checkbox-section .border-checkbox-group .border-checkbox-label{
-    width: 50%;
+table.dataTable thead .sorting_asc:after {
+    content: "\f0de" !important;
+    font-family: 'Font Awesome 6 Free' !important;
+}
+
+table.dataTable thead .sorting_desc:after {
+    content: "\f0dd" !important;
+    font-family: 'Font Awesome 6 Free' !important;
+}
+.md-tabs .nav-item {
+    width: calc(100% / 3) !important;
+    text-align: center;
 }

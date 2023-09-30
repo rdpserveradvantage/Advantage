@@ -1,6 +1,4 @@
 <?php include('header.php'); ?>
-
-
 <style>
     .form-control {
         font-size: 16px !important;
@@ -76,12 +74,11 @@
 
                                 if ($ipID > 0) {
 
-                                    $checkSql = mysqli_query($con,"select * from ipconfuration where serial_no='".$serial_no."' and status=1");
-                                    if($checkSqlResult = mysqli_fetch_assoc($checkSql)){
+                                    $checkSql = mysqli_query($con, "select * from ipconfuration where serial_no='" . $serial_no . "' and status=1");
+                                    if ($checkSqlResult = mysqli_fetch_assoc($checkSql)) {
 
                                         echo '<h5> This Serial Number is already configured. </h5>';
-
-                                    }else{
+                                    } else {
                                         if (mysqli_query($con, "update inventory set isIPAssign=1 where serial_no='" . $serial_no . "'")) {
                                             echo '<h5>IP Assigned To Serial Number : ' . $serial_no . '</h5>';
                                             mysqli_query($con, "update ips set isAssign=1 where id='" . $ipID . "'");
@@ -91,27 +88,13 @@
                                             echo '<h5>Error In IP Assigned To Serial Number : ' . $serial_no . '</h5>';
                                         }
                                     }
-
-
                                 } else {
                                     echo '<h5>Something Wrong</h5>';
                                 }
-
-
                                 ?>
                             </div>
                         </div>
-
-
-
-
-                    <? }
-
-
-                    ?>
-
-
-
+                    <? } ?>
                 </div>
             </div>
         </div>
@@ -283,9 +266,7 @@
                 $(this).remove();
             });
         }, 5000); // 5000 milliseconds = 5 seconds
-
         $("#submit").css('display', 'none');
     }
 </script>
-
 <?php include('footer.php'); ?>

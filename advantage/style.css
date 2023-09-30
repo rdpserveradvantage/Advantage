@@ -519,3 +519,7 @@ table.dataTable thead .sorting_desc:after {
     content: "\f0dd" !important;
     font-family: 'Font Awesome 6 Free' !important;
 }
+.md-tabs .nav-item {
+    width: calc(100% / 3) !important;
+    text-align: center;
+}

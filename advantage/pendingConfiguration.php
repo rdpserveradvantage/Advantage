@@ -75,14 +75,24 @@
                                 $ipID = $_REQUEST['ipID'];
 
                                 if ($ipID > 0) {
-                                    if (mysqli_query($con, "update inventory set isIPAssign=1 where serial_no='" . $serial_no . "'")) {
-                                        echo '<h5>IP Assigned To Serial Number : ' . $serial_no . '</h5>';
-                                        mysqli_query($con, "update ips set isAssign=1 where id='" . $ipID . "'");
-                                        mysqli_query($con, "insert into ipconfuration(ipID, serial_no, router_ip, network_ip, atm_ip, subnet_ip, created_at, created_by, status)
-                                    values('" . $ipID . "','" . $serial_no . "','" . $router_ip . "','" . $network_ip . "','" . $atm_ip . "','" . $subnet_mask . "','" . $datetime . "','" . $userid . "',1)");
-                                    } else {
-                                        echo '<h5>Error In IP Assigned To Serial Number : ' . $serial_no . '</h5>';
+
+                                    $checkSql = mysqli_query($con,"select * from ipconfuration where serial_no='".$serial_no."' and status=1");
+                                    if($checkSqlResult = mysqli_fetch_assoc($checkSql)){
+
+                                        echo '<h5> This Serial Number is already configured. </h5>';
+
+                                    }else{
+                                        if (mysqli_query($con, "update inventory set isIPAssign=1 where serial_no='" . $serial_no . "'")) {
+                                            echo '<h5>IP Assigned To Serial Number : ' . $serial_no . '</h5>';
+                                            mysqli_query($con, "update ips set isAssign=1 where id='" . $ipID . "'");
+                                            mysqli_query($con, "insert into ipconfuration(ipID, serial_no, router_ip, network_ip, atm_ip, subnet_ip, created_at, created_by, status)
+                                        values('" . $ipID . "','" . $serial_no . "','" . $router_ip . "','" . $network_ip . "','" . $atm_ip . "','" . $subnet_mask . "','" . $datetime . "','" . $userid . "',1)");
+                                        } else {
+                                            echo '<h5>Error In IP Assigned To Serial Number : ' . $serial_no . '</h5>';
+                                        }
                                     }
+
+
                                 } else {
                                     echo '<h5>Something Wrong</h5>';
                                 }
@@ -146,6 +156,9 @@
                     if (response == 0) {
                         alert("No IP addresses available.");
                         $("#IPinfoBox").css('display', 'none');
+                    } else if (response == 2) {
+                        alert('Entered Serial Number is not Available !');
+                        $("#serial_no").val('');
                     } else {
                         var ipAddresses = JSON.parse(response);
                         $("#router_ip").val(ipAddresses.router_ip);
@@ -164,7 +177,7 @@
                         $("#serial_noOptions option[value='" + serial_no + "']").remove();
                         $("#IPinfoBox").css('display', 'flex');
                         $("#router_ip").focus();
-                                setTimeout(checkIfIPisUnassigned, 5000); 
+                        setTimeout(checkIfIPisUnassigned, 5000);
                     }
                 }
             });
@@ -183,93 +196,96 @@
 </script>
 
 <style>
-        .custom-alert {
-            position: fixed;
-            top: 10%;
-            right: 2%;
-            z-index: 1100;
-            background: #404e67;
-            color: white;
-            width: 20%;
-      animation: shake 0.5s; /* Apply the shake animation */
+    .custom-alert {
+        position: fixed;
+        top: 10%;
+        right: 2%;
+        z-index: 1100;
+        background: #404e67;
+        color: white;
+        width: 20%;
+        animation: shake 0.5s;
+        /* Apply the shake animation */
+    }
+
+    @keyframes shake {
+        0% {
+            transform: translateX(0);
         }
 
-        @keyframes shake {
-            0% {
-                transform: translateX(0);
-            }
-            25% {
-                transform: translateX(-5px);
-            }
-            50% {
-                transform: translateX(5px);
-            }
-            75% {
-                transform: translateX(-5px);
-            }
-            100% {
-                transform: translateX(5px);
-            }
+        25% {
+            transform: translateX(-5px);
         }
-    </style>
+
+        50% {
+            transform: translateX(5px);
+        }
+
+        75% {
+            transform: translateX(-5px);
+        }
+
+        100% {
+            transform: translateX(5px);
+        }
+    }
+</style>
 
 <script>
-
-        function checkIfIPisUnassigned() {
-            var ipID = $("#ipID").val();
-            $.ajax({
-                type: 'GET',
-                url: 'checkIfIPisunAssign.php',
-                data: 'ipID='+ipID,
-                success: function (response) {
-                    console.log(response)
-                    if (response == 1) {
-                        showTickMark();
-                    } else {
-                        showCross();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
+    function checkIfIPisUnassigned() {
+        var ipID = $("#ipID").val();
+        $.ajax({
+            type: 'GET',
+            url: 'checkIfIPisunAssign.php',
+            data: 'ipID=' + ipID,
+            success: function(response) {
+                console.log(response)
+                if (response == 1) {
+                    showTickMark();
+                } else {
+                    showCross();
                 }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
+    function showTickMark() {
+        // Create a Bootstrap alert with a tick mark icon
+        var alert = '<div class="alert alert-success custom-alert" role="alert">' +
+            '  <i class="fas fa-check-circle"></i> IP is available' +
+            '</div>';
+        // Append the alert to the page body
+        $('body').append(alert);
+
+        // Auto-hide the alert after 5 seconds
+        setTimeout(function() {
+            $('.custom-alert').fadeOut(1000, function() {
+                $(this).remove();
             });
-        }
-        function showTickMark() {
-            // Create a Bootstrap alert with a tick mark icon
-            var alert = '<div class="alert alert-success custom-alert" role="alert">' +
-                        '  <i class="fas fa-check-circle"></i> IP is available' +
-                        '</div>';
-            // Append the alert to the page body
-            $('body').append(alert);
-            
-            // Auto-hide the alert after 5 seconds
-            setTimeout(function () {
-                $('.custom-alert').fadeOut(1000, function () {
-                    $(this).remove();
-                });
-            }, 5000); // 5000 milliseconds = 5 seconds
-            $("#submit").css('display', 'block');
-        }
+        }, 5000); // 5000 milliseconds = 5 seconds
+        $("#submit").css('display', 'block');
+    }
 
-        function showCross() {
-            // Create a Bootstrap alert with a cross icon
-            var alert = '<div class="alert alert-danger custom-alert" role="alert">' +
-                        '  <i class="fas fa-times-circle"></i> IP is not available' +
-                        '</div>';
-            // Append the alert to the page body
-            $('body').append(alert);
-            
-            // Auto-hide the alert after 5 seconds
-            setTimeout(function () {
-                $('.custom-alert').fadeOut(1000, function () {
-                    $(this).remove();
-                });
-            }, 5000); // 5000 milliseconds = 5 seconds
-            
-            $("#submit").css('display', 'none');
-        }
+    function showCross() {
+        // Create a Bootstrap alert with a cross icon
+        var alert = '<div class="alert alert-danger custom-alert" role="alert">' +
+            '  <i class="fas fa-times-circle"></i> IP is not available' +
+            '</div>';
+        // Append the alert to the page body
+        $('body').append(alert);
 
+        // Auto-hide the alert after 5 seconds
+        setTimeout(function() {
+            $('.custom-alert').fadeOut(1000, function() {
+                $(this).remove();
+            });
+        }, 5000); // 5000 milliseconds = 5 seconds
 
-        </script>
-    
+        $("#submit").css('display', 'none');
+    }
+</script>
+
 <?php include('footer.php'); ?>

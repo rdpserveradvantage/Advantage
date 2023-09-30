@@ -10,7 +10,7 @@ if (isset($_POST['selectedItems'])) {
         $id = $sql_result['id'];
         $siteid = $sql_result['siteid']; 
         $atmid = $sql_result['atmid'] ;
-        $requestBy = $sql_result['requestBy'] ;
+        $requestBy = $VENDOR_email ;
         $requestByPortal = $sql_result['requestByPortal'] ;
         $requestFor = $sql_result['requestFor'] ;
         $requestForPortal = $sql_result['requestForPortal'] ;
@@ -22,7 +22,7 @@ if (isset($_POST['selectedItems'])) {
         $ticketId = $sql_result['ticketId'] ;	
 
         $statement = "insert into generatefaultymaterialrequest(siteid,atmid,requestBy,requestByPortal,requestFor,requestForPortal,materialRequestLevel,description,created_at,created_by,status,ticketId) 
-        values('".$siteid."','".$atmid."','".$requestBy."','".$requestByPortal."','".$requestFor."','".$requestForPortal."','2','".$description."','".$datetime."','".$userid."','1','".$ticketId."')
+        values('".$siteid."','".$atmid."','".$requestBy."','vendor','1','advantage','1','".$description."','".$datetime."','".$userid."','1','".$ticketId."')
         ";
 
         if(mysqli_query($con,$statement)){

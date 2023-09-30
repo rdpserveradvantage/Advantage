@@ -73,6 +73,7 @@ $userLevel = $_SESSION['VENDOR_level'];
 $datetime = date('Y-m-d H:i:s');
 $RailTailVendorID = $_SESSION['VENDOR_RailTailVendorID'] ; 
 $RailTailVendorName = getVendorName($RailTailVendorID);
+$VENDOR_email = $_SESSION['VENDOR_email'];
 
 if($userid>0){
                 

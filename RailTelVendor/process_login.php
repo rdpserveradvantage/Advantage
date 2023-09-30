@@ -27,6 +27,8 @@ if($uname && $password){
                 $_SESSION['VENDOR_auth']=1;
                 $_SESSION['VENDOR_isVendorPortal'] = 1 ; 
                 $_SESSION['VENDOR_username']=$sql_result['name'];
+                $_SESSION['VENDOR_email']=$sql_result['uname'];
+
                 $_SESSION['VENDOR_userid'] = $sql_result['id'];
                 $_SESSION['VENDOR_level'] = $sql_result['level'];
                 $_SESSION['VENDOR_RailTailVendorID'] = $sql_result['vendorId'];

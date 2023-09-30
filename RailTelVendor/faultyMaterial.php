@@ -15,6 +15,8 @@
                         <div class="card-block">
 
                             <?
+
+                            var_dump($_SESSION);
                             echo $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestFor='" . $RailTailVendorID . "' and requestForPortal IN ('vendor') and materialRequestLevel=2";
                             $sql = mysqli_query($con, $statement);
 

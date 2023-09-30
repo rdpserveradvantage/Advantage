@@ -20,12 +20,10 @@ $softwareDependency = $_REQUEST['softwareDependency'];
 $upsIssue = $_REQUEST['upsIssue'];
 $engineerName = $_REQUEST['engineerName'];
 $engineerid = $_REQUEST['engineerid'];
+$holdRemark = $_REQUEST['holdRemark'];
 
-$sql = "INSERT INTO holdInstallation (siteid, atmid, vendorId, vendorName, customerDependency,powerIssue,upsIssue,electricalDependency, hardwareDependency,  softwareDependency, engineerId,engineerName,created_at,created_by,status,portal) 
-        VALUES ('".$siteid."', '".$atmid."', '".$vendorId."', '".$vendorName."', '".$dependency."','".$powerIssue."','".$upsIssue."','".$electricalIssue."',  '".$hardwareDependency."', '".$softwareDependency."', '".$engineerid."','".$engineerName."','".$datetime."','".$userid."',1,'Project')" ;
-
-
-
+$sql = "INSERT INTO holdInstallation (siteid, atmid, vendorId, vendorName, customerDependency,powerIssue,upsIssue,electricalDependency, hardwareDependency,  softwareDependency, engineerId,engineerName,created_at,created_by,status,portal,holdRemark) 
+        VALUES ('".$siteid."', '".$atmid."', '".$vendorId."', '".$vendorName."', '".$dependency."','".$powerIssue."','".$upsIssue."','".$electricalIssue."',  '".$hardwareDependency."', '".$softwareDependency."', '".$engineerid."','".$engineerName."','".$datetime."','".$userid."',1,'Project','".$holdRemark."')" ;
 
 if (mysqli_query($con,$sql)) {
     echo json_encode(200);

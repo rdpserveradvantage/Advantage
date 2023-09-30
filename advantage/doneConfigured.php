@@ -39,8 +39,8 @@
 
                     if (isset($_REQUEST['serial_no']) && $_REQUEST['serial_no'] != '') {
                         $serial_no = $_REQUEST['serial_no'];
-                        $atm_sql .= "and serial_no like '" . $serial_no . "'";
-                        $sqlappCount .= "and serial_no like '" . $serial_no . "'";
+                        $atm_sql .= "and serial_no like '%" . $serial_no . "%'";
+                        $sqlappCount .= "and serial_no like '%" . $serial_no . "%'";
                     }
                     
 

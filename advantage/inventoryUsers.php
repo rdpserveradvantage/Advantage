@@ -103,7 +103,7 @@
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <br>
-                                                    <input type="submit" name="submit" class="btn btn-danger">
+                                                    <input type="submit" name="submit" class="btn btn-primary">
                                                 </div>                                                
                                             </div>
 
@@ -121,12 +121,12 @@
                                     <div class="card-body" style="overflow:auto;">
                                         <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
                                             <thead>
-                                                <tr>
+                                                <tr class="table-primary">
                                                     <th>#</th>
-                                                    <th>User ID</th>
+                                                    <!--<th>User ID</th>-->
                                                     <th>Name</th>
                                                     <th>Desgination</th>
-                                                    <th>Username</th>
+                                                    <!--<th>Username</th>-->
                                                     <th>Password</th>
                                                     <th>Contact No.</th>
                                                     <th>Status</th>
@@ -163,11 +163,11 @@
                                                 ?>
                                                     <tr>
                                                         <td><? echo $i; ?></td>
-                                                        <td><? echo $sql_result['id']; ?></td>
-                                                        <td><? echo $sql_result['name']; ?></td>
+                                                        <!--<td><? echo $sql_result['id']; ?></td>-->
+                                                        <td class="strong"><? echo $sql_result['name']; ?></td>
                                                         <td><? echo $designation; ?></td>
                                                         <td style="text-transform: initial;"><? echo $sql_result['uname']; ?></td>
-                                                        <td style="text-transform: initial;"><? echo $sql_result['password']; ?></td>
+                                                        <!--<td style="text-transform: initial;"><? echo $sql_result['password']; ?></td>-->
                                                         <td style="text-transform: initial;"><? echo $sql_result['contact']; ?></td>
                                                         <td class="<? echo $status_class; ?>"><? echo $user_status;?></td>
                                                         <td>
@@ -214,3 +214,15 @@ function validInput(e) {
 <? include('footer.php'); ?>
 
 
+
+<script src="./datatable/jquery.dataTables.js"></script>
+<script src="./datatable/dataTables.bootstrap.js"></script>
+<script src="./datatable/dataTables.buttons.min.js"></script>
+<script src="./datatable/buttons.flash.min.js"></script>
+<script src="./datatable/jszip.min.js"></script>
+
+<script src="./datatable/pdfmake.min.js"></script>
+<script src="./datatable/vfs_fonts.js"></script>
+<script src="./datatable/buttons.html5.min.js"></script>
+<script src="./datatable/buttons.print.min.js"></script>
+<script src="./datatable/jquery-datatable.js"></script>

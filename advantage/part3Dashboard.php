@@ -94,7 +94,8 @@ if ($noRecordsFound) {
                       <span style="color:red;font-size: 10px;">(Max 7 Records here. Click the below button for more.. )</span>
                       <hr />
                       <div class="pendingInstallationDashboard overflow_auto">
-                          <table class="table table-hover table-styling table-xs">
+                          <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs">
+                          
                               <thead>
                                   <tr class="table-primary">
                                       <th> Vendor </th>

@@ -126,7 +126,7 @@
                                 <thead>
                                     <tr class="table-primary">
                                         <th>#</th>
-                                        <th>User ID</th>
+                                        <!--<th>User ID</th>-->
 
                                         <th>Name</th>
                                         <th>Desgination</th>
@@ -165,9 +165,9 @@
                                     ?>
                                         <tr>
                                             <td><? echo $i; ?></td>
-                                            <td><? echo $sql_result['id']; ?></td>
+                                            <!--<td><? echo $sql_result['id']; ?></td>-->
 
-                                            <td><? echo $sql_result['name']; ?></td>
+                                            <td class="strong"><? echo $sql_result['name']; ?></td>
                                             <td><? echo $designation; ?></td>
                                             <td style="text-transform: initial;"><? echo $sql_result['uname']; ?></td>
 
@@ -202,7 +202,7 @@
                                     <thead>
                                         <tr class="table-primary">
                                             <th>#</th>
-                                            <th>User ID</th>
+                                            <!--<th>User ID</th>-->
                                             <th>Name</th>
                                             <th>Desgination</th>
                                             <th>Username</th>
@@ -235,8 +235,8 @@
                                         ?>
                                             <tr>
                                                 <td><? echo $i; ?></td>
-                                                <td><? echo $sql_result['id']; ?></td>
-                                                <td><? echo $sql_result['name']; ?></td>
+                                                <!--<td><? echo $sql_result['id']; ?></td>-->
+                                                <td class="strong"><? echo $sql_result['name']; ?></td>
                                                 <td><? echo $designation; ?></td>
                                                 <td style="text-transform: initial;"><? echo $sql_result['uname']; ?></td>
 

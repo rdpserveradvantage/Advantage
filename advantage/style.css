@@ -1,3 +1,5 @@
+
+
 html {
     /*font-size:13px;*/
 }
@@ -506,4 +508,14 @@ table{
 
 .card .card-header span{
     margin-top: 0px !important;
+}
+
+table.dataTable thead .sorting_asc:after {
+    content: "\f0de" !important;
+    font-family: 'Font Awesome 6 Free' !important;
+}
+
+table.dataTable thead .sorting_desc:after {
+    content: "\f0dd" !important;
+    font-family: 'Font Awesome 6 Free' !important;
 }

@@ -52,7 +52,7 @@
                                          if(mysqli_query($con,$sql)){ ?>
                                              <script>
                                                  alert('Updated !');
-                                                 window.location.href="allotmenu_perm.php?id=<? echo $userid;?>&table=<? echo $table; ?>";
+                                                 window.location.href="add_user.php";
                                              </script>
                                         <?      }else{ ?>
                                            <script>
@@ -85,10 +85,11 @@
                                             ?>
                                                 
                                               
-                                                  <li>
+                                                  <li class="card-block">
 
 
-                                                     <input type="checkbox" class="main_menu" value="<? echo $main_id;?>"> <? echo $mainsql_result['name'];?>   
+                                                     <input type="checkbox" class="main_menu" value="<? echo $main_id;?>">
+                                                     <span class="strong"><? echo $mainsql_result['name'];?></span>   
                                                   
                                               
                                                 <!--<br>-->
@@ -107,6 +108,7 @@
                                                             <!--<br>-->
                                                         <? } ?>
                                                 </ul>
+                                                <hr />
                                                 </li>
                                             <? } ?>
                                             </ul>

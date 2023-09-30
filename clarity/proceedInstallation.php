@@ -766,11 +766,19 @@ if (mysqli_num_rows($sealSql) > 0) {
 
                                         <select id="hardwareDependency" name="hardwareDependency">
                                             <option value="">-- Select -- </option>
-                                            <option>Router Faulty</option>
-                                            <option>Antenna Faulty</option>
-                                            <option>Adaptor Faulty</option>
-                                            <option>Lan cable Faulty</option>
-                                            <option>SIM Card Faulty</option>
+                                            
+                                            <?
+                                            $getboqsql = mysqli_query($con,"select * from boq where needSerialNumber=1 and status=1");
+                                            while($getboqsqlResult = mysqli_fetch_assoc($getboqsql)){
+                                                $boqName = $getboqsqlResult['value'];
+                                                echo "<option>$boqName</option>";
+                                            }
+                                            ?>
+                                            <!--<option>Router Faulty</option>-->
+                                            <!--<option>Antenna Faulty</option>-->
+                                            <!--<option>Adaptor Faulty</option>-->
+                                            <!--<option>Lan cable Faulty</option>-->
+                                            <!--<option>SIM Card Faulty</option>-->
                                         </select>
 
                                         <hr />
@@ -786,7 +794,12 @@ if (mysqli_num_rows($sealSql) > 0) {
                                         </select>
 
                                         <br />
-                                         <button class="btn btn-danger" type="button" onclick="submitHoldReason()" id="submitHoldReason">Submit</button>
+                                        
+                                        <input type="text" name="holdRemark" class="form-control" placeholder="Enter Remarks if any ... ">
+                                        
+                                        <br />
+                                        
+                                        <button class="btn btn-danger" type="button" onclick="submitHoldReason()" id="submitHoldReason">Submit</button>
                                           <div id="loadingIndicatorHoldReason" style="display: none;">Loading...</div>
                                     </form>
                                 </div>

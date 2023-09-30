@@ -1,16 +1,9 @@
-<?php include('header.php');
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
-?>
+<?php include('header.php');?>
 
 <style>
-    .border-checkbox-section .border-checkbox-group .border-checkbox-label{
-    width: 50%;
-}
+    .border-checkbox-section .border-checkbox-group .border-checkbox-label {
+        width: 50%;
+    }
 </style>
 
 <link rel="stylesheet" type="text/css" href="./datatable/dataTables.bootstrap.css">
@@ -21,10 +14,8 @@ error_reporting(E_ALL);
                 <div class="page-body">
                     <div class="card">
                         <div class="card-block">
-
                             <h5>SITE INFORMATION</h5>
                             <hr>
-
                             <?
                             $id = $_GET['id'];
                             $sql = mysqli_query($con, "select * from mis_details  where id= '" . $id . "'");

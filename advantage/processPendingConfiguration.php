@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sealNumber = $_POST['sealNumber'];
 
     // Check if ATM ID exists in the "sites" table
-    $checkQuery = mysqli_query($con, "SELECT COUNT(*) AS count FROM sites WHERE atmid = '" . $atmid . "'");
+    $checkQuery = mysqli_query($con, "SELECT * FROM sites WHERE atmid = '" . $atmid . "'");
     if ($checkQueryResult = mysqli_fetch_assoc($checkQuery)) {
         $insertQuery = "INSERT INTO routerConfiguration (atmid, serialNumber, sealNumber, status, created_at, created_by)
                         VALUES ('" . $atmid . "', '" . $serialNumber . "', '" . $sealNumber . "', '1', '" . $datetime . "', '" . $userid . "')";

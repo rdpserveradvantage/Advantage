@@ -100,9 +100,9 @@ $totalPages = ceil($totalRecords / $recordsPerPage);
             <div class="pendingInstallationDashboard overflow_auto">
                 
             
-                <table class="table table-hover table-styling table-xs">
-                    <thead>
-                        <tr class="table-primary">
+                  <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs">
+                      <thead>
+                          <tr class="table-primary">
                             <th> Vendor </th>
                             <th> Atmid </th>
                             <th> Pending From </th>

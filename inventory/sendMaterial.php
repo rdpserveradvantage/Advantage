@@ -16,7 +16,7 @@ function getSitesInfo($siteid, $parameter)
             <div class="page-wrapper">
                 <div class="page-body">
                     <div class="card">
-                        <div class="card-block">
+                        <div class="card-block" style="overflow:auto;">
                             <h5>Material Request</h5>
                             <hr />
 

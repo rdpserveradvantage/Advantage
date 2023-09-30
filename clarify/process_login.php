@@ -16,6 +16,7 @@ if ($username && $password) {
         $_SESSION['SERVICE_auth'] = true;
         $_SESSION['SERVICE_isServicePortal'] = 1;
         $_SESSION['SERVICE_username'] = $response['user']['name'];
+        $_SESSION['SERVICE_email'] = $response['user']['uname'];
         $_SESSION['SERVICE_userid'] = $response['user']['id'];
         $_SESSION['SERVICE_level'] = $response['user']['level'];
         

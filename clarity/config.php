@@ -71,6 +71,7 @@ $datetime = date('Y-m-d H:i:s');
 $RailTailVendorID = getUsers_Vendor($userid);
 $RailTailVendorName = getUsername($RailTailVendorID);
 $PROJECT_level = $_SESSION['PROJECT_level'];
+$PROJECT_email = $_SESSION['PROJECT_email'];
 // if($userid>0){
                 
 //         $assign_cust_sql = mysqli_query($con,"select cust_id,permission from vendorUsers where id ='".$userid."'");

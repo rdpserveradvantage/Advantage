@@ -17,6 +17,8 @@ if ($username && $password) {
         $_SESSION['PROJECT_auth'] = true;
         $_SESSION['PROJECT_isServicePortal'] = 1;
         $_SESSION['PROJECT_username'] = $response['user']['name'];
+        $_SESSION['PROJECT_email'] = $response['user']['uname'];
+        
         $_SESSION['PROJECT_userid'] = $response['user']['id'];
         $_SESSION['PROJECT_level'] = $response['user']['level'];
         

@@ -10,8 +10,8 @@
                         <div class="card-block">
 
                             <?
-
-                            $sql = mysqli_query($con, "select * from faultymaterialrequests where RequestedBy='" . $userid . "' and portal in ('Clarity','Clarify')");
+                            echo $statement = "select * from generatefaultymaterialrequest where requestBy='" . $PROJECT_email . "' and requestByPortal in ('Clarity','Clarify')" ; 
+                            $sql = mysqli_query($con, $statement);
                             if (mysqli_num_rows($sql) > 0) {
                                 echo '
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs">
@@ -35,16 +35,18 @@
                                     $atmid = $sql_result['atmid'];
 
                                     echo "<tr>
-                                    <td>$i</td>
+                                    <td>$i &nbsp;&nbsp;<input type='checkbox' name='materialId[]'</td>
                                     <td>$MaterialName</td>
                                     <td>$MaterialSerialNumber</td>
                                     <td>$atmid</td>
-                                    <td>Action</td>
+                                    <td><a href='#'>Dispatch Item </a></td>
                                     </tr>";
                                     $i++;
                                 }
                                 echo '</tbody>
                                 </table>';
+                                echo '<a href="#" class="btn btn-primary">Dispatch Checked Item </a>';
+
                             } else {
                                 echo 'No Data Found ! ';
                             }

@@ -35,16 +35,23 @@
                                     $atmid = $sql_result['atmid'];
 
                                     echo "<tr>
-                                    <td>$i</td>
+                                    <td>$i &nbsp;&nbsp;<input type='checkbox' name='materialId[]'></td>
                                     <td>$MaterialName</td>
                                     <td>$MaterialSerialNumber</td>
                                     <td>$atmid</td>
-                                    <td>Action</td>
+                                    <td>
+                                    <a href='#'>Send Replacement</a> | 
+                                    <a href='#'>Send To Advantage</a>
+
+                                    </td>
                                     </tr>";
                                     $i++;
                                 }
                                 echo '</tbody>
                                 </table>';
+                                echo '<a href="#" class="btn btn-primary">Dispatch Checked Item To Advantage</a> |';
+                                echo '<a href="#" class="btn btn-warning">Send Replacement</a> ';
+
                             } else {
                                 echo 'No Data Found ! ';
                             }

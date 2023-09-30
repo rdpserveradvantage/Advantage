@@ -20,6 +20,7 @@ if ($con->connect_error) {
 
 }
 
+$SERVICE_email = $_SESSION['SERVICE_email'];
 
 function getUsers_Vendor($userid){
     global $con;

@@ -20,8 +20,12 @@ if($atmid){
             $engname =mysqli_query($con,"select name from mis_loginusers where id = '".$eng_user_id."' ");
             $engname_result = mysqli_fetch_assoc($engname);
             $_engname = $engname_result['name'];
-            
-            $data = ['customer'=>$customer,'bank'=>$bank,'location'=>$location,'city'=>$city,'state'=>$state,'region'=>$region,'branch'=>$branch,'bm'=>$bm,'engineer'=>$_engname,'lho'=>$lho] ; 
+            $networkIP = $sql_result['networkIP'];
+            $routerIP = $sql_result['routerIP'];
+            $atmIP = $sql_result['atmIP'];
+            $data = ['customer'=>$customer,'bank'=>$bank,'location'=>$location,'city'=>$city,'state'=>$state,'region'=>$region,'branch'=>$branch,'bm'=>$bm,'engineer'=>$_engname,'lho'=>$lho
+            ,'networkIP'=>$networkIP,'routerIP'=>$routerIP,'atmIP'=>$atmIP
+            ] ; 
         
         if($data){
             echo json_encode($data);    

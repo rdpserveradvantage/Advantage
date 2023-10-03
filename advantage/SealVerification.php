@@ -20,38 +20,38 @@
                 <div class="page-body">
 
 
-                <?
-                $statement = "select * from sealVerification where status=1 and isVerify in (0,1) " ; 
-                $sqlappCount = "select count(1) as totalCount from sealVerification where status=1 and isVerify in (0,1) ";
+                    <?
+                    $statement = "select * from sealVerification where status=1 and isVerify in (0,1,2) ";
+                    $sqlappCount = "select count(1) as totalCount from sealVerification where status=1 and isVerify in (0,1,2) ";
 
-                if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
-                    $atmid = $_REQUEST['atmid'];
-                    $statement .= "and atmid like '%" . trim($atmid) . "%'";
-                    $sqlappCount .= "and atmid like '%" . trim($atmid) . "%'";
-                }
-
-
-                $statement .= "order by id desc" ;
-                
-                $page_size = 10;
-                $result = mysqli_query($con, $sqlappCount);
-                $row = mysqli_fetch_assoc($result);
-                $total_records = $row['totalCount'];
-
-                $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-                $offset = ($current_page - 1) * $page_size;
-                $total_pages = ceil($total_records / $page_size);
-                $window_size = 10;
-                $start_window = max(1, $current_page - floor($window_size / 2));
-                $end_window = min($start_window + $window_size - 1, $total_pages);
-                $sql_query = "$statement LIMIT $offset, $page_size";
+                    if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
+                        $atmid = $_REQUEST['atmid'];
+                        $statement .= "and atmid like '%" . trim($atmid) . "%'";
+                        $sqlappCount .= "and atmid like '%" . trim($atmid) . "%'";
+                    }
 
 
+                    $statement .= "order by id desc";
 
-                ?>
+                    $page_size = 10;
+                    $result = mysqli_query($con, $sqlappCount);
+                    $row = mysqli_fetch_assoc($result);
+                    $total_records = $row['totalCount'];
+
+                    $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+                    $offset = ($current_page - 1) * $page_size;
+                    $total_pages = ceil($total_records / $page_size);
+                    $window_size = 10;
+                    $start_window = max(1, $current_page - floor($window_size / 2));
+                    $end_window = min($start_window + $window_size - 1, $total_pages);
+                    $sql_query = "$statement LIMIT $offset, $page_size";
+// echo $statement ; 
+
+
+                    ?>
 
                     <div class="card" id="filter">
-                        <div class="card-block">
+                        <div class="card-block" style="overflow:auto;">
                             <form action="<? $_SERVER['PHP_SELF']; ?>" method="POST">
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div class="card">
-                    <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show
+                        <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show
                             Filters</a>
                         <div class="card-header">
                             <h5>Total Records: <strong class="record-count">
@@ -84,7 +84,7 @@
                             </form>
 
                         </div>
-                        <div class="card-block">
+                        <div class="card-block" style="overflow:auto;">
                             <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
                                 <thead>
                                     <tr class="table-primary">
@@ -106,7 +106,7 @@
                                         $created_by = $sql_result['created_by'];
                                         $engineerName = getUsername($created_by, true);
                                         $isVerify = $sql_result['isVerify'];
-                                        ?>
+                                    ?>
                                         <tr>
                                             <td>
                                                 <? echo $counter; ?>
@@ -118,17 +118,14 @@
                                                 <?= $engineerName; ?>
                                             </td>
                                             <td>
-                                                <button class="view-images-btn btn btn-primary" data-atmid="<?= $atmid; ?>"
-                                                    data-id="<?= $id; ?>">
+                                                <button class="view-images-btn btn btn-primary" data-atmid="<?= $atmid; ?>" data-id="<?= $id; ?>">
                                                     View Images
                                                 </button>
                                             </td>
                                             <td>
-                                                <a
-                                                    href="sealVerificationStatus.php?id=<? echo $id; ?>&&isVerfy=1&&siteid=<? echo $siteid; ?>&&atmid=<? echo $atmid; ?>">Approve</a>
+                                                <a href="sealVerificationStatus.php?id=<? echo $id; ?>&&isVerfy=1&&siteid=<? echo $siteid; ?>&&atmid=<? echo $atmid; ?>">Approve</a>
                                                 |
-                                                <a
-                                                    href="sealVerificationStatus.php?id=<? echo $id; ?>&&isVerfy=2&&siteid=<? echo $siteid; ?>&&atmid=<? echo $atmid; ?>">Reject</a>
+                                                <a href="sealVerificationStatus.php?id=<? echo $id; ?>&&isVerfy=2&&siteid=<? echo $siteid; ?>&&atmid=<? echo $atmid; ?>">Reject</a>
                                                 <?
                                                 if ($isVerify == 0) {
                                                     echo ' | Pending ';
@@ -142,7 +139,7 @@
                                             </td>
 
                                         </tr>
-                                        <? $counter++;
+                                    <? $counter++;
                                     } ?>
                                 </tbody>
                             </table>
@@ -158,36 +155,35 @@
 
                         <?
 
-$atmid = $_REQUEST['atmid'];
+                        $atmid = $_REQUEST['atmid'];
 
-echo '<div class="pagination"><ul>';
-if ($start_window > 1) {
+                        echo '<div class="pagination"><ul>';
+                        if ($start_window > 1) {
 
-    echo "<li><a href='?page=1&&atmid=$atmid'>First</a></li>";
-    echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '">Prev</a></li>';
-}
+                            echo "<li><a href='?page=1&&atmid=$atmid'>First</a></li>";
+                            echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '">Prev</a></li>';
+                        }
 
-for ($i = $start_window; $i <= $end_window; $i++) {
-    ?>
-    <li class="<? if ($i == $current_page) {
-        echo 'active';
-    } ?>">
-        <a
-            href="?page=<?= $i; ?>&&atmid=<?= $atmid; ?>">
-            <?= $i; ?>
-        </a>
-    </li>
+                        for ($i = $start_window; $i <= $end_window; $i++) {
+                        ?>
+                            <li class="<? if ($i == $current_page) {
+                                            echo 'active';
+                                        } ?>">
+                                <a href="?page=<?= $i; ?>&&atmid=<?= $atmid; ?>">
+                                    <?= $i; ?>
+                                </a>
+                            </li>
 
-<? }
+                        <? }
 
-if ($end_window < $total_pages) {
+                        if ($end_window < $total_pages) {
 
-    echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '">Next</a></li>';
-    echo '<li><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '">Last</a></li>';
-}
-echo '</ul></div>';
+                            echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '">Next</a></li>';
+                            echo '<li><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '">Last</a></li>';
+                        }
+                        echo '</ul></div>';
 
-?>
+                        ?>
 
 
 
@@ -204,8 +200,7 @@ echo '</ul></div>';
 
 
 <!-- The Bootstrap modal to display images -->
-<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -232,7 +227,7 @@ echo '</ul></div>';
     const modalBody = document.getElementById('modalBody');
 
     viewImagesBtns.forEach(btn => {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function() {
             const id = this.dataset.id;
             const atmid = this.dataset.atmid;
             atmIdSpan.textContent = atmid;
@@ -242,7 +237,7 @@ echo '</ul></div>';
             const xhr = new XMLHttpRequest();
             xhr.open('GET', `get_images.php?id=${id}`, true);
 
-            xhr.onload = function () {
+            xhr.onload = function() {
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
                     if (response.success && response.images.length > 0) {
@@ -279,15 +274,15 @@ echo '</ul></div>';
 
 
 <script>
+    $("#show_filter").css('display', 'none');
+    $("#hide_filter").on('click', function() {
+        $("#filter").css('display', 'none');
+        $("#show_filter").css('display', 'block');
+    });
+    $("#show_filter").on('click', function() {
+        $("#filter").css('display', 'block');
         $("#show_filter").css('display', 'none');
-        $("#hide_filter").on('click', function() {
-            $("#filter").css('display', 'none');
-            $("#show_filter").css('display', 'block');
-        });
-        $("#show_filter").on('click', function() {
-            $("#filter").css('display', 'block');
-            $("#show_filter").css('display', 'none');
-        });
-    </script>
+    });
+</script>
 
 <? include('footer.php'); ?>

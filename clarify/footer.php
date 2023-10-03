@@ -23,5 +23,4 @@
 
 </body>
 
-<!-- Mirrored from demo.dashboardpack.com/adminty-html/default/dashboard-analytics.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 05 Jul 2023 10:34:59 GMT -->
 </html>

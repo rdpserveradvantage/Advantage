@@ -74,9 +74,7 @@ $datetime = date('Y-m-d H:i:s');
 $RailTailVendorID = $_SESSION['VENDOR_RailTailVendorID'] ; 
 $RailTailVendorName = getVendorName($RailTailVendorID);
 $VENDOR_email = $_SESSION['VENDOR_email'];
-
-if($userid>0){
-                
+if($userid>0){                
         $assign_cust_sql = mysqli_query($con,"select cust_id,permission from mis_loginusers where id ='".$userid."'");
         if($assign_cust_sql_result = mysqli_fetch_assoc($assign_cust_sql)){
           $assigned_customer =   $assign_cust_sql_result['cust_id'];
@@ -278,5 +276,3 @@ function fetchNotificationsAndCount($recipientType, $userid)
     }
 }
 }
-
-?>

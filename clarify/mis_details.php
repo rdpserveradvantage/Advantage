@@ -245,8 +245,16 @@
                                             <option value="schedule">Schedule</option>
                                             <option value="material_dispatch">Material Dispatch</option>
                                             <option value="material_in_process">Material in Process</option>
+                                            <option value="replace_with_available">Replace With Available Material</option>
                                             <option value="close">Close</option>
-                                        <?php } ?>
+                                        <?php }
+
+                                        if ($mis_status == 'replace_with_available') { ?>
+                                            <option value="">Select</option>
+                                            <option value="close">Close</option>
+                                        <? }
+
+                                        ?>
 
 
 
@@ -259,7 +267,11 @@
 
 
 
-
+                            <style>
+                                html {
+                                    text-transform: inherit !important;
+                                }
+                            </style>
                             <?
 
                             if (isset($_POST['status'])) {
@@ -315,8 +327,8 @@
                                     $sendid = $checkMaterialSendResult['id'];
 
 
-                                    $faultyMaterialRequestSql = "insert into generatefaultymaterialrequest(siteid,atmid,requestBy,requestByPortal,requestFor,requestForPortal,materialRequestLevel,description,created_at,created_by,status,ticketId)
-                                    values('" . $siteid . "','" . $atmid . "','" . $SERVICE_email . "','Clarify','" . $RailTailVendorID . "','vendor',3,'','" . $datetime . "','" . $userid . "',1,'" . $ticketid . "');
+                                    $faultyMaterialRequestSql = "insert into generatefaultymaterialrequest(siteid,atmid,requestBy,requestByPortal,requestFor,requestForPortal,materialRequestLevel,description,created_at,created_by,status,ticketId,materialRequestType,mis_id)
+                                    values('" . $siteid . "','" . $atmid . "','" . $SERVICE_email . "','Clarify','" . $RailTailVendorID . "','vendor',3,'','" . $datetime . "','" . $userid . "',1,'" . $ticketid . "','clarify','" . $mis_id . "');
                                     ";
                                     if (mysqli_query($con, $faultyMaterialRequestSql)) {
                                         $faultyRequestID = $con->insert_id;
@@ -336,8 +348,8 @@
                                             $serialNumber = $sendDetailsSqlResult['serialNumber'];
                                             $MaterialID = getInventoryIDBySerialNumber($serialNumber);
 
-                                            $faultyDetailsSql = "insert into generatefaultymaterialrequestdetails(requestId, MaterialID, MaterialName, MaterialSerialNumber, materialImage, created_at, created_by, status)
-                                            values('" . $faultyRequestID . "','" . $MaterialID . "','" . $requiredMaterials[$i] . "','" . $serialNumber . "','" . $imagePath . "','" . $datetime . "','" . $userid . "',1)";
+                                            $faultyDetailsSql = "insert into generatefaultymaterialrequestdetails(requestId, MaterialID, MaterialName, MaterialSerialNumber, materialImage, created_at, created_by, status , materialRequestType,mis_id)
+                                            values('" . $faultyRequestID . "','" . $MaterialID . "','" . $requiredMaterials[$i] . "','" . $serialNumber . "','" . $imagePath . "','" . $datetime . "','" . $userid . "',1,'clarify','" . $mis_id . "')";
                                             if (mysqli_query($con, $faultyDetailsSql)) {
                                             } else {
                                                 echo "Error: " . $sql . "<br>" . mysqli_error($con);
@@ -389,6 +401,15 @@
 
                                     $statement = "insert into mis_history (mis_id,type,attachment,remark,status,created_at,created_by,dependency,ProblemOccurs) 
                                                 values('" . $id . "','" . $status . "','" . $link . "','" . $remark . "','1','" . $date . "','" . $userid . "','Bank','" . $ProblemOccursStr . "')";
+                                } else if ($status == 'replace_with_available') {
+
+                                    $materialToReplace = $_REQUEST['materialToReplace'];
+                                    foreach($materialToReplace as $materialToReplaceKey=>$materialToReplaceValue){
+
+                                        $materialToReplaceValue ; 
+                                        // $serialNumberValidator = mysqli_query($con,"select * from inventory where ");
+
+                                    }
                                 }
 
 
@@ -431,7 +452,7 @@
                             ?>
 
                             <form action="<? echo $_SERVER['PHP_SELF']; ?>?id=<? echo $id; ?>" method="POST" enctype="multipart/form-data">
-                                <div class="row" id="status_col"></div>
+                                <div class="row extra_highlight" id="status_col"></div>
                             </form>
 
 
@@ -546,11 +567,9 @@
             var status = $(this).val();
             $("#status_col").html('');
 
-
             if (status == 'close') {
                 var html = `<input type="hidden" name="status" value="close">
-
-            <div class="col-sm-12"><label>Snap</label><br /><input type="file" name="image" required></div>
+                <div class="col-sm-12"><label>Snap</label><br /><input type="file" name="image" required></div>
             <div class="col-sm-12"><br><label>Remark</label><input type="text" name="remark" class="form-control"></div>
             <div class="col-sm-12"><br><label>Resolution</label>
                 <select name="" class="form-control" required>
@@ -706,7 +725,43 @@
             <br>
             <input class="btn btn-primary" type="submit" value="Update" name="submit">
             </div>`;
+            } else if (status == 'replace_with_available') {
+                var html = `
+            <input type="hidden" name="status" value="replace_with_available">
+            <div class="col-sm-6">
+            <label> <h5>Material</h5> </label>
+            </div>
+
+            <div class="col-sm-6">
+            <label> <h5>Serial Number</h5> </label>
+            </div>
+            <?
+
+            $matLoopCount = 1;
+            $mat_sql = mysqli_query($con, "select * from generatefaultymaterialrequestdetails where mis_id='" . $mis_id . "' and materialRequestType='clarify' and status=1");
+            while ($mat_sqlResult = mysqli_fetch_assoc($mat_sql)) {
+
+                $value = $mat_sqlResult['MaterialName'];
+            ?>                     
+                        <div class="col-sm-6">
+                            <input type="checkbox" name="materialToReplace[]" value="<?= $value; ?>" required>  <?= $value; ?>
+                        </div>  
+                        <div class="col-sm-6">
+                            <input class="form-control" type="text" name="serial_number[]" required>  
+                        </div>
+                        <br />
+
+                        <?
+                    }
+                        ?>
+
+
+            <div class="col-sm-4">
+            <br>
+            <input class="btn btn-primary" type="submit" value="Update" name="submit">
+            </div>`;
             }
+
 
             $("#status_col").html(html);
         });

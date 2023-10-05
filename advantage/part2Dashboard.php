@@ -23,11 +23,11 @@ $materialRequest = $query4_result['count'];
 if($assignedLho){
     $query5 = mysqli_query($con,"SELECT COUNT(1) AS count FROM material_send a INNER JOIN sites s ON a.atmid=s.atmid where a.vendorId='".$vendorId."' and s.LHO like '".$assignedLho."'");    
 
-    $query6 = mysqli_query($con,"SELECT COUNT(1) AS count FROM projectInstallation a INNER JOIN sites s ON a.atmid=s.atmid where a.vendor='".$vendorId."' and isDone=1 and s.LHO like '".$assignedLho."'");
+    $query6 = mysqli_query($con,"SELECT COUNT(1) AS count FROM projectInstallation a INNER JOIN sites s ON a.atmid=s.atmid where a.vendor='".$vendorId."' and isDone=1 and s.LHO like '".$assignedLho."' and a.status=1");
     
 }else{
     $query5 = mysqli_query($con,"SELECT COUNT(1) AS count FROM material_send where vendorId='".$vendorId."'");    
-    $query6 = mysqli_query($con,"SELECT COUNT(1) AS count FROM projectInstallation where vendor='".$vendorId."' and isDone=1");
+    $query6 = mysqli_query($con,"SELECT COUNT(1) AS count FROM projectInstallation where vendor='".$vendorId."' and isDone=1 and status=1");
     
 }
 

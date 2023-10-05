@@ -301,6 +301,7 @@
 
                                     $material_condition = $_REQUEST['material_condition'];
                                     $material_conditionStr = implode(',', $material_condition);
+                                    $material_conditionStr = rtrim($material_conditionStr, ',');
 
                                     $totalMaterialCount = count($material_condition);
                                     $year = date('Y');
@@ -312,17 +313,15 @@
                                         mkdir($targetDir, 0777, true); // Set appropriate permissions (modify as needed)
                                     }
 
-
-
-
                                     $checkMaterialSend = mysqli_query($con, "select * from material_send where atmid='" . $atmid . "' order by id desc");
                                     $checkMaterialSendResult = mysqli_fetch_assoc($checkMaterialSend);
                                     $sendid = $checkMaterialSendResult['id'];
 
 
-                                    $faultyMaterialRequestSql = "insert into generatefaultymaterialrequest(siteid,atmid,requestBy,requestByPortal,requestFor,requestForPortal,materialRequestLevel,description,created_at,created_by,status,ticketId,materialRequestType,mis_id)
-                                    values('" . $siteid . "','" . $atmid . "','" . $SERVICE_email . "','Clarify','" . $RailTailVendorID . "','vendor',3,'','" . $datetime . "','" . $userid . "',1,'" . $ticketid . "','clarify','" . $mis_id . "');
+                                    $faultyMaterialRequestSql = "insert into generatefaultymaterialrequest(siteid,atmid,requestBy,requestByPortal,requestFor,requestForPortal,materialRequestLevel,description,created_at,created_by,status,ticketId,materialRequestType,mis_id,engineer)
+                                    values('" . $siteid . "','" . $atmid . "','" . $SERVICE_email . "','Clarify','" . $RailTailVendorID . "','vendor',3,'','" . $datetime . "','" . $userid . "',1,'" . $ticketid . "','clarify','" . $mis_id . "','".$userid."');
                                     ";
+
                                     if (mysqli_query($con, $faultyMaterialRequestSql)) {
                                         $faultyRequestID = $con->insert_id;
                                     }
@@ -399,12 +398,12 @@
                                     $materialToReplace = $_REQUEST['materialToReplace'];
                                     foreach ($materialToReplace as $materialToReplaceKey => $materialToReplaceValue) {
 
-                                        $materialToReplaceValue;
-                                        // $serialNumberValidator = mysqli_query($con,"select * from inventory where ");
+                                        echo '$materialToReplaceValue = '. $materialToReplaceValue;
+                                        echo '<br>';
+                                        // $serialNumberValidator = mysqli_query($con,"select * from inventory where ");    
 
                                     }
                                 }
-
 
                                 if (mysqli_query($con, $statement)) {
                                     if ($status == 'reopen') {
@@ -744,7 +743,7 @@
                                 <input class="form-control" type="text" name="serial_number[]" required>  
                             </div>
                             <br />
-    
+                    
                             <?
                         }
                     }

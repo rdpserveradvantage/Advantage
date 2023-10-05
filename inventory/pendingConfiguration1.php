@@ -17,19 +17,17 @@
                             <form id="routerConfigForm" action="processPendingConfiguration.php" method="post">
                                 <div class="form-group">
                                     <label>Atmid</label>
-                                    <input type="text" id="atmid" class="form-control" list="atmidOptions" name="atmid" required>
+                                    <input type="text" id="atmid" class="form-control" list="atmidOptions" name="atmid">
                                     <datalist id="atmidOptions"></datalist>
                                 </div>
                                 <div class="form-group">
                                     <label for="serialNumber">Serial Number</label>
-                                    <input type="text" class="form-control" id="serialNumber" list="serialOptions" name="serialNumber" required>
-                                    <datalist id="serialOptions"></datalist>
-
+                                    <input type="text" class="form-control" id="serialNumber" name="serialNumber" required>
                                 </div>
-                                <!-- <div class="form-group">
+                                <div class="form-group">
                                     <label for="sealNumber">Seal Number</label>
                                     <input type="text" class="form-control" id="sealNumber" name="sealNumber" required>
-                                </div> -->
+                                </div>
                                 <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
                             </form>
 
@@ -91,6 +89,10 @@
                     </div>
 
                     <div class="card">
+                        <div class="card-header" style="display:block;">
+                            <h5 style="display:block;">Configured Data</h5>
+                        <hr>
+                        </div>
                         <div class="card-body" style="overflow:auto;">
 
                             <?
@@ -166,43 +168,7 @@
 
 <script>
     $(document).ready(function() {
-
-        function populateATMDatafromIP(serial_no) {
-            $.ajax({
-                type: "POST",
-                url: 'get_ip_data.php',
-                data: 'serial_no=' + serial_no,
-                success: function(msg) {
-                    console.log(msg);
-
-                    if (msg != 0) {
-                        var obj = JSON.parse(msg);
-                        var fields = ['networkIP', 'routerIP', 'atmIP'];
-
-                        fields.forEach(function(field) {
-                            if (!obj[field]) {
-                                $("#" + field).focus();
-                            } else {
-                                $("#" + field).val(obj[field]);
-                                $('#' + field).attr('readonly', true);
-                            }
-                        });
-
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'No Info With This Serial Number',
-                        }).then(function() {
-                            // $("#form")[0].reset();
-                        });
-
-                    }
-                }
-            });
-
-        }
-
-        function populateATMDatafromSites(atmid) {
+        function populateATMData(atmid) {
             $.ajax({
                 type: "POST",
                 url: 'get_atm_data.php',
@@ -212,7 +178,7 @@
 
                     if (msg != 0) {
                         var obj = JSON.parse(msg);
-                        var fields = ['customer', 'bank', 'engineer', 'location', 'region', 'state', 'city', 'branch', 'bm', 'lho'];
+                        var fields = ['customer', 'bank', 'engineer', 'location', 'region', 'state', 'city', 'branch', 'bm', 'lho', 'networkIP', 'routerIP', 'atmIP'];
 
                         fields.forEach(function(field) {
                             if (!obj[field]) {
@@ -268,43 +234,10 @@
             });
         });
 
-
-        $("#serialNumber").on('input', function() {
-            var input = $(this).val();
-
-            $.ajax({
-                type: "POST",
-                url: 'get_serialsuggestions.php',
-                data: {
-                    input: input
-                },
-                success: function(response) {
-                    console.log(response)
-                    var datalist = $("#serialOptions");
-                    datalist.empty();
-
-                    var suggestions = JSON.parse(response);
-
-                    suggestions.forEach(function(suggestion) {
-                        datalist.append($("<option>").attr('value', suggestion).text(suggestion));
-                    });
-                }
-            });
-        });
-
-
         $("#atmid").on('change', function() {
             var atmid = $(this).val();
-            populateATMDatafromSites(atmid);
+            populateATMData(atmid);
         });
-
-
-        $("#serialNumber").on('change', function() {
-            var serial_no = $(this).val();
-            populateATMDatafromIP(serial_no);
-        });
-
-        
     });
 </script>
 

@@ -14,12 +14,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $atmid = $_POST['atmid'];
     $serialNumber = $_POST['serialNumber'];
     $sealNumber = $_POST['sealNumber'];
-
+    $sealNumber ? $sealNumber : 'NA' ; 
+    $networkIP = $_POST['networkIP'];
+    $routerIP = $_POST['routerIP'];
+    $atmIP = $_POST['atmIP'];
     // Check if ATM ID exists in the "sites" table
     $checkQuery = mysqli_query($con, "SELECT * FROM sites WHERE atmid = '" . $atmid . "'");
     if ($checkQueryResult = mysqli_fetch_assoc($checkQuery)) {
         $insertQuery = "INSERT INTO routerConfiguration (atmid, serialNumber, sealNumber, status, created_at, created_by)
                         VALUES ('" . $atmid . "', '" . $serialNumber . "', '" . $sealNumber . "', '1', '" . $datetime . "', '" . $userid . "')";
+
+            mysqli_query($con,"update sites set networkIP = '".$networkIP."', routerIP = '".$routerIP."', atmIP = '".$atmIP."' where atmid='".$atmid."'");
 
         try {
             mysqli_query($con, $insertQuery);

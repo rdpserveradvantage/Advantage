@@ -45,14 +45,13 @@ $icon = [
 
 
  for ($i = 0; $i < count($titles); $i++) { ?>
- 
                             <div class="col-xl-3 col-sm-6">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar-sm">
-                                                    <div class="avatar-title bg-primary-subtle text-primary rounded-circle font-size-18">
+                                                    <div class="avatar-title text-primary rounded-circle font-size-18">
                                                         <i class="uil <?= $icon[$i]; ?> "></i>
                                                     </div>
                                                 </div>

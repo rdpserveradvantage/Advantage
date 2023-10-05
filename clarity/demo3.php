@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Clarity - Login</title>
+  <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -103,14 +103,16 @@ body{
     <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox">
       <div class="item active">
-        <img src="./assets/bg1.jpg" alt="Los Angeles">
+        <img src="./assets/pic1.jpg" alt="Los Angeles">
       </div>
 
       <div class="item">
-        <img src="./assets/bg2.jpg" alt="Chicago">
+        <img src="./assets/pic2.jpg" alt="Chicago">
       </div>
 
-
+      <div class="item">
+        <img src="./assets/noRecords.png" alt="Chicago">
+      </div>
     </div>
 </div>
 
@@ -153,7 +155,7 @@ body{
 <script>
   $(document).ready(function(){
     $('#myCarousel').carousel({
-      interval: 1000 // Change slide every 1.5 seconds
+      interval: 3000 // Change slide every 3 seconds
     });
   });
 </script>

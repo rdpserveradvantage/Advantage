@@ -7,7 +7,7 @@
                     <div class="card">
                         <div class="card-block" style="overflow:auto;">
                             <?
-                            $allSql = mysqli_query($con, "SELECT * FROM vendormaterialsend where contactPersonName='" . $userid . "' ");
+                            $allSql = mysqli_query($con, "SELECT * FROM vendormaterialsend where contactPersonName='" . $userid . "' order by id desc");
                             while ($allSqlResult = mysqli_fetch_assoc($allSql)) {
                                 $sendID[] = $allSqlResult['id'];
                             }
@@ -22,7 +22,7 @@
                                     </thead>
                                     <tbody>';
                             $counter = 1;
-                            $allSql = "SELECT * FROM `vendormaterialsenddetails` where materialSendId in($sendID) and attribute<>''";
+                            $allSql = "SELECT * FROM `vendormaterialsenddetails` where materialSendId in($sendID) and attribute<>'' order by id desc";
                             $allSqlQuery = mysqli_query($con, $allSql);
                             $grandTotal = 0;
                             while ($allSqlQueryResult = mysqli_fetch_assoc($allSqlQuery)) {

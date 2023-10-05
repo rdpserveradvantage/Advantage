@@ -9,24 +9,16 @@
 
 <body>
   <h1>Real-Time Notifications</h1>
-
-  <!-- Notifications container -->
   <ul id="notificationList"></ul>
-
-<!-- JavaScript to handle WebSocket connection and notifications -->
-<script>
+  <script>
     const notificationList = document.getElementById('notificationList');
-
-    // WebSocket connection
-    const socket = new WebSocket('ws://localhost:8080'); // Change to your WebSocket server URL
-
-    // Listen for incoming WebSocket messages (notifications)
-    socket.addEventListener('message', function (event) {
+    const socket = new WebSocket('ws://localhost:8080');
+    socket.addEventListener('message', function(event) {
       const notifications = JSON.parse(event.data);
-      addNotifications(notifications); // Add the new notifications to the list
+      console.log(notifications)
+      addNotifications(notifications);
     });
 
-    // Function to add multiple notifications to the list
     function addNotifications(notifications) {
       notifications.forEach((data) => {
         const notificationItem = document.createElement('li');
@@ -36,9 +28,7 @@
         notificationList.appendChild(notificationItem);
       });
     }
-
-</script>
-
+  </script>
 </body>
 
 </html>

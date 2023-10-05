@@ -22,6 +22,16 @@ if ($con->connect_error) {
 
 $SERVICE_email = $_SESSION['SERVICE_email'];
 
+if (!function_exists('vendorUsersData')) {
+    function vendorUsersData($id,$parameter){
+    global $con;
+        $sql = mysqli_query($con,"select $parameter from vendorUsers where id ='".$id."'");
+        $sql_result = mysqli_fetch_assoc($sql);
+        return $sql_result[$parameter];
+
+}
+}
+
 function getUsers_Vendor($userid){
     global $con;
     $sql = mysqli_query($con,"select * from vendorusers where id='".$userid."'");
@@ -71,7 +81,7 @@ $datetime = date('Y-m-d H:i:s');
 $RailTailVendorID = getUsers_Vendor($userid);
 $RailTailVendorName = getUsername($RailTailVendorID, true);
 $SERVICE_LEVEL = $_SESSION['SERVICE_level'];
-
+$SERVICE_email = $_SESSION['SERVICE_email'];
 // if($userid>0){
 
 //         $assign_cust_sql = mysqli_query($con,"select cust_id,permission from vendorUsers where id ='".$userid."'");

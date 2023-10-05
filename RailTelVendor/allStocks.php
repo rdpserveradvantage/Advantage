@@ -67,11 +67,11 @@
 
                     ?>
                     <div class="card">
-                        <div class="card-block" style="overflow:auto;">
+                        <div class="card-block">
 
                             <div class="card-header">
 
-                                <h5> Total Records: 
+                                <h5> Total Records:
                                     <strong class="record-count"><? echo $total_records; ?></strong>
                                 </h5>
                                 <span style="color:red; ">( Records Received site wise )</span>
@@ -83,11 +83,14 @@
                                 </form>
 
                             </div>
+                            <div class="card-body" style="overflow:auto;">
                             <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs">
                                 <thead>
                                     <tr class="table-primary">
                                         <th>Srno</th>
                                         <th>ATMID</th>
+                                        <th>Material</th>
+                                        <th>Serial Number</th>
                                         <th>Status</th>
                                         <th>Update Action</th>
                                         <th>Contact Person</th>
@@ -101,15 +104,27 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    echo $sql_query ; 
+                                    // echo $sql_query;
                                     $i = 1;
                                     $counter = ($current_page - 1) * $page_size + 1;
                                     $sql_app = mysqli_query($con, $sql_query);
                                     while ($sql_result = mysqli_fetch_assoc($sql_app)) {
 
+
                                         $id = $sql_result['id'];
+
+                                        $detailSql = mysqli_query($con, "select * from material_send_details where materialSendId='" . $id . "'");
+                                        $detailSqlResult = mysqli_fetch_assoc($detailSql);
+
+                                        $materialName = $detailSqlResult['attribute'];
+                                        $serialNumber = $detailSqlResult['serialNumber'];
+
+
+
                                         $siteid = $sql_result['siteid'];
                                         $atmid = $sql_result['atmid'];
+                                        $isSingleProduct = (!$atmid) ? 1 : 0;
+
                                         $vendorId = $sql_result['vendorId'];
                                         $vendorName = getVendorName($vendorId);
                                         $address = $sql_result['address'];
@@ -136,7 +151,11 @@
                                         }
                                         echo "<tr class='clickable-row' data-toggle='collapse' data-target='#details-$id'>";
                                         echo "<td>$counter</td>";
-                                        echo "<td class='strong'>$atmid</td>";
+                                        echo "<td class='strong'>" .
+                                            ($atmid ? $atmid : '<span style="color:red;font-size:12px;">Not Assign</span>')
+                                            . "</td>";
+                                        echo "<td>" . ($isSingleProduct == 1 ? $materialName : '-') . "</td>";
+                                        echo "<td>" . ($isSingleProduct == 1 ? $serialNumber : '-') . "</td>";
                                         echo "<td class='strong'>" .
                                             ($isDelivered == 1 ? 'Delivered' : 'In-Transit') . "</td>";
                                         echo "<td>" . ($ifExistTrackingUpdate == 1 ? 'View' : "<a href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update</a>") . "</td>";
@@ -148,9 +167,12 @@
                                         echo "<td>$remark</td>";
                                         echo "<td>$date</td>";
                                         if ($isDelivered == 1 && $isAgainSendStatus == 0) {
-                                            echo "<td>
-                                                    <a href='dispatchMaterial.php?siteid=$siteid&atmid=$atmid&materialSendId=$id'>Dispatch</a>
-                                              </td>";
+                                            echo "<td>".
+                                            ($isSingleProduct == 1 ?
+                                            "<a href='dispatchIndividualMaterial.php?materialSendId=$id'>Dispatch</a>"
+                                             :  
+                                            "<a href='dispatchMaterial.php?siteid=$siteid&atmid=$atmid&materialSendId=$id'>Dispatch</a>").     
+                                              "</td>";
                                         } else if ($isDelivered == 1 && $isAgainSendStatus == 1) {
                                             echo "<td>
                                                         Material Send to <span class='strong'>$contactPersonName <span>
@@ -164,6 +186,9 @@
                                     ?>
                                 </tbody>
                             </table>
+
+
+                            </div>
 
 
 

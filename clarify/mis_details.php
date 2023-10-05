@@ -187,7 +187,6 @@
                                                                         <span><? echo $sql_result['created_at']; ?></span>
                                                                     </td>
                                                                 </tr>
-
                                                                 <th scope="row">Created By</th>
                                                                 <td><? echo $sql1_result['serviceExecutive']; ?></td>
                                                                 </tr>
@@ -222,9 +221,6 @@
                         </div>
                     </div>
 
-
-
-
                     <div class="card">
                         <div class="card-block">
                             <h5>Change Status</h5>
@@ -255,9 +251,6 @@
                                         <? }
 
                                         ?>
-
-
-
                                     </select>
                                 </div>
                             </div>
@@ -404,9 +397,9 @@
                                 } else if ($status == 'replace_with_available') {
 
                                     $materialToReplace = $_REQUEST['materialToReplace'];
-                                    foreach($materialToReplace as $materialToReplaceKey=>$materialToReplaceValue){
+                                    foreach ($materialToReplace as $materialToReplaceKey => $materialToReplaceValue) {
 
-                                        $materialToReplaceValue ; 
+                                        $materialToReplaceValue;
                                         // $serialNumberValidator = mysqli_query($con,"select * from inventory where ");
 
                                     }
@@ -738,22 +731,26 @@
             <?
 
             $matLoopCount = 1;
-            $mat_sql = mysqli_query($con, "select * from generatefaultymaterialrequestdetails where mis_id='" . $mis_id . "' and materialRequestType='clarify' and status=1");
-            while ($mat_sqlResult = mysqli_fetch_assoc($mat_sql)) {
-
-                $value = $mat_sqlResult['MaterialName'];
+            $faultySql = mysqli_query($con, "select * from generatefaultymaterialrequest where mis_id='" . $mis_id . "' and materialRequestType='clarify' and materialRequestLevel=3");
+            if ($faultySqlResult = mysqli_fetch_assoc($faultySql)) {
+                $mat_sql = mysqli_query($con, "select * from generatefaultymaterialrequestdetails where requestId='" . $mis_id . "'");
+                while ($mat_sqlResult = mysqli_fetch_assoc($mat_sql)) {
+                    $value = $mat_sqlResult['MaterialName'];
             ?>                     
-                        <div class="col-sm-6">
-                            <input type="checkbox" name="materialToReplace[]" value="<?= $value; ?>" required>  <?= $value; ?>
-                        </div>  
-                        <div class="col-sm-6">
-                            <input class="form-control" type="text" name="serial_number[]" required>  
-                        </div>
-                        <br />
-
-                        <?
+                            <div class="col-sm-6">
+                                <input type="checkbox" name="materialToReplace[]" value="<?= $value; ?>" required>  <?= $value; ?>
+                            </div>  
+                            <div class="col-sm-6">
+                                <input class="form-control" type="text" name="serial_number[]" required>  
+                            </div>
+                            <br />
+    
+                            <?
+                        }
                     }
-                        ?>
+                            ?>
+            
+
 
 
             <div class="col-sm-4">

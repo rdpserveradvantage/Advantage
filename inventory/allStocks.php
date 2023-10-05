@@ -1,26 +1,26 @@
 <?php include('header.php'); ?>
-
-
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
-
                     <div class="card" id="filter">
                         <div class="card-block">
-
                             <form id="sitesForm" action="<?php echo basename(__FILE__); ?>" method="POST">
                                 <div class="row">
 
                                     <div class="col-sm-3">
                                         <label>Stock</label>
                                         <select name="status" class="form-control">
-                                            <option value="0" <? if($_REQUEST['status']=='0') { echo 'selected';} ?> >ALL</option>
-                                            <option value="1" <? if($_REQUEST['status']=='1') { echo 'selected';} ?>>AVAILABLE</option>
+                                            <option value="0" <? if ($_REQUEST['status'] == '0') {
+                                                                    echo 'selected';
+                                                                } ?>>ALL</option>
+                                            <option value="1" <? if ($_REQUEST['status'] == '1') {
+                                                                    echo 'selected';
+                                                                } ?>>AVAILABLE</option>
                                         </select>
                                     </div>
-                                            
+
                                     <div class="col-sm-3">
                                         <label>Material</label>
                                         <select name="material" class="form-control">
@@ -71,7 +71,7 @@
                     // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                     $sqlappCount = "select count(1) as total from Inventory where 1 ";
                     $atm_sql = "select id,material,material_make,model_no,serial_no,challan_no,amount,gst,amount_with_gst,courier_detail,tracking_details,
-                            date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at,inventoryType
+                            date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at,inventoryType,status
                                 from Inventory where 1 ";
 
                     if (isset($_REQUEST['material']) && $_REQUEST['material'] != '') {
@@ -79,21 +79,20 @@
                         $atm_sql .= "and material like '" . $material . "'";
                         $sqlappCount .= "and material like '" . $material . "'";
                     }
-                    
+
                     if (isset($_REQUEST['status']) && $_REQUEST['status'] != '') {
                         $status = $_REQUEST['status'];
-                        if($status=='0'){
+                        if ($status == '0') {
                             $atm_sql .= " and status in (0,1) ";
-                            $sqlappCount .= " and status in(0,1) ";                            
-                        }else if($status=='1'){
+                            $sqlappCount .= " and status in(0,1) ";
+                        } else if ($status == '1') {
                             $atm_sql .= " and status in (1) ";
                             $sqlappCount .= " and status in(1) ";
                         }
-
                     }
-                    
-                    
-                    
+
+
+
                     if (isset($_REQUEST['serialNumber']) && $_REQUEST['serialNumber'] != '') {
                         $serialNumber = $_REQUEST['serialNumber'];
                         $atm_sql .= "and serial_no like '%" . $serialNumber . "%'";
@@ -123,7 +122,7 @@
                     $end_window = min($start_window + $window_size - 1, $total_pages);
                     $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     // }
-                    // echo $sql_query ; 
+                    // echo $atm_sql ; 
 
 
 
@@ -134,16 +133,16 @@
                     <div class="card">
                         <div class="card-block" style="overflow:auto;">
 
-                        <div class="card-header">
-                                        <h5>Total Records: <strong class="record-count"><? echo $total_records; ?></strong></h5>
+                            <div class="card-header">
+                                <h5>Total Records: <strong class="record-count"><? echo $total_records; ?></strong></h5>
 
-                                        <hr>
-                                        <form action="exportInventoryRecords.php" method="POST">
-                                            <input type="hidden" name="exportSql" value="<?= $atm_sql ; ?>">
-                                            <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
-                                        </form>
+                                <hr>
+                                <form action="exportInventoryRecords.php" method="POST">
+                                    <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
+                                    <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
+                                </form>
 
-                                    </div>
+                            </div>
 
 
                             <!-- <div style="display:flex;justify-content:space-around;">
@@ -159,6 +158,7 @@
                                 <thead>
                                     <tr class="table-primary">
                                         <th>Sr no</th>
+                                        <th>Actions</th>
                                         <th>material</th>
                                         <th>material_make</th>
                                         <th>model_no</th>
@@ -186,7 +186,7 @@
                                     $counter = ($current_page - 1) * $page_size + 1;
                                     $sql_app = mysqli_query($con, $sql_query);
                                     while ($row = mysqli_fetch_assoc($sql_app)) {
-
+                                        $materialId = $row['id'];
                                         $material = $row['material'];
                                         $material_make = $row['material_make'];
                                         $model_no = $row['model_no'];
@@ -204,11 +204,18 @@
                                         $po_date = $row['po_date'];
                                         $po_number = $row['po_number'];
                                         $inventoryType = $row['inventoryType'];
-
+                                        $invstatus = $row['status'];
                                         echo '<tr>';
                                     ?>
-
                                         <td><?= $counter; ?></td>
+                                        <td>
+                                            <?
+                                            if ($invstatus == 0) {
+                                            } else if ($invstatus == 1) {
+                                                echo '<a href="sendIndividualMaterial.php?materialId='.$materialId.'" >Send Material</a>';
+                                            }
+                                            ?>
+                                        </td>
                                         <td><?= $material; ?></td>
                                         <td><?= $material_make; ?></td>
                                         <td><?= $model_no; ?></td>

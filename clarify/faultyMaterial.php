@@ -1,6 +1,4 @@
 <? include('header.php'); ?>
-
-
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
@@ -8,124 +6,57 @@
                 <div class="page-body">
                     <div class="card">
                         <div class="card-block">
-                            <form action="<? $_SERVER['PHP_SELF']; ?>" method="post">
-                                <table border="1">
-                                    <tr>
-                                        <th>Select</th>
-                                        <th>Material Name</th>
-                                        <th>Serial Number / Quantity</th>
-                                    </tr>
-                                    <?php
-
-                                    // Fetch materials from the BOQ table
-                                    $sql = "SELECT id, value, needSerialNumber FROM boq ORDER BY needSerialNumber DESC";
-                                    $result = $con->query($sql);
-
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            $id = $row['id'];
-                                            $materialName = $row['value'];
-                                            $hasSerialNumber = $row['needSerialNumber'];
-
-                                            echo "<tr>";
-                                            // echo "<td><input type='checkbox' name='selected_materials[]' value='$id' onchange='handleCheckboxChange($id, this)'></td>";
-                                            echo "<td><input type='checkbox' name='selected_materials[]' value='$id' onchange='handleCheckboxChange($id, this)' id='checkbox$id'></td>";
-                                            echo "<td>$materialName</td>";
-
-                                            echo "<td>";
-                                            if ($hasSerialNumber == 1) {
-                                                echo "<div id='serialNumberInputs$id'>";
-                                                echo "<div class='serialInput'>";
-                                                echo "<input type='text' name='serial_numbers[$id][]' placeholder='Serial Number' disabled>";
-                                                echo "<button type='button' onclick='addSerialNumberInput($id)' disabled>Add</button>";
-                                                echo "</div>";
-                                                echo "</div>";
-                                            } else {
-                                                // For materials that don't require serial numbers, use an empty div as a placeholder.
-                                                echo "<div id='serialNumberInputs$id'></div>";
-                                                echo "<input type='number' name='quantities[$id]' id='quantityInput$id' placeholder='Quantity' disabled>";
-                                            }
-                                            echo "</td>";
-
-                                            echo "</tr>";
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='3'>No materials found in the BOQ.</td></tr>";
+                            <?
+                            $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestBy='" . $SERVICE_email . "' AND requestByPortal IN ('Clarity','Clarify') and materialRequestLevel=3 and status=1";
+                            $sql = mysqli_query($con, $statement);
+                            if (mysqli_num_rows($sql) > 0) {
+                                echo '
+                                    <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs">
+                                        <thead>
+                                        <tr class="table-primary">
+                                        <th>Sr No</th>
+                                        <th>Material</th>
+                                        <th>Serial Number</th>
+                                        <th>ATMID</th>
+                                        <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                    <tbody>';
+                                $i = 1;
+                                while ($sql_result = mysqli_fetch_assoc($sql)) {
+                                    echo $id = $sql_result['id'];
+                                    $atmid = $sql_result['atmid'];
+                                    echo "<tr>
+                                            <td>$i &nbsp;&nbsp;&nbsp;
+                                            <input type='checkbox' name='materialRequestId[]' value='$id' /> 
+                                            </td>
+                                            <td class='strong' colspan='3'>$atmid</td>
+                                            <td><a href='#'>Dispatch Item</a></td>
+                                        </tr>";
+                                    $detailsSql = mysqli_query($con, "SELECT * FROM generatefaultymaterialrequestdetails WHERE requestId='" . $id . "'");
+                                    $counter2 = 1;
+                                    while ($detailsSql_result = mysqli_fetch_assoc($detailsSql)) {
+                                        $MaterialName = $detailsSql_result['MaterialName'];
+                                        $MaterialSerialNumber = $detailsSql_result['MaterialSerialNumber'];
+                                        echo "<tr>
+                                                    <td></td>
+                                                    <td>$MaterialName</td>
+                                                    <td>$MaterialSerialNumber</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>";
+                                        $counter2++;
                                     }
-
-                                    // Close the database connection
-                                    $con->close();
-                                    ?>
-                                </table>
-
-                                <br>
-                                <input type="submit" value="Send Selected Materials to OEM">
-                            </form>
-                            <script>
-                                function toggleSerialInputs(materialId, checked) {
-                                    var container = document.getElementById("serialNumberInputs" + materialId);
-                                    var inputs = container.getElementsByTagName("input");
-                                    var buttons = container.getElementsByTagName("button");
-
-                                    if (container) {
-                                        for (var i = 0; i < inputs.length; i++) {
-                                            inputs[i].disabled = !checked;
-                                            inputs[i].required = checked;
-                                            // Set the minimum value of the input to 1 if the checkbox is checked
-                                            inputs[i].min = checked ? 1 : 0;
-                                        }
-
-                                        for (var j = 0; j < buttons.length; j++) {
-                                            buttons[j].disabled = !checked;
-                                        }
-
-                                    }
-
-                                    // Enable/disable quantity input based on checkbox state
-                                    var quantityInput = document.getElementById("quantityInput" + materialId);
-                                    if (quantityInput) {
-                                        quantityInput.disabled = !checked;
-                                        if (!checked) {
-                                            quantityInput.value = ""; // Clear quantity input if checkbox is unchecked
-                                        }
-                                        // Set the minimum value of the quantity input to 1 if the checkbox is checked
-                                        quantityInput.min = checked ? 1 : 0;
-                                    }
+                                    $i++;
                                 }
+                                echo '</tbody>
+                                </table>';
+                                echo '<a href="#" class="btn btn-primary" onclick="dispatchCheckedItems()">Dispatch Checked Item</a>';
+                            } else {
+                                echo 'No Data Found!';
+                            }
 
-                                function handleCheckboxChange(materialId, checkbox) {
-                                    toggleSerialInputs(materialId, checkbox.checked);
-                                }
-
-                                function addSerialNumberInput(materialId) {
-                                    var container = document.getElementById("serialNumberInputs" + materialId);
-
-                                    // Create a div to group the input and remove button
-                                    var divWrapper = document.createElement("div");
-
-                                    var input = document.createElement("input");
-                                    input.type = "text";
-                                    input.name = "serial_numbers[" + materialId + "][]";
-                                    input.placeholder = "Serial Number";
-                                    input.required = true; // Make the added serial number input required
-
-                                    var removeButton = document.createElement("button");
-                                    removeButton.type = "button";
-                                    removeButton.textContent = "Remove";
-                                    removeButton.addEventListener("click", function() {
-                                        // Remove the div wrapper, which contains the input and remove button
-                                        container.removeChild(divWrapper);
-                                    });
-
-                                    // Append the input and remove button to the div wrapper
-                                    divWrapper.appendChild(input);
-                                    divWrapper.appendChild(removeButton);
-
-                                    // Append the div wrapper to the container
-                                    container.appendChild(divWrapper);
-                                }
-                            </script>
-
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -136,5 +67,83 @@
     </div>
 </div>
 
+
+
+<div class="modal fade" id="dispatchModal" tabindex="-1" role="dialog" aria-labelledby="dispatchModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="receiversForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dispatchModalLabel">Enter OEM Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            form fields
+                            <input type="text" id="vendorName" value="1">
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="submitVendorDetails" class="btn btn-primary" id="submitOemDetails">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var selectedItems = []; // Variable to store selected item IDs
+
+    function dispatchCheckedItems() {
+        var materialRequestIds = document.getElementsByName('materialRequestId[]');
+
+        for (var i = 0; i < materialRequestIds.length; i++) {
+            if (materialRequestIds[i].checked) {
+                selectedItems.push(materialRequestIds[i].value);
+            }
+        }
+
+
+        if (selectedItems.length > 0) {
+            $('#dispatchModal').modal('show');
+        } else {
+            alert('Please select at least one item to dispatch.');
+        }
+    }
+
+    document.getElementById('submitVendorDetails').addEventListener('click', function() {
+        var vendorName = document.getElementById('vendorName').value;
+
+        if (selectedItems.length > 0) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        console.log(xhr.responseText);
+                        $('#dispatchModal').modal('hide');
+                    } else {
+                        console.error('Error: ' + xhr.status);
+                    }
+                }
+            };
+
+            xhr.open('POST', 'process_selected_items.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send('vendorName=' + encodeURIComponent(vendorName) + '&selectedItems=' + JSON.stringify(selectedItems));
+        } else {
+            alert('Please select at least one item to dispatch.');
+        }
+    });
+</script>
 
 <? include('footer.php'); ?>

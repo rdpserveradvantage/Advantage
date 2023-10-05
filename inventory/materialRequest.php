@@ -25,7 +25,7 @@ function getMaterialRequestStatus($siteid){
                         <div class="page-wrapper">
                             <div class="page-body">
                                 <div class="card">
-                                    <div class="card-block" style="overflow:auto;">
+                                    <div class="card-header" style="overflow:auto;">
                                         
                                         <?
                                         $siteidsql = mysqli_query($con,"SELECT siteid FROM `material_requests` where status='pending' group by siteid");
@@ -42,7 +42,9 @@ function getMaterialRequestStatus($siteid){
                                         if($siteids_ar){ ?>
                                         <h5>All Material Request</h5>
                                         <hr />
-
+                                        </div>
+                                        <div class="card-body" style="overflow:auto;">
+                                            
                                          <table class="table table-hover table-styling table-xs">
                                             <thead>
                                                 <tr class="table-primary">

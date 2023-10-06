@@ -7,7 +7,7 @@ $database = 'sarmicrosystems_advantage';
 
 $backupFolder = 'database_backup';
 if (!is_dir($backupFolder)) {
-    mkdir($backupFolder);
+    mkdir($backupFolder,0777, true);
 }
 
 $currentYear = date('Y');
@@ -15,12 +15,12 @@ $currentMonth = date('M');
 
 $yearFolder = $backupFolder . '/' . $currentYear;
 if (!is_dir($yearFolder)) {
-    mkdir($yearFolder);
+    mkdir($yearFolder,0777, true);
 }
 
 $monthFolder = $yearFolder . '/' . $currentMonth;
 if (!is_dir($monthFolder)) {
-    mkdir($monthFolder);
+    mkdir($monthFolder,0777, true);
 }
 
 $currentDate = date('dMY');

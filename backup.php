@@ -47,9 +47,9 @@ if ($returnValue === 0) {
 
     // Execute Git commands
     exec($gitAdd, $outputAdd, $returnValueAdd);
-    sleep(60);
+    sleep(20);
     exec($gitCommit, $outputCommit, $returnValueCommit);
-    sleep(60);
+    sleep(20);
     exec($gitPush, $outputPush, $returnValuePush);
 
     // Check for success or failure

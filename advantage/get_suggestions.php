@@ -4,8 +4,7 @@ if (isset($_POST['input'])) {
     $input = $_POST['input'];
 
      $query = "SELECT a.atmid FROM sites a
-              INNER JOIN projectInstallation b ON a.atmid = b.atmid
-              WHERE a.atmid like '%" . mysqli_real_escape_string($con, $input) . "%' AND b.isDone = 1";
+              WHERE a.atmid like '%" . mysqli_real_escape_string($con, $input) . "%'";
     
 
     

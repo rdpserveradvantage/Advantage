@@ -94,8 +94,7 @@ function getMaterial_requestData($siteid, $parameter)
                                         $networkIP = $sql_result['networkIP'];
                                         $routerIP = $sql_result['routerIP'];
                                         $atmIP = $sql_result['atmIP'];
-                                        $subnetIP = $sql_result['subnetIP'];
-
+                                        
                                         if ($networkIP) {
                                             $ipRemark .= ' Network IP <i class="fas fa-check" style="color:green;"></i>';
                                         } else {
@@ -114,20 +113,13 @@ function getMaterial_requestData($siteid, $parameter)
                                             $error++;
                                             $ipRemark .= ' ATM IP <i class="fas fa-window-close"  style="color:red;"></i>';
                                         }
-                                        if ($subnetIP) {
-                                            $ipRemark .= ' Subnet IP <i class="fas fa-check" style="color:green;"></i>';
-                                        } else {
-                                            $error++;
-                                            $ipRemark .= ' Subnet IP <i class="fas fa-window-close"  style="color:red;"></i>';
-                                        }
-
+                                        
 
                                         $routerConfiguration = mysqli_query($con, "select * from routerConfiguration where atmid='" . $atmid . "' and status=1");
                                         $routerConfigurationResult = mysqli_fetch_assoc($routerConfiguration);
 
                                         $serialNumber = $routerConfigurationResult['serialNumber'];
-                                        $sealNumber    = $routerConfigurationResult['sealNumber'];
-
+                                        
                                         if ($serialNumber) {
                                             $configurationRemark .= ' Serial Number <i class="fas fa-check" style="color:green;"></i>';
                                         } else {
@@ -135,12 +127,6 @@ function getMaterial_requestData($siteid, $parameter)
                                             $configurationError++;
                                         }
 
-                                        if ($sealNumber) {
-                                            $configurationRemark .= ' Seal Number <i class="fas fa-check" style="color:green;"></i>';
-                                        } else {
-                                            $configurationRemark .= ' Seal Number <i class="fas fa-window-close" style="color:red;"></i>';
-                                            $configurationError++;
-                                        }
 
                                     ?>
 

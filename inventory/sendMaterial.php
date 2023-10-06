@@ -85,8 +85,6 @@ function getSitesInfo($siteid, $parameter)
                                     <p><strong>ATM IP :</strong> ' . $atmIP . '</p>
                                     <p><strong>Subnet :</strong> ' . $subnetIP . '</p>
                                 </div>';
-                            
-                            
                             ?>
                             <hr>
                             <form id="attributeForm" action="confirmSendMaterialRequest.php" method="POST">
@@ -119,13 +117,14 @@ function getSitesInfo($siteid, $parameter)
                                                              <option value="'.$serialNumber.'">'.$serialNumber.'</option>
                                                          </select>';
                                                          
-                                                }else if(trim($material_name)=='Security seal'){
-                                                    echo '<input type="text" name="value[]" placeholder="Value" style="width: 15%;    background-color: #e9ecef;" value="' . $sealNumber . '" readonly required>
-                                                         <select name="serialNumber[]" class="serial-number-list" style="width: 20%;    background-color: #e9ecef;" required>
-                                                             <option value="'.$sealNumber.'">'.$sealNumber.'</option>
-                                                         </select>';
-                                                         
                                                 }
+                                                // else if(trim($material_name)=='Security seal'){
+                                                //     echo '<input type="text" name="value[]" placeholder="Value" style="width: 15%;    background-color: #e9ecef;" value="' . $sealNumber . '" readonly required>
+                                                //          <select name="serialNumber[]" class="serial-number-list" style="width: 20%;    background-color: #e9ecef;" required>
+                                                //              <option value="'.$sealNumber.'">'.$sealNumber.'</option>
+                                                //          </select>';
+                                                         
+                                                // }
                                                 	
                                                 else{
                                                     echo '<input type="text" name="value[]" placeholder="Value" style="width: 15%;" required>

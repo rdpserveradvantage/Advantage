@@ -318,16 +318,14 @@
                                     $sendid = $checkMaterialSendResult['id'];
 
 
-                                    $faultyMaterialRequestSql = "insert into generatefaultymaterialrequest(siteid,atmid,requestBy,requestByPortal,requestFor,requestForPortal,materialRequestLevel,description,created_at,created_by,status,ticketId,materialRequestType,mis_id,engineer)
+                                   echo $faultyMaterialRequestSql = "insert into generatefaultymaterialrequest(siteid,atmid,requestBy,requestByPortal,requestFor,requestForPortal,materialRequestLevel,description,created_at,created_by,status,ticketId,materialRequestType,mis_id,engineer)
                                     values('" . $siteid . "','" . $atmid . "','" . $SERVICE_email . "','Clarify','" . $RailTailVendorID . "','vendor',3,'','" . $datetime . "','" . $userid . "',1,'" . $ticketid . "','clarify','" . $mis_id . "','".$userid."');
                                     ";
 
                                     if (mysqli_query($con, $faultyMaterialRequestSql)) {
                                         $faultyRequestID = $con->insert_id;
-                                    }
-
-
-                                    for ($i = 0; $i < count($requiredMaterials); $i++) {
+                                        
+                                        for ($i = 0; $i < count($requiredMaterials); $i++) {
                                         $imageFileName = uniqid() . "_" . $_FILES['material_requirement_images']['name'][$i];
                                         $imagePath = $targetDir . '/' . $imageFileName;
 
@@ -340,23 +338,22 @@
                                             $serialNumber = $sendDetailsSqlResult['serialNumber'];
                                             $MaterialID = getInventoryIDBySerialNumber($serialNumber);
 
-                                            $faultyDetailsSql = "insert into generatefaultymaterialrequestdetails(requestId, MaterialID, MaterialName, MaterialSerialNumber, materialImage, created_at, created_by, status , materialRequestType,mis_id)
-                                            values('" . $faultyRequestID . "','" . $MaterialID . "','" . $requiredMaterials[$i] . "','" . $serialNumber . "','" . $imagePath . "','" . $datetime . "','" . $userid . "',1,'clarify','" . $mis_id . "')";
+                                            $faultyDetailsSql = "insert into generatefaultymaterialrequestdetails(requestId, MaterialID, MaterialName, MaterialSerialNumber, materialImage, created_at, created_by, status , materialRequestType,mis_id,materialCondition)
+                                            values('" . $faultyRequestID . "','" . $MaterialID . "','" . $requiredMaterials[$i] . "','" . $serialNumber . "','" . $imagePath . "','" . $datetime . "','" . $userid . "',1,'clarify','" . $mis_id . "','".$material_condition[$i]."')";
                                             if (mysqli_query($con, $faultyDetailsSql)) {
                                             } else {
                                                 echo "Error: " . $sql . "<br>" . mysqli_error($con);
                                             }
                                         }
-
-
-                                        // $sql = "INSERT INTO mis_materialrequirement (mis_id, materialName, materialImage, materialCondition, status, created_at, created_by, portal)
-                                        //                     VALUES ('$id', '$requiredMaterials[$i]', '$imagePath', '$material_condition[$i]', '1', '$datetime', '$userid', 'Service')";
-
-                                        // if (mysqli_query($con, $sql)) {
-                                        // } else {
-                                        //     echo "Error: " . $sql . "<br>" . mysqli_error($con);
-                                        // }
                                     }
+
+
+
+
+
+                                    }
+
+
 
 
 

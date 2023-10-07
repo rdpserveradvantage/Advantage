@@ -94,6 +94,34 @@
                                 </div>
                 
                 
+                
+                <hr />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                         <label>Port </label>
+                                         <input type="text" name="port" class="form-control" required />
+                                     </div>
+                                    
+                                    <div class="col-sm-3">
+                                        <label>Switch</label>
+                                        <input type="text" name="switch" class="form-control" required />
+                                    </div>
+                                    
+                                    
+                                    <div class="col-sm-3">
+                                        <label>Primary DNS</label>
+                                        <input type="text" name="primaryDNS" class="form-control" required />
+                                    </div>
+                                    
+                                    <div class="col-sm-3">
+                                         <label>Alternate DNS</label>
+                                         <input type="text" name="alternateDNS" class="form-control" required />
+                                     </div>
+
+
+                                </div>
+                                
+                
 
                                 <div class="row">
                                     <div class="col-sm-12">

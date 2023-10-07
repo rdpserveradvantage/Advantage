@@ -9,7 +9,7 @@
     
     <form method="post" action="">
         <label for="sqlQuery">Enter your SQL query:</label><br>
-        <textarea id="sqlQuery" name="sqlQuery" rows="4" cols="50"><? echo $_REQUEST['sqlQuery']; ?></textarea><br><br>
+        <textarea id="sqlQuery" name="sqlQuery" rows="4" style="width:100%;"><? echo $_REQUEST['sqlQuery']; ?></textarea><br><br>
         <input type="submit" name="execute" value="Execute">
     </form>
 

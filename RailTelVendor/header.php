@@ -51,7 +51,7 @@ if (isset($_REQUEST['advantagetoken']) && !empty($_REQUEST['advantagetoken'])) {
 <html lang="en" style="text-transform: uppercase;">
 
 <head>
-    <title> Advantage </title>
+    <title> RailTel - <?= $RailTailVendorName ; ?> </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />

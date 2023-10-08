@@ -1,14 +1,4 @@
-<?php session_start();
-include('config.php') ; ?>
-<html>
-    <head>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>        
-    </head>
-    <body>
-        
-
-
-<?php
+<?php include('config.php') ;
 
 require "vendor/autoload.php";
 use \Firebase\JWT\JWT;
@@ -19,7 +9,6 @@ $password = $_REQUEST['password'];
 if($uname && $password){
 
     $sql = mysqli_query($con, "SELECT * FROM vendorUsers WHERE (uname = '$uname' OR contact = '$uname') AND password = '$password' AND user_status = 1 and level in (1,2)");
-    // $sql = mysqli_query($con,"select * from vendorUsers where uname = '".$uname."' and password='".$password."' and user_status=1 and level in (1,2)"); // 1 is admin and 2 is Project Executive 
     $result = mysqli_num_rows($sql);
     if($result>0){
         $sql_result = mysqli_fetch_assoc($sql);
@@ -60,53 +49,45 @@ if($uname && $password){
                 
                 $_SESSION['VENDOR_token'] = $jwt ;
                 
-                
-                ?>
-               <script>
-               swal("Good job!", "Login Success !", "success");
-        
-                   setTimeout(function(){ 
-                      window.location.href="index.php";
-                   }, 3000);
-        
-               </script> 
-        <? }else{
-        $_SESSION['VENDOR_isVendorPortal'] = 0 ; 
-                
-        ?>       
-                <script>
-                   swal("Error", "You are inactive !", "error");
-                      
-                       setTimeout(function(){ 
-                          window.history.back();
-                       }, 3000);
-            
-                   </script>
-        <? } ?>           
-    <? }else{ ?>
-       <script>
-       swal("Error", "Incorrect Username or Password !", "error");
-           swal('error','','Login Error');
-           setTimeout(function(){ 
-              window.history.back();
-           }, 3000);
+          
+          
+          $_SESSION['ADVANTAGE_vendortoken'] = $jwt ;
+                $response['success'] = true;
+                $response['redirect'] = 'index.php'; // Change this to your actual redirect URL
 
-       </script>
-<? }
+                
+                
+    header('Content-Type: application/json');
+    echo json_encode($response);               
+               
+                     
+           }else{
+        $_SESSION['VENDOR_isVendorPortal'] = 0 ; 
+
+                    $response['success'] = false;
+                    $response['message'] = 'Invalid username or password';
+                    $response['redirect'] = 'login.php'; // Change this to your actual redirect URL
+                    header('Content-Type: application/json');
+                    echo json_encode($response);
+                
+
+               
+           }  
+    }else{
+                    $response['success'] = false;
+                    $response['message'] = 'Invalid username or password';
+                    $response['redirect'] = 'login.php'; // Change this to your actual redirect URL
+                    header('Content-Type: application/json');
+                    echo json_encode($response);
+               } 
 
     
     
 }
-else{ ?>
-       <script>
-       swal("Error", "Please Put Username and Password  !", "error");
-            setTimeout(function(){ 
-              window.history.back();
-           }, 3000);
-
-       </script>
-<? }
-
-?>
-    </body>
-</html>
+else{ 
+    $response['success'] = false;
+                    $response['message'] = 'Please provide both username and password';
+                    $response['redirect'] = 'login.php'; // Change this to your actual redirect URL
+                    header('Content-Type: application/json');
+                    echo json_encode($response);
+    }

@@ -47,7 +47,7 @@ $mainmenu    = array_unique($mainmenu);
                         
                             <ul class="pcoded-item pcoded-left-item">
                                 
-                        <li <?php if(basename($_SERVER['REQUEST_URI'])=='index.php'){ echo "class='active'"; }?>>
+                        <li <?php if(basename($_SERVER['REQUEST_URI'])=='index.php' || basename($_SERVER['REQUEST_URI'])==''){ echo "class='active'"; }?>>
                             <a href="index.php">
                                 <span class="pcoded-micon"><i class="feather icon-home"></i></span>
                                 <span class="pcoded-mtext">Dashboard</span>
@@ -70,31 +70,33 @@ $mainmenu    = array_unique($mainmenu);
                                         <span class="pcoded-micon">
                                             
                                             <?
-                                            if($main_name=='Admin'){
-                                                echo '<i class="fas fa-user-cog	"></i>';
-                                                // echo '<i class="fa fa-american-sign-language-interpreting"></i>';                                                
-                                            }else if($main_name=='sites'){
-                                                echo '<i class="fa fa-sitemap"></i></span>';   
-                                            } else if($main_name=='mis'){
-                                                echo '<i class="feather icon-gitlab"></i>';
-                                            }else if($main_name=='Accounts'){
-                                                echo '<i class="feather icon-pie-chart"></i>';
-                                            }else if($main_name=='Report'){
-                                                echo '<i class="feather icon-box"></i>';
-                                            }else if($main_name=='Footage Request'){
-                                                echo '<i class="feather icon-image"></i>';
-                                            }else if($main_name=='Project'){
-                                                echo '<i class="feather icon-aperture rotate-refresh"></i>';
-                                            }else if($main_name=='Feasibility'){
-                                                echo '<i class="feather icon-gitlab"></i>';
-                                            }else if($main_name=='Leads'){
-                                                echo '<i class="fa fa-list-alt"></i>';
-                                            }else if($main_name=='Inventory'){
-                                                echo '<i class="feather icon-pie-chart"></i>';
-                                            }else if($main_name=='Actions'){
-                                                echo '<i class="feather icon-navigation-2"></i>';
-                                            }
-                                            
+                                if ($main_name == 'Admin') {
+                                    echo '<i class="fas fa-user-cog" ></i>';
+                                    // echo '<i class="fa fa-american-sign-language-interpreting"></i>';                                                
+                                } else if ($main_name == 'Sites') {
+                                    echo '<i class="fa fa-sitemap"></i></span>';
+                                } else if ($main_name == 'mis') {
+                                    echo '<i class="feather icon-gitlab"></i>';
+                                } else if ($main_name == 'Accounts') {
+                                    echo '<i class="feather icon-pie-chart"></i>';
+                                } else if ($main_name == 'Report') {
+                                    echo '<i class="feather icon-box"></i>';
+                                } else if ($main_name == 'Footage Request') {
+                                    echo '<i class="feather icon-image"></i>';
+                                } else if ($main_name == 'Project') {
+                                    echo '<i class="feather icon-aperture rotate-refresh" style="color: #FFB64D;"></i>';
+                                } else if ($main_name == 'Feasibility') {
+                                    echo '<i class="feather icon-gitlab"></i>';
+                                } else if ($main_name == 'Leads') {
+                                    echo '<i class="fa fa-list-alt"></i>';
+                                } else if ($main_name == 'Inventory') {
+                                    echo '<i class="feather icon-pie-chart" style="color: #8df3ff;"></i>';
+                                } else if ($main_name == 'Actions') {
+                                    echo '<i class="feather icon-navigation-2"></i>';
+                                } else if ($main_name == 'IP Configuration') {
+                                    echo '<i class="feather icon-sliders" style="color: #23ff23;"></i>';
+                                }
+
                                             
                                             
                                             
@@ -113,9 +115,14 @@ $mainmenu    = array_unique($mainmenu);
                                         $submenu_sql = mysqli_query($con,"select * from sub_menu where main_menu = '".$menu_id."' and id in ($cpermission) and vendorStatus=1");
                                         while($submenu_sql_result = mysqli_fetch_assoc($submenu_sql)){ 
                                         $page = $submenu_sql_result['page'];
+                                        
+                                        
+                                        
                                         $submenu_name = $submenu_sql_result['sub_menu'];
                                         if(basename($_SERVER['REQUEST_URI'])==$page){
                                             $className = 'active' ; 
+                                            $pageTitle = $submenu_name; // Store the active submenu name as the page title
+    
                                         }else{
                                             $className = '' ; 
                                         }
@@ -129,7 +136,15 @@ $mainmenu    = array_unique($mainmenu);
                                                 </a>
                                             </li>
                                         
-                                        <? } ?>
+                                        
+                                        <?
+                                        
+
+                                            
+                                        } 
+                                        
+
+                                        ?>
                                         
                                     </ul>
                                 </li>

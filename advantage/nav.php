@@ -100,7 +100,7 @@ if ($_SESSION['ADVANTAGE_username']) {
                                 } else if ($main_name == 'Footage Request') {
                                     echo '<i class="feather icon-image"></i>';
                                 } else if ($main_name == 'Project') {
-                                    echo '<i class="feather icon-aperture rotate-refresh"></i>';
+                                    echo '<i class="feather icon-aperture rotate-refresh" style="color: #FFB64D;"></i>';
                                 } else if ($main_name == 'Feasibility') {
                                     echo '<i class="feather icon-gitlab"></i>';
                                 } else if ($main_name == 'Leads') {

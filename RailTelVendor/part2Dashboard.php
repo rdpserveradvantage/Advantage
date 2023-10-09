@@ -26,11 +26,10 @@ $titles = [
 ];
 
 $links = [
-    "sitestest.php",
-    "sitestest.php?isDelegated=1",
-    "sitestest.php?isFeasibiltyDone=1",
-    // "materialRequest.php",
-    "completedInstallation.php"
+    "#",
+    "#",
+    "#",
+    "#"
 ];
 
 $icon = [

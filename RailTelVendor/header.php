@@ -52,8 +52,9 @@ if (isset($_REQUEST['advantagetoken']) && !empty($_REQUEST['advantagetoken'])) {
 
 <head>
     <title> RailTel - <?= $RailTailVendorName ; ?> </title>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.9">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=0.8, user-scalable=0, minimal-ui">-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="#">
     <meta name="author" content="#">
@@ -70,12 +71,28 @@ if (isset($_REQUEST['advantagetoken']) && !empty($_REQUEST['advantagetoken'])) {
     <link href="select2/dist/css/select2.min.css" rel="stylesheet" type="text/css">
     <script src="select2/dist/js/select2.min.js" defer></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="files/assets/icon/icofont/css/icofont.css">
+    <!--<link rel="stylesheet" type="text/css" href="assets/line.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="assets/all.min.css">-->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css" type="text/css">
     </link>
     <link rel="stylesheet" href="https://preview.pichforest.com/dashonic/layouts/assets/css/app.min.css" type="text/css">
     </link>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <link href="./fa/css/fontawesome.css" rel="stylesheet">
-    <link href="./fa/css/all.css" rel="stylesheet">
+    <link href="./fa/css/brands.css" rel="stylesheet">
+    <link href="./fa/css/solid.css" rel="stylesheet">
+
+
+
 
 
 </head>

@@ -1,9 +1,8 @@
 <? include('config.php');
 
 $serializedAttributes = $_POST['attribute'];
-$serializedValues = $_POST['values'];
 $serializedSerialNumbers = $_POST['serialNumbers'];
-
+$serializedValues = $serializedSerialNumbers ; 
 $attributes = unserialize($serializedAttributes);
 $values = unserialize($serializedValues);
 $serialNumbers = unserialize($serializedSerialNumbers);

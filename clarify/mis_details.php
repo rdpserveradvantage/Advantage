@@ -318,39 +318,37 @@
                                     $sendid = $checkMaterialSendResult['id'];
 
 
-                                   echo $faultyMaterialRequestSql = "insert into generatefaultymaterialrequest(siteid,atmid,requestBy,requestByPortal,requestFor,requestForPortal,materialRequestLevel,description,created_at,created_by,status,ticketId,materialRequestType,mis_id,engineer)
-                                    values('" . $siteid . "','" . $atmid . "','" . $SERVICE_email . "','Clarify','" . $RailTailVendorID . "','vendor',3,'','" . $datetime . "','" . $userid . "',1,'" . $ticketid . "','clarify','" . $mis_id . "','".$userid."');
+                                    $faultyMaterialRequestSql = "insert into generatefaultymaterialrequest(siteid,atmid,requestBy,requestByPortal,requestFor,requestForPortal,materialRequestLevel,description,created_at,created_by,status,ticketId,materialRequestType,mis_id,engineer)
+                                    values('" . $siteid . "','" . $atmid . "','" . $SERVICE_email . "','Clarify','" . $RailTailVendorID . "','vendor',3,'','" . $datetime . "','" . $userid . "',1,'" . $ticketid . "','clarify','" . $mis_id . "','" . $userid . "');
                                     ";
 
                                     if (mysqli_query($con, $faultyMaterialRequestSql)) {
                                         $faultyRequestID = $con->insert_id;
-                                        
+
                                         for ($i = 0; $i < count($requiredMaterials); $i++) {
-                                        $imageFileName = uniqid() . "_" . $_FILES['material_requirement_images']['name'][$i];
-                                        $imagePath = $targetDir . '/' . $imageFileName;
+                                            $imageFileName = uniqid() . "_" . $_FILES['material_requirement_images']['name'][$i];
+                                            $imagePath = $targetDir . '/' . $imageFileName;
 
-                                        move_uploaded_file($_FILES['material_requirement_images']['tmp_name'][$i], $imagePath);
+                                            move_uploaded_file($_FILES['material_requirement_images']['tmp_name'][$i], $imagePath);
 
 
 
-                                        $sendDetailsSql = mysqli_query($con, "Select * from material_send_details where materialSendId='" . $sendid . "' and attribute='" . $requiredMaterials[$i] . "'");
-                                        if ($sendDetailsSqlResult = mysqli_fetch_assoc($sendDetailsSql)) {
-                                            $serialNumber = $sendDetailsSqlResult['serialNumber'];
-                                            $MaterialID = getInventoryIDBySerialNumber($serialNumber);
+                                            $sendDetailsSql = mysqli_query($con, "Select * from material_send_details where materialSendId='" . $sendid . "' and attribute='" . $requiredMaterials[$i] . "'");
+                                            if ($sendDetailsSqlResult = mysqli_fetch_assoc($sendDetailsSql)) {
+                                                $serialNumber = $sendDetailsSqlResult['serialNumber'];
+                                                $MaterialID = getInventoryIDBySerialNumber($serialNumber);
 
-                                            $faultyDetailsSql = "insert into generatefaultymaterialrequestdetails(requestId, MaterialID, MaterialName, MaterialSerialNumber, materialImage, created_at, created_by, status , materialRequestType,mis_id,materialCondition)
-                                            values('" . $faultyRequestID . "','" . $MaterialID . "','" . $requiredMaterials[$i] . "','" . $serialNumber . "','" . $imagePath . "','" . $datetime . "','" . $userid . "',1,'clarify','" . $mis_id . "','".$material_condition[$i]."')";
-                                            if (mysqli_query($con, $faultyDetailsSql)) {
-                                            } else {
-                                                echo "Error: " . $sql . "<br>" . mysqli_error($con);
+                                                $faultyDetailsSql = "insert into generatefaultymaterialrequestdetails(requestId, MaterialID, MaterialName, MaterialSerialNumber, materialImage, created_at, created_by, status , materialRequestType,mis_id,materialCondition)
+                                            values('" . $faultyRequestID . "','" . $MaterialID . "','" . $requiredMaterials[$i] . "','" . $serialNumber . "','" . $imagePath . "','" . $datetime . "','" . $userid . "',1,'clarify','" . $mis_id . "','" . $material_condition[$i] . "')";
+                                                if (mysqli_query($con, $faultyDetailsSql)) {
+
+                                                    mysqli_query($con, "insert into vendormaterialrequest(vendorId, vendorName, siteid, atmid, engineerId, engineerName, materialName, materialCondition, created_at,  created_by, createdByPortal, status) 
+                                                values('" . $RailTailVendorID . "','" . $getVendorName . "','" . $siteid . "','" . $atmid . "','" . $userid . "','" . $SERVICE_email . "','" . $requiredMaterials[$i] . "','" . $material_condition[$i] . "','" . $datetime . "','" . $userid . "','Clarify',1)");
+                                                } else {
+                                                    echo "Error: " . $sql . "<br>" . mysqli_error($con);
+                                                }
                                             }
                                         }
-                                    }
-
-
-
-
-
                                     }
 
 
@@ -395,7 +393,7 @@
                                     $materialToReplace = $_REQUEST['materialToReplace'];
                                     foreach ($materialToReplace as $materialToReplaceKey => $materialToReplaceValue) {
 
-                                        echo '$materialToReplaceValue = '. $materialToReplaceValue;
+                                        echo '$materialToReplaceValue = ' . $materialToReplaceValue;
                                         echo '<br>';
                                         // $serialNumberValidator = mysqli_query($con,"select * from inventory where ");    
 

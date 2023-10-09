@@ -119,7 +119,8 @@ if ($_SESSION['username']) {
                                 $page = $submenu_sql_result['page'];
                                 $submenu_name = $submenu_sql_result['sub_menu'];
 
-                                if (basename($_SERVER['REQUEST_URI']) == $page) {
+                                if (basename($_SERVER['PHP_SELF'], PATHINFO_BASENAME) == $page) {
+
                                     $className = 'active';
                                 } else {
                                     $className = '';

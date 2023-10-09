@@ -73,6 +73,16 @@ if (!function_exists('getUsername')) {
 
 
 
+if (!function_exists('getVendorName')) {
+
+    function getVendorName($id)
+    {
+        global $con;
+        $sql = mysqli_query($con, "select * from vendor where id ='" . $id . "'");
+        $sql_result = mysqli_fetch_assoc($sql);
+        return $sql_result['vendorName'];
+    }
+}
 
 
 
@@ -80,6 +90,7 @@ $userid = $_SESSION['SERVICE_userid'];
 $datetime = date('Y-m-d H:i:s');
 $RailTailVendorID = getUsers_Vendor($userid);
 $RailTailVendorName = getUsername($RailTailVendorID, true);
+$getVendorName = getVendorName($RailTailVendorID);
 $SERVICE_LEVEL = $_SESSION['SERVICE_level'];
 $SERVICE_email = $_SESSION['SERVICE_email'];
 // if($userid>0){
@@ -157,16 +168,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_query($con, $dataRecordsSql);
 }
 
-if (!function_exists('getVendorName')) {
-
-    function getVendorName($id)
-    {
-        global $con;
-        $sql = mysqli_query($con, "select * from vendor where id ='" . $id . "'");
-        $sql_result = mysqli_fetch_assoc($sql);
-        return $sql_result['vendorName'];
-    }
-}
 
 
 function logEvent($siteId, $atmid, $portal, $eventName, $eventDescription, $table)

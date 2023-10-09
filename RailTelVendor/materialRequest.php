@@ -1,174 +1,90 @@
-<? include('header.php');
-
-function getMaterialRequestInitiatorName($siteid)
-{
-    global $con;
-    $sql = mysqli_query($con, "select * from material_requests where siteid='" . $siteid . "' and isProject=1");
-    $sql_result = mysqli_fetch_assoc($sql);
-    $vendorId = $sql_result['vendorId'];
-    return getVendorName($vendorId);
-}
-
-function getMaterialRequestStatus($siteid)
-{
-    global $con;
-    $sql = mysqli_query($con, "select status from material_requests where siteid='" . $siteid . "' and isProject=1");
-    $sql_result = mysqli_fetch_assoc($sql);
-    return $sql_result['status'];
-}
-
-function getMaterial_requestData($siteid, $parameter)
-{
-    global $con;
-    $sql = mysqli_query($con, "select $parameter from material_requests where siteid='" . $siteid . "' order by id desc");
-    $sql_result = mysqli_fetch_assoc($sql);
-    return $sql_result[$parameter];
-}
-
-?>
+<? include('header.php'); ?>
 
 
+<style>
+    #contactPersonName[readonly] {
+        pointer-events: none;
+    }
 
+    .swal2-popup {
+        background: white !important;
+    }
+</style>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
                     <div class="card">
-                        <div class="card-header" style="overflow:auto;">
-
-                            <?
-                            $siteidsql = mysqli_query($con, "SELECT siteid FROM `material_requests` where status='pending' group by siteid");
-                            while ($siteidsql_result = mysqli_fetch_assoc($siteidsql)) {
-                                $siteids[] = $siteidsql_result['siteid'];
-                            }
-                            $siteids_ar = $siteids;
-                            $siteids = json_encode($siteids);
-                            $siteids = str_replace(array('[', ']', '"'), '', $siteids);
-                            $siteids = explode(',', $siteids);
-                            $siteids = "'" . implode("', '", $siteids) . "'";
-
-
-                            if ($siteids_ar) { ?>
-                                <h5>All Material Request</h5>
-                                <hr />
+                        <div class="card-header">
+                            <h5>Material Request</h5>
                         </div>
                         <div class="card-body" style="overflow:auto;">
 
-                            <table class="table table-hover table-styling table-xs">
-                                <thead>
-                                    <tr class="table-primary">
-                                        <th>Srno</th>
-                                        <th>ATMID</th>
-                                        <th>Address</th>
-                                        <th>City</th>
-                                        <th>State</th>
-                                        <th>Vendor</th>
+                            <?
 
-                                        <th>IP Configuration</th>
-                                        <th>Router Configuration</th>
+                            $srno = 1;
+                            $sql = mysqli_query($con, "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID . "' and status=1");
+                            if (mysqli_num_rows($sql) > 0) {
 
-                                        <th>Action</th>
-                                        <th>Current Status</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?
-                                    $i = 1;
-                                    $sql = mysqli_query($con, "select * from sites where id in($siteids)");
-                                    while ($sql_result = mysqli_fetch_assoc($sql)) {
+                                echo '<table class="table table-hover table-styling table-xs">
+    <thead>
+        <tr class="table-primary">
+            <th>Sr No</th>
+            <th>Requested By </th>
+            <th>ATMID</th>
+            <th>Material</th>
+            <th>Requested At</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody> ';
 
-                                        $ipRemark = '';
-                                        $error = 0;
+                                while ($sql_result = mysqli_fetch_assoc($sql)) {
 
-                                        $configurationRemark = '';
-                                        $configurationError = 0;
+                                    $id = $sql_result['id'];
+                                    $siteid = $sql_result['siteid'];
+                                    $engineerId = $sql_result['engineerId'];
+                                    $engineerName = $sql_result['engineerName'];
+                                    $atmid = $sql_result['atmid'];
+                                    $materialName =  $sql_result['materialName'];
+                                    $created_at = $sql_result['created_at'];
 
-                                        $atmid = $sql_result['atmid'];
-                                        $siteid = $sql_result['id'];
-                                        $city = $sql_result['city'];
-                                        $state = $sql_result['state'];
-                                        $address = $sql_result['address'];
+                                    echo "<tr>
+<td>$srno</td>
+<td>$engineerName</td>
+<td>$atmid</td>
+<td>$materialName</td>
+<td>$created_at</td>
+<td>
+    <button type='button' class='send-from-stock btn btn-primary' 
+    data-materialName='$materialName'
+    data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-engineerId='$engineerId' >
+    Send From Stock
+    </button>
+ | 
+ <button type='button' class='material-request btn btn-primary' 
+    data-materialName='$materialName'
+    data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-engineerId='$engineerId' >
+ Material Request
+</button>
+</td>
+</tr>";
 
-                                        $networkIP = $sql_result['networkIP'];
-                                        $routerIP = $sql_result['routerIP'];
-                                        $atmIP = $sql_result['atmIP'];
-                                        
-                                        if ($networkIP) {
-                                            $ipRemark .= ' Network IP <i class="fas fa-check" style="color:green;"></i>';
-                                        } else {
-                                            $ipRemark .= ' Network IP <i class="fas fa-window-close" style="color:red;"></i>';
-                                            $error++;
-                                        }
-                                        if ($routerIP) {
-                                            $ipRemark .= ' Router IP <i class="fas fa-check" style="color:green;"></i>';
-                                        } else {
-                                            $ipRemark .= ' Router IP <i class="fas fa-window-close"  style="color:red;"></i>';
-                                            $error++;
-                                        }
-                                        if ($atmIP) {
-                                            $ipRemark .= ' ATM IP <i class="fas fa-check" style="color:green;"></i>';
-                                        } else {
-                                            $error++;
-                                            $ipRemark .= ' ATM IP <i class="fas fa-window-close"  style="color:red;"></i>';
-                                        }
-                                        
+                                    $srno++;
+                                }
 
-                                        $routerConfiguration = mysqli_query($con, "select * from routerConfiguration where atmid='" . $atmid . "' and status=1");
-                                        $routerConfigurationResult = mysqli_fetch_assoc($routerConfiguration);
+                                echo "</tbody>
+</table>";
+                            } else {
 
-                                        $serialNumber = $routerConfigurationResult['serialNumber'];
-                                        
-                                        if ($serialNumber) {
-                                            $configurationRemark .= ' Serial Number <i class="fas fa-check" style="color:green;"></i>';
-                                        } else {
-                                            $configurationRemark .= ' Serial Number <i class="fas fa-window-close" style="color:red;"></i>';
-                                            $configurationError++;
-                                        }
-
-
-                                    ?>
-
-                                        <tr>
-                                            <td><?= $i; ?></td>
-                                            <td><?= $atmid; ?></td>
-                                            <td><?= $address; ?></td>
-                                            <td><?= $city; ?></td>
-                                            <td><?= $state; ?></td>
-                                            <td><?= getMaterialRequestInitiatorName($siteid); ?></td>
-
-
-                                            <td><?= $ipRemark; ?></td>
-                                            <td><?= $configurationRemark; ?></td>
-                                            <td>
-                                                <?
-                                                if ($configurationError + $error > 0) {
-                                                    echo '<label style="color:red;">Pending Details !</label>';
-                                                } else { ?>
-                                                    <a href="sendMaterial.php?siteid=<?= $siteid; ?>">Send Material</a>
-                                                <? } ?>
-                                            </td>
-                                            <td>
-                                                <?= getMaterialRequestStatus($siteid); ?>
-                                            </td>
-                                            <td>
-                                                <?= getMaterial_requestData($siteid, 'created_at'); ?>
-                                            </td>
-                                        </tr>
-                                    <? $i++;
-                                    } ?>
-
-                                </tbody>
-                            </table>
-                        <? } else {
                                 echo '
                                             
-                                            <div class="noRecordsContainer">
-                                                <img src="assets/no_records.jpg">
-                                            </div>';
-                            } ?>
-
+<div class="noRecordsContainer">
+    <img src="assets/noRecords.png">
+</div>';
+                            }
+                            ?>
 
 
                         </div>
@@ -182,4 +98,171 @@ function getMaterial_requestData($siteid, $parameter)
 </div>
 
 
+
+
+<div class="modal" id="sendFromStockModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Send From Stock</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+
+
+
+                <form id="vendorForm">
+                    <input type="hidden" name="engineerId" id="engineerId">
+                    <input type="hidden" name="atmid" value="<?php echo $atmid; ?>">
+                    <input type="hidden" name="siteid" value="<?php echo $siteid; ?>">
+                    <input type="hidden" name="vendorId" value="<?php echo $RailTailVendorID; ?>">
+                    <input type="hidden" name="attribute" value="<?php echo htmlentities(serialize($attributes)); ?>">
+                    <input type="hidden" name="serialNumbers" value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label for="">Material</label>
+                            <input type="text" name="attribute" id="material" class="form-control" value="" readonly>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="">Serial Number</label>
+                            <input type="text" name="serialNumbers" id="serialNumbers" class="form-control" value="" required>
+                        </div>
+
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Contact Person Name</label>
+                            <select class="form-control" name="contactPersonName" id="contactPersonName" readonly required>
+                                <option value="">Select</option>
+                                <?
+
+                                $vendorUsersSql = mysqli_query($con, "select * from vendorUsers where vendorId='" . $RailTailVendorID . "' and user_status=1 order by name asc");
+                                while ($vendorUsersSqlResult = mysqli_fetch_assoc($vendorUsersSql)) {
+                                    $vendorUserName = $vendorUsersSqlResult['name'];
+                                    $vendorUserId = $vendorUsersSqlResult['id'];
+                                ?>
+                                    <option value="<?= $vendorUserId; ?>">
+                                        <?= $vendorUserName; ?>
+                                    </option>
+                                <? } ?>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Contact Person Number</label>
+                            <input type="text" name="contactPersonNumber" id="contactPersonNumber" class="form-control" readonly required>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Address</label>
+                            <textarea name="address" class="form-control" id="address" required></textarea>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>POD</label>
+                            <input type="text" name="POD" class="form-control" required />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Courier</label>
+                            <input type="text" name="courier" class="form-control" required />
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Any Other Remark</label>
+                            <input type="text" name="remark" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <br>
+                            <input type="submit" name="submit" class="btn btn-primary" onclick="submitForm(event);" id="submitButton" value="Submit">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.send-from-stock').click(function() {
+
+            var id = $(this).data('id');
+            var siteid = $(this).data('siteid');
+            var atmid = $(this).data('atmid');
+            var engineerId = $(this).data('engineerid');
+            var materialName = $(this).data('materialname');
+
+            $.ajax({
+                type: "POST",
+                url: 'getVendorUserInfo.php',
+                data: 'contactPerson=' + engineerId,
+                async: false,
+                success: function(msg) {
+                    var data = JSON.parse(msg);
+                    $('#contactPersonNumber').val(data.contact);
+                    $('#address').val(data.address);
+                }
+            });
+
+            $('#sendFromStockModal').find('[name="atmid"]').val(atmid);
+            $('#sendFromStockModal').find('[name="siteid"]').val(siteid);
+            $('#sendFromStockModal').find('[name="engineerId"]').val(engineerId);
+            $('#sendFromStockModal').find('[name="attribute"]').val(materialName); //attribute = material_name
+
+            $('#sendFromStockModal').find('#contactPersonName').val(engineerId);
+            $('#sendFromStockModal').modal('show');
+
+        });
+        $(document).on('click', '#contactPersonName[readonly]', function() {
+            return false;
+        });
+
+        $('.material-request').click(function() {
+            if (confirm('Are you sure you want to generate a material request?')) {
+                var id = $(this).data('id');
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'proceedToInventoryMaterialRequest.php',
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        if (response == 1) {
+                            Swal.fire({
+                                title: "Material Request Send Successfully !",
+                                text: "Redirecting...",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 1500,
+                                didClose: () => {
+                                    window.location.href = 'materialRequest.php';
+                                },
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Material Request sent error !",
+                                text: 'Ooops ',
+                                icon: "error",
+                                showConfirmButton: true, // You can use true or false based on your preference
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                            title: "Material Request sent error !",
+                            text: 'Ooops ',
+                            icon: "error",
+                            showConfirmButton: true, // You can use true or false based on your preference
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
 <? include('footer.php'); ?>

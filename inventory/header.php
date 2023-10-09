@@ -65,7 +65,7 @@ if(verifyToken($token)!=1 || $site!='advantageInventory'){
     <link href="select2/dist/css/select2.min.css" rel="stylesheet" type="text/css">
     <script src="select2/dist/js/select2.min.js" defer></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.0/css/line.css" type="text/css"></link>
 <link rel="stylesheet" href="https://preview.pichforest.com/dashonic/layouts/assets/css/app.min.css" type="text/css"></link>
@@ -309,7 +309,7 @@ width: 100%;
 
                     <div class="navbar-logo">
                         <a class="mobile-menu" id="mobile-collapse" href="#!">
-                            <i class="feather icon-menu"></i>
+                            <i class="feather icon-menu icon-toggle-right"></i>
                         </a>
                         <a href="index.php" style="margin-left: 16px;">
                             <img src="assets/1601680170_capture.jpg"  class="logo_img"/>    

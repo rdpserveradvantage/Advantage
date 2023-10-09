@@ -11,7 +11,7 @@
 
                             <?
                             $counter = 1;
-                            $sql = mysqli_query($con, "SELECT * FROM material_send where vendorId='" . $RailTailVendorID ."' order by id desc");
+                            $sql = mysqli_query($con, "SELECT * FROM material_send where vendorId='" . $RailTailVendorID . "' order by id desc");
                             if (mysqli_num_rows($sql) > 0) {
                                 echo "<table class='table table-hover table-styling table-xs'>
                                         <thead>
@@ -67,7 +67,11 @@
                                     echo "<td class='strong'>$atmid</td>";
                                     echo "<td class='strong'>" .
                                         ($isDelivered == 1 ? 'Delivered' : 'In-Transit') . "</td>";
-                                    echo "<td>" . ($ifExistTrackingUpdate == 1 ? 'View' : "<a href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update</a>") . "</td>";
+                                    echo "<td>" . ($ifExistTrackingUpdate == 1 ?
+                                        '<button type="button" class="view-dispatch-info btn btn-primary btn-sm" data-id='.$id.'>
+                                    View
+                                    </button>'
+                                        : "<a class='btn btn-warning btn-sm' href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update Receive</a>") . "</td>";
                                     echo "<td>$contactPerson</td>";
                                     echo "<td>$contactNumber</td>";
                                     // echo "<td>$contactPerson</td>";
@@ -114,4 +118,46 @@
     </div>
 </div>
 
+
+<div class="modal" id="viewdispatchinfo">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Info</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div id="getDispatchInfo"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+            $('.view-dispatch-info').click(function() {
+                var id = $(this).data('id');
+                $.ajax({
+                    type: 'POST',
+                    url: 'getDispatchInfo.php',
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        $("#getDispatchInfo").html(response);
+                    },
+                    error: function(error) {
+                        $("#getDispatchInfo").html('Nothing found here !');
+                        
+                    }
+                });
+
+                $('#viewdispatchinfo').modal('show');
+
+                
+            });
+</script>
 <?php include('footer.php'); ?>

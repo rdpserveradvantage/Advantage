@@ -8,6 +8,8 @@ $attributes = unserialize($serializedAttributes);
 $values = unserialize($serializedValues);
 $serialNumbers = unserialize($serializedSerialNumbers);
 
+$materialSendIDParent = $_POST['materialSendID'];
+
 $atmid = $_POST['atmid'];
 $siteid = $_POST['siteid'];
 $vendorId = $_POST['vendorId'];
@@ -18,24 +20,11 @@ $pod = $_POST['POD'];
 $courier = $_POST['courier'];
 $remark = $_POST['remark'];
 
-$data = [
-    'atmid' => $atmid,
-    'siteid' => $siteid,
-    'vendorId' => $vendorId,
-    'contactPersonName' => $contactPersonName,
-    'contactPersonNumber' => $contactPersonNumber,
-    'pod' => $pod,
-    'courier' => $courier,
-    'remark' => $remark,
-    'address' => $address,
-    'attribute' => $attributes,
-    'values' => $values,
-    'serialNumbers' => $serialNumbers
-];
 
-$query = "INSERT INTO vendorMaterialSend (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+$query = "INSERT INTO vendorMaterialSend (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark,materialSendId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $con->prepare($query);
-$stmt->bind_param("ssissssss", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark);
+$stmt->bind_param("ssisssssss", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark,$materialSendIDParent);
 $stmt->execute();
 $stmt->close();
 

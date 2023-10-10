@@ -4,6 +4,14 @@
     .error {
         border: 1px solid red;
     }
+    .nav-tabs .slide{
+        width: calc(100% / 2);
+    }
+    
+
+.md-tabs .nav-item {
+    width: calc(100% / 2);
+}
 </style>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
@@ -268,7 +276,7 @@
 
 
 
-<div class="modal" id="sendFromStockModal">
+<div class="modal fade" id="sendFromStockModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

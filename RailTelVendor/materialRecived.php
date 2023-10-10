@@ -11,6 +11,7 @@
 
                             <?
                             $counter = 1;
+                            echo "SELECT * FROM material_send where vendorId='" . $RailTailVendorID . "' order by id desc "; 
                             $sql = mysqli_query($con, "SELECT * FROM material_send where vendorId='" . $RailTailVendorID . "' order by id desc");
                             if (mysqli_num_rows($sql) > 0) {
                                 echo "<table class='table table-hover table-styling table-xs'>
@@ -46,7 +47,7 @@
                                     $date = $sql_result['created_at'];
                                     $isDelivered = $sql_result['isDelivered'];
 
-                                    $againSend = mysqli_query($con, "select * from vendorMaterialSend where siteid='" . $siteid . "' and status=1");
+                                    $againSend = mysqli_query($con, "select * from vendorMaterialSend where materialSendId='" . $id . "'");
                                     if ($againSendResult = mysqli_fetch_assoc($againSend)) {
                                         $isAgainSendStatus = 1;
                                         $contactPersonName = $againSendResult['contactPersonName'];

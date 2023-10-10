@@ -1,8 +1,19 @@
-<!-- Replace 'path/to/cisco-icon.svg' with the actual path of the Cisco vendor icon SVG file -->
-<div class="vendor-svg-container">
-    <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-        width="50" height="50" viewBox="0 0 50 50"
-        preserveAspectRatio="xMidYMid meet">
-        <image href="path/to/cisco-icon.svg" width="50" height="50" />
-    </svg>
-</div>
+<? include('config.php');
+
+
+return ; 
+$sql = mysqli_query($con,"select * from material_send");
+while($sql_result = mysqli_fetch_assoc($sql)){
+    
+    $id = $sql_result['id'];
+    $atmid = $sql_result['atmid'];
+    $siteid = $sql_result['siteid'];
+    
+    
+    mysqli_query($con,"update vendorMaterialSend set materialSendId='".$id."' where atmid='".$atmid."' and siteid='".$siteid."'");
+    
+    
+    
+}
+
+?>

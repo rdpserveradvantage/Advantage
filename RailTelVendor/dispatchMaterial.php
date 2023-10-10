@@ -38,6 +38,8 @@
                                 <input type="hidden" name="atmid" value="<?php echo $atmid; ?>">
                                 <input type="hidden" name="siteid" value="<?php echo $siteid; ?>">
                                 <input type="hidden" name="vendorId" value="<?php echo $vendorId; ?>">
+                                <input type="hidden" name="materialSendID" value="<?= $materialSendId; ?>">
+                                
 
                                 <input type="hidden" name="attribute" value="<?php echo htmlentities(serialize($attributes)); ?>">
                                 <input type="hidden" name="values" value="<?php echo htmlentities(serialize($values)); ?>">

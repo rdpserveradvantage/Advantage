@@ -20,6 +20,7 @@ if ($username && $password) {
         $_SESSION['SERVICE_userid'] = $response['user']['id'];
         $_SESSION['SERVICE_level'] = $response['user']['level'];
         
+        $_SESSION['SERVICE_userNumber'] = $response['user']['contact'];
         
         $_SESSION['SERVICE_branch'] = $response['user']['branch'];
         $_SESSION['SERVICE_zone'] = $response['user']['zone'];

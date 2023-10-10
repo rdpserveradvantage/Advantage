@@ -199,6 +199,8 @@ $(document).on('change','#comp',function(){
     }else if(comp=='Non-Offline'){
         option = `<option>Weak Signal</option>
                     <option>Fluctuation</option>
+                    <option>SIM Slot Not Working</option>
+
         `;
     }else{
         option = `<option></option>`;

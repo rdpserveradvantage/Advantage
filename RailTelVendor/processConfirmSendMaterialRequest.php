@@ -21,30 +21,43 @@ $courier = $_POST['courier'];
 $remark = $_POST['remark'];
 
 
+$checkVendorMaterialSend = mysqli_query($con,"select * from vendorMaterialSend where materialSendId='".$materialSendIDParent."' and status=0");
+if($checkVendorMaterialSendResult = mysqli_fetch_assoc($checkVendorMaterialSend)){
+    $materialSendId = $checkVendorMaterialSendResult['id'];
 
-$query = "INSERT INTO vendorMaterialSend (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark,materialSendId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-$stmt = $con->prepare($query);
-$stmt->bind_param("ssisssssss", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark,$materialSendIDParent);
-$stmt->execute();
-$stmt->close();
+    mysqli_query($con,"update vendorMaterialSend set contactPersonName='".$contactPersonName."', contactPersonNumber='".$contactPersonNumber."',
+    address='".$address."', pod='".$pod."', courier='".$pod."', remark='".$remark."',status=1 where id='".$materialSendId."'");
 
-$materialSendId = $con->insert_id;
-
-if (!empty($attributes) && !empty($values) && !empty($serialNumbers)) {
-    $query = "INSERT INTO vendorMaterialSendDetails (materialSendId, attribute, value, serialNumber) VALUES (?, ?, ?, ?)";
+}else{
+    $query = "INSERT INTO 
+    vendorMaterialSend (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark,materialSendId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $con->prepare($query);
-    $stmt->bind_param("isss", $materialSendId, $attribute, $value, $serialNumber);
-    for ($i = 0; $i < count($attributes); $i++) {
-        $attribute = $attributes[$i];
-        $value = $values[$i];
-        $serialNumber = $serialNumbers[$i];
-        $stmt->execute();
-            mysqli_query($con,"update vendorinventory set status=1 where serial_no='".$serialNumber."'") ; 
-    }
-    sendMaterialToEngineer($siteid,$atmid,'') ;
+    $stmt->bind_param("ssisssssss", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark,$materialSendIDParent);
+    $stmt->execute();
     $stmt->close();
+    
+    $materialSendId = $con->insert_id;
 
+    if (!empty($attributes) && !empty($values) && !empty($serialNumbers)) {
+        $query = "INSERT INTO vendorMaterialSendDetails (materialSendId, attribute, value, serialNumber) 
+        VALUES (?, ?, ?, ?)";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("isss", $materialSendId, $attribute, $value, $serialNumber);
+        for ($i = 0; $i < count($attributes); $i++) {
+            $attribute = $attributes[$i];
+            $value = $values[$i];
+            $serialNumber = $serialNumbers[$i];
+            $stmt->execute();
+                mysqli_query($con,"update vendorinventory set status=1 where serial_no='".$serialNumber."'") ; 
+        }
+        sendMaterialToEngineer($siteid,$atmid,'') ;
+        $stmt->close();
+    
+    }
+
+    
 }
+
 
 
 $con->close();

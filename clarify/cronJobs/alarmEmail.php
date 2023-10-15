@@ -19,11 +19,20 @@ if ($inbox) {
             $overview = imap_fetch_overview($inbox, $email_number, 0);
             $subject = $overview[0]->subject;
 
-            // Check if the body contains the target phrase
-            preg_match('/(\d+) devices on the platform are offline/', $message, $matches);
+            // Modify the regular expression to match both cases
+            preg_match('/(\d+) devices on the platform are offline|The VPN of (\d+) devices in the platform is offline/', $message, $matches);
 
             if (!empty($matches)) {
-                $numberOfDevices = $matches[1];
+                // Check if the first capture group is set (for the first pattern)
+                if (!empty($matches[1])) {
+                    $numberOfDevices = $matches[1];
+                } else {
+                    // If the first capture group is empty, use the second capture group (for the second pattern)
+                    $numberOfDevices = $matches[2];
+                }
+
+                // Remove "= td>" from the message
+                $message = str_replace("= td>", "", $message);
 
                 $dom = new DOMDocument;
                 libxml_use_internal_errors(true);
@@ -32,43 +41,77 @@ if ($inbox) {
 
                 libxml_use_internal_errors(false);
 
+                // Search for tables with specific content in cells
                 $tables = $dom->getElementsByTagName('table');
-                $table = $tables->item(0);
+                $firstTable = null;
+                $thirdTable = null;
 
-                if ($table) {
-                    $snValues = [];
-                    $deviceIDValues = [];
-                    $descriptionValues = [];
+                foreach ($tables as $table) {
+                    $cellContent = $table->textContent;
+echo '<br>';echo '<br>';
+echo '$cellContent = ' . $cellContent ; 
+echo '<br>';echo '<br>';echo '<br>';
+                    if (strpos($cellContent, 'devices on the platform are offline') !== false) {
+                        $firstTable = $table;
+                    } elseif (strpos($cellContent, 'devices in the platform have been offline for more than 15 minutes') !== false) {
+                        $thirdTable = $table;
+                    }
+                    // echo '<br>';
+                    // echo '$table = ' . $table ; 
+                }
 
+                if ($firstTable) {
                     echo "Subject: $subject<br>";
                     echo "Number of Devices Offline: $numberOfDevices<br>";
-                    echo "SN\tDevice ID\tDescription<br>";
+                    echo "SN\tDevice ID\tDescription\tOffline Time<br>";
 
-                    foreach ($table->getElementsByTagName('tr') as $row) {
+                    foreach ($firstTable->getElementsByTagName('tr') as $row) {
                         $cells = $row->getElementsByTagName('td');
 
-                        if ($cells->length >= 3) {
+                        if ($cells->length >= 4) {
                             $sn = trim(html_entity_decode(strip_tags($cells->item(0)->nodeValue)));
                             $deviceID = trim(html_entity_decode(strip_tags($cells->item(1)->nodeValue)));
                             $description = trim(html_entity_decode(strip_tags($cells->item(2)->nodeValue)));
 
                             echo "$sn\t$deviceID\t$description<br>";
-
-                            $snValues[] = $sn;
-                            $deviceIDValues[] = $deviceID;
-                            $descriptionValues[] = $description;
                         }
                     }
 
-                    var_dump($snValues, $deviceIDValues, $descriptionValues);
+                    var_dump($snValues, $deviceIDValues, $descriptionValues, $offlineTimeValues);
 
-                    echo '<br />';
-                    
-                    echo '<br />';
-                    echo '<br />';
-                } else {
-                    echo "No table found in the email body<br>";
+                    echo '<br>';
+                    echo '<br>';
+                    echo '<br>';
                 }
+
+                if ($thirdTable) {
+                    echo "Subject: $subject<br>";
+                    echo "Number of Devices Offline: $numberOfDevices<br>";
+                    echo "SN\tDevice ID\tDescription\tOffline Time<br>";
+
+                    foreach ($thirdTable->getElementsByTagName('tr') as $row) {
+                        $cells = $row->getElementsByTagName('td');
+
+                        if ($cells->length >= 4) {
+                            $sn = trim(html_entity_decode(strip_tags($cells->item(0)->nodeValue)));
+                            $deviceID = trim(html_entity_decode(strip_tags($cells->item(1)->nodeValue)));
+                            $description = trim(html_entity_decode(strip_tags($cells->item(2)->nodeValue)));
+                            $offlineTime = trim(html_entity_decode(strip_tags($cells->item(3)->nodeValue)));
+
+                            echo "$sn\t$deviceID\t$description\t$offlineTime<br>";
+                        }
+                    }
+
+                    var_dump($snValues, $deviceIDValues, $descriptionValues, $offlineTimeValues);
+
+                    echo '<br>';
+                    echo '<br>';
+                    echo '<br>';
+                } else {
+                    echo "No 15-minute offline table found in the email<br>";
+                }
+            } else {
+                echo "No relevant information found in the email<br>";
             }
         }
     } else {

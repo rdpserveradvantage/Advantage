@@ -5,16 +5,93 @@
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
+
+                    <div class="card">
+                        <div class="card-block">
+                            <form action="<? $_SERVER['PHP_SELF']; ?>" method="POST">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label>ATM ID</label>
+                                        <input type="text" class="form-control" name="atmid">
+                                    </div>
+
+                                </div>
+                                <br />
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input type="submit" class="btn btn-primary" name="submit">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+
+                    <?php
+                    // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
+                    
+
+                    $sqlappCount = "SELECT count(1) as total FROM material_send where vendorId='" . $RailTailVendorID . "'";
+                    $atm_sql = "SELECT * FROM material_send where vendorId='" . $RailTailVendorID . "' ";
+
+
+
+                    if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
+                        $atmid = $_REQUEST['atmid'];
+                        $atm_sql .= "and atmid like '%" . $atmid . "%'";
+                        $sqlappCount .= "and atmid like '%" . $atmid . "%'";
+                    }
+
+
+                    $atm_sql .= "  order by id desc";
+                    $sqlappCount .= " ";
+
+                    $page_size = 10;
+                    $result = mysqli_query($con, $sqlappCount);
+                    $row = mysqli_fetch_assoc($result);
+                    $total_records = $row['total'];
+                    $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+                    $offset = ($current_page - 1) * $page_size;
+                    $total_pages = ceil($total_records / $page_size);
+                    $window_size = 10;
+                    $start_window = max(1, $current_page - floor($window_size / 2));
+                    $end_window = min($start_window + $window_size - 1, $total_pages);
+                    $sql_query = "$atm_sql LIMIT $offset, $page_size";
+                    // }
+                    // echo $sql_query ; 
+                    
+                    ?>
+
+
                     <div class="card">
                         <div class="card-block" style="overflow:auto;">
 
 
                             <?
                             $counter = 1;
-                            echo "SELECT * FROM material_send where vendorId='" . $RailTailVendorID . "' order by id desc ";
-                            $sql = mysqli_query($con, "SELECT * FROM material_send where vendorId='" . $RailTailVendorID . "' order by id desc");
+                            $sql = mysqli_query($con, $sql_query);
                             if (mysqli_num_rows($sql) > 0) {
-                                echo "<table class='table table-hover table-styling table-xs'>
+
+                                ?>
+                                <div class="card-header">
+
+                                    <h5> Total Records:
+                                        <strong class="record-count">
+                                            <? echo $total_records; ?>
+                                        </strong>
+                                    </h5>
+                                    <hr>
+                                    <form action="exportMaterialReceived.php" method="POST">
+                                        <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
+                                        <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
+                                    </form>
+
+                                </div>
+
+                                <?
+                                echo "<table class='table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs'>
                                         <thead>
                                             <tr class='table-primary'>
                                                 <th>Srno</th>
@@ -32,7 +109,13 @@
                                         </thead>
                                         <tbody>";
 
-                                while ($sql_result = mysqli_fetch_assoc($sql)) {
+
+                                $i = 1;
+                                $counter = ($current_page - 1) * $page_size + 1;
+                                $sql_app = mysqli_query($con, $sql_query);
+                                while ($sql_result = mysqli_fetch_assoc($sql_app)) {
+
+                                    // while ($sql_result = mysqli_fetch_assoc($sql)) {
                                     $id = $sql_result['id'];
                                     $siteid = $sql_result['siteid'];
                                     $atmid = $sql_result['atmid'];
@@ -74,10 +157,10 @@
                                     echo "<td class='strong'>" .
                                         ($isDelivered == 1 ? 'Delivered' : 'In-Transit') . "</td>";
                                     echo "<td>" . ($ifExistTrackingUpdate == 1 ?
-                                        '<button type="button" class="view-dispatch-info btn btn-primary btn-sm" data-id=' . $id . '>
+                                        '<button type="button" style="border:none;" class="view-dispatch-info" data-id=' . $id . '>
                                     View
                                     </button>'
-                                        : "<a class='btn btn-warning btn-sm' href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update Receive</a>") . "</td>";
+                                        : "<a href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update Receive</a>") . "</td>";
                                     echo "<td>$contactPerson</td>";
                                     echo "<td>$contactNumber</td>";
                                     // echo "<td>$contactPerson</td>";
@@ -87,7 +170,7 @@
                                     echo "<td>$date</td>";
                                     if ($isDelivered == 1 && $isAgainSendStatus == 0) {
                                         echo "<td>
-                                                        <a href='dispatchMaterial.php?siteid=$siteid&atmid=$atmid&materialSendId=$id' class='btn btn-primary'>Dispatch</a>
+                                                        <a href='dispatchMaterial.php?siteid=$siteid&atmid=$atmid&materialSendId=$id'>Dispatch</a>
                                                   </td>";
                                     } else if ($isDelivered == 1 && $isAgainSendStatus == 1) {
                                         echo "<td>
@@ -103,6 +186,39 @@
 
                                 echo "</tbody>
                                     </table>";
+
+
+
+
+                                $atmid = $_REQUEST['atmid'];
+                                echo '<div class="pagination"><ul>';
+                                if ($start_window > 1) {
+
+                                    echo "<li><a href='?page=1&&atmid=$atmid'>First</a></li>";
+                                    echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '">Prev</a></li>';
+                                }
+
+                                for ($i = $start_window; $i <= $end_window; $i++) {
+                                    ?>
+                                    <li class="<? if ($i == $current_page) {
+                                        echo 'active';
+                                    } ?>">
+                                        <a href="?page=<?= $i; ?>&&atmid=<?= $atmid; ?>">
+                                            <?= $i; ?>
+                                        </a>
+                                    </li>
+
+                                <? }
+
+                                if ($end_window < $total_pages) {
+
+                                    echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '">Next</a></li>';
+                                    echo '<li><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '">Last</a></li>';
+                                }
+                                echo '</ul></div>';
+
+
+
                             } else {
 
                                 echo '
@@ -144,7 +260,7 @@
 </div>
 
 <script>
-    $('.view-dispatch-info').click(function() {
+    $('.view-dispatch-info').click(function () {
         var id = $(this).data('id');
         $.ajax({
             type: 'POST',
@@ -152,10 +268,10 @@
             data: {
                 id: id
             },
-            success: function(response) {
+            success: function (response) {
                 $("#getDispatchInfo").html(response);
             },
-            error: function(error) {
+            error: function (error) {
                 $("#getDispatchInfo").html('Nothing found here !');
 
             }

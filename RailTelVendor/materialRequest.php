@@ -22,9 +22,9 @@
                         <div class="card-body" style="overflow:auto;">
 
                             <?
-echo "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID . "' and status=1";
+                            echo "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID . "' and status=1";
                             $srno = 1;
-                            $sql = mysqli_query($con, "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID . "' and status=1");
+                            $sql = mysqli_query($con, "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID . "'");
                             if (mysqli_num_rows($sql) > 0) {
 
                                 echo '<table class="table table-hover table-styling table-xs">
@@ -36,6 +36,7 @@ echo "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID 
             <th>Material</th>
             <th>Requested At</th>
             <th>Action</th>
+            <th>AVAILABILTY</th>
         </tr>
     </thead>
     <tbody> ';
@@ -50,25 +51,44 @@ echo "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID 
                                     $materialName = $sql_result['materialName'];
                                     $created_at = $sql_result['created_at'];
 
+                                    $checkInventory = mysqli_query($con, "select material,count(1) as materialCount from vendorinventory where material like '" . trim($materialName) . "' and status=1 and vendorId='".$RailTailVendorID."' group by material having count(1) > 0");
+                                            if ($checkInventoryResult = mysqli_fetch_assoc($checkInventory)) {
+                                                $matName = $checkInventoryResult['material'];
+                                                $matCount = $checkInventoryResult['materialCount'];
+                                                $availability = $matCount . ' In Stock ';
+                                                $availabilityStatus = 1;
+                                            } else {
+                                                $availability = 'Not Available';
+                                                $availabilityStatus = 0;
+                                            }
+                                            
+
                                     echo "<tr>
 <td>$srno</td>
 <td>$engineerName</td>
 <td>$atmid</td>
 <td>$materialName</td>
 <td>$created_at</td>
-<td>
-    <button type='button' class='send-from-stock btn btn-primary' 
-    data-materialName='$materialName'
-    data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-engineerId='$engineerId' >
-    Send From Stock
-    </button>
- | 
- <button type='button' class='material-request btn btn-primary' 
+<td>";
+
+if ($availabilityStatus == 1) {
+    echo "<button type='button' class='send-from-stock btn btn-primary btn-sm' 
+            data-materialName='$materialName'
+            data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-engineerId='$engineerId'>
+            Send From Stock
+          </button>";
+}else{
+echo "<button class='btn btn-disabled'>Not In Stock</button>";
+}
+
+echo "
+ <button type='button' class='material-request btn btn-primary btn-sm' 
     data-materialName='$materialName'
     data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-engineerId='$engineerId' >
  Material Request
 </button>
 </td>
+<td>$availability</td>
 </tr>";
 
                                     $srno++;
@@ -222,6 +242,10 @@ echo "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID 
             $('#sendFromStockModal').modal('show');
 
         });
+
+
+
+        
         $(document).on('click', '#contactPersonName[readonly]', function () {
             return false;
         });

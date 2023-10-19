@@ -10,7 +10,7 @@ if ($getMaterialSqlResult = mysqli_fetch_assoc($getMaterialSql)) {
 
     $serializedAttributes = $getMaterialSqlResult['material'];
     $serializedValues = $getMaterialSqlResult['serial_no'];
-    $serialNumber =  $serializedSerialNumbers = $getMaterialSqlResult['serial_no'];
+    $serialNumber = $serializedSerialNumbers = $getMaterialSqlResult['serial_no'];
 
     mysqli_query($con, "update inventory set status=0 where id='" . $invId . "'");
 
@@ -57,23 +57,21 @@ if ($getMaterialSqlResult = mysqli_fetch_assoc($getMaterialSql)) {
 
         $result = mysqli_query($con, $vendorInventorySql);
         $response = ['status' => '200', 'message' => 'Form data saved successfully'];
-        mysqli_query($con,"update vendormaterialrequest set sentFromInventory=1,sentFromInventoryBy='".$userid."',sentFromInventoryDate='".$datetime."' where id='".$requestId."' ");
-        
-        
-        mysqli_query($con,"insert into vendorMaterialSend(atmid,siteid,vendorId,isService,status,materialSendId) values('".$atmid."','".$siteid."','".$vendorId."',1,0,'".$materialSendId."')");
-        $thisvendorMaterialSendID= $con->insert_id ; 
-        mysqli_query($con,"insert into vendorMaterialSenddetails(materialSendId,attribute,value,serialNumber) values('".$thisvendorMaterialSendID."','".$material."','".$serial_no."','".$serial_no."')");
-        
-    }else{
+        mysqli_query($con, "update vendormaterialrequest set sentFromInventory=1,sentFromInventoryBy='" . $userid . "',sentFromInventoryDate='" . $datetime . "' where id='" . $requestId . "' ");
+
+
+        mysqli_query($con, "insert into vendorMaterialSend(atmid,siteid,vendorId,isService,status,materialSendId) values('" . $atmid . "','" . $siteid . "','" . $vendorId . "',1,0,'" . $materialSendId . "')");
+        $thisvendorMaterialSendID = $con->insert_id;
+        mysqli_query($con, "insert into vendorMaterialSenddetails(materialSendId,attribute,value,serialNumber) values('" . $thisvendorMaterialSendID . "','" . $material . "','" . $serial_no . "','" . $serial_no . "')");
+
+    } else {
         $response = ['status' => '500', 'message' => 'Error updating status in the Inventory table'];
-        
+
     }
-    
+
 } else {
     $response = ['status' => '500', 'message' => 'Error updating status in the Inventory table'];
 }
-
-
 
 echo json_encode($response);
 

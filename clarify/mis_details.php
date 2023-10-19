@@ -817,7 +817,8 @@
             $matLoopCount = 1;
             $faultySql = mysqli_query($con, "select * from generatefaultymaterialrequest where mis_id='" . $mis_id . "' and materialRequestType='clarify' and materialRequestLevel=3");
             if ($faultySqlResult = mysqli_fetch_assoc($faultySql)) {
-                $mat_sql = mysqli_query($con, "select * from generatefaultymaterialrequestdetails where requestId='" . $mis_id . "'");
+                $generatefaultymaterialrequestID = $faultySqlResult['id'];
+                $mat_sql = mysqli_query($con, "select * from generatefaultymaterialrequestdetails where requestId='" . $generatefaultymaterialrequestID . "'");
                 while ($mat_sqlResult = mysqli_fetch_assoc($mat_sql)) {
                     $value = $mat_sqlResult['MaterialName'];
                     ?>                     

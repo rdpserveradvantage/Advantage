@@ -10,11 +10,7 @@ $inbox = imap_open("{{$emailServer}:993/imap/ssl}INBOX", $username, $password);
 
 if ($inbox) {
 
-    // Calculate the date 1 days ago (read emails from last 24 hours)
-    $date = date("d M Y", strtotime("-10 days"));
-    $searchCriteria = 'SINCE "' . $date . '"';
-
-    $unseenMessages = imap_search($inbox, $searchCriteria);
+    $unseenMessages = imap_search($inbox, 'UNSEEN');
 
 
 
@@ -107,9 +103,9 @@ foreach ($toEmails as $key => $email) {
                 );
 
                 $context = stream_context_create($options);
-                // $result = file_get_contents($nodes, false, $context);
+                $result = file_get_contents($nodes, false, $context);
 
-                // var_dump($result);
+                var_dump($result);
 
             }
 

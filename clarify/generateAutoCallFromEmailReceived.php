@@ -1,7 +1,5 @@
 <? include('config.php');
 
-return ; 
-
 $atmid = $_REQUEST['atmid'];
 $siteAddress = $_REQUEST['siteAddress'];
 $city = $_REQUEST['city'];

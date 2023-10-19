@@ -133,9 +133,6 @@
                                         </form>
                                             </div>
                                             
-                                            <?
-                                            if($level==3){ ?>
-                                                
                                             
                                             <div class="col-sm-6">
                                                 <h5>Service</h5>
@@ -178,7 +175,7 @@
                                         
                                         
                                             </div>
-                                            <? }  ?>
+                                            
                                         </div>
                                         
                                         

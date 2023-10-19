@@ -15,7 +15,6 @@
                     <div class="card">
                         <div class="card-block">
                             <h5>SITE INFORMATION</h5>
-
                             <hr>
                             <?
                             $id = $_GET['id'];
@@ -52,21 +51,29 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <th scope="row">Ticket ID </th>
-                                                                    <td><? echo $ticketid; ?></td>
+                                                                    <td>
+                                                                        <? echo $ticketid; ?>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">ATM ID</th>
                                                                     <td>
-                                                                        <span><? echo $sql_result['atmid']; ?></span>
+                                                                        <span>
+                                                                            <? echo $sql_result['atmid']; ?>
+                                                                        </span>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Bank</th>
-                                                                    <td><? echo $sql1_result['bank']; ?></td>
+                                                                    <td>
+                                                                        <? echo $sql1_result['bank']; ?>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Location</th>
-                                                                    <td><? echo $sql1_result['location']; ?></td>
+                                                                    <td>
+                                                                        <? echo $sql1_result['location']; ?>
+                                                                    </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -80,19 +87,27 @@
                                                                 <tr>
                                                                 <tr>
                                                                     <th scope="row">City</th>
-                                                                    <td><? echo $sql1_result['city']; ?></td>
+                                                                    <td>
+                                                                        <? echo $sql1_result['city']; ?>
+                                                                    </td>
                                                                 </tr>
 
                                                                 <th scope="row">State</th>
-                                                                <td><? echo $sql1_result['state']; ?></td>
+                                                                <td>
+                                                                    <? echo $sql1_result['state']; ?>
+                                                                </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Zone</th>
-                                                                    <td><? echo $sql1_result['zone']; ?></td>
+                                                                    <td>
+                                                                        <? echo $sql1_result['zone']; ?>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Status</th>
-                                                                    <td><? echo $sql_result['status']; ?></td>
+                                                                    <td>
+                                                                        <? echo $sql_result['status']; ?>
+                                                                    </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -154,23 +169,33 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <th scope="row">Ticket ID </th>
-                                                                    <td><? echo $ticketid; ?></td>
+                                                                    <td>
+                                                                        <? echo $ticketid; ?>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Assigned Engineer</th>
-                                                                    <td><? ?></td>
+                                                                    <td>
+                                                                        <? ?>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Current Status</th>
-                                                                    <td><? echo $sql_result['status']; ?></td>
+                                                                    <td>
+                                                                        <? echo $sql_result['status']; ?>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Component</th>
-                                                                    <td><? echo $sql_result['component']; ?></td>
+                                                                    <td>
+                                                                        <? echo $sql_result['component']; ?>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Sub Component</th>
-                                                                    <td><? echo $sql_result['subcomponent']; ?></td>
+                                                                    <td>
+                                                                        <? echo $sql_result['subcomponent']; ?>
+                                                                    </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -184,23 +209,33 @@
                                                                 <tr>
                                                                     <th scope="row">Created On</th>
                                                                     <td>
-                                                                        <span><? echo $sql_result['created_at']; ?></span>
+                                                                        <span>
+                                                                            <? echo $sql_result['created_at']; ?>
+                                                                        </span>
                                                                     </td>
                                                                 </tr>
                                                                 <th scope="row">Created By</th>
-                                                                <td><? echo $sql1_result['serviceExecutive']; ?></td>
+                                                                <td>
+                                                                    <? echo $sql1_result['serviceExecutive']; ?>
+                                                                </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Down Time </th>
-                                                                    <td><? echo $diff->format("%a days"); ?></td>
+                                                                    <td>
+                                                                        <? echo $diff->format("%a days"); ?>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Remark</th>
-                                                                    <td><? echo $sql1_result['remarks']; ?></td>
+                                                                    <td>
+                                                                        <? echo $sql1_result['remarks']; ?>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Hardware</th>
-                                                                    <td><? echo $sql1_result['noProblemOccurs']; ?></td>
+                                                                    <td>
+                                                                        <? echo $sql1_result['noProblemOccurs']; ?>
+                                                                    </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -283,7 +318,7 @@
 
                                     $image = $_FILES['image']['name'];
                                     if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . '/' . $image)) {
-                                        $link  = $target_dir . '/' . $image;
+                                        $link = $target_dir . '/' . $image;
                                     }
 
                                     $engineer = $_POST['engineer'];
@@ -300,6 +335,7 @@
                                     $requiredMaterial = implode(', ', $requiredMaterials);
 
                                     $material_condition = $_REQUEST['material_condition'];
+                                    $material_qty = $_REQUEST['material_quantity'];
                                     $material_conditionStr = implode(',', $material_condition);
                                     $material_conditionStr = rtrim($material_conditionStr, ',');
 
@@ -338,15 +374,27 @@
                                                 $serialNumber = $sendDetailsSqlResult['serialNumber'];
                                                 $MaterialID = getInventoryIDBySerialNumber($serialNumber);
 
-                                                $faultyDetailsSql = "insert into generatefaultymaterialrequestdetails(requestId, MaterialID, MaterialName, MaterialSerialNumber, materialImage, created_at, created_by, status , materialRequestType,mis_id,materialCondition)
-                                            values('" . $faultyRequestID . "','" . $MaterialID . "','" . $requiredMaterials[$i] . "','" . $serialNumber . "','" . $imagePath . "','" . $datetime . "','" . $userid . "',1,'clarify','" . $mis_id . "','" . $material_condition[$i] . "')";
+                                                $faultyDetailsSql = "insert into generatefaultymaterialrequestdetails(requestId, MaterialID, MaterialName, MaterialSerialNumber, materialImage, created_at, created_by, status , materialRequestType,mis_id,materialCondition,material_qty)
+                                            values('" . $faultyRequestID . "','" . $MaterialID . "','" . $requiredMaterials[$i] . "','" . $serialNumber . "','" . $imagePath . "','" . $datetime . "','" . $userid . "',1,'clarify','" . $mis_id . "','" . $material_condition[$i] . "','" . $material_qty[$i] . "')";
                                                 if (mysqli_query($con, $faultyDetailsSql)) {
-
-                                                    mysqli_query($con, "insert into vendormaterialrequest(vendorId, vendorName, siteid, atmid, engineerId, engineerName, materialName, materialCondition, created_at,  created_by, createdByPortal, status) 
-                                                values('" . $RailTailVendorID . "','" . $getVendorName . "','" . $siteid . "','" . $atmid . "','" . $userid . "','" . $SERVICE_email . "','" . $requiredMaterials[$i] . "','" . $material_condition[$i] . "','" . $datetime . "','" . $userid . "','Clarify',1)");
+                                                    mysqli_query($con, "insert into vendormaterialrequest(vendorId, vendorName, siteid, atmid, engineerId, engineerName, materialName, materialCondition, created_at,  created_by, createdByPortal, status,material_qty) 
+                                                values('" . $RailTailVendorID . "','" . $getVendorName . "','" . $siteid . "','" . $atmid . "','" . $userid . "','" . $SERVICE_email . "','" . $requiredMaterials[$i] . "','" . $material_condition[$i] . "','" . $datetime . "','" . $userid . "','Clarify',1,'" . $material_qty[$i] . "')");
                                                 } else {
                                                     echo "Error: " . $sql . "<br>" . mysqli_error($con);
                                                 }
+                                            } else {
+
+
+                                                $faultyDetailsSql = "insert into generatefaultymaterialrequestdetails(requestId, MaterialID, MaterialName, MaterialSerialNumber, materialImage, created_at, created_by, status , materialRequestType,mis_id,materialCondition,material_qty)
+                                            values('" . $faultyRequestID . "','','" . $requiredMaterials[$i] . "','','" . $imagePath . "','" . $datetime . "','" . $userid . "',1,'clarify','" . $mis_id . "','" . $material_condition[$i] . "','" . $material_qty[$i] . "')";
+                                                if (mysqli_query($con, $faultyDetailsSql)) {
+
+                                                    mysqli_query($con, "insert into vendormaterialrequest(vendorId, vendorName, siteid, atmid, engineerId, engineerName, materialName, materialCondition, created_at,  created_by, createdByPortal, status,material_qty) 
+                                                values('" . $RailTailVendorID . "','" . $getVendorName . "','" . $siteid . "','" . $atmid . "','" . $userid . "','" . $SERVICE_email . "','" . $requiredMaterials[$i] . "','" . $material_condition[$i] . "','" . $datetime . "','" . $userid . "','Clarify',1,'" . $material_qty[$i] . "')");
+                                                } else {
+                                                    echo "Error: " . $sql . "<br>" . mysqli_error($con);
+                                                }
+
                                             }
                                         }
                                     }
@@ -383,7 +431,7 @@
 
                                     $image = $_FILES['image']['name'];
                                     if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_dir . '/' . $image)) {
-                                        $link  = $target_dir . '/' . $image;
+                                        $link = $target_dir . '/' . $image;
                                     }
 
                                     $statement = "insert into mis_history (mis_id,type,attachment,remark,status,created_at,created_by,dependency,ProblemOccurs) 
@@ -396,7 +444,7 @@
                                         echo '$materialToReplaceValue = ' . $materialToReplaceValue;
                                         echo '<br>';
                                         // $serialNumberValidator = mysqli_query($con,"select * from inventory where ");    
-
+                            
                                     }
                                 }
 
@@ -409,36 +457,37 @@
 
                                     mysqli_query($con, "update mis_details  set status = '" . $status . "' where id = '" . $id . "'");
 
-                            ?>
+                                    ?>
 
                                     <script>
                                         Swal.fire({
                                             icon: 'success',
                                             title: 'Call Updated Successfully !',
                                             confirmButtonText: 'OK'
-                                        }).then(function() {
-                                            window.location.href = "mis_details.php?id=<? echo $id; ?>";
+                                        }).then(function () {
+                                            //      window.location.href = "mis_details.php?id=<? echo $id; ?>";
                                         });
                                     </script>
                                 <? } else {
                                     echo mysqli_error($con);
-                                ?>
+                                    ?>
                                     <script>
                                         Swal.fire({
                                             icon: 'error',
                                             title: 'Oops !", "Call Updated Error !',
                                             confirmButtonText: 'OK'
-                                        }).then(function() {
+                                        }).then(function () {
                                             window.location.href = "mis_details.php?id=<? echo $id; ?>";
                                         });
                                     </script>
 
-                            <? }
+                                <? }
                             }
 
                             ?>
 
-                            <form action="<? echo $_SERVER['PHP_SELF']; ?>?id=<? echo $id; ?>" method="POST" enctype="multipart/form-data">
+                            <form action="<? echo $_SERVER['PHP_SELF']; ?>?id=<? echo $id; ?>" method="POST"
+                                enctype="multipart/form-data">
                                 <div class="row extra_highlight" id="status_col"></div>
                             </form>
 
@@ -454,7 +503,9 @@
                             <h5>CALL DISPATCH INFORMATION</h5>
 
                             <hr>
-                            <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
+                            <table id="example"
+                                class="table table-bordered table-striped table-hover dataTable js-exportable no-footer"
+                                style="width:100%">
                                 <thead>
                                     <tr class="table-primary">
                                         <th>Sn No</th>
@@ -478,37 +529,74 @@
                                 <tbody>
                                     <?
                                     // echo "select * from mis_history  where mis_id ='".$id."'"; 
-
+                                    
                                     $his_sql = mysqli_query($con, "select * from mis_history  where mis_id ='" . $id . "'");
                                     $i = 1;
                                     while ($his_sql_result = mysqli_fetch_assoc($his_sql)) {
                                         $is_material_dept = $his_sql_result['is_material_dept'];
-                                    ?>
-                                        <tr <? if ($is_material_dept == 1) { ?> style="background-color: #404e67;color:white;" <? } ?>>
-                                            <td><? echo $i; ?></td>
-                                            <td><? echo $his_sql_result['type'];  ?></td>
-                                            <td><? echo $his_sql_result['remark'];  ?></td>
-                                            <td><? echo $his_sql_result['created_at'];  ?></td>
-                                            <td><? if ($his_sql_result['schedule_date'] != '0000-00-00') {
+                                        ?>
+                                        <tr <? if ($is_material_dept == 1) { ?> style="background-color: #404e67;color:white;"
+                                            <? } ?>>
+                                            <td>
+                                                <? echo $i; ?>
+                                            </td>
+                                            <td>
+                                                <? echo $his_sql_result['type']; ?>
+                                            </td>
+                                            <td>
+                                                <? echo $his_sql_result['remark']; ?>
+                                            </td>
+                                            <td>
+                                                <? echo $his_sql_result['created_at']; ?>
+                                            </td>
+                                            <td>
+                                                <? if ($his_sql_result['schedule_date'] != '0000-00-00') {
                                                     echo $his_sql_result['schedule_date'];
-                                                }  ?></td>
-                                            <td><? echo $his_sql_result['material'];  ?></td>
-                                            <td><? echo getUsername($his_sql_result['engineer'], true);  ?></td>
-                                            <td><? echo $his_sql_result['pod'];  ?></td>
-                                            <td><? echo getUsername($his_sql_result['created_by'], true);  ?></td>
-                                            <td> <? if ($his_sql_result['attachment']) { ?><a href="<? echo $his_sql_result['attachment'];  ?>" target="_blank">View Attchment</a> <? } ?></td>
-                                            <td> <? if ($his_sql_result['attachment2']) { ?><a href="<? echo $his_sql_result['attachment2'];  ?>" target="_blank">View Attchment</a> <? } ?></td>
+                                                } ?>
+                                            </td>
+                                            <td>
+                                                <? echo $his_sql_result['material']; ?>
+                                            </td>
+                                            <td>
+                                                <? echo getUsername($his_sql_result['engineer'], true); ?>
+                                            </td>
+                                            <td>
+                                                <? echo $his_sql_result['pod']; ?>
+                                            </td>
+                                            <td>
+                                                <? echo getUsername($his_sql_result['created_by'], true); ?>
+                                            </td>
+                                            <td>
+                                                <? if ($his_sql_result['attachment']) { ?><a
+                                                        href="<? echo $his_sql_result['attachment']; ?>" target="_blank">View
+                                                        Attchment</a>
+                                                <? } ?>
+                                            </td>
+                                            <td>
+                                                <? if ($his_sql_result['attachment2']) { ?><a
+                                                        href="<? echo $his_sql_result['attachment2']; ?>" target="_blank">View
+                                                        Attchment</a>
+                                                <? } ?>
+                                            </td>
 
-                                            <td><? if ($his_sql_result['delivery_date'] != '0000-00-00') {
+                                            <td>
+                                                <? if ($his_sql_result['delivery_date'] != '0000-00-00') {
                                                     echo $his_sql_result['delivery_date'];
-                                                }  ?></td>
-                                            <td><? echo $his_sql_result['delivery_address'];  ?></td>
-                                            <td><? echo $his_sql_result['serial_number'];  ?></td>
-                                            <td><? echo $his_sql_result['dependency'];  ?></td>
+                                                } ?>
+                                            </td>
+                                            <td>
+                                                <? echo $his_sql_result['delivery_address']; ?>
+                                            </td>
+                                            <td>
+                                                <? echo $his_sql_result['serial_number']; ?>
+                                            </td>
+                                            <td>
+                                                <? echo $his_sql_result['dependency']; ?>
+                                            </td>
 
 
                                         </tr>
-                                    <? $i++;
+                                        <? $i++;
                                     } ?>
 
                                 </tbody>
@@ -545,9 +633,9 @@
     }
 
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-        $(document).on('change', '#status', function() {
+        $(document).on('change', '#status', function () {
 
             console.log("Checkbox:", this);
 
@@ -602,22 +690,24 @@
                     $mat_sql = mysqli_query($con, "select * from boq where status=1");
                     while ($mat_sqlResult = mysqli_fetch_assoc($mat_sql)) {
                         $value = $mat_sqlResult['value']; ?>
-                        <div class="border-checkbox-group border-checkbox-group-primary">
-                            <input class="border-checkbox" name="requiredMaterial[]" type="checkbox" id="checkbox<?= $matLoopCount; ?>" value="<?= trim($value); ?>">
+                                    <div class="border-checkbox-group border-checkbox-group-primary">
+                                        <input class="border-checkbox" name="requiredMaterial[]" type="checkbox" id="checkbox<?= $matLoopCount; ?>" value="<?= trim($value); ?>">
 
-                            <label class="border-checkbox-label" for="checkbox<?= $matLoopCount; ?>"><?= trim($value); ?></label>
+                                        <label class="border-checkbox-label" for="checkbox<?= $matLoopCount; ?>"><?= trim($value); ?></label>
 
-                            <select id="select_<?= $matLoopCount; ?>" name="material_condition[]">
-                                <option value="">Select</option>
-                                <option value="Missing">Missing</option>
-                                <option value="Faulty">Faulty</option>
-                                <option value="Not Installed">Not Installed</option>
-                            </select>
+                                        <input type="text" name="material_quantity[]" style="width: 50px;" placeholder="QTY" />
+                                        <select id="select_<?= $matLoopCount; ?>" name="material_condition[]">
+                                            <option value="">Select</option>
+                                            <option value="Missing">Missing</option>
+                                            <option value="Faulty">Faulty</option>
+                                            <option value="Not Installed">Not Installed</option>
+                                            <option value="Power Fluctuation">Power Fluctuation</option>
+                                        </select>
 
-                            <input id="input_<?= $matLoopCount; ?>" type="file" name="material_requirement_images[]" />
-                        </div>
+                                        <input id="input_<?= $matLoopCount; ?>" type="file" name="material_requirement_images[]" />
+                                    </div>
                         
-                        <? $matLoopCount++;
+                                    <? $matLoopCount++;
                     } ?>
                     </div>
 
@@ -680,9 +770,9 @@
             <option value="">Select</option>
             <? $eng_sql = mysqli_query($con, "select * from vendorusers where level=3 order by name asc");
             while ($eng_sql_result = mysqli_fetch_assoc($eng_sql)) { ?> 
-            <option value="<? echo $eng_sql_result['id']; ?>">
-            <?= ucwords(strtolower($eng_sql_result['name'])); ?>
-            </option> <? } ?>
+                        <option value="<? echo $eng_sql_result['id']; ?>">
+                        <?= ucwords(strtolower($eng_sql_result['name'])); ?>
+                        </option> <? } ?>
             
             </select>
             </div>
@@ -730,19 +820,19 @@
                 $mat_sql = mysqli_query($con, "select * from generatefaultymaterialrequestdetails where requestId='" . $mis_id . "'");
                 while ($mat_sqlResult = mysqli_fetch_assoc($mat_sql)) {
                     $value = $mat_sqlResult['MaterialName'];
-            ?>                     
-                            <div class="col-sm-6">
-                                <input type="checkbox" name="materialToReplace[]" value="<?= $value; ?>" required>  <?= $value; ?>
-                            </div>  
-                            <div class="col-sm-6">
-                                <input class="form-control" type="text" name="serial_number[]" required>  
-                            </div>
-                            <br />
+                    ?>                     
+                                                    <div class="col-sm-6">
+                                                        <input type="checkbox" name="materialToReplace[]" value="<?= $value; ?>" required>  <?= $value; ?>
+                                                    </div>  
+                                                    <div class="col-sm-6">
+                                                        <input class="form-control" type="text" name="serial_number[]" required>  
+                                                    </div>
+                                                    <br />
                     
-                            <?
-                        }
-                    }
-                            ?>
+                                        <?
+                }
+            }
+            ?>
             
 
 
@@ -757,7 +847,7 @@
             $("#status_col").html(html);
         });
 
-        $(document).on('change', '.border-checkbox', function() {
+        $(document).on('change', '.border-checkbox', function () {
             // Get the matLoopCount from the checkbox's ID
             var matLoopCount = this.id.replace('checkbox', '');
             handleCheckboxChange(this, matLoopCount);
@@ -766,19 +856,19 @@
 
     function throttle(f, delay) {
         var timer = null;
-        return function() {
+        return function () {
             var context = this,
                 args = arguments;
             clearTimeout(timer);
-            timer = window.setTimeout(function() {
-                    f.apply(context, args);
-                },
+            timer = window.setTimeout(function () {
+                f.apply(context, args);
+            },
                 delay || 1000);
         };
     }
 
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $(".js-example-basic-single").select2();
     });
 
@@ -808,14 +898,14 @@
 
 
 
-    $(document).on('keyup', '#address', throttle(function() {
+    $(document).on('keyup', '#address', throttle(function () {
         $("#item_name").html('');
         add = $(this).val();
         $.ajax({
             type: "POST",
             url: 'suggested_address.php',
             data: 'address=' + add,
-            success: function(msg) {
+            success: function (msg) {
 
                 $("#item_name").append(msg);
 

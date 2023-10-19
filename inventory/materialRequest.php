@@ -4,14 +4,15 @@
     .error {
         border: 1px solid red;
     }
-    .nav-tabs .slide{
+
+    .nav-tabs .slide {
         width: calc(100% / 2);
     }
-    
 
-.md-tabs .nav-item {
-    width: calc(100% / 2);
-}
+
+    .md-tabs .nav-item {
+        width: calc(100% / 2);
+    }
 </style>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
@@ -37,18 +38,21 @@
 
                         <ul class="nav nav-tabs md-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#fresh-requests" role="tab" aria-selected="true">Installation Requests</a>
+                                <a class="nav-link active" data-toggle="tab" href="#fresh-requests" role="tab"
+                                    aria-selected="true">Installation Requests</a>
                                 <div class="slide"></div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#service-requests" role="tab" aria-selected="false">Service Requests</a>
+                                <a class="nav-link" data-toggle="tab" href="#service-requests" role="tab"
+                                    aria-selected="false">Service Requests</a>
                                 <div class="slide"></div>
                             </li>
                         </ul>
 
                         <div class="tab-content">
                             <!-- Fresh Requests Tab -->
-                            <div class="tab-pane fade show active" id="fresh-requests" role="tabpanel" aria-labelledby="fresh-requests-tab">
+                            <div class="tab-pane fade show active" id="fresh-requests" role="tabpanel"
+                                aria-labelledby="fresh-requests-tab">
 
                                 <div class="card-body" style="overflow:auto;">
                                     <?
@@ -136,16 +140,32 @@
                                                         $configurationError++;
                                                     }
 
-                                                ?>
+                                                    ?>
                                                     <tr>
-                                                        <td><?= $counter; ?></td>
-                                                        <td><?= $atmid; ?></td>
-                                                        <td><?= $address; ?></td>
-                                                        <td><?= $city; ?></td>
-                                                        <td><?= $state; ?></td>
-                                                        <td><?= getMaterialRequestInitiatorName($siteid); ?></td>
-                                                        <td><?= $ipRemark; ?></td>
-                                                        <td><?= $configurationRemark; ?></td>
+                                                        <td>
+                                                            <?= $counter; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $atmid; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $address; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $city; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $state; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= getMaterialRequestInitiatorName($siteid); ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $ipRemark; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $configurationRemark; ?>
+                                                        </td>
                                                         <td>
                                                             <?php
                                                             if ($configurationError + $error > 0) {
@@ -154,10 +174,14 @@
                                                                 <a href="sendMaterial.php?siteid=<?= $siteid; ?>">Send Material</a>
                                                             <?php } ?>
                                                         </td>
-                                                        <td><?= getMaterialRequestStatus($siteid); ?></td>
-                                                        <td><?= getMaterial_requestData($siteid, 'created_at'); ?></td>
+                                                        <td>
+                                                            <?= getMaterialRequestStatus($siteid); ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= getMaterial_requestData($siteid, 'created_at'); ?>
+                                                        </td>
                                                     </tr>
-                                                <?php
+                                                    <?php
                                                     $counter++;
                                                 } ?>
                                             </tbody>
@@ -169,15 +193,18 @@
                                         ?>
                                         <div class="pagination">
                                             <ul>
-                                                <?php for ($page = 1; $page <= $totalPages; $page++) : ?>
-                                                    <li class="<?php if ($page == $currentPage) echo 'active'; ?>">
-                                                        <a href="?page=<?= $page; ?>"><?= $page; ?></a>
+                                                <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                                    <li class="<?php if ($page == $currentPage)
+                                                        echo 'active'; ?>">
+                                                        <a href="?page=<?= $page; ?>">
+                                                            <?= $page; ?>
+                                                        </a>
                                                     </li>
                                                 <?php endfor; ?>
                                             </ul>
                                         </div>
 
-                                    <?php
+                                        <?php
                                     } else {
                                         echo '<div class="noRecordsContainer">
                                         <img src="assets/no_records.jpg">
@@ -188,7 +215,8 @@
                             </div>
 
                             <!-- Service Requests Tab -->
-                            <div class="tab-pane fade" id="service-requests" role="tabpanel" aria-labelledby="service-requests-tab">
+                            <div class="tab-pane fade" id="service-requests" role="tabpanel"
+                                aria-labelledby="service-requests-tab">
 
                                 <div class="card-body" style="overflow:auto;">
 
@@ -204,6 +232,7 @@
                                             <th>Vendor</th>
                                             <th>ATMID</th>
                                             <th>Material</th>
+                                            <th>Quantity</th>
                                             <th>Condition</th>
                                             <th>Requested At</th>
                                             <th>Availabilty</th>
@@ -222,16 +251,16 @@
                                             $materialName = $serviceRequestResult['materialName'];
                                             $materialCondition = $serviceRequestResult['materialCondition'];
                                             $requestToInventoryDate = $serviceRequestResult['requestToInventoryDate'];
-
+                                            $material_qty = $serviceRequestResult['material_qty'];
                                             $checkInventory = mysqli_query($con, "select material,count(1) as materialCount from inventory where material like '" . trim($materialName) . "' and status=1 group by material having count(1) > 0");
                                             if ($checkInventoryResult = mysqli_fetch_assoc($checkInventory)) {
                                                 $matName = $checkInventoryResult['material'];
                                                 $matCount = $checkInventoryResult['materialCount'];
                                                 $availability = $matCount . ' In Stock ';
-                                                $availabilityStatus=1;
-                                            }else{
+                                                $availabilityStatus = 1;
+                                            } else {
                                                 $availability = 'Not Available';
-                                                $availabilityStatus=0;
+                                                $availabilityStatus = 0;
                                             }
                                             echo "<tr>
                                                     <td>$srno</td>
@@ -243,6 +272,7 @@
                                                     <td>$vendorName</td>
                                                     <td>$atmid</td>
                                                     <td>$materialName</td>
+                                                    <td>$material_qty</td>
                                                     <td>$materialCondition</td>
                                                     <td>$requestToInventoryDate</td>
                                                     <td>$availability</td>
@@ -293,7 +323,8 @@
                     <input type="hidden" name="vendorId" value="<?php echo $vendorId; ?>">
                     <input type="hidden" name="attribute" value="<?php echo htmlentities(serialize($attributes)); ?>">
                     <input type="hidden" name="values" value="<?php echo htmlentities(serialize($values)); ?>">
-                    <input type="hidden" name="serialNumbers" value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
+                    <input type="hidden" name="serialNumbers"
+                        value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
 
 
                     <div class="row">
@@ -303,7 +334,8 @@
                         </div>
                         <div class="col-sm-6">
                             <label for="">Serial Number</label>
-                            <input type="text" name="serialNumbers" id="serialNumbers" class="form-control" value="" required>
+                            <input type="text" name="serialNumbers" id="serialNumbers" class="form-control" value=""
+                                required>
                         </div>
 
                     </div>
@@ -338,7 +370,8 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <br>
-                            <input type="submit" name="submit" class="btn btn-primary" onclick="submitForm(event);" id="submitButton" value="Submit">
+                            <input type="submit" name="submit" class="btn btn-primary" onclick="submitForm(event);"
+                                id="submitButton" value="Submit">
                         </div>
                     </div>
                 </form>
@@ -354,8 +387,8 @@
 
 
 <script>
-    $(document).ready(function() {
-        $('.send-material').click(function() {
+    $(document).ready(function () {
+        $('.send-material').click(function () {
 
             var id = $(this).data('id');
             var siteid = $(this).data('siteid');
@@ -386,7 +419,7 @@
                 type: 'POST',
                 url: 'process_IndividualMaterialSend.php',
                 data: formData,
-                success: function(response) {
+                success: function (response) {
                     console.log(response);
                     var responseData = JSON.parse(response);
                     if (responseData.status == '200') {
@@ -403,7 +436,7 @@
                         });
                     }
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                     Swal.fire({
                         icon: 'error',
@@ -419,7 +452,7 @@
 
     function validateForm() {
         var isValid = true;
-        $('#vendorForm [required]').each(function() {
+        $('#vendorForm [required]').each(function () {
             if ($(this).val().trim() == '') {
                 isValid = false;
                 $(this).addClass('error');

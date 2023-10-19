@@ -22,7 +22,7 @@
                         <div class="card-body" style="overflow:auto;">
 
                             <?
-
+echo "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID . "' and status=1";
                             $srno = 1;
                             $sql = mysqli_query($con, "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID . "' and status=1");
                             if (mysqli_num_rows($sql) > 0) {
@@ -47,7 +47,7 @@
                                     $engineerId = $sql_result['engineerId'];
                                     $engineerName = $sql_result['engineerName'];
                                     $atmid = $sql_result['atmid'];
-                                    $materialName =  $sql_result['materialName'];
+                                    $materialName = $sql_result['materialName'];
                                     $created_at = $sql_result['created_at'];
 
                                     echo "<tr>
@@ -118,7 +118,8 @@
                     <input type="hidden" name="siteid" value="<?php echo $siteid; ?>">
                     <input type="hidden" name="vendorId" value="<?php echo $RailTailVendorID; ?>">
                     <input type="hidden" name="attribute" value="<?php echo htmlentities(serialize($attributes)); ?>">
-                    <input type="hidden" name="serialNumbers" value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
+                    <input type="hidden" name="serialNumbers"
+                        value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -127,7 +128,8 @@
                         </div>
                         <div class="col-sm-6">
                             <label for="">Serial Number</label>
-                            <input type="text" name="serialNumbers" id="serialNumbers" class="form-control" value="" required>
+                            <input type="text" name="serialNumbers" id="serialNumbers" class="form-control" value=""
+                                required>
                         </div>
 
                     </div>
@@ -135,7 +137,8 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>Contact Person Name</label>
-                            <select class="form-control" name="contactPersonName" id="contactPersonName" readonly required>
+                            <select class="form-control" name="contactPersonName" id="contactPersonName" readonly
+                                required>
                                 <option value="">Select</option>
                                 <?
 
@@ -143,7 +146,7 @@
                                 while ($vendorUsersSqlResult = mysqli_fetch_assoc($vendorUsersSql)) {
                                     $vendorUserName = $vendorUsersSqlResult['name'];
                                     $vendorUserId = $vendorUsersSqlResult['id'];
-                                ?>
+                                    ?>
                                     <option value="<?= $vendorUserId; ?>">
                                         <?= $vendorUserName; ?>
                                     </option>
@@ -152,7 +155,8 @@
                         </div>
                         <div class="col-sm-6">
                             <label>Contact Person Number</label>
-                            <input type="text" name="contactPersonNumber" id="contactPersonNumber" class="form-control" readonly required>
+                            <input type="text" name="contactPersonNumber" id="contactPersonNumber" class="form-control"
+                                readonly required>
                         </div>
                         <div class="col-sm-12">
                             <label>Address</label>
@@ -174,7 +178,8 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <br>
-                            <input type="submit" name="submit" class="btn btn-primary" onclick="submitForm(event);" id="submitButton" value="Submit">
+                            <input type="submit" name="submit" class="btn btn-primary" onclick="submitForm(event);"
+                                id="submitButton" value="Submit">
                         </div>
                     </div>
                 </form>
@@ -187,8 +192,8 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('.send-from-stock').click(function() {
+    $(document).ready(function () {
+        $('.send-from-stock').click(function () {
 
             var id = $(this).data('id');
             var siteid = $(this).data('siteid');
@@ -201,7 +206,7 @@
                 url: 'getVendorUserInfo.php',
                 data: 'contactPerson=' + engineerId,
                 async: false,
-                success: function(msg) {
+                success: function (msg) {
                     var data = JSON.parse(msg);
                     $('#contactPersonNumber').val(data.contact);
                     $('#address').val(data.address);
@@ -217,11 +222,11 @@
             $('#sendFromStockModal').modal('show');
 
         });
-        $(document).on('click', '#contactPersonName[readonly]', function() {
+        $(document).on('click', '#contactPersonName[readonly]', function () {
             return false;
         });
 
-        $('.material-request').click(function() {
+        $('.material-request').click(function () {
             if (confirm('Are you sure you want to generate a material request?')) {
                 var id = $(this).data('id');
 
@@ -231,7 +236,7 @@
                     data: {
                         id: id
                     },
-                    success: function(response) {
+                    success: function (response) {
                         if (response == 1) {
                             Swal.fire({
                                 title: "Material Request Send Successfully !",
@@ -252,7 +257,7 @@
                             });
                         }
                     },
-                    error: function(error) {
+                    error: function (error) {
                         Swal.fire({
                             title: "Material Request sent error !",
                             text: 'Ooops ',

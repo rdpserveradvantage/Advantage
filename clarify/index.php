@@ -24,6 +24,24 @@
     
       <script>
     $(document).ready(function() {
+
+        
+        // Load content for part2 asynchronously
+        function loadPart2Content() {
+        $.ajax({
+            url: 'part2Dashboard.php',
+            method: 'GET',
+            success: function(response) {
+                $('#part2').html(response);
+            },
+            error: function() {
+                $('#part2').html('Error loading part2 content.');
+            }
+        });
+    }
+
+    setInterval(loadPart2Content, 5000);
+
         // Load content for part1 asynchronously
         $.ajax({
             url: 'part1Dashboard.php',
@@ -36,18 +54,10 @@
             }
         });
 
-        // Load content for part2 asynchronously
-        $.ajax({
-            url: 'part2Dashboard.php',
-            method: 'GET',
-            success: function(response) {
-                $('#part2').html(response);
-            },
-            error: function() {
-                $('#part2').html('Error loading part2 content.');
-            }
-        });
+        
 
+
+    
         // // Load content for part3 asynchronously
         $.ajax({
             url: 'part3Dashboard.php',

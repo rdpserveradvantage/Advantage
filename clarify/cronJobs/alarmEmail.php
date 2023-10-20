@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set("Asia/Calcutta"); // India time (GMT+5:30)
-error_reporting(E_ALL); // Enable error reporting for debugging
+// error_reporting(E_ALL); // Enable error reporting for debugging
+// set_time_limit(0);
 
 $username = 'alarms@advantagesb.com';
 $password = 'Adv@1234#';
@@ -53,6 +54,7 @@ if ($inbox) {
 
                             $data = array(
                                 'atmid' => $description,
+                                'message'=>$message,
                             );
             
                             $options = array(
@@ -83,13 +85,6 @@ if ($inbox) {
                 }
             }
         }
-    } else {
-        echo "No unread emails found";
-    }
-} else {
-    echo 'No Inbox';
+    } 
 }
-
-
-
 imap_close($inbox);

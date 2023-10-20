@@ -6,15 +6,19 @@ $city = $_REQUEST['city'];
 $circle = $_REQUEST['circle'];
 $linkVendor = $_REQUEST['linkVendor'];
 $atmIP = $_REQUEST['atmIP'];
+$message = $_REQUEST['message'];
+
+$message = quoted_printable_decode($message);
+
 
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
 
-echo 'atmid = ' . $atmid ; 
+echo 'atmid = ' . $atmid;
 
-if($atmid){
+if ($atmid) {
     $sql = mysqli_query($con, "select * from sites where atmid='" . trim($atmid) . "'");
     if ($sql_result = mysqli_fetch_assoc($sql)) {
         $customer = strtoupper($sql_result['customer']);
@@ -47,11 +51,13 @@ if($atmid){
         if ($checkSqlResult = mysqli_fetch_assoc($checkSql)) {
 
             $misId = $checkSqlResult['id'];
-            $misDetailsSql = mysqli_query($con,"select * from mis_details where mis_id = '".$misId."'");
+            $misDetailsSql = mysqli_query($con, "select * from mis_details where mis_id = '" . $misId . "'");
             $misDetailsSqlResult = mysqli_fetch_assoc($misDetailsSql);
 
             $ticket_id = $misDetailsSqlResult['ticket_id'];
-          } else {
+            mysqli_query($con, "insert into mis_history(mis_id,type,remark,created_at,created_by) values('" . $misId . "','Mail Update','" . $message . "','" . $created_at . "','" . $created_by . "')");
+            mysqli_query($con, "update mis set isRead='unread' where id='" . $misId . "'");
+        } else {
             $statement = "INSERT INTO mis(atmid, bank, customer, zone, city, state, location, call_receive_from, remarks, status, created_by, created_at, branch, bm, call_type, serviceExecutive,lho) 
             VALUES ('" . $atmid . "','" . $bank . "','" . $customer . "','" . $zone . "','" . $city . "','" . $state . "','" . $location . "','" . $call_receive . "','" . $remarks . "','open','" . $created_by . "','" . $created_at . "','" . $branch . "','" . $bm . "','Service','System','" . $lho . "')";
 
@@ -64,7 +70,7 @@ if($atmid){
                 if (!$last) {
                     $last = 0;
                 }
-                $ticket_id =  mb_substr(date('M'), 0, 1) . date('Y') . date('m')  . date('d') . sprintf('%04u', $last);
+                $ticket_id = mb_substr(date('M'), 0, 1) . date('Y') . date('m') . date('d') . sprintf('%04u', $last);
 
                 $detai_statement = "insert into mis_details(mis_id,atmid,component,subcomponent,status,created_at,ticket_id,
                          mis_city,zone,call_type,case_type,branch) 
@@ -72,6 +78,9 @@ if($atmid){
                          '" . $city . "','" . $zone . "','Service','" . $call_receive . "','" . $branch . "')";
                 if (mysqli_query($con, $detai_statement)) {
 
+                    mysqli_query($con, "insert into mis_history(mis_id,type,remark,created_at,created_by) values('" . $misId . "','Mail Update','" . $message . "','" . $created_at . "','" . $created_by . "')");
+
+                    mysqli_query($con, "update mis set isRead='unread' where id='" . $misId . "'");
 
                 }
             }

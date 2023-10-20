@@ -156,3 +156,29 @@ No issue found
                     theft 
                     fire / short circuit
                     backroom access not available
+
+
+
+
+
+
+CLARIFY
+on reassign 
+send mail to bank
+umesh sir will give mail template 
+
+vendor material received 
+confirm 
+functioning but not acknowledge
+
+
+
+
+
+clarify
+    materialReceived.php
+        click update receive 
+          write submit logic
+
+
+like mail if not read ticket show simething highlight

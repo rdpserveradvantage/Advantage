@@ -39,6 +39,7 @@
                             $branch = $sql1_result['branch'];
                             $ticketid = $sql_result['ticket_id'];
 
+                            mysqli_query($con,"update mis set isRead='read' where id='".$mis_id."'");
                             ?>
                             <div class="view-info">
                                 <div class="row">
@@ -530,7 +531,7 @@
                                     <?
                                     // echo "select * from mis_history  where mis_id ='".$id."'"; 
                                     
-                                    $his_sql = mysqli_query($con, "select * from mis_history  where mis_id ='" . $id . "'");
+                                    $his_sql = mysqli_query($con, "select * from mis_history  where mis_id ='" . $id . "' order by id desc");
                                     $i = 1;
                                     while ($his_sql_result = mysqli_fetch_assoc($his_sql)) {
                                         $is_material_dept = $his_sql_result['is_material_dept'];

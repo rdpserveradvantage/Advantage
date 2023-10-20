@@ -221,7 +221,7 @@
                                 <div class="card-body" style="overflow:auto;">
 
                                     <?
-                                    $serviceRequest = mysqli_query($con, "select * from vendormaterialrequest where status=0 and requestToInventory=1");
+                                    $serviceRequest = mysqli_query($con, "select * from vendormaterialrequest where status=0 and requestToInventory=1 and sentFromInventory=0");
                                     if (mysqli_num_rows($serviceRequest) > 0) {
 
                                         echo "<table class='table table-hover table-styling table-xs'>
@@ -266,7 +266,7 @@
                                                     <td>$srno</td>
                                                     <td>
                                                     <button class='send-material btn btn-primary' data-materialName='$materialName'
-                                                    data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-vendorid='$vendorId'>Send Material</button> 
+                                                    data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-vendorid='$vendorId' data-material_qty='$material_qty'>Send Material</button> 
                                                 |   <button class='btn btn-danger'>Request Reject</button>
                                                     </td>
                                                     <td>$vendorName</td>
@@ -326,16 +326,21 @@
                     <input type="hidden" name="serialNumbers"
                         value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
 
-
                     <div class="row">
                         <div class="col-sm-6">
                             <label for="">Material</label>
                             <input type="text" name="attribute" id="material" class="form-control" value="" readonly>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <label for="">Serial Number</label>
                             <input type="text" name="serialNumbers" id="serialNumbers" class="form-control" value=""
                                 required>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="">Quantity</label>
+                            <input type="text" name="material_qty" id="material_qty" class="form-control" value=""
+                                required readonly>
                         </div>
 
                     </div>
@@ -395,12 +400,15 @@
             var atmid = $(this).data('atmid');
             var materialName = $(this).data('materialname');
             var vendorId = $(this).data('vendorid');
+            var material_qty = $(this).data('material_qty');
+
 
             $('#sendFromStockModal').find('[name="id"]').val(id);
             $('#sendFromStockModal').find('[name="atmid"]').val(atmid);
             $('#sendFromStockModal').find('[name="siteid"]').val(siteid);
             $('#sendFromStockModal').find('[name="vendorId"]').val(vendorId);
             $('#sendFromStockModal').find('[name="attribute"]').val(materialName); //attribute = material_name
+            $('#sendFromStockModal').find('[name="material_qty"]').val(material_qty); //attribute = material_name
 
             $('#sendFromStockModal').modal('show');
 

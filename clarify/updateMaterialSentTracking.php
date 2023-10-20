@@ -86,13 +86,13 @@ function saveFormData() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             if (xhr.status == 200) {
                 var response = JSON.parse(xhr.responseText);
-                if (response.status === '200') {
+                if (response.status == '200') {
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
                         text: response.message
                     }).then(() => {
-                        window.location.href = "materialSent.php";
+                        window.location.href = "./materialRecived.php";
                     });
                 } else {
                     Swal.fire({

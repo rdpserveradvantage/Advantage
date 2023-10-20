@@ -19,7 +19,7 @@ html{
 
                             <?
                             $counter = 1;
-                           echo  $statement = "SELECT * FROM vendorMaterialSend where contactPersonName='" . $userid . "' order by id desc" ; 
+                            $statement = "SELECT * FROM vendorMaterialSend where contactPersonName='" . $userid . "' order by id desc" ; 
                             $sql = mysqli_query($con, $statement);
                             if (mysqli_num_rows($sql) > 0) {
                                 echo "<table class='table table-hover table-styling table-xs'>
@@ -69,6 +69,9 @@ html{
                                         $isAgainSendStatus = 0;
                                     }
 
+                                    $contactPersonName = vendorUsersData($contactPerson, 'name');
+
+
                                     $ifExistTrackingUpdateSql = mysqli_query($con, "select * from trackingDetailsUpdate where atmid='" . $atmid . "' and siteid='" . $siteid . "' and materialSendId='" . $id . "' order by id desc");
                                     if ($ifExistTrackingUpdateSqlResult = mysqli_fetch_assoc($ifExistTrackingUpdateSql)) {
                                         $ifExistTrackingUpdate = 1;
@@ -86,7 +89,7 @@ html{
                                     View
                                     </button>'
                                         : "<a class='btn btn-warning btn-sm' href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update Receive</a>") . "</td>";
-                                    echo "<td>$contactPerson</td>";
+                                    echo "<td>$contactPersonName</td>";
                                     echo "<td>$contactNumber</td>";
                                     // echo "<td>$contactPerson</td>";
                                     echo "<td>$pod</td>";

@@ -7,29 +7,34 @@ $circle = $_REQUEST['circle'];
 $linkVendor = $_REQUEST['linkVendor'];
 $atmIP = $_REQUEST['atmIP'];
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+$message = $_REQUEST['message'];
+$message = quoted_printable_decode($message);
+$message = str_replace('<br>', '', $message);
+
+
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 
 
 
-        require_once 'PHPMailer/src/PHPMailer.php';
-        require_once 'PHPMailer/src/SMTP.php';
-        require_once 'PHPMailer/src/Exception.php';
+require_once 'PHPMailer/src/PHPMailer.php';
+require_once 'PHPMailer/src/SMTP.php';
+require_once 'PHPMailer/src/Exception.php';
 
-        $hostusername = 'noc@advantagesb.com';
-        $hostPassword = '4mPZJcl^X@XB';
-        $mail = new PHPMailer\PHPMailer\PHPMailer();
+$hostusername = 'noc@advantagesb.com';
+$hostPassword = '4mPZJcl^X@XB';
+$mail = new PHPMailer\PHPMailer\PHPMailer();
 
-        // $mail->SMTPDebug = 1;                                // Enable verbose debug output
-        $mail->isSMTP();                                        // Set mailer to use SMTP
-        $mail->Host = 'webmail-b21.web-hosting.com';           // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true;
-        $mail->Username = $hostusername;                        // SMTP username
-        $mail->Password = $hostPassword;                        // SMTP password
-        $mail->SMTPSecure = 'ssl';                              // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = 465;                                     // Use port 587 for TLS
+// $mail->SMTPDebug = 1;                                // Enable verbose debug output
+$mail->isSMTP(); // Set mailer to use SMTP
+$mail->Host = 'webmail-b21.web-hosting.com'; // Specify main and backup SMTP servers
+$mail->SMTPAuth = true;
+$mail->Username = $hostusername; // SMTP username
+$mail->Password = $hostPassword; // SMTP password
+$mail->SMTPSecure = 'ssl'; // Enable TLS encryption, `ssl` also accepted
+$mail->Port = 465; // Use port 587 for TLS
 
 
 
@@ -43,7 +48,7 @@ foreach ($cc as $valcc) {
     $mail->addCC($valcc);
 }
 
-if($atmid){
+if ($atmid) {
     $sql = mysqli_query($con, "select * from sites where atmid='" . trim($atmid) . "'");
     if ($sql_result = mysqli_fetch_assoc($sql)) {
         $customer = strtoupper($sql_result['customer']);
@@ -76,8 +81,11 @@ if($atmid){
         if ($checkSqlResult = mysqli_fetch_assoc($checkSql)) {
 
             $misId = $checkSqlResult['id'];
-            $misDetailsSql = mysqli_query($con,"select * from mis_details where mis_id = '".$misId."'");
+            $misDetailsSql = mysqli_query($con, "select * from mis_details where mis_id = '" . $misId . "'");
             $misDetailsSqlResult = mysqli_fetch_assoc($misDetailsSql);
+
+            mysqli_query($con, "insert into mis_history(mis_id,type,remark,created_at,created_by) values('" . $misId . "','Mail Update','" . $message . "','" . $created_at . "','" . $created_by . "')");
+            mysqli_query($con, "update mis set isRead='unread' where id='" . $misId . "'");
 
             $ticket_id = $misDetailsSqlResult['ticket_id'];
             $from = 'noc@advantagesb.com';
@@ -116,9 +124,9 @@ if($atmid){
             $mail->setFrom($from, $fromname);
             $mail->From = trim($hostusername);
             $mail->FromName = $fromname;
-            
+
             $mail->addCC('vishwaaniruddh@gmail.com');
-            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->isHTML(true); // Set email format to HTML
             $mail->Subject = $subject . "\r\n";
             $mail->Body = $message;
 
@@ -142,7 +150,11 @@ if($atmid){
                 if (!$last) {
                     $last = 0;
                 }
-                $ticket_id =  mb_substr(date('M'), 0, 1) . date('Y') . date('m')  . date('d') . sprintf('%04u', $last);
+                $ticket_id = mb_substr(date('M'), 0, 1) . date('Y') . date('m') . date('d') . sprintf('%04u', $last);
+
+                mysqli_query($con, "insert into mis_history(mis_id,type,remark,created_at,created_by) values('" . $misId . "','Mail Update','" . $message . "','" . $created_at . "','" . $created_by . "')");
+                mysqli_query($con, "update mis set isRead='unread' where id='" . $misId . "'");
+
 
                 $detai_statement = "insert into mis_details(mis_id,atmid,component,subcomponent,status,created_at,ticket_id,
                          mis_city,zone,call_type,case_type,branch) 
@@ -177,22 +189,22 @@ if($atmid){
                                 </html>
 
                             ';
-                            
+
                     $mail->addReplyTo('noc@advantagesb.com');
                     $mail->setFrom($from, $fromname);
                     $mail->From = trim($hostusername);
                     $mail->FromName = $fromname;
                     $mail->addCC('vishwaaniruddh@gmail.com');
-                    $mail->isHTML(true);                                  // Set email format to HTML
+                    $mail->isHTML(true); // Set email format to HTML
                     $mail->Subject = $subject . "\r\n";
                     $mail->Body = $message;
-                    
+
                     if ($mail->send()) {
-                        echo 1;
-                        $randomName = rand(132, 344323);
-                        mysqli_query($con, "insert into test(name,created_at) values('" . $randomName . "','" . $datetime . "')");
+                        // echo 1;
+                        // $randomName = rand(132, 344323);
+                        // mysqli_query($con, "insert into test(name,created_at) values('" . $randomName . "','" . $datetime . "')");
                     } else {
-                        echo 0;
+                        // echo 0;
                     }
                 }
             }

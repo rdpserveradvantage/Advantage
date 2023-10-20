@@ -169,8 +169,9 @@ umesh sir will give mail template
 
 vendor material received 
 confirm 
-functioning but not acknowledge
+functioning but not acknowledge -done
 
+like mail if not read ticket show simething highlight - done
 
 
 
@@ -181,4 +182,3 @@ clarify
           write submit logic
 
 
-like mail if not read ticket show simething highlight

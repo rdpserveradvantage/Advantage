@@ -39,7 +39,7 @@
                             $branch = $sql1_result['branch'];
                             $ticketid = $sql_result['ticket_id'];
 
-                            mysqli_query($con,"update mis set isRead='read' where id='".$mis_id."'");
+                            mysqli_query($con, "update mis set isRead='read' where id='" . $mis_id . "'");
                             ?>
                             <div class="view-info">
                                 <div class="row">
@@ -335,8 +335,14 @@
                                     $requiredMaterials = $_REQUEST['requiredMaterial'];
                                     $requiredMaterial = implode(', ', $requiredMaterials);
 
-                                    $material_condition = $_REQUEST['material_condition'];
-                                    $material_qty = $_REQUEST['material_quantity'];
+                                    $material_condition = array_filter($_REQUEST['material_condition']);
+                                    $material_qty = array_filter($_REQUEST['material_quantity']);
+
+                                    $material_condition = array_values($material_condition);
+                                    $material_qty = array_values($material_qty);
+
+
+
                                     $material_conditionStr = implode(',', $material_condition);
                                     $material_conditionStr = rtrim($material_conditionStr, ',');
 
@@ -384,8 +390,6 @@
                                                     echo "Error: " . $sql . "<br>" . mysqli_error($con);
                                                 }
                                             } else {
-
-
                                                 $faultyDetailsSql = "insert into generatefaultymaterialrequestdetails(requestId, MaterialID, MaterialName, MaterialSerialNumber, materialImage, created_at, created_by, status , materialRequestType,mis_id,materialCondition,material_qty)
                                             values('" . $faultyRequestID . "','','" . $requiredMaterials[$i] . "','','" . $imagePath . "','" . $datetime . "','" . $userid . "',1,'clarify','" . $mis_id . "','" . $material_condition[$i] . "','" . $material_qty[$i] . "')";
                                                 if (mysqli_query($con, $faultyDetailsSql)) {
@@ -399,10 +403,6 @@
                                             }
                                         }
                                     }
-
-
-
-
 
 
 
@@ -466,7 +466,7 @@
                                             title: 'Call Updated Successfully !',
                                             confirmButtonText: 'OK'
                                         }).then(function () {
-                                            //      window.location.href = "mis_details.php?id=<? echo $id; ?>";
+                                            // window.location.href = "mis_details.php?id=<? echo $id; ?>";
                                         });
                                     </script>
                                 <? } else {
@@ -691,24 +691,24 @@
                     $mat_sql = mysqli_query($con, "select * from boq where status=1");
                     while ($mat_sqlResult = mysqli_fetch_assoc($mat_sql)) {
                         $value = $mat_sqlResult['value']; ?>
-                                    <div class="border-checkbox-group border-checkbox-group-primary">
-                                        <input class="border-checkbox" name="requiredMaterial[]" type="checkbox" id="checkbox<?= $matLoopCount; ?>" value="<?= trim($value); ?>">
+                                                        <div class="border-checkbox-group border-checkbox-group-primary">
+                                                            <input class="border-checkbox" name="requiredMaterial[]" type="checkbox" id="checkbox<?= $matLoopCount; ?>" value="<?= trim($value); ?>">
 
-                                        <label class="border-checkbox-label" for="checkbox<?= $matLoopCount; ?>"><?= trim($value); ?></label>
+                                                            <label class="border-checkbox-label" for="checkbox<?= $matLoopCount; ?>"><?= trim($value); ?></label>
 
-                                        <input type="text" name="material_quantity[]" style="width: 50px;" placeholder="QTY" />
-                                        <select id="select_<?= $matLoopCount; ?>" name="material_condition[]">
-                                            <option value="">Select</option>
-                                            <option value="Missing">Missing</option>
-                                            <option value="Faulty">Faulty</option>
-                                            <option value="Not Installed">Not Installed</option>
-                                            <option value="Power Fluctuation">Power Fluctuation</option>
-                                        </select>
+                                                            <input type="text" name="material_quantity[]" style="width: 50px;" placeholder="QTY" />
+                                                            <select id="select_<?= $matLoopCount; ?>" name="material_condition[]">
+                                                                <option value="">Select</option>
+                                                                <option value="Missing">Missing</option>
+                                                                <option value="Faulty">Faulty</option>
+                                                                <option value="Not Installed">Not Installed</option>
+                                                                <option value="Power Fluctuation">Power Fluctuation</option>
+                                                            </select>
 
-                                        <input id="input_<?= $matLoopCount; ?>" type="file" name="material_requirement_images[]" />
-                                    </div>
+                                                            <input id="input_<?= $matLoopCount; ?>" type="file" name="material_requirement_images[]" />
+                                                        </div>
                         
-                                    <? $matLoopCount++;
+                                                        <? $matLoopCount++;
                     } ?>
                     </div>
 
@@ -771,9 +771,9 @@
             <option value="">Select</option>
             <? $eng_sql = mysqli_query($con, "select * from vendorusers where level=3 order by name asc");
             while ($eng_sql_result = mysqli_fetch_assoc($eng_sql)) { ?> 
-                        <option value="<? echo $eng_sql_result['id']; ?>">
-                        <?= ucwords(strtolower($eng_sql_result['name'])); ?>
-                        </option> <? } ?>
+                                            <option value="<? echo $eng_sql_result['id']; ?>">
+                                            <?= ucwords(strtolower($eng_sql_result['name'])); ?>
+                                            </option> <? } ?>
             
             </select>
             </div>
@@ -823,15 +823,15 @@
                 while ($mat_sqlResult = mysqli_fetch_assoc($mat_sql)) {
                     $value = $mat_sqlResult['MaterialName'];
                     ?>                     
-                                                    <div class="col-sm-6">
-                                                        <input type="checkbox" name="materialToReplace[]" value="<?= $value; ?>" required>  <?= $value; ?>
-                                                    </div>  
-                                                    <div class="col-sm-6">
-                                                        <input class="form-control" type="text" name="serial_number[]" required>  
-                                                    </div>
-                                                    <br />
+                                    <div class="col-sm-6">
+                                        <input type="checkbox" name="materialToReplace[]" value="<?= $value; ?>" required>  <?= $value; ?>
+                                    </div>  
+                                    <div class="col-sm-6">
+                                        <input class="form-control" type="text" name="serial_number[]" required>  
+                                    </div>
+                                    <br />
                     
-                                        <?
+                                                            <?
                 }
             }
             ?>

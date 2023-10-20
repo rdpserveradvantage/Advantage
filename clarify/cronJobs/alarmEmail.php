@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set("Asia/Calcutta"); // India time (GMT+5:30)
 // error_reporting(E_ALL); // Enable error reporting for debugging
-// set_time_limit(0);
+set_time_limit(0);
 
 $username = 'alarms@advantagesb.com';
 $password = 'Adv@1234#';
@@ -38,8 +38,8 @@ if ($inbox) {
                     $deviceIDValues = [];
                     $descriptionValues = [];
 
-                    echo "Subject: $subject<br>";
-                    echo "SN\tDevice ID\tDescription<br>";
+                    // echo "Subject: $subject<br>";
+                    // echo "SN\tDevice ID\tDescription<br>";
 
 
                     foreach ($table->getElementsByTagName('tr') as $row) {
@@ -50,7 +50,7 @@ if ($inbox) {
                             $deviceID = trim(html_entity_decode(strip_tags($cells->item(1)->nodeValue)));
                             $description = trim(html_entity_decode(strip_tags($cells->item(2)->nodeValue)));
 
-                            echo "$sn\t$deviceID\t$description<br>";
+                            // echo "$sn\t$deviceID\t$description<br>";
 
                             $data = array(
                                 'atmid' => $description,
@@ -68,7 +68,6 @@ if ($inbox) {
                             $context = stream_context_create($options);
                             $result = file_get_contents($nodes, false, $context);
             
-                            var_dump($result);
 
                             $snValues[] = $sn;
                             $deviceIDValues[] = $deviceID;
@@ -76,13 +75,11 @@ if ($inbox) {
                         }
                     }
 
-                    var_dump($snValues, $deviceIDValues, $descriptionValues);
+                    // var_dump($snValues, $deviceIDValues, $descriptionValues);
 
-                    echo '<br/>';
+                    // echo '<br/>';
 
-                } else {
-                    echo "No table found in the email body<br>";
-                }
+                } 
             }
         }
     } 

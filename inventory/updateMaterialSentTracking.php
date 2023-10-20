@@ -90,11 +90,11 @@ function saveFormData() {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'process_updateMaterialSentTracking.php'); 
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                if (xhr.status == 200) {
                     // Parse the JSON response
                     var response = JSON.parse(xhr.responseText);
-                    if (response.status === 200) {
+                    if (response.status == 200) {
                         // Form data successfully saved
                         swal('Success', response.response, 'success');
                         setTimeout(function () {

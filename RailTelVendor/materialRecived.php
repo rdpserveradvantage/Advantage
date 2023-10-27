@@ -60,8 +60,8 @@
                     $end_window = min($start_window + $window_size - 1, $total_pages);
                     $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     // }
-                    // echo $sql_query ; 
-                    
+                    echo $sql_query;
+
                     ?>
 
 
@@ -174,7 +174,7 @@
                                         echo "<td>
                                                 <a href='dispatchMaterial.php?siteid=$siteid&atmid=$atmid&materialSendId=$id'>Dispatch</a>
                                             </td>";
-                                        $goodsReturn = 1    ;
+                                        $goodsReturn = 1;
 
                                     } else if ($isDelivered == 1 && $isAgainSendStatus == 1) {
                                         echo "<td>

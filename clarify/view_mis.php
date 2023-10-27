@@ -19,7 +19,7 @@ $username = $_SESSION['SERVICE_username'];
 
 <style>
     html {
-        text-transform: inherit !important;
+        /* text-transform: inherit !important; */
     }
 
     td a {
@@ -299,6 +299,9 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                             <option value="Internal" <? if ($_REQUEST['call_receive_from'] == 'Internal') {
                                                 echo 'selected';
                                             } ?>>Internal</option>
+                                            <option value="Auto Email Call" <? if ($_REQUEST['call_receive_from'] == 'Auto Email Call') {
+                                                echo 'selected';
+                                            } ?>>Auto Email Call</option>
                                         </select>
                                     </div>
 
@@ -630,7 +633,7 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                 if ($start_window > 1) {
 
                                     echo "<li><a href='?page=1&&atmid=$atmid&&$customer&&fromdt=$fromdt&&todt=$todt&&call_type=$call_type&&$statusQuery&&call_receive_from=$call_receive_from'>First</a></li>";
-                                    echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '&&' . $customer . '&&fromdt=' . $fromdt . '&&todt=' . $todt . '&&call_type=' . $call_type .'&'. $statusQuery . '&&call_receive_from=' . $call_receive_from . '">Prev</a></li>';
+                                    echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '&&' . $customer . '&&fromdt=' . $fromdt . '&&todt=' . $todt . '&&call_type=' . $call_type . '&' . $statusQuery . '&&call_receive_from=' . $call_receive_from . '">Prev</a></li>';
                                 }
 
                                 for ($i = $start_window; $i <= $end_window; $i++) {

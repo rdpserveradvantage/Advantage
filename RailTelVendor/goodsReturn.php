@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-return ; 
+// return ; 
 ?>
 
 
@@ -39,30 +39,52 @@ return ;
 
                             <h5>Receiver's Details</h5>
                             <hr>
-                            <p><strong>Vendor Name:</strong> <?php echo $vendorName; ?></p>
-                            <hr />
+                            <label>Vendor Name:</label>
+                            <?php echo $vendorName; ?>
+
                             <form id="vendorForm">
                                 <input type="hidden" name="atmid" value="<?php echo $atmid; ?>">
                                 <input type="hidden" name="siteid" value="<?php echo $siteid; ?>">
                                 <input type="hidden" name="vendorId" value="<?php echo $vendorId; ?>">
                                 <input type="hidden" name="materialSendID" value="<?= $materialSendId; ?>">
-                                
 
-                                <input type="hidden" name="attribute" value="<?php echo htmlentities(serialize($attributes)); ?>">
-                                <input type="hidden" name="values" value="<?php echo htmlentities(serialize($values)); ?>">
-                                <input type="hidden" name="serialNumbers" value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
 
+                                <input type="hidden" name="attribute"
+                                    value="<?php echo htmlentities(serialize($attributes)); ?>">
+                                <input type="hidden" name="values"
+                                    value="<?php echo htmlentities(serialize($values)); ?>">
+                                <input type="hidden" name="serialNumbers"
+                                    value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label><u>Material Details</u></label>
+                                        <br>
+                                        <?
+                                        $i = 1;
+                                        $materials_sql = mysqli_query($con, "SELECT *  FROM `material_send_details` WHERE `materialSendId` = '" . $materialSendId . "'");
+                                        while ($materials_sql_result = mysqli_fetch_assoc($materials_sql)) {
+                                            echo '<b>' . $i . '</b>' . ') ' . $matName = $materials_sql_result['attribute'];
+                                            echo '<br>';
+                                            $i++;
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+
+                                <hr />
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label>Contact Person Name</label>
-                                        <select class="form-control" name="contactPersonName" id="contactPersonName" required>
+                                        <select class="form-control" name="contactPersonName" id="contactPersonName"
+                                            required>
                                             <option value="">Select</option>
                                             <?
                                             $vendorUsersSql = mysqli_query($con, "select * from  inventoryusers where user_status=1 order by name asc");
                                             while ($vendorUsersSqlResult = mysqli_fetch_assoc($vendorUsersSql)) {
                                                 $vendorUserName = $vendorUsersSqlResult['name'];
                                                 $vendorUserId = $vendorUsersSqlResult['id'];
-                                            ?>
+                                                ?>
                                                 <option value="<?= $vendorUserId; ?>">
                                                     <?= $vendorUserName; ?>
                                                 </option>
@@ -71,7 +93,8 @@ return ;
                                     </div>
                                     <div class="col-sm-6">
                                         <label>Contact Person Number</label>
-                                        <input type="text" name="contactPersonNumber" id="contactPersonNumber" class="form-control" required>
+                                        <input type="text" name="contactPersonNumber" id="contactPersonNumber"
+                                            class="form-control" required>
                                     </div>
                                     <div class="col-sm-12">
                                         <label>Address</label>
@@ -93,13 +116,14 @@ return ;
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <br>
-                                        <input type="submit" name="submit" class="btn btn-primary" onclick="submitForm(event);" id="submitButton" value="Submit">
+                                        <input type="submit" name="submit" class="btn btn-primary"
+                                            onclick="submitForm(event);" id="submitButton" value="Submit">
                                     </div>
                                 </div>
                             </form>
 
                             <script>
-                                $(document).on('change', '#contactPersonName', function() {
+                                $(document).on('change', '#contactPersonName', function () {
 
                                     var contactPerson = $(this).val();
 
@@ -108,7 +132,7 @@ return ;
                                         url: 'getinventoryUserInfo.php',
                                         data: 'contactPerson=' + contactPerson,
                                         async: false,
-                                        success: function(msg) {
+                                        success: function (msg) {
                                             var data = JSON.parse(msg);
                                             $('#contactPersonNumber').val(data.contact);
                                             $('#address').val(data.address);
@@ -141,16 +165,16 @@ return ;
 
                                         var serializedData = new URLSearchParams(formData).toString();
                                         var xhr = new XMLHttpRequest();
-                                        xhr.open('POST', 'processConfirmSendMaterialRequest.php');
+                                        xhr.open('POST', 'processGoodsReturn.php');
                                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                                        xhr.onload = function() {
+                                        xhr.onload = function () {
                                             submitButton.disabled = false;
 
                                             var data = JSON.parse(xhr.responseText);
                                             console.log(data);
                                             if (data.status == '200') {
                                                 alert('Material Send Successfully !')
-                                                window.location.href = "materialRecived.php";
+                                                // window.location.href = "materialRecived.php";
                                             } else {
                                                 alert('Material Send Error !')
                                                 console.error(xhr.responseText);

@@ -286,6 +286,13 @@
                                             <option value="close">Close</option>
                                         <? }
 
+                                        if ($mis_status == 'reassign') { ?>
+                                            <option value="">Select</option>
+                                            <option value="close">Close</option>
+                                        <? }
+
+
+
                                         ?>
                                     </select>
                                 </div>
@@ -466,7 +473,7 @@
                                             title: 'Call Updated Successfully !',
                                             confirmButtonText: 'OK'
                                         }).then(function () {
-                                            // window.location.href = "mis_details.php?id=<? echo $id; ?>";
+                                            window.location.href = "mis_details.php?id=<? echo $id; ?>";
                                         });
                                     </script>
                                 <? } else {
@@ -655,7 +662,7 @@
                     <option value="Loose connection fixed">Loose connection fixed</option>
                     <option value="Power turned on">Power turned on</option>
                     <option value="Router rebooted">Router rebooted</option>
-                    <option value="Lab cable replaced or label fixed (if damaged).">Lab cable replaced or label fixed (if damaged).</option>
+                    <option value="LAN cable replaced or label fixed (if damaged).">LAN cable replaced or label fixed (if damaged).</option>
                     <option value="Electrical wiring done">Electrical wiring done</option>
                     <option value="SIM replaced">SIM replaced</option>
                     <option value="SIM re-inserted">SIM re-inserted</option>
@@ -691,24 +698,24 @@
                     $mat_sql = mysqli_query($con, "select * from boq where status=1");
                     while ($mat_sqlResult = mysqli_fetch_assoc($mat_sql)) {
                         $value = $mat_sqlResult['value']; ?>
-                                                        <div class="border-checkbox-group border-checkbox-group-primary">
-                                                            <input class="border-checkbox" name="requiredMaterial[]" type="checkbox" id="checkbox<?= $matLoopCount; ?>" value="<?= trim($value); ?>">
+                                                            <div class="border-checkbox-group border-checkbox-group-primary">
+                                                                <input class="border-checkbox" name="requiredMaterial[]" type="checkbox" id="checkbox<?= $matLoopCount; ?>" value="<?= trim($value); ?>">
 
-                                                            <label class="border-checkbox-label" for="checkbox<?= $matLoopCount; ?>"><?= trim($value); ?></label>
+                                                                <label class="border-checkbox-label" for="checkbox<?= $matLoopCount; ?>"><?= trim($value); ?></label>
 
-                                                            <input type="text" name="material_quantity[]" style="width: 50px;" placeholder="QTY" />
-                                                            <select id="select_<?= $matLoopCount; ?>" name="material_condition[]">
-                                                                <option value="">Select</option>
-                                                                <option value="Missing">Missing</option>
-                                                                <option value="Faulty">Faulty</option>
-                                                                <option value="Not Installed">Not Installed</option>
-                                                                <option value="Power Fluctuation">Power Fluctuation</option>
-                                                            </select>
+                                                                <input type="text" name="material_quantity[]" style="width: 50px;" placeholder="QTY" />
+                                                                <select id="select_<?= $matLoopCount; ?>" name="material_condition[]">
+                                                                    <option value="">Select</option>
+                                                                    <option value="Missing">Missing</option>
+                                                                    <option value="Faulty">Faulty</option>
+                                                                    <option value="Not Installed">Not Installed</option>
+                                                                    <option value="Power Fluctuation">Power Fluctuation</option>
+                                                                </select>
 
-                                                            <input id="input_<?= $matLoopCount; ?>" type="file" name="material_requirement_images[]" />
-                                                        </div>
+                                                                <input id="input_<?= $matLoopCount; ?>" type="file" name="material_requirement_images[]" />
+                                                            </div>
                         
-                                                        <? $matLoopCount++;
+                                                            <? $matLoopCount++;
                     } ?>
                     </div>
 
@@ -771,9 +778,9 @@
             <option value="">Select</option>
             <? $eng_sql = mysqli_query($con, "select * from vendorusers where level=3 order by name asc");
             while ($eng_sql_result = mysqli_fetch_assoc($eng_sql)) { ?> 
-                                            <option value="<? echo $eng_sql_result['id']; ?>">
-                                            <?= ucwords(strtolower($eng_sql_result['name'])); ?>
-                                            </option> <? } ?>
+                                                <option value="<? echo $eng_sql_result['id']; ?>">
+                                                <?= ucwords(strtolower($eng_sql_result['name'])); ?>
+                                                </option> <? } ?>
             
             </select>
             </div>
@@ -823,15 +830,15 @@
                 while ($mat_sqlResult = mysqli_fetch_assoc($mat_sql)) {
                     $value = $mat_sqlResult['MaterialName'];
                     ?>                     
-                                    <div class="col-sm-6">
-                                        <input type="checkbox" name="materialToReplace[]" value="<?= $value; ?>" required>  <?= $value; ?>
-                                    </div>  
-                                    <div class="col-sm-6">
-                                        <input class="form-control" type="text" name="serial_number[]" required>  
-                                    </div>
-                                    <br />
+                                            <div class="col-sm-6">
+                                                <input type="checkbox" name="materialToReplace[]" value="<?= $value; ?>" required>  <?= $value; ?>
+                                            </div>  
+                                            <div class="col-sm-6">
+                                                <input class="form-control" type="text" name="serial_number[]" required>  
+                                            </div>
+                                            <br />
                     
-                                                            <?
+                                                                <?
                 }
             }
             ?>

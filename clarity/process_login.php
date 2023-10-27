@@ -2,9 +2,7 @@
 require "vendor/autoload.php";
 use \Firebase\JWT\JWT;
 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+
 
 $username = $_REQUEST['username'];
 $password = $_REQUEST['password'];
@@ -84,7 +82,7 @@ function getUserFromTable($username, $password) {
     global $con; 
 
 
-        $sql = mysqli_query($con,"select * from vendorUsers where uname = '".$username."' and password='".$password."' and user_status=1 and level in (3,5)");
+        $sql = mysqli_query($con,"select * from vendorUsers where uname = '".trim($username)."' and password='".$password."' and user_status=1 and level in (1,3,5)");
         $user = mysqli_fetch_assoc($sql);
         $_SESSION['FROM_PORTAL'] = 'Clarify';
 

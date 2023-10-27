@@ -13,14 +13,23 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
-
 // Define and execute your database query to fetch data
 $exportSql = $_REQUEST['exportSql']; // Replace with your SQL query
 $sql_app = mysqli_query($con, $exportSql); // Execute the SQL query
 
-
-
-
+function getColumnLabel($index) {
+    $base26 = '';
+    
+    // Calculate the first part of the label (A, B, C, ...)
+    if ($index >= 26) {
+        $base26 .= chr(65 + ($index / 26) - 1);
+    }
+    
+    // Calculate the second part of the label (A, B, C, ...)
+    $base26 .= chr(65 + ($index % 26));
+    
+    return $base26;
+}
 
 // Define column headers
 $headers = array(
@@ -38,37 +47,54 @@ $headers = array(
     'Date',
 );
 
-
 $boqSql = mysqli_query($con, "select * from boq where status=1");
 while ($boqSqlResult = mysqli_fetch_assoc($boqSql)) {
     $attributeAr[] = trim($boqSqlResult['value']);
     $headers[] = trim($boqSqlResult['value']);
 }
 
+// Set Header Styles
+$headerStyle = [
+    'font' => [
+        'bold' => true,
+    ],
+    'alignment' => [
+        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    ],
+    'borders' => [
+        'outline' => [
+            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        ],
+    ],
+    'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        'startcolor' => ['rgb' => 'FFA500'], // Change this color as needed
+    ],
+];
 
-// Set headers in the Excel sheet
+// Apply Header Styles
 foreach ($headers as $index => $header) {
-    $column = chr(65 + $index); // A, B, C, ...
+    $column = getColumnLabel($index);
     $sheet->setCellValue($column . '1', $header);
+    $sheet->getStyle($column . '1')->applyFromArray($headerStyle);
 }
 
 // Initialize the row counter
-
-
-
-// $attributeString = json_encode($attributeAr);
-// $attributeString = str_replace(array('[', ']', '"'), '', $attributeString);
-// $arr = explode(',', $attributeString);
-// $attributeString = "'" . implode("', '", $arr) . "'";
-
-
-
 $i = 2; // Start from row 2 for data
 $serial_number = 1; // Initialize the serial number
 
-while ($row = mysqli_fetch_assoc($sql_app)) {
+// Add Data and Borders to Data Cells
+$dataStyle = [
+    'borders' => [
+        'allBorders' => [
+            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        ],
+    ],
+];
 
-    $id = $row['id'];
+while ($row = mysqli_fetch_assoc($sql_app)) {
+    
+     $id = $row['id'];
     $atmid = $row['atmid'];
     $isDelivered = $row['isDelivered'];
     $ifExistTrackingUpdate = $row['ifExistTrackingUpdate'];
@@ -89,7 +115,7 @@ while ($row = mysqli_fetch_assoc($sql_app)) {
         $ifExistTrackingUpdate = 0;
     }
 
-    // Set the data in the Excel sheet
+
     $sheet->setCellValue('A' . $i, $serial_number);
     $sheet->setCellValue('B' . $i, $atmid);
     $sheet->setCellValue('C' . $i, ($isDelivered == 1 ? 'Delivered' : 'In-Transit'));
@@ -105,7 +131,7 @@ while ($row = mysqli_fetch_assoc($sql_app)) {
 
     $attributeColumn = 'M';
     foreach ($attributeAr as $attributeArKey => $attributeArVal) {
-        $detailsQuery = "SELECT COUNT(1) as total FROM material_send_details WHERE materialSendId = '".$id."' AND attribute LIKE '%" . mysqli_real_escape_string($con, $attributeArVal) . "%'";
+$detailsQuery = "SELECT COUNT(1) as total FROM material_send_details WHERE materialSendId = '".$id."' AND attribute LIKE '%" . mysqli_real_escape_string($con, $attributeArVal) . "%'";
         $detailsResult = mysqli_query($con, $detailsQuery);
     
         if ($detailsResult) {
@@ -114,16 +140,16 @@ while ($row = mysqli_fetch_assoc($sql_app)) {
         } else {
             $count = 0;
         }
-    
+        
+        
         $sheet->setCellValue($attributeColumn . $i, $count);
+        $sheet->getStyle($attributeColumn . $i)->applyFromArray($dataStyle);
         $attributeColumn++;
     }
-    
+
     $i++;
     $serial_number++;
 }
-
-
 
 // Set headers for download
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

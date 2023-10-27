@@ -105,6 +105,7 @@
                                                 <th>Remark</th>
                                                 <th>Date</th>
                                                 <th>Dispatch</th>
+                                                <th>Goods Return</th>
                                             </tr>
                                         </thead>
                                         <tbody>";
@@ -168,17 +169,35 @@
                                     echo "<td>$courier</td>";
                                     echo "<td>$remark</td>";
                                     echo "<td>$date</td>";
+
                                     if ($isDelivered == 1 && $isAgainSendStatus == 0) {
                                         echo "<td>
-                                                        <a href='dispatchMaterial.php?siteid=$siteid&atmid=$atmid&materialSendId=$id'>Dispatch</a>
-                                                  </td>";
+                                                <a href='dispatchMaterial.php?siteid=$siteid&atmid=$atmid&materialSendId=$id'>Dispatch</a>
+                                            </td>";
+                                        $goodsReturn = 1    ;
+
                                     } else if ($isDelivered == 1 && $isAgainSendStatus == 1) {
                                         echo "<td>
                                                             Material Send to <span class='strong'>$contactPersonName <span>
                                                     </td>";
+                                        $goodsReturn = 0;
+
                                     } else {
+                                        $goodsReturn = 0;
                                         echo "<td>No Status</td>";
                                     }
+
+                                    if ($goodsReturn == 1) {
+                                        echo "<td>
+                                        <a href='./goodsReturn.php?siteid=$siteid&atmid=$atmid&materialSendId=$id' target='_blank'>Goods Return</a>
+                                        </td>";
+                                    } else {
+                                        echo "<td>
+                                        
+                                        </td>";
+                                    }
+
+
 
                                     echo "</tr>";
                                     $counter++;

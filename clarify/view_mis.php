@@ -1,5 +1,9 @@
 <?php include('header.php');
 
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
 function get_mis_history($parameter, $type, $id)
 {
     global $con;
@@ -15,7 +19,7 @@ $username = $_SESSION['SERVICE_username'];
 
 <style>
     html {
-        /* text-transform: inherit !important; */
+        text-transform: inherit !important;
     }
 
     td a {
@@ -51,7 +55,7 @@ $username = $_SESSION['SERVICE_username'];
 
 <?php
 
-$userid  = $_SESSION['userid'];
+$userid = $_SESSION['userid'];
 $call_type = $_REQUEST['call_type'];
 $call_receive = $_REQUEST['call_receive'];
 $sql = mysqli_query($con, "select * from vendorUsers where id='" . $userid . "'");
@@ -67,25 +71,15 @@ $sql_result = mysqli_fetch_assoc($sql);
 if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
 
     $statement = "select a.remarks,a.id,a.bank,a.customer,a.location,a.zone,a.state,a.city,a.branch,a.created_by,a.bm,b.id,b.mis_id,b.atmid,
-                b.component,b.subcomponent,b.engineer,b.docket_no,b.status,b.created_at,b.ticket_id,b.close_date,b.call_type,b.case_type ,
-                
-                
+                b.component,b.subcomponent,b.engineer,b.docket_no,b.status,b.created_at,b.ticket_id,b.close_date,b.call_type,b.case_type ,      
                 (SELECT name from vendorUsers WHERE id= a.created_by) AS createdBy
-                
-                from mis a
-                    INNER JOIN mis_details b ON b.mis_id = a.id 
-                    
-                    where 1 and 
+                from mis a INNER JOIN mis_details b ON b.mis_id = a.id 
+                where 1 and 
                 b.mis_id = a.id 
                 ";
-
-
-
-    $sqlappCount = "select count(1) as total 
-                from mis a
+    $sqlappCount = "select count(1) as total from mis a
                     INNER JOIN mis_details b ON b.mis_id = a.id 
-                    where 1 and
-                b.mis_id = a.id 
+                    where 1 and b.mis_id = a.id 
                 ";
 
 
@@ -105,7 +99,7 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
         $date1 = $_REQUEST['fromdt'];
         $date2 = $_REQUEST['todt'];
 
-        if (count($_REQUEST['status']) > 0) {
+        if (isset($_REQUEST['status']) && is_array($_REQUEST['status']) && count($_REQUEST['status']) > 0) {
             if ($_REQUEST['status'][0] == 'close' && count($_REQUEST['status']) == 1) {
                 $statement .= " and CAST(b.close_date AS DATE) >= '" . $date1 . "' and CAST(b.close_date AS DATE) <= '" . $date2 . "'";
                 $sqlappCount .= " and CAST(b.close_date AS DATE) >= '" . $date1 . "' and CAST(b.close_date AS DATE) <= '" . $date2 . "'";
@@ -124,12 +118,14 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
 
     if (isset($_REQUEST['status']) && $_REQUEST['status'] != '') {
 
-        $status = json_encode($_REQUEST['status']);
-        $status = str_replace(array('[', ']', '"'), '', $status);
-        $arr_status = explode(',', $status);
-        $status = "'" . implode("', '", $arr_status) . "'";
-        $statement .= " and b.status in($status)";
-        $sqlappCount .= " and b.status in($status)";
+        $statusArray = $_REQUEST['status'];
+        $statusValues = array_values($statusArray);
+        // var_dump($statusValues);
+        // Convert the values to a string in the format "('close', 'schedule', ...)"
+        $statusString = "('" . implode("', '", $statusValues) . "')";
+
+        $statement .= " and b.status in $statusString ";
+        $sqlappCount .= " and b.status in $statusString ";
     } else {
         $statement .= " and b.status in('open','permission_require','dispatch','material_requirement','material_in_process','schedule','material_available_i','material_dispatch','cancelled','not_available','available','close','MRS','fund_required','service_center')";
         $sqlappCount .= " and b.status in('open','permission_require','dispatch','material_requirement','material_in_process','schedule','material_available_i','material_dispatch','cancelled','not_available','available','close','MRS','fund_required','service_center')";
@@ -146,23 +142,21 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
     $statement .= " order by b.id desc";
 
 
-    if ($_REQUEST['atmid'] == '' && $_REQUEST['customer'] == '') {
+    // if ($_REQUEST['atmid'] == '' && $_REQUEST['customer'] == '') {
 
-        $date1 = $_REQUEST['fromdt'];
-        $date2 = $_REQUEST['todt'];
+    //     $date1 = $_REQUEST['fromdt'];
+    //     $date2 = $_REQUEST['todt'];
 
 
-        $statement = "
+    //     $statement = "select a.remarks,a.id AS misid,a.bank,a.customer,a.location,a.zone,a.state,a.city,a.branch,a.created_by,a.bm,b.id,b.mis_id,
+    //         b.atmid,b.component,b.subcomponent,b.engineer,b.docket_no,b.status,b.created_at,b.ticket_id,b.close_date,b.call_type,b.case_type 
+    //         from mis a
+    //         INNER JOIN mis_details b ON b.mis_id = a.id 
 
-select a.remarks,a.id AS misid,a.bank,a.customer,a.location,a.zone,a.state,a.city,a.branch,a.created_by,a.bm,b.id,b.mis_id,
-b.atmid,b.component,b.subcomponent,b.engineer,b.docket_no,b.status,b.created_at,b.ticket_id,b.close_date,b.call_type,b.case_type 
-from mis a
-INNER JOIN mis_details b ON b.mis_id = a.id 
+    //         where 1 and
 
-where 1 and
-
-b.mis_id = a.id and
-b.status in($status) ";
+    //         b.mis_id = a.id and
+    //         b.status in($status) ";
 
 
 
@@ -175,31 +169,32 @@ b.status in($status) ";
 
 
 
-        $sqlappCount = "select count(1) as total from
-                    mis a
-                    INNER JOIN mis_details b ON b.mis_id = a.id 
-                    
-                    where 1 and
-                        b.mis_id = a.id and
-                        b.status in($status) ";
+    //     $sqlappCount = "select count(1) as total from
+    //                 mis a
+    //                 INNER JOIN mis_details b ON b.mis_id = a.id 
+
+    //                 where 1 and
+    //                     b.mis_id = a.id and
+    //                     b.status in($status) ";
 
 
-        if ($_REQUEST['status'][0] == 'close' && count($_REQUEST['status']) == 1) {
-            $statement .= " and CAST(b.close_date AS DATE) >= '" . $date1 . "' and CAST(b.close_date AS DATE) <= '" . $date2 . "'";
-            $sqlappCount  .= " and CAST(b.close_date AS DATE) >= '" . $date1 . "' and CAST(b.close_date AS DATE) <= '" . $date2 . "'";
-        } else {
-            $statement .= "and CAST(b.created_at AS DATE) >= '" . $date1 . "' 
-                                  and CAST(b.created_at AS DATE) <= '" . $date2 . "'";
+    //     if ($_REQUEST['status'][0] == 'close' && count($_REQUEST['status']) == 1) {
+    //         $statement .= " and CAST(b.close_date AS DATE) >= '" . $date1 . "' and CAST(b.close_date AS DATE) <= '" . $date2 . "'";
+    //         $sqlappCount .= " and CAST(b.close_date AS DATE) >= '" . $date1 . "' and CAST(b.close_date AS DATE) <= '" . $date2 . "'";
+    //     } else {
+    //         $statement .= "and CAST(b.created_at AS DATE) >= '" . $date1 . "' 
+    //                               and CAST(b.created_at AS DATE) <= '" . $date2 . "'";
 
-            $sqlappCount .= "and CAST(b.created_at AS DATE) >= '" . $date1 . "' 
-                          and CAST(b.created_at AS DATE) <= '" . $date2 . "'";
-        }
-
-
-        $statement .= " order by b.id desc";
-    }
+    //         $sqlappCount .= "and CAST(b.created_at AS DATE) >= '" . $date1 . "' 
+    //                       and CAST(b.created_at AS DATE) <= '" . $date2 . "'";
+    //     }
 
 
+    //     $statement .= " order by b.id desc";
+    // }
+
+
+    // echo $statement;
 
     $result = mysqli_query($con, $sqlappCount);
     $row = mysqli_fetch_assoc($result);
@@ -242,29 +237,31 @@ b.status in($status) ";
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label>ATMID</label>
-                                        <input type="text" name="atmid" class="form-control" value="<? echo $_REQUEST['atmid']; ?>">
+                                        <input type="text" name="atmid" class="form-control"
+                                            value="<? echo $_REQUEST['atmid']; ?>">
                                     </div>
 
                                     <div class="col-md-3">
                                         <label>From Call Login Date</label>
                                         <input type="date" name="fromdt" class="form-control" value="<? if ($_REQUEST['fromdt']) {
-                                                                                                            echo  $_REQUEST['fromdt'];
-                                                                                                        } else {
-                                                                                                            echo '2023-01-01';
-                                                                                                        } ?>">
+                                            echo $_REQUEST['fromdt'];
+                                        } else {
+                                            echo '2023-01-01';
+                                        } ?>">
                                     </div>
                                     <div class="col-md-3">
                                         <label>To Call Login Date</label>
                                         <input type="date" name="todt" class="form-control" value="<? if ($_REQUEST['todt']) {
-                                                                                                        echo  $_REQUEST['todt'];
-                                                                                                    } else {
-                                                                                                        echo date('Y-m-d');
-                                                                                                    } ?>">
+                                            echo $_REQUEST['todt'];
+                                        } else {
+                                            echo date('Y-m-d');
+                                        } ?>">
                                     </div>
 
                                     <div class="col-md-3">
                                         <label>Status</label>
-                                        <select id="multiselect_status" class="form-control" name="status[]" multiple="multiple">
+                                        <select id="multiselect_status" class="form-control" name="status[]"
+                                            multiple="multiple">
                                             <?
                                             $i = 0;
                                             $status_sql = mysqli_query($con, "select status_code,status_name from mis_status where status='1'");
@@ -272,21 +269,21 @@ b.status in($status) ";
                                                 if ($status_sql_result['status_code'] == "material_pending") {
                                                     $status_sql_result['status_code'] = "MRS";
                                                 }
-                                            ?>
+                                                ?>
                                                 <option value="<? echo $status_sql_result['status_code']; ?>" <? if (isset($_REQUEST['status'])) {
 
-                                                                                                                    if (in_array($status_sql_result['status_code'], $_REQUEST['status'])) {
-                                                                                                                        echo 'selected';
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    if ($status_sql_result['status_name'] != 'Closed') {
-                                                                                                                        echo 'selected';
-                                                                                                                    }
-                                                                                                                }
-                                                                                                                ?>>
+                                                       if (in_array($status_sql_result['status_code'], $_REQUEST['status'])) {
+                                                           echo 'selected';
+                                                       }
+                                                   } else {
+                                                       if ($status_sql_result['status_name'] != 'Closed') {
+                                                           echo 'selected';
+                                                       }
+                                                   }
+                                                   ?>>
                                                     <? echo $status_sql_result['status_name']; ?>
                                                 </option>
-                                            <?
+                                                <?
                                                 $i++;
                                             } ?>
                                         </select>
@@ -297,11 +294,11 @@ b.status in($status) ";
                                         <select name="call_receive_from" id="call_receive_from" class="form-control">
                                             <option value="">Select</option>
                                             <option value="Customer / Bank" <? if ($_REQUEST['call_receive_from'] == 'Customer / Bank') {
-                                                                                echo 'selected';
-                                                                            } ?>>Customer / Bank</option>
+                                                echo 'selected';
+                                            } ?>>Customer / Bank</option>
                                             <option value="Internal" <? if ($_REQUEST['call_receive_from'] == 'Internal') {
-                                                                            echo 'selected';
-                                                                        } ?>>Internal</option>
+                                                echo 'selected';
+                                            } ?>>Internal</option>
                                         </select>
                                     </div>
 
@@ -312,7 +309,8 @@ b.status in($status) ";
                                 <br><br>
                                 <div class="col" style="display:flex;justify-content:center;">
                                     <input type="submit" name="submit" value="Filter" class="btn btn-primary">
-                                    <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
+                                    <a class="btn btn-warning" id="hide_filter"
+                                        style="color:white;margin:auto 10px;">Hide Filters</a>
                                 </div>
 
                             </form>
@@ -365,7 +363,9 @@ b.status in($status) ";
 
                                 <h5 style="text-align:right;" id="row_count"></h5>
                                 <div class="card-header">
-                                    <h5>Total Records: <strong class="record-count"><?= $total_records; ?></strong></h5>
+                                    <h5>Total Records: <strong class="record-count">
+                                            <?= $total_records; ?>
+                                        </strong></h5>
                                     <hr>
                                     <form action="exportMis.php" method="POST">
                                         <input type="hidden" name="exportSql" value="<? echo $statement; ?>">
@@ -428,7 +428,7 @@ b.status in($status) ";
 
                                                 $mis_id = $sql_result['mis_id'];
                                                 // echo $mis_id;
-
+                                        
                                                 $historydate = mysqli_query($con, "select created_at from mis_history where mis_id='" . $id . "' order by id desc limit 1");
                                                 $created_date_result = mysqli_fetch_row($historydate);
                                                 $created_date = $created_date_result[0];
@@ -503,50 +503,82 @@ b.status in($status) ";
                                                         $attachment = $lastactionsql_result['attachment'];
                                                     }
                                                 }
-                                            ?>
-                                                <tr <? if ($aging_day > 3 && $status != 'close') { ?> style="background:#fe5d70c2;color:white;" <? }
-                                                                                                                                            if ($status == 'close') { ?> style="background:#0ac282;color:white;" <?  } elseif ($status == 'schedule') {  ?> style="background:#6c757d;color:white;" <? } elseif ($status == 'open') {  ?> style="background:white;color:black;" <? }  ?>>
+                                                ?>
+                                                <tr <? if ($aging_day > 3 && $status != 'close') { ?>
+                                                        style="background:#fe5d70c2;color:white;" <? }
+                                                if ($status == 'close') { ?> style="background:#0ac282;color:white;" <? } elseif ($status == 'schedule') { ?> style="background:#6c757d;color:white;" <? } elseif ($status == 'open') { ?> style="background:white;color:black;" <? } ?>>
                                                     <!--<td><? echo ++$i; ?></td>-->
                                                     <!-- <th><a href="delete_mis.php?id=<? echo $id; ?>" <? if ($aging_day > 3 && $status != 'close') { ?> style="color:white"  <? } ?>>Delete</a></th>-->
 
-                                                    <td><? echo $counter; ?></td>
+                                                    <td>
+                                                        <? echo $counter; ?>
+                                                    </td>
                                                     <td style=" background:white;    border: 1px solid black; ">
-                                                        <a style=" text-decoration: none; font-weight: 700;" target="_blank" href="mis_details.php?id=<? echo $id; ?>" <? if ($aging_day > 3 && $status != 'close') { ?> style="color:white" <? } ?>>
+                                                        <a style=" text-decoration: none; font-weight: 700;" target="_blank"
+                                                            href="mis_details.php?id=<? echo $id; ?>" <? if ($aging_day > 3 && $status != 'close') { ?> style="color:white" <? } ?>>
                                                             <? echo $sql_result['ticket_id']; ?>
                                                         </a>
                                                     </td>
 
-                                                    <td><? echo $customer; ?></td>
+                                                    <td>
+                                                        <? echo $customer; ?>
+                                                    </td>
 
-                                                    <td><? echo $sql_result['bank']; ?></td>
-                                                    <td><? echo $atmid; ?></td>
+                                                    <td>
+                                                        <? echo $sql_result['bank']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <? echo $atmid; ?>
+                                                    </td>
 
                                                     <td>
                                                         <? echo $sql_result['location']; ?>
 
                                                     </td>
-                                                    <td><? echo $sql_result['city']; ?></td>
-                                                    <td><? echo $sql_result['state']; ?></td>
+                                                    <td>
+                                                        <? echo $sql_result['city']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <? echo $sql_result['state']; ?>
+                                                    </td>
 
 
 
-                                                    <td><? echo $sql_result['call_type']; ?></td>
-                                                    <td><? echo $sql_result['case_type']; ?></td>
+                                                    <td>
+                                                        <? echo $sql_result['call_type']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <? echo $sql_result['case_type']; ?>
+                                                    </td>
 
 
-                                                    <td><? echo $sql_result['component']; ?></td>
-                                                    <td><? echo $sql_result['subcomponent']; ?></td>
-                                                    <td><? echo $status; ?></td>
-                                                    <td><? echo $sql_result['created_at']; ?></td>
-                                                    <td><? echo $createdBy; ?></td>
+                                                    <td>
+                                                        <? echo $sql_result['component']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <? echo $sql_result['subcomponent']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <? echo $status; ?>
+                                                    </td>
+                                                    <td>
+                                                        <? echo $sql_result['created_at']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <? echo $createdBy; ?>
+                                                    </td>
 
-                                                    <td><? echo $diff->format("%a days"); ?></td>
-                                                    <td><? echo $sql_result['remarks']; ?></td>
+                                                    <td>
+                                                        <? echo $diff->format("%a days"); ?>
+                                                    </td>
+                                                    <td>
+                                                        <? echo $sql_result['remarks']; ?>
+                                                    </td>
 
                                                 </tr>
 
 
-                                            <? $counter++;
+                                                <? $counter++;
                                             } ?>
 
                                         </tbody>
@@ -571,8 +603,19 @@ b.status in($status) ";
                                 $customer = $_REQUEST['customer'];
                                 $customer = http_build_query(array('customer' => $customer));
 
+                                // $status = $_REQUEST['status'];
+                                // $status = http_build_query(array('status' => $status));
+                            
+
+                                // $status = $_REQUEST['status'];
+                                // $statusQuery = '';
+                                // foreach ($status as $key => $value) {
+                                //     $statusQuery .= "status%5B{$key}%5D={$value}&";
+                                // }
+                                // $statusQuery = rtrim($statusQuery, '&');
+                            
                                 $status = $_REQUEST['status'];
-                                $status = http_build_query(array('status' => $status));
+                                $statusQuery = http_build_query(array('status' => $status), '', '&', PHP_QUERY_RFC3986);
 
 
                                 $call_receive_from = $_REQUEST['call_receive_from'];
@@ -586,17 +629,18 @@ b.status in($status) ";
                                 echo '<div class="pagination"><ul>';
                                 if ($start_window > 1) {
 
-                                    echo "<li><a href='?page=1&&atmid=$atmid&&$customer&&fromdt=$fromdt&&todt=$todt&&call_type=$call_type&&status=$status&&call_receive_from=$call_receive_from'>First</a></li>";
-                                    echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '&&' . $customer . '&&fromdt=' . $fromdt . '&&todt=' . $todt . '&&call_type=' . $call_type . '&&status' . $status . '&&call_receive_from=' . $call_receive_from . '">Prev</a></li>';
+                                    echo "<li><a href='?page=1&&atmid=$atmid&&$customer&&fromdt=$fromdt&&todt=$todt&&call_type=$call_type&&$statusQuery&&call_receive_from=$call_receive_from'>First</a></li>";
+                                    echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '&&' . $customer . '&&fromdt=' . $fromdt . '&&todt=' . $todt . '&&call_type=' . $call_type .'&'. $statusQuery . '&&call_receive_from=' . $call_receive_from . '">Prev</a></li>';
                                 }
 
                                 for ($i = $start_window; $i <= $end_window; $i++) {
-                                ?>
+                                    ?>
                                     <li class="<? if ($i == $current_page) {
-                                                    echo 'active';
-                                                } ?>">
-                                        <a href="?page=<? echo $i; ?>&&atmid=<? echo $atmid; ?>&&<? echo $customer; ?>&&fromdt=<? echo $fromdt; ?>&&todt=<? echo $todt; ?>&&call_type=<? echo $call_type; ?>&&<? echo $status; ?>&&call_receive_from=<?= $call_receive_from; ?>">
-                                            <? echo $i;  ?>
+                                        echo 'active';
+                                    } ?>">
+                                        <a
+                                            href="?page=<? echo $i; ?>&&atmid=<? echo $atmid; ?>&&<? echo $customer; ?>&&fromdt=<? echo $fromdt; ?>&&todt=<? echo $todt; ?>&&call_type=<? echo $call_type; ?>&&<? echo $statusQuery; ?>&&call_receive_from=<?= $call_receive_from; ?>">
+                                            <? echo $i; ?>
                                         </a>
                                     </li>
 
@@ -604,8 +648,9 @@ b.status in($status) ";
 
                                 if ($end_window < $total_pages) {
 
-                                    echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '&&' . $customer . '&&fromdt=' . $fromdt . '&&todt=' . $todt . '&&call_type=' . $call_type . '&&status=' . $status . '&&call_receive_from=' . $call_receive_from . '">Next</a></li>';
-                                    echo '<li><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '&&' . $customer . '&&fromdt=' . $fromdt . '&&todt=' . $todt . '&&call_type=' . $call_type . '&&status' . $status . '&&call_receive_from=' . $call_receive_from . '">Last</a></li>';
+                                    echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '&&' . $customer . '&&fromdt=' . $fromdt . '&&todt=' . $todt . '&&call_type=' . $call_type . '&&' . $statusQuery . '&&call_receive_from=' . $call_receive_from . '">Next</a></li>';
+                                    echo '<li><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '&&' . $customer . '&&fromdt=' . $fromdt . '&&todt=' . $todt . '&&call_type=' . $call_type . '&&' . $statusQuery . '&&call_receive_from=' . $call_receive_from . '">Last</a></li>';
+
                                 }
                                 echo '</ul></div>';
 
@@ -656,7 +701,7 @@ b.status in($status) ";
                     <? } ?>
 
                     <script>
-                        $('.update_remark').on('submit', function(e) {
+                        $('.update_remark').on('submit', function (e) {
                             e.preventDefault();
                             var remark = $(this).find("[name='update_remark']").val();
                             var misid = $(this).find("[name='misid']").val();
@@ -664,10 +709,10 @@ b.status in($status) ";
                                 type: 'post',
                                 url: 'updatemisremark.php',
                                 data: 'remark=' + remark + '&&misid=' + misid,
-                                success: function(msg) {
+                                success: function (msg) {
                                     if (msg == 1) {
                                         swal('Updated !');
-                                        setTimeout(function() {
+                                        setTimeout(function () {
                                             window.location.reload();
                                         }, 3000);
 
@@ -703,7 +748,7 @@ b.status in($status) ";
 <? include('footer.php'); ?>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         $('#multiselect_status').multiselect({
             buttonWidth: '100%',
@@ -719,11 +764,11 @@ b.status in($status) ";
 
     $("#show_filter").css('display', 'none');
 
-    $("#hide_filter").on('click', function() {
+    $("#hide_filter").on('click', function () {
         $("#filter").css('display', 'none');
         $("#show_filter").css('display', 'block');
     });
-    $("#show_filter").on('click', function() {
+    $("#show_filter").on('click', function () {
         $("#filter").css('display', 'block');
         $("#show_filter").css('display', 'none');
     });

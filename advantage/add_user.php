@@ -164,22 +164,22 @@
                                         $desgination = $sql_result['designation'];
                                     ?>
                                         <tr>
-                                            <td><? echo $i; ?></td>
-                                            <!--<td><? echo $sql_result['id']; ?></td>-->
+                                            <td><?= $i; ?></td>
+                                            <!--<td><?= $sql_result['id']; ?></td>-->
 
-                                            <td class="strong"><? echo $sql_result['name']; ?></td>
-                                            <td><? echo $designation; ?></td>
-                                            <td style="text-transform: initial;"><? echo $sql_result['uname']; ?></td>
+                                            <td class="strong"><?= $sql_result['name']; ?></td>
+                                            <td><?= $designation; ?></td>
+                                            <td style="text-transform: initial;"><?= $sql_result['uname']; ?></td>
 
-                                            <td style="text-transform: initial;"><? echo $sql_result['contact']; ?></td>
-                                            <td class="<? echo $status_class; ?>"><? echo $user_status; ?></td>
+                                            <td style="text-transform: initial;"><?= $sql_result['contact']; ?></td>
+                                            <td class="<?= $status_class; ?>"><?= $user_status; ?></td>
                                             <td>
-                                                <!--<a class="btn btn-danger" href="allot_perm.php?id=<? echo $sql_result['id']; ?>">Permission</a>-->
-                                                <a class="btn btn-warning" href="allotmenu_perm.php?id=<? echo $sql_result['id'];  ?>">Menu Permission</a>
+                                                <!--<a class="btn btn-danger" href="allot_perm.php?id=<?= $sql_result['id']; ?>">Permission</a>-->
+                                                <a class="btn btn-warning" href="allotmenu_perm.php?id=<?= $sql_result['id'];  ?>">Menu Permission</a>
                                             </td>
-                                            <td><a href="#" class="btn btn-danger" onclick="disable(<? echo $sql_result['id']; ?>)"><? echo $makeuser_status; ?></a></td>
+                                            <td><a href="#" class="btn btn-danger" onclick="disable(<?= $sql_result['id']; ?>)"><?= $makeuser_status; ?></a></td>
                                             <!--<td>-->
-                                            <!--    <a href="edit_designation.php?id=<? echo $sql_result['id']; ?>"><input type="submit" name="edit" id="edit" class="btn btn-warning" value="Edit"></a>-->
+                                            <!--    <a href="edit_designation.php?id=<?= $sql_result['id']; ?>"><input type="submit" name="edit" id="edit" class="btn btn-warning" value="Edit"></a>-->
                                             <!--</td>-->
 
                                         </tr>
@@ -206,6 +206,7 @@
                                             <th>Name</th>
                                             <th>Desgination</th>
                                             <th>Username</th>
+                                            <th>Password</th>
                                             <th>Contact No.</th>
                                             <th>Status</th>
                                             <th>action</th>
@@ -234,16 +235,16 @@
                                             $desgination = $sql_result['designation'];
                                         ?>
                                             <tr>
-                                                <td><? echo $i; ?></td>
-                                                <!--<td><? echo $sql_result['id']; ?></td>-->
-                                                <td class="strong"><? echo $sql_result['name']; ?></td>
-                                                <td><? echo $designation; ?></td>
-                                                <td style="text-transform: initial;"><? echo $sql_result['uname']; ?></td>
+                                                <td><?= $i; ?></td>
+                                                <td class="strong"><?= $sql_result['name']; ?></td>
+                                                <td><?= $designation; ?></td>
+                                                <td style="text-transform: initial;"><?= $sql_result['uname']; ?></td>
+                                                <td style="text-transform: initial;"><?= $sql_result['password']; ?></td>
 
-                                                <td style="text-transform: initial;"><? echo $sql_result['contact']; ?></td>
-                                                <td class="<? echo $status_class; ?>"><? echo $user_status; ?></td>
+                                                <td style="text-transform: initial;"><?= $sql_result['contact']; ?></td>
+                                                <td class="<?= $status_class; ?>"><?= $user_status; ?></td>
                                                 <td>
-                                                    <a class="btn btn-warning" href="allotmenu_perm_bank.php?id=<? echo $sql_result['id']; ?>&level=<?= $level; ?>">Menu Permission</a>
+                                                    <a class="btn btn-warning" href="allotmenu_perm_bank.php?id=<?= $sql_result['id']; ?>&level=<?= $level; ?>">Menu Permission</a>
                                                 </td>
                                             </tr>
                                         <? $i++;

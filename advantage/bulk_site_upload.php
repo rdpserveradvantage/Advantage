@@ -5,7 +5,7 @@
 
 <style>
     .card-data{
-        overflow-x: auto;
+        overflow-x: auto;   
     }
    
 </style>
@@ -106,14 +106,17 @@ if(isset($_POST['submit'])){
         $longitude = $rowData[$i][0][36] ;
         
 
-        $excelDate = $Site_data_Received_for_Feasiblity_date;
+        $excelDate = (float)$Site_data_Received_for_Feasiblity_date;
+
         $unixTimestamp = ($excelDate - 25569) * 86400;
         $Site_data_Received_for_Feasiblity_date = date('Y-m-d', $unixTimestamp);
         
         
-        $excelDate2 = $PO_date;
+        $excelDate2 = (float)$PO_date;
         $unixTimestamp2 = ($excelDate2 - 25569) * 86400;
         $PO_date = date('Y-m-d', $unixTimestamp2);
+
+        
         
         
 
@@ -127,7 +130,7 @@ if(isset($_POST['submit'])){
                     
                 }else{
                 
-                   $sql = "insert into sites(activity,customer,bank,atmid,atmid2,atmid3,address,city,state,zone,LHO,LHO_Contact_Person,LHO_Contact_Person_No,
+                  echo  $sql = "insert into sites(activity,customer,bank,atmid,atmid2,atmid3,address,city,state,zone,LHO,LHO_Contact_Person,LHO_Contact_Person_No,
                     LHO_Contact_Person_email,LHO_Adv_Person,LHO_Adv_Contact,LHO_Adv_email,Project_Coordinator_Name,Project_Coordinator_No,Project_Coordinator_email,
                     Customer_SLA,Our_SLA,Vendor,Cash_Management,CRA_VENDOR,ID_on_Make,Model,SiteType,PopulationGroup,XPNET_RemoteAddress,CONNECTIVITY,Connectivity_Type,
                     Site_data_Received_for_Feasiblity_date,status,created_at,created_by,po,po_date,latitude,longitude) values('".$activity."','".$customer."','".$bank."','".$atmid."','".$atmid2."','".$atmid3."',

@@ -27,7 +27,7 @@ foreach ($queries as $query) {
 }
 
 $titles = [
-    "Total Active Sites",
+    "Total Sites",
     "Total Sites Delegated",
     "Total Feasibility Done",
     // "Material Request Pending",

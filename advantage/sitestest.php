@@ -7,7 +7,11 @@
 
 ?>
 
-
+<style>
+    html {
+        /* text-transform: inherit !important; */
+    }
+</style>
 
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
@@ -48,25 +52,26 @@
                     }
 
                     if (isset($_REQUEST['cust']) && $_REQUEST['cust'] != '') {
-                        $atm_sql .=  "and customer like '%" . $_REQUEST['cust'] . "%' ";
+                        $atm_sql .= "and customer like '%" . $_REQUEST['cust'] . "%' ";
                         $sqlappCount .= "and customer like '%" . $_REQUEST['cust'] . "%' ";
                     }
 
                     if (isset($_REQUEST['zone']) && $_REQUEST['zone'] != '') {
-                        $atm_sql .=  "and zone = '" . $_REQUEST['zone'] . "' ";
+                        $atm_sql .= "and zone = '" . $_REQUEST['zone'] . "' ";
                         $sqlappCount .= "and zone = '" . $_REQUEST['zone'] . "' ";
                     }
 
                     if (isset($_REQUEST['state']) && $_REQUEST['state'] != '') {
-                        $atm_sql .=  "and state= '" . $_REQUEST['state'] . "' ";
-                        $sqlappCount .=  "and state= '" . $_REQUEST['state'] . "' ";
+                        $atm_sql .= "and state= '" . $_REQUEST['state'] . "' ";
+                        $sqlappCount .= "and state= '" . $_REQUEST['state'] . "' ";
                     }
 
-                    if ($ADVANTAGE_level == 2 || $ADVANTAGE_level == 5) {
+                    if ($assignedLho) {
+                        if ($ADVANTAGE_level == 2 || $ADVANTAGE_level == 5) {
+                            $atm_sql .= "and LHO = '" . $assignedLho . "' ";
+                            $sqlappCount .= "and LHO= '" . $assignedLho . "' ";
+                        }
 
-
-                        $atm_sql .=  "and LHO = '" . $assignedLho . "' ";
-                        $sqlappCount .=  "and LHO= '" . $assignedLho . "' ";
                     }
 
                     function getBranchName($id)
@@ -81,8 +86,8 @@
 
 
 
-                    $atm_sql .=  "and status=1 order by id desc";
-                    $sqlappCount .=  "and status=1";
+                    $atm_sql .= "and status=1 order by id desc";
+                    $sqlappCount .= "and status=1";
 
                     $page_size = 10;
                     $result = mysqli_query($con, $sqlappCount);
@@ -96,7 +101,7 @@
                     $end_window = min($start_window + $window_size - 1, $total_pages);
                     $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
-                    // echo $sql_query ; 
+                    // echo $sql_query;
 
                     ?>
 
@@ -106,7 +111,8 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label>ATMID</label>
-                                        <input type="text" class="form-control" name="atmid" value="<? echo $_REQUEST['atmid']; ?>" />
+                                        <input type="text" class="form-control" name="atmid"
+                                            value="<? echo $_REQUEST['atmid']; ?>" />
                                     </div>
 
                                     <div class="col-md-3">
@@ -114,11 +120,11 @@
                                         <select name="isFeasibiltyDone" class="form-control">
                                             <option value="">Select</option>
                                             <option value="1" <? if (isset($isFeasibiltyDonefilter) && $isFeasibiltyDonefilter == 1) {
-                                                                    echo 'selected';
-                                                                } ?>>Yes</option>
+                                                echo 'selected';
+                                            } ?>>Yes</option>
                                             <option value="0" <? if (isset($isFeasibiltyDonefilter) && $isFeasibiltyDonefilter == 0) {
-                                                                    echo 'selected';
-                                                                } ?>>No</option>
+                                                echo 'selected';
+                                            } ?>>No</option>
                                         </select>
 
                                     </div>
@@ -126,7 +132,8 @@
 
                                     <div class="col-md-2">
                                         <label>Customer</label>
-                                        <select name="cust" class="form-control mdb-select md-form" searchable="Search here..">
+                                        <select name="cust" class="form-control mdb-select md-form"
+                                            searchable="Search here..">
 
                                             <option value="">-- Select Customer --</option>
 
@@ -134,10 +141,10 @@
                                             $i = 0;
                                             $custlist = mysqli_query($con, "SELECT id,customer from sites where customer!='' group by customer ");
                                             while ($fetch_data = mysqli_fetch_assoc($custlist)) {
-                                            ?>
+                                                ?>
                                                 <option value="<?php echo $fetch_data['customer'] ?>" <?php if ($_REQUEST['cust'] == $fetch_data['customer']) {
-                                                                                                            echo 'selected';
-                                                                                                        }  ?>>
+                                                       echo 'selected';
+                                                   } ?>>
                                                     <?php echo $fetch_data['customer']; ?>
                                                 </option>
                                             <?php } ?>
@@ -155,10 +162,10 @@
                                             $i = 0;
                                             $statelist = mysqli_query($con, "SELECT id,state from sites where state!='' group by state ");
                                             while ($fetch_data = mysqli_fetch_assoc($statelist)) {
-                                            ?>
+                                                ?>
                                                 <option value="<?php echo $fetch_data['state'] ?>" <?php if ($_REQUEST['state'] == $fetch_data['state']) {
-                                                                                                        echo 'selected';
-                                                                                                    }  ?>>
+                                                       echo 'selected';
+                                                   } ?>>
                                                     <?php echo $fetch_data['state']; ?>
                                                 </option>
                                             <?php } ?>
@@ -171,11 +178,11 @@
                                         <select name="isDelegated" class="form-control">
                                             <option value="">Select</option>
                                             <option value="1" <? if (isset($isDelegatedFilter) && $isDelegatedFilter == 1) {
-                                                                    echo 'selected';
-                                                                } ?>>Yes</option>
+                                                echo 'selected';
+                                            } ?>>Yes</option>
                                             <option value="0" <? if (isset($isDelegatedFilter) && $isDelegatedFilter == 0) {
-                                                                    echo 'selected';
-                                                                } ?>>No</option>
+                                                echo 'selected';
+                                            } ?>>No</option>
                                         </select>
 
                                     </div>
@@ -185,7 +192,8 @@
                                 <br>
                                 <div class="col" style="display:flex;justify-content:center;">
                                     <input type="submit" name="submit" value="Filter" class="btn btn-primary">
-                                    <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
+                                    <a class="btn btn-warning" id="hide_filter"
+                                        style="color:white;margin:auto 10px;">Hide Filters</a>
                                 </div>
 
                             </form>
@@ -196,9 +204,12 @@
 
 
                     <div class="card">
-                        <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show Filters</a>
+                        <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show
+                            Filters</a>
                         <div class="card-header">
-                            <h5>Total Records: <strong class="record-count"><? echo $total_records; ?></strong></h5>
+                            <h5>Total Records: <strong class="record-count">
+                                    <? echo $total_records; ?>
+                                </strong></h5>
 
                             <hr />
                             <form action="exportsites.php" method="POST">
@@ -211,10 +222,12 @@
 
                             <?
                             // if (isset($_REQUEST['submit']) || isset($_GET['page'])) { 
-
+                            
                             ?>
 
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs" style="width:100%;">
+                            <table
+                                class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs"
+                                style="width:100%;">
                                 <thead>
                                     <tr class="table-primary">
                                         <th>#</th>
@@ -325,11 +338,17 @@
                                             $projectInstallation = false;
                                         }
 
-                                    ?>
+                                        ?>
 
                                         <tr>
-                                            <th><?php echo $counter; ?></th>
-                                            <td class="strong"> <a href="atmEdit.php?id=<? echo $id; ?>&atmid=<? echo $atmid; ?>"><i class="fa fa-edit"></i></a> | <? echo $atmid; ?> </td>
+                                            <th>
+                                                <?php echo $counter; ?>
+                                            </th>
+                                            <td class="strong"> <a
+                                                    href="atmEdit.php?id=<? echo $id; ?>&atmid=<? echo $atmid; ?>"><i
+                                                        class="fa fa-edit"></i></a> |
+                                                <? echo $atmid; ?>
+                                            </td>
                                             <td>
                                                 <?php
 
@@ -362,16 +381,18 @@
                                                 ?>
                                             </td>
                                             <td>
-                                                <a href="#" class="history-link" data-toggle="modal" data-target="#historyModal" data-siteid="<?php echo $id; ?>">History</a>
+                                                <a href="#" class="history-link" data-toggle="modal"
+                                                    data-target="#historyModal" data-siteid="<?php echo $id; ?>">History</a>
                                             </td>
-                                            <td><?
+                                            <td>
+                                                <?
                                                 echo ($verificationStatus
                                                     ? ($verificationStatus === 'Verify' ? '<button class="btn btn-success btn-icon" title="Verification Approved">&#10004;</button>'
                                                         : '<button class="btn btn-danger btn-icon" title="Verification Reject ">R</button> | <a href="reopenRejectFeasibility.php?id=' . $id . '&atmid=' . $atmid . '&action=reopen_redelegation&vendor=' . $projectInstallationVendor . '">Reopen <span style="color:red">⟳</span></a>')
                                                     . ($projectInstallation
-                                                        ? ' | Sent to Vendor for Installation : <u><b>'  . getVendorName($projectInstallationVendor) . '</b></u>'
+                                                        ? ' | Sent to Vendor for Installation : <u><b>' . getVendorName($projectInstallationVendor) . '</b></u>'
                                                         : ($verificationStatus === 'Verify'
-                                                            ?  ' | <a href="sendToInstallation.php?id=' . $id . '&atmid=' . $atmid . '">Proceed To Installation</a>'
+                                                            ? ' | <a href="sendToInstallation.php?id=' . $id . '&atmid=' . $atmid . '">Proceed To Installation</a>'
                                                             : '')
                                                     )
                                                     : '<button class="btn btn-warning btn-icon" title="Pending">P</button>'
@@ -380,52 +401,129 @@
                                                 echo ' | <strong style="    color: #01a9ac;box-shadow: 1px 1px 1px 1px gray;
     padding: 4px;">' . $lastUpdate . '</strong>';
 
-                                                ?></td>
+                                                ?>
+                                            </td>
 
-                                            <td><?= ($po ? $po : 'NA'); ?></td>
-                                            <td><?= ($po_date ? $po_date : 'NA'); ?></td>
+                                            <td>
+                                                <?= ($po ? $po : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($po_date ? $po_date : 'NA'); ?>
+                                            </td>
 
-                                            <td><?= ($activity ? $activity : 'NA'); ?> </td>
-                                            <td><?= ($customer ? $customer : 'NA'); ?> </td>
-                                            <td><?= ($bank ? $bank : 'NA'); ?> </td>
+                                            <td>
+                                                <?= ($activity ? $activity : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($customer ? $customer : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($bank ? $bank : 'NA'); ?>
+                                            </td>
 
-                                            <td><?= ($address ? $address : 'NA'); ?> </td>
+                                            <td>
+                                                <?= ($address ? $address : 'NA'); ?>
+                                            </td>
 
-                                            <td> <?= ($latitude ? $latitude : 'NA'); ?> </td>
-                                            <td><?= ($longitude ? $longitude : 'NA'); ?> </td>
+                                            <td>
+                                                <?= ($latitude ? $latitude : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($longitude ? $longitude : 'NA'); ?>
+                                            </td>
 
-                                            <td><?= ($city ? $city : 'NA'); ?> </td>
-                                            <td><?= ($state ? $state : 'NA'); ?> </td>
-                                            <td><?= ($zone ? $zone : 'NA'); ?> </td>
-                                            <td><?= ($LHO ? $LHO : 'NA'); ?> </td>
-                                            <td><?= ($LHO_Contact_Person ? $LHO_Contact_Person : 'NA'); ?> </td>
-                                            <td><?= ($LHO_Contact_Person_No ? $LHO_Contact_Person_No : 'NA'); ?> </td>
-                                            <td><?= ($LHO_Contact_Person_email ? $LHO_Contact_Person_email : 'NA'); ?> </td>
-                                            <td><?= ($LHO_Adv_Person ? $LHO_Adv_Person : 'NA'); ?> </td>
-                                            <td><?= ($LHO_Adv_Contact ? $LHO_Adv_Contact : 'NA'); ?> </td>
-                                            <td><?= ($LHO_Adv_email ? $LHO_Adv_email : 'NA'); ?> </td>
-                                            <td><?= ($Project_Coordinator_Name ? $Project_Coordinator_Name : 'NA'); ?> </td>
-                                            <td><?= ($Project_Coordinator_No ? $Project_Coordinator_No : 'NA'); ?> </td>
-                                            <td><?= ($Project_Coordinator_email ? $Project_Coordinator_email : 'NA'); ?> </td>
-                                            <td><?= ($Customer_SLA ? $Customer_SLA : 'NA'); ?> </td>
-                                            <td><?= ($Our_SLA ? $Our_SLA : 'NA'); ?> </td>
-                                            <td><?= ($Vendor ? $Vendor : 'NA'); ?> </td>
-                                            <td><?= ($Cash_Management ? $Cash_Management : 'NA'); ?> </td>
-                                            <td><?= ($CRA_VENDOR ? $CRA_VENDOR : 'NA'); ?> </td>
-                                            <td><?= ($ID_on_Make ? $ID_on_Make : 'NA'); ?> </td>
-                                            <td><?= ($Model ? $Model : 'NA'); ?> </td>
-                                            <td><?= ($SiteType ? $SiteType : 'NA'); ?> </td>
-                                            <td><?= ($PopulationGroup ? $PopulationGroup : 'NA'); ?> </td>
-                                            <td><?= ($XPNET_RemoteAddress ? $XPNET_RemoteAddress : 'NA'); ?> </td>
-                                            <td><?= ($CONNECTIVITY ? $CONNECTIVITY : 'NA'); ?> </td>
-                                            <td><?= ($Connectivity_Type ? $Connectivity_Type : 'NA'); ?> </td>
-                                            <td><?= ($Site_data_Received_for_Feasiblity_date ? $Site_data_Received_for_Feasiblity_date : 'NA'); ?> </td>
-                                            <td><?= ($ESD != '0000-00-00 00:00:00' ? $ESD : 'NA'); ?></td>
-                                            <td><?= ($ASD != '0000-00-00 00:00:00' ? $ASD : 'NA'); ?></td>
-                                            <td><?= ($created_at ? $created_at : 'NA'); ?></td>
-                                            <td><?= ($created_by ? $created_by : 'NA'); ?></td>
+                                            <td>
+                                                <?= ($city ? $city : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($state ? $state : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($zone ? $zone : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($LHO ? $LHO : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($LHO_Contact_Person ? $LHO_Contact_Person : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($LHO_Contact_Person_No ? $LHO_Contact_Person_No : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($LHO_Contact_Person_email ? $LHO_Contact_Person_email : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($LHO_Adv_Person ? $LHO_Adv_Person : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($LHO_Adv_Contact ? $LHO_Adv_Contact : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($LHO_Adv_email ? $LHO_Adv_email : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($Project_Coordinator_Name ? $Project_Coordinator_Name : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($Project_Coordinator_No ? $Project_Coordinator_No : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($Project_Coordinator_email ? $Project_Coordinator_email : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($Customer_SLA ? $Customer_SLA : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($Our_SLA ? $Our_SLA : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($Vendor ? $Vendor : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($Cash_Management ? $Cash_Management : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($CRA_VENDOR ? $CRA_VENDOR : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($ID_on_Make ? $ID_on_Make : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($Model ? $Model : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($SiteType ? $SiteType : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($PopulationGroup ? $PopulationGroup : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($XPNET_RemoteAddress ? $XPNET_RemoteAddress : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($CONNECTIVITY ? $CONNECTIVITY : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($Connectivity_Type ? $Connectivity_Type : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($Site_data_Received_for_Feasiblity_date ? $Site_data_Received_for_Feasiblity_date : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($ESD != '0000-00-00 00:00:00' ? $ESD : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($ASD != '0000-00-00 00:00:00' ? $ASD : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($created_at ? $created_at : 'NA'); ?>
+                                            </td>
+                                            <td>
+                                                <?= ($created_by ? $created_by : 'NA'); ?>
+                                            </td>
                                         </tr>
-                                    <? $counter++;
+                                        <? $counter++;
                                     } ?>
                                 </tbody>
                             </table>
@@ -459,12 +557,13 @@
                         }
 
                         for ($i = $start_window; $i <= $end_window; $i++) {
-                        ?>
+                            ?>
                             <li class="<? if ($i == $current_page) {
-                                            echo 'active';
-                                        } ?>">
-                                <a href="?page=<? echo $i; ?>&&atmid=<? echo $atmid; ?>&&customer=<? echo $customer; ?>&&page_size=<? echo $page_size; ?>&&isDelegated=<? echo $isDelegated; ?>&&isFeasibiltyDone=<? echo $isFeasibiltyDone; ?>">
-                                    <? echo $i;  ?>
+                                echo 'active';
+                            } ?>">
+                                <a
+                                    href="?page=<? echo $i; ?>&&atmid=<? echo $atmid; ?>&&customer=<? echo $customer; ?>&&page_size=<? echo $page_size; ?>&&isDelegated=<? echo $isDelegated; ?>&&isFeasibiltyDone=<? echo $isFeasibiltyDone; ?>">
+                                    <? echo $i; ?>
                                 </a>
                             </li>
 
@@ -516,10 +615,10 @@
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
 
 
-        $(".history-link").click(function() {
+        $(".history-link").click(function () {
             var siteId = $(this).data("siteid");
             var modal = document.getElementById("historyModal");
             $.ajax({
@@ -528,11 +627,11 @@
                 data: {
                     siteId: siteId
                 },
-                success: function(response) {
+                success: function (response) {
                     $("#historyContent").html(response);
                     modal.style.display = "block";
                 },
-                error: function() {
+                error: function () {
                     alert("Failed to fetch history data.");
                 }
             });
@@ -543,11 +642,11 @@
 
 <script>
     $("#show_filter").css('display', 'none');
-    $("#hide_filter").on('click', function() {
+    $("#hide_filter").on('click', function () {
         $("#filter").css('display', 'none');
         $("#show_filter").css('display', 'block');
     });
-    $("#show_filter").on('click', function() {
+    $("#show_filter").on('click', function () {
         $("#filter").css('display', 'block');
         $("#show_filter").css('display', 'none');
     });

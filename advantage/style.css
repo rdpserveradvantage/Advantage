@@ -523,3 +523,7 @@ table.dataTable thead .sorting_desc:after {
     width: calc(100% / 3) !important;
     text-align: center;
 }
+
+#submitButton:disabled {
+    cursor: not-allowed;
+  }

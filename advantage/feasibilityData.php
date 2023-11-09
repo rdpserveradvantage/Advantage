@@ -63,12 +63,18 @@ powerFluctuationSnap,remarksSnap,created_at,created_by,feasibilityDone,isVendor 
                             $sqlappCount .= "and city like '%" . $city . "%'";
                         }
 
+                        if ($assignedLho) {
+                            if ($ADVANTAGE_level == 2 || $ADVANTAGE_level == 5) {
+                                $statement .= "and LHO = '" . $assignedLho . "' ";
+                                $sqlappCount .= "and LHO= '" . $assignedLho . "' ";
+                            }
+    
+                        }
 
 
 
 
                     $statement .= " order by id desc";
-
 $sqlappCount;
 
 

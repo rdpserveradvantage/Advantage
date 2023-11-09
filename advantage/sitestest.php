@@ -34,6 +34,13 @@
                                 from sites where 1 ";
 
 
+
+
+                    if (isset($_REQUEST['vendorId']) && $_REQUEST['vendorId'] != '') {
+                        $vendorId = $_REQUEST['vendorId'];
+                        $atm_sql .= "and delegatedToVendorId like '%" . $vendorId . "%'";
+                        $sqlappCount .= "and delegatedToVendorId like '%" . $vendorId . "%'";
+                    }
                     if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
                         $atmid = $_REQUEST['atmid'];
                         $atm_sql .= "and atmid like '%" . $atmid . "%'";
@@ -102,20 +109,20 @@
                     $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
                     // echo $sql_query;
-
+                    
                     ?>
 
                     <div class="card" id="filter">
                         <div class="card-block">
                             <form id="sitesForm" action="<?php echo basename(__FILE__); ?>" method="POST">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label>ATMID</label>
                                         <input type="text" class="form-control" name="atmid"
                                             value="<? echo $_REQUEST['atmid']; ?>" />
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label>Feasibilty Done</label>
                                         <select name="isFeasibiltyDone" class="form-control">
                                             <option value="">Select</option>
@@ -128,6 +135,29 @@
                                         </select>
 
                                     </div>
+
+                                    <div class="col-md-2">
+                                        <label>Contractor</label>
+                                        <select name="vendorId" class="form-control mdb-select md-form"
+                                            searchable="Search here..">
+
+                                            <option value="">-- Select Contractor --</option>
+
+                                            <?php
+                                            $i = 0;
+                                            $vendorSql = mysqli_query($con, "SELECT * from vendor where status=1");
+                                            while ($fetch_data = mysqli_fetch_assoc($vendorSql)) {
+                                                ?>
+                                                <option value="<?php echo $fetch_data['id'] ?>" <?php if ($_REQUEST['vendorId'] == $fetch_data['id']) {
+                                                       echo 'selected';
+                                                   } ?>>
+                                                    <?php echo $fetch_data['vendorName']; ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+
+                                    </div>
+
 
 
                                     <div class="col-md-2">
@@ -548,12 +578,16 @@
                         $atmid = $_REQUEST['atmid'];
                         $isDelegated = $_REQUEST['isDelegated'];
                         $isFeasibiltyDone = $_REQUEST['isFeasibiltyDone'];
+                        $vendorId = $_REQUEST['vendorId'];
+                        $state = $_REQUEST['state'];
+
+
 
                         echo '<div class="pagination"><ul>';
                         if ($start_window > 1) {
 
-                            echo "<li><a href='?page=1&&atmid=$atmid&&$customer&&page_size=$page_size&&isDelegated=$isDelegated&&isFeasibiltyDone=$isFeasibiltyDone'>First</a></li>";
-                            echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '&&customer=' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '">Prev</a></li>';
+                            echo "<li><a href='?page=1&&atmid=$atmid&&$customer&&page_size=$page_size&&isDelegated=$    &&isFeasibiltyDone=$isFeasibiltyDone&vendorId=$vendorId'&state='.$state.'>First</a></li>";
+                            echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '&&customer=' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '&vendorId='.$vendorId.'&state='.$state.'">Prev</a></li>';
                         }
 
                         for ($i = $start_window; $i <= $end_window; $i++) {
@@ -562,7 +596,7 @@
                                 echo 'active';
                             } ?>">
                                 <a
-                                    href="?page=<? echo $i; ?>&&atmid=<? echo $atmid; ?>&&customer=<? echo $customer; ?>&&page_size=<? echo $page_size; ?>&&isDelegated=<? echo $isDelegated; ?>&&isFeasibiltyDone=<? echo $isFeasibiltyDone; ?>">
+                                    href="?page=<? echo $i; ?>&&atmid=<? echo $atmid; ?>&&customer=<? echo $customer; ?>&&page_size=<? echo $page_size; ?>&&isDelegated=<? echo $isDelegated; ?>&&isFeasibiltyDone=<? echo $isFeasibiltyDone; ?>&vendorId=<?= $vendorId;?>&state=<?= $state; ?>">
                                     <? echo $i; ?>
                                 </a>
                             </li>
@@ -571,8 +605,8 @@
 
                         if ($end_window < $total_pages) {
 
-                            echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '&&customer=' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '">Next</a></li>';
-                            echo '<li><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '&&customer' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '">Last</a></li>';
+                            echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '&&customer=' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '&vendorId='.$vendorId.'&state='.$state.'">Next</a></li>';
+                            echo '<li><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '&&customer' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '&vendorId='.$vendorId.'&state='.$state.'">Last</a></li>';
                         }
                         echo '</ul></div>';
 

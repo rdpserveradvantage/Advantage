@@ -322,6 +322,13 @@
 
 
 <script>
+    
+    $(document).on("click", "a[data-target='#unbindModal']", function () {
+        var id = $(this).data('id');
+        document.getElementById("unbindItemId").value = id;
+    });
+
+
     function confirmUnbind() {
         var idToUnbind = document.getElementById("unbindItemId").value;
         // alert(idToUnbind)
@@ -330,12 +337,12 @@
             url: "unbind_router_atmid.php",
             data: { id: idToUnbind },
             success: function (response) {
-                console.log(response);
-                if (response.success == 1) {
+                // console.log(response);
+                if (response == '1') {
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: response.message
+                        text: 'Unbind Success !'
                     }).then(function () {
                         window.location.href = 'pendingConfiguration1.php';
                     });
@@ -343,7 +350,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: response.message
+                        text: 'Unbind Error !'
                     });
                 }
             },
@@ -353,18 +360,11 @@
         });
         $('#unbindModal').modal('hide');
     }
-    $(document).on("click", "a[data-target='#unbindModal']", function () {
-        var id = $(this).data('id');
-        document.getElementById("unbindItemId").value = id;
-    });
-</script>
 
-
-
-
-
-<script>
     $(document).ready(function () {
+
+      
+
 
         function populateATMDatafromIP(serial_no) {
             $.ajax({
@@ -377,6 +377,7 @@
                     if (msg != 0) {
                         var obj = JSON.parse(msg);
                         var fields = ['networkIP', 'routerIP', 'atmIP'];
+
 
                         fields.forEach(function (field) {
                             if (!obj[field]) {
@@ -412,6 +413,16 @@
                     if (msg != 0) {
                         var obj = JSON.parse(msg);
                         var fields = ['customer', 'bank', 'engineer', 'location', 'region', 'state', 'city', 'branch', 'bm', 'lho'];
+
+                        if (obj.isConfigurationFound == 1) {
+                            $("#submitButton").prop("disabled", true);
+                            alert('Router already Configure with given atmid !');
+
+                        } else {
+                            $("#submitButton").prop("disabled", false);
+
+                        }
+
 
                         fields.forEach(function (field) {
                             if (!obj[field]) {

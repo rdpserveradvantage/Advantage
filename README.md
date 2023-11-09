@@ -8,31 +8,31 @@ Welcome to our multi-project repository! This repository contains five separate 
 
 Project Advantage focuses on XYZ. It aims to achieve ABC by implementing various features and improvements.
 
-Repository: [Advantage](https://github.com/rdpserveradvantage/advantage)
+Repository: [Advantage](advantage.advantagesb.com)
 
 ### Clarity
 
 The Clarity project is designed to address DEF. It provides solutions for GHI and offers a user-friendly interface for better management.
 
-Repository: [Clarity](https://github.com/rdpserveradvantage/clarity)
+Repository: [Clarity](clarity.advantagesb.com)
 
 ### Clarify
 
 Clarify is all about JKL. This project aims to simplify complex processes and ensure a smooth workflow for users.
 
-Repository: [Clarify](https://github.com/rdpserveradvantage/clarify)
+Repository: [Clarify](clarify.advantagesb.com)
 
 ### RailtelVendor
 
 RailtelVendor project is dedicated to managing vendor interactions within the organization. It streamlines the vendor-related processes and optimizes communication.
 
-Repository: [RailtelVendor](https://github.com/rdpserveradvantage/railtelvendor)
+Repository: [RailtelVendor](vendor.advantagesb.com)
 
 ### Inventory
 
 The Inventory project helps in managing XYZ. It tracks assets, maintains stock levels, and provides insights for efficient inventory management.
 
-Repository: [Inventory](https://github.com/rdpserveradvantage/inventory)
+Repository: [Inventory](inventory.advantagesb.com)
 
 ## Getting Started
 

@@ -7,7 +7,7 @@
                     <div class="card">
                         <div class="card-block">
                             <?
-                              $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestBy='" . $SERVICE_email . "' AND requestByPortal IN ('Clarity','Clarify') and materialRequestLevel=3 and status=1";
+                             echo  $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestBy='" . $SERVICE_email . "' AND requestByPortal IN ('Clarity','Clarify') and materialRequestLevel=3 and status=1";
                             $sql = mysqli_query($con, $statement);
                             if (mysqli_num_rows($sql) > 0) {
                                 echo '

@@ -1,148 +1,197 @@
 <? include('header.php'); ?>
 
-     
-            <div class="pcoded-content">
-                <div class="pcoded-inner-content">
-                    <div class="main-body">
-                        <div class="page-wrapper">
-                            <div class="page-body">
-                                <div class="card">
-                                    <div class="card-block">
-                                        
-                                        
-                                        
-                                        
-    <form action="<? $_SERVER['PHP_SELF']; ?>" method="post">
- <table border="1">
-            <tr>
-                <th>Select</th>
-                <th>Material Name</th>
-                <th>Serial Number / Quantity</th>
-            </tr>
-            <?php
-
-            // Fetch materials from the BOQ table
-            $sql = "SELECT id, value, needSerialNumber FROM boq ORDER BY needSerialNumber DESC";
-            $result = $con->query($sql);
-
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $id = $row['id'];
-                    $materialName = $row['value'];
-                    $hasSerialNumber = $row['needSerialNumber'];
-
-                    echo "<tr>";
-                    // echo "<td><input type='checkbox' name='selected_materials[]' value='$id' onchange='handleCheckboxChange($id, this)'></td>";
-                    echo "<td><input type='checkbox' name='selected_materials[]' value='$id' onchange='handleCheckboxChange($id, this)' id='checkbox$id'></td>";
-                    echo "<td>$materialName</td>";
-
-                    echo "<td>";
-                 if ($hasSerialNumber == 1) {
-                        echo "<div id='serialNumberInputs$id'>";
-                        echo "<div class='serialInput'>";
-                        echo "<input type='text' name='serial_numbers[$id][]' placeholder='Serial Number' disabled>";
-                        echo "<button type='button' onclick='addSerialNumberInput($id)' disabled>Add</button>";
-                        echo "</div>";
-                        echo "</div>";
-                    } else {
-                        // For materials that don't require serial numbers, use an empty div as a placeholder.
-                        echo "<div id='serialNumberInputs$id'></div>";
-                        echo "<input type='number' name='quantities[$id]' id='quantityInput$id' placeholder='Quantity' disabled>";
-                    }
-                    echo "</td>";
-
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='3'>No materials found in the BOQ.</td></tr>";
-            }
-
-            // Close the database connection
-            $con->close();
-            ?>
-        </table>
-
-        <br>
-        <input type="submit" value="Send Selected Materials to OEM">
-    </form>
-    <script>
-
-
-
-function toggleSerialInputs(materialId, checked) {
-    var container = document.getElementById("serialNumberInputs" + materialId);
-    var inputs = container.getElementsByTagName("input");
-    var buttons = container.getElementsByTagName("button");
-    
-    if(container){
-    for (var i = 0; i < inputs.length; i++) {
-        inputs[i].disabled = !checked;
-        inputs[i].required = checked;
-        // Set the minimum value of the input to 1 if the checkbox is checked
-        inputs[i].min = checked ? 1 : 0;
+<style>
+    html{
+        /*text-transform: inherit !important;*/
     }
-    
-    for (var j = 0; j < buttons.length; j++) {
-        buttons[j].disabled = !checked;
-    }
-        
-    }
-    
-    // Enable/disable quantity input based on checkbox state
-    var quantityInput = document.getElementById("quantityInput" + materialId);
-    if (quantityInput) {
-        quantityInput.disabled = !checked;
-        if (!checked) {
-            quantityInput.value = ""; // Clear quantity input if checkbox is unchecked
-        }
-        // Set the minimum value of the quantity input to 1 if the checkbox is checked
-        quantityInput.min = checked ? 1 : 0;
-    }
-}
+</style>
 
-        function handleCheckboxChange(materialId, checkbox) {
-            toggleSerialInputs(materialId, checkbox.checked);
-        }
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="main-body">
+            <div class="page-wrapper">
+                <div class="page-body">
+                    <div class="card">
+                        <div class="card-block">
 
-function addSerialNumberInput(materialId) {
-    var container = document.getElementById("serialNumberInputs" + materialId);
-    
-    // Create a div to group the input and remove button
-    var divWrapper = document.createElement("div");
-    
-    var input = document.createElement("input");
-    input.type = "text";
-    input.name = "serial_numbers[" + materialId + "][]";
-    input.placeholder = "Serial Number";
-    input.required = true; // Make the added serial number input required
-    
-    var removeButton = document.createElement("button");
-    removeButton.type = "button";
-    removeButton.textContent = "Remove";
-    removeButton.addEventListener("click", function() {
-        // Remove the div wrapper, which contains the input and remove button
-        container.removeChild(divWrapper);
-    });
-    
-    // Append the input and remove button to the div wrapper
-    divWrapper.appendChild(input);
-    divWrapper.appendChild(removeButton);
-    
-    // Append the div wrapper to the container
-    container.appendChild(divWrapper);
-}
+                            <?
 
-</script>
+                          $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestByPortal='vendor' and requestForPortal IN ('advantage','inventory') 
+                            and requestFor=1 and status=1";
+                            $sql = mysqli_query($con, $statement);
 
-                                    </div>
-                                </div>
-                            </div>
+                            if (mysqli_num_rows($sql) > 0) {
+                                echo '
+    <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs">
+    <thead>
+    <tr class="table-primary">
+    <th>Sr No</th>
+    <th>Material</th>
+    <th>Serial Number</th>
+    <th>ATMID</th>
+    <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>';
+
+                                $i = 1;
+
+                                while ($sql_result = mysqli_fetch_assoc($sql)) {
+                                    $id = $sql_result['id'];
+                                    $atmid = $sql_result['atmid'];
+
+                                    echo "<tr>
+                <td>$i &nbsp;&nbsp;&nbsp;
+                 <input type='checkbox' name='materialRequestId[]' value='$id' /> 
+                 </td>
+                <td class='strong' colspan='3'>$atmid</td>
+                <td><a href='#'></a></td>
+
+              </tr>";
+
+                                    $detailsSql = mysqli_query($con, "SELECT * FROM generatefaultymaterialrequestdetails WHERE requestId='" . $id . "'");
+                                    $counter2 = 1;
+
+                                    while ($detailsSql_result = mysqli_fetch_assoc($detailsSql)) {
+                                        $MaterialName = $detailsSql_result['MaterialName'];
+                                        $MaterialSerialNumber = $detailsSql_result['MaterialSerialNumber'];
+
+                                        echo "<tr>
+                    <td></td>
+                    <td>$MaterialName</td>
+                    <td>$MaterialSerialNumber</td>
+                    <td></td>
+                    <td></td>
+                  </tr>";
+
+                                        $counter2++;
+                                    }
+
+                                    $i++;
+                                }
+
+                                echo '</tbody>
+    </table>';
+                                echo '<a href="#" class="btn btn-primary" onclick="dispatchCheckedItems()">Dispatch Checked Item</a>                                ';
+                            } else {
+                                echo 'No Data Found!';
+                            }
+
+                            ?>
                         </div>
-
-
                     </div>
                 </div>
             </div>
-                    
-                    
-    <? include('footer.php'); ?>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="dispatchModal" tabindex="-1" role="dialog" aria-labelledby="dispatchModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dispatchModalLabel">Enter OEM Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="oemDetailsForm">
+                    <div class="form-group">
+                        <label for="oemName">OEM Name</label>
+                        <input type="text" class="form-control" id="oemName" name="oemName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="oemContact">Contact Number</label>
+                        <input type="tel" class="form-control" id="oemContact" name="oemContact" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="oemAddress">Address</label>
+                        <textarea class="form-control" id="oemAddress" name="oemAddress" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="shippingDetails">Shipping Details</label>
+                        <textarea class="form-control" id="shippingDetails" name="shippingDetails" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="podDate">Proof of Delivery (POD) Date</label>
+                        <input type="date" class="form-control" id="podDate" name="podDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="courierChallan">Courier Challan</label>
+                        <input type="text" class="form-control" id="courierChallan" name="courierChallan" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="documentUpload">Document Upload</label>
+                        <input type="file" class="form-control-file" id="documentUpload" name="documentUpload">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitOemDetails">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+function dispatchCheckedItems() {
+    var materialRequestIds = document.getElementsByName('materialRequestId[]');
+    var selectedItems = [];
+
+    for (var i = 0; i < materialRequestIds.length; i++) {
+        if (materialRequestIds[i].checked) {
+            selectedItems.push(materialRequestIds[i].value);
+        }
+    }
+
+    if (selectedItems.length > 0) {
+        // Open the Bootstrap modal
+        $('#dispatchModal').modal('show');
+    } else {
+        // Handle the case where no items are selected
+        alert('Please select at least one item to dispatch.');
+    }
+}
+
+document.getElementById('submitOemDetails').addEventListener('click', function () {
+    // Get form data
+    var oemName = document.getElementById('oemName').value;
+    // Get other form fields as needed
+
+    // Perform validation if necessary
+
+    // Send the form data to the server using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                // Handle a successful response from the server
+                console.log(xhr.responseText);
+                // Close the modal
+                $('#dispatchModal').modal('hide');
+            } else {
+                // Handle errors
+                console.error('Error: ' + xhr.status);
+            }
+        }
+    };
+
+    // xhr.open('POST', 'process_oem_details.php', true);
+    // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    // xhr.send('oemName=' + oemName); // Send data to the server
+
+    // Clear the form fields if needed
+});
+
+</script>
+
+<? include('footer.php'); ?>

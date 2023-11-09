@@ -74,7 +74,7 @@ if ($noRecordsFound) {
         $sqlStatement = "SELECT * FROM projectInstallation WHERE isDone = 0 ORDER BY created_at ASC ";    
     }
     
-    echo '<script src="https://code.highcharts.com/highcharts.js"></script>
+    echo '
           <div class="col-sm-4">
               <div class="card">
                   <div class="card-block">
@@ -159,7 +159,7 @@ if ($noRecordsFound) {
       </div>
   </div>';
 
-    echo '<script src="https://code.highcharts.com/modules/exporting.js"></script>
+    echo '
           <script>
               var chartData = '.json_encode($totalPendingInstallation, JSON_NUMERIC_CHECK).';
               Highcharts.chart("container", {

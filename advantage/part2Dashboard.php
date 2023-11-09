@@ -60,8 +60,6 @@ $installationDone = $query6_result['count'];
 
 
 ?>
-<!-- Include Highcharts library -->
-<script src="https://code.highcharts.com/highcharts.js"></script>
 
 <div class="col-sm-12">
     <div class="card">
@@ -72,9 +70,7 @@ $installationDone = $query6_result['count'];
         </div>
     </div>
 </div>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
-<!-- Chart code -->
 <script>
     var data = <?php echo json_encode($data); ?>;
     data.forEach(function(item) {

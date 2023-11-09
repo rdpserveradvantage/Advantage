@@ -1,7 +1,7 @@
 <? include('header.php'); ?>
 
 <style>
-    html{
+    html {
         /*text-transform: inherit !important;*/
     }
 </style>
@@ -22,17 +22,17 @@
 
                             if (mysqli_num_rows($sql) > 0) {
                                 echo '
-    <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs">
-    <thead>
-    <tr class="table-primary">
-    <th>Sr No</th>
-    <th>Material</th>
-    <th>Serial Number</th>
-    <th>ATMID</th>
-    <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>';
+                                    <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs">
+                                        <thead>
+                                            <tr class="table-primary">
+                                                <th>Sr No</th>
+                                                <th>Material</th>
+                                                <th>Serial Number</th>
+                                                <th>ATMID</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                    <tbody>';
 
                                 $i = 1;
 
@@ -41,17 +41,13 @@
                                     $atmid = $sql_result['atmid'];
 
                                     echo "<tr>
-                <td>$i &nbsp;&nbsp;&nbsp;
-                 <input type='checkbox' name='materialRequestId[]' value='$id' /> 
-                 </td>
-                <td class='strong' colspan='3'>$atmid</td>
-                <td><a href='#'>Dispatch Item</a></td>
+                                        <td>$i &nbsp;&nbsp;&nbsp;
+                                        <input type='checkbox' name='materialRequestId[]' value='$id' /> 
+                                        </td>
+                                        <td class='strong' colspan='3'>$atmid</td>
+                                        <td><a href='#'>Dispatch Item</a></td>
 
-              </tr>";
-// echo '<br>';
-
-// echo "SELECT * FROM generatefaultymaterialrequestdetails WHERE requestId='" . $id . "'" ; 
-// echo '<br>';
+                                     </tr>";
                                     $detailsSql = mysqli_query($con, "SELECT * FROM generatefaultymaterialrequestdetails WHERE requestId='" . $id . "'");
                                     $counter2 = 1;
 
@@ -60,12 +56,12 @@
                                         $MaterialSerialNumber = $detailsSql_result['MaterialSerialNumber'];
 
                                         echo "<tr>
-                    <td></td>
-                    <td>$MaterialName</td>
-                    <td>$MaterialSerialNumber</td>
-                    <td></td>
-                    <td></td>
-                  </tr>";
+                                        <td></td>
+                                        <td>$MaterialName</td>
+                                        <td>$MaterialSerialNumber</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>";
 
                                         $counter2++;
                                     }
@@ -74,7 +70,7 @@
                                 }
 
                                 echo '</tbody>
-    </table>';
+                                </table>';
                                 echo '<a href="#" class="btn btn-primary" onclick="dispatchCheckedItems()">Dispatch Checked Item</a>                                ';
                             } else {
                                 echo 'No Data Found!';
@@ -104,7 +100,7 @@
 
         // Send the selected items to the server using AJAX
         var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // Display the response from the server
                 console.log(xhr.responseText);

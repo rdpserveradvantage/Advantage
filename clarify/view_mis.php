@@ -384,17 +384,19 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                             <tr class="table-primary">
                                                 <th>SR</th>
                                                 <th>TicketId</th>
-                                                <th>Customer</th>
-                                                <th>Bank</th>
                                                 <th>Atmid</th>
+                                                <th>Component</th>
+                                                <th>Sub Component</th>
+                                                <th>Customer</th>
+
+                                                <th>Bank</th>
                                                 <th>Atm Address</th>
                                                 <th>City</th>
                                                 <th>State</th>
 
                                                 <th>Call Type</th>
                                                 <th>Call Receive From</th>
-                                                <th>Component</th>
-                                                <th>Sub Component</th>
+
                                                 <th>Current Status</th>
 
 
@@ -523,15 +525,23 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                         </a>
                                                     </td>
 
+                                                    
+                                                    <td>
+                                                        <? echo $atmid; ?>
+                                                    </td>
+                                                    <td>
+                                                        <? echo $sql_result['component']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <? echo $sql_result['subcomponent']; ?>
+                                                    </td>
+
                                                     <td>
                                                         <? echo $customer; ?>
                                                     </td>
 
                                                     <td>
                                                         <? echo $sql_result['bank']; ?>
-                                                    </td>
-                                                    <td>
-                                                        <? echo $atmid; ?>
                                                     </td>
 
                                                     <td>
@@ -555,12 +565,6 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                     </td>
 
 
-                                                    <td>
-                                                        <? echo $sql_result['component']; ?>
-                                                    </td>
-                                                    <td>
-                                                        <? echo $sql_result['subcomponent']; ?>
-                                                    </td>
                                                     <td>
                                                         <? echo $status; ?>
                                                     </td>

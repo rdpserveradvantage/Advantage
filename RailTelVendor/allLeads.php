@@ -390,11 +390,11 @@
                                                     <td><? 
                                                         echo (
     $verificationStatus
-    ? $verificationStatus . (
+    ? '<button class="btn btn-success btn-icon" title="Verification Approved">✔</button>' . (
         $projectInstallation
         ? ' | Sent to Vendor for Installation : <u><b>'  . getVendorName($projectInstallationVendor) . '</b></u>'
         : ($verificationStatus === 'Verify'
-            ?  '' : '')
+            ?  '' : 'pending')
     )
     : ($isFeasibilityDoneRecord ? 'Pending' : '')
 );

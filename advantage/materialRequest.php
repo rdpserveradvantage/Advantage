@@ -221,6 +221,8 @@ function getMaterial_requestData($siteid, $parameter)
                                 <div class="card-body" style="overflow:auto;">
 
                                     <?
+                                    echo "select * from vendormaterialrequest where status=0 and requestToInventory=1" ; 
+                                    
                                     $serviceRequest = mysqli_query($con, "select * from vendormaterialrequest where status=0 and requestToInventory=1");
                                     if (mysqli_num_rows($serviceRequest) > 0) {
 

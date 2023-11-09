@@ -34,9 +34,18 @@ if ($atmid) {
         $engname_result = mysqli_fetch_assoc($engname);
         $_engname = $engname_result['name'];
         $to = $_REQUEST['to'];
+        $vpn = $_REQUEST['vpn'];
 
-        $comp = 'Offline';
-        $subcomp = 'Router Offline';
+        if($vpn==0){
+            $comp = 'Offline';
+            $subcomp = 'Router Offline';
+        }else{
+            $comp = 'VPN-down';
+            $subcomp = 'VPN-down';
+        }
+
+
+
         $call_receive = 'Auto Email Call';
         $status = 'open';
         $remarks = 'Call Log';

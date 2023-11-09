@@ -120,43 +120,45 @@ if ($_SESSION['SERVICE_level'] == 5) { ?>
                                         <input type="text" name="call_type" id="call_type" class="form-control"
                                             value="Service" readonly required>
                                     </div>
-                                    
+
                                 </div>
-                                
 
 
 
-                                    <div class="row highlight">
 
-                                        <? if ($_SESSION['SERVICE_level'] != 5) { ?>
-                                            <div class="col-sm-12">
-                                                <label>Call Receive From</label>
-                                                <select class="form-control" name="call_receive" id="call_receive" reuqired>
-                                                    <option value="">Select</option>
-                                                    <option value="Customer / Bank">Customer / Bank</option>
-                                                    <option value="Internal">Internal</option>
-                                                </select>
-                                            </div>
+                                <div class="row highlight">
 
-                                        <? } ?>
-
-
-                                        <div class="col-sm-6">
-                                            <label>Issue</label>
-                                            <select name="comp" id="comp" class="form-control" required>
+                                    <? if ($_SESSION['SERVICE_level'] != 5) { ?>
+                                        <div class="col-sm-12">
+                                            <label>Call Receive From</label>
+                                            <select class="form-control" name="call_receive" id="call_receive" reuqired>
                                                 <option value="">Select</option>
-                                                <option>Offline</option>
-                                                <option>Non-Offline</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <label>Reason</label>
-                                            <select name="subcomp" id="subcomp" class="form-control" required>
+                                                <option value="Customer / Bank">Customer / Bank</option>
+                                                <option value="Internal">Internal</option>
                                             </select>
                                         </div>
 
+                                    <? } ?>
 
+
+                                    <div class="col-sm-6">
+                                        <label>Issue</label>
+                                        <select name="comp" id="comp" class="form-control" required>
+                                            <option value="">Select</option>
+                                            <option>Offline</option>
+                                            <option>Non-Offline</option>
+                                            <option>VPN-down</option>
+
+                                        </select>
                                     </div>
+                                    <div class="col-sm-6">
+                                        <label>Reason</label>
+                                        <select name="subcomp" id="subcomp" class="form-control" required>
+                                        </select>
+                                    </div>
+
+
+                                </div>
 
 
 
@@ -192,21 +194,25 @@ if ($_SESSION['SERVICE_level'] == 5) { ?>
 <script>
 
 
-$(document).on('change','#comp',function(){
-    var comp = $(this).val() ;
-    if(comp=='Offline'){
-        option = '<option>Router Offline</option>';
-    }else if(comp=='Non-Offline'){
-        option = `<option>Weak Signal</option>
+    $(document).on('change', '#comp', function () {
+        var comp = $(this).val();
+        if (comp == 'Offline') {
+            option = '<option>Router Offline</option>';
+        } else if (comp == 'Non-Offline') {
+            option = `<option>Weak Signal</option>
                     <option>Fluctuation</option>
                     <option>SIM Slot Not Working</option>
 
         `;
-    }else{
-        option = `<option></option>`;
-    }
-    $("#subcomp").html(option);
-})
+        } else if (comp == 'VPN-down') {
+            option = `<option>VPN-down</option>`;
+
+        }
+        else {
+            option = `<option></option>`;
+        }
+        $("#subcomp").html(option);
+    })
 
     $(document).ready(function () {
         $("#atmid").focus();

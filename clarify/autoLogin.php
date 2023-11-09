@@ -29,6 +29,11 @@ if ($username && $password) {
         $_SESSION['SERVICE_zone'] = $response['user']['zone'];
         $_SESSION['isServicePortalToken'] = $response['jwt'];
 
+        $_SESSION['advantagePeople'] = 1;
+
+
+
+
         // $_SESSION['SERVICE_RailTailVendorID'] = $response['user']['vendorId'];
 
         $response['redirect'] = 'index.php'; // Change this to your actual redirect URL

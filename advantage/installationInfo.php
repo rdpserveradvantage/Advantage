@@ -24,6 +24,8 @@ $baseurl = 'http://clarity.advantagesb.com/';
                                       $siteid = $_REQUEST['siteid'];
                                       $atmid = $_REQUEST['atmid'];
                                       
+                                      echo "SELECT * FROM `installationData` where atmid='".$atmid."' order by id desc" ; 
+                                      
                                       $sql = mysqli_query($con,"SELECT * FROM `installationData` where atmid='".$atmid."' order by id desc");
                                       if($sql_result = mysqli_fetch_assoc($sql)){
                                           

@@ -49,7 +49,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <label>ATMID</label>
-                                        <input type="text" name="atmid" class="form-control" value="<?= $atmid; ?>">
+                                        <input type="text" name="atmid" class="form-control" value="<?= $atmid; ?>" required>
                                     </div>
                                     <div class="col-sm-12">
                                         <br />

@@ -39,12 +39,12 @@
                         <ul class="nav nav-tabs md-tabs" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#fresh-requests" role="tab"
-                                    aria-selected="true">Installation Requests</a>
+                                    aria-selected="true">Installation Material Requests</a>
                                 <div class="slide"></div>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#service-requests" role="tab"
-                                    aria-selected="false">Service Requests</a>
+                                    aria-selected="false">Service Material Requests</a>
                                 <div class="slide"></div>
                             </li>
                         </ul>
@@ -435,7 +435,12 @@
                             icon: 'success',
                             title: 'Success',
                             text: responseData.message,
-                        });
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = './materialRequest.php';
+                                }
+                            });
+                        
                     } else {
                         Swal.fire({
                             icon: 'error',

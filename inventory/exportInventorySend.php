@@ -1,8 +1,6 @@
-<?php
-// Include your database configuration file
-include('config.php');
+<?php  include('config.php');
 
-// Include PhpSpreadsheet library
+// library
 require 'vendor/autoload.php';
 
 // Import necessary classes from PhpSpreadsheet

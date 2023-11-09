@@ -20,19 +20,26 @@ $pod = $_POST['POD'];
 $courier = $_POST['courier'];
 $remark = $_POST['remark'];
 
-var_dump($_SESSION) ; 
-return ; 
-$statement = "insert into goodreturn(siteid,atmid,created_at,created_by,portal,status,remarks) 
-values('" . $siteid . "','" . $atmid . "','" . $datetime . "','" . $userid . "','vendor','1','" . $remark . "')";
+
+$statement = "insert into goodreturn(materialSendID,siteid,atmid,created_at,created_by,portal,status,remarks,contactPersonName,contactPersonNumber,address,pod,courier) 
+values('".$materialSendIDParent."','" . $siteid . "','" . $atmid . "','" . $datetime . "','" . $userid . "','vendor','1','" . $remark . "','".$contactPersonName."','".$contactPersonNumber."','".$address."','".$pod."','".$courier."')";
 if (mysqli_query($con, $statement)) {
     $insert_id = $con->insert_id;
     for ($i = 0; $i < count($attributes); $i++) {
         mysqli_query($con, "insert into goodreturndetails(goodReturnID,material,serialNumber) 
         values('" . $insert_id . "','" . $attributes[$i] . "','" . $serialNumbers[$i] . "')");
     }
+    
+$response = ['status' => '200', 'message' => 'Form data saved successfully'];
 
-    mysqli_query($con,"insert into (materialSendId,atmid,siteid,challanNumber,receiversName,receiversNumber,,created_at,portal,status)
-    values('".$materialSendIDParent."','".$atmid."','".$siteid."','".$pod."','".$receiversName."','".$receiversNumber."','".$datetime."','vendor','1')
-    ")
+}else{
+    
+        $response = ['status' => '500', 'message' => 'Error updating status in the Inventory'];
 }
+
+
+$con->close();
+
+echo json_encode($response);
+?>
 

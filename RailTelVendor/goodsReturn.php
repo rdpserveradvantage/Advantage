@@ -1,8 +1,8 @@
 <? include('header.php');
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 // return ; 
 ?>
@@ -174,7 +174,7 @@ error_reporting(E_ALL);
                                             console.log(data);
                                             if (data.status == '200') {
                                                 alert('Material Send Successfully !')
-                                                // window.location.href = "materialRecived.php";
+                                                window.location.href = "materialRecived.php";
                                             } else {
                                                 alert('Material Send Error !')
                                                 console.error(xhr.responseText);

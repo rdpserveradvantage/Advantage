@@ -1,4 +1,163 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic Column Visibility</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Table with Dynamic Column Visibility</h1>
+        
+                <!-- Table -->
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Sr no</th>
+                    <th>Column 4</th>
+                    <th>Column 5</th>
+                    <th>Column 6</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Your table data goes here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add Bootstrap Modal -->
+    <div class="modal fade" id="columnModal" tabindex="-1" role="dialog" aria-labelledby="columnModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!--<h5 class="modal-title" id="columnModalLabel">Customize Column Visibility</h5>-->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="columnForm">
+                        <div class="form-group">
+                            <!-- Column checkboxes will be generated here -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveColumnVisibility">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap and jQuery scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+         $(document).ready(function() {
+            // Initialize Bootstrap modal
+            $('#columnModal').modal({ backdrop: 'static', keyboard: false, show: false });
+            const table = $('table');
+            function createColumnModal() {
+                const customizeButton = $('<button type="button" class="btn btn-primary" id="customizeColumnsButton">Customize Column Visibility</button>');
+                customizeButton.click(function() {
+                    const form = $('#columnForm');
+                    form.empty();
+                    table.find('thead th').each(function(index) {
+                        const columnTitle = $(this).text();
+                        const columnCheckbox = $(`<div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck${index + 1}" data-column="${index + 1}" checked>
+                            <label class="custom-control-label" for="customCheck${index + 1}">${columnTitle}</label>
+                        </div>`);
+                        form.append(columnCheckbox);
+                    });
+                    $('#columnModal').modal('show');
+                });
+                $('.container').prepend(customizeButton);
+            }
+
+            // Function to load user preferences from the database
+            function loadUserPreferences() {
+                $.ajax({
+                    url: 'demo3.php', // Replace with the actual URL to fetch user preferences
+                    method: 'GET',
+                    data: { tableId: 'view_site' }, // Pass the table ID to retrieve user preferences
+                    success: function(response) {
+                        const selectedColumns = response.split(',');
+
+                        // Update the checkboxes based on the retrieved preferences
+                        $('input[type=checkbox]', '#columnForm').each(function() {
+                            const column = $(this).data('column');
+                            const isVisible = selectedColumns.includes(column.toString());
+                            $(this).prop('checked', isVisible);
+
+                            if (isVisible) {
+                                // Show the column
+                                $('th, td', `table tr td:nth-child(${column})`).show();
+                            } else {
+                                // Hide the column
+                                $('th, td', `table tr td:nth-child(${column})`).hide();
+                            }
+                        });
+                    },
+                    error: function() {
+                        console.log('Error loading user preferences.');
+                    }
+                });
+            }
+
+            // Call the function to create the column customization modal
+            createColumnModal();
+
+            // Load and apply user preferences
+            loadUserPreferences();
+
+            // Event handler for showing the modal
+            $('#columnModal').on('show.bs.modal', function() {
+                // Reset the form to the previous state
+                $('input[type=checkbox]', '#columnForm').each(function() {
+                    const column = $(this).data('column');
+                    const isVisible = $(`th, td`, `table tr td:nth-child(${column})`).is(':visible');
+                    $(this).prop('checked', isVisible);
+                });
+            });
+
+            $('#saveColumnVisibility').click(function() {
+                const selectedColumns = [];
+                $('input[type=checkbox]:checked', '#columnForm').each(function() {
+                    selectedColumns.push($(this).data('column'));
+                });
+
+                // Save the user's column preferences using AJAX
+                $.ajax({
+                    url: 'demo2.php', // Replace with the actual URL to save preferences
+                    method: 'POST',
+                    data: {
+                        tableId: 'view_site', // Pass the table ID for the user's preferences
+                        selectedColumns: selectedColumns.join(',')
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function() {
+                        console.log('Error saving user preferences.');
+                    }
+                });
+                $('#columnModal').modal('hide');
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+<? return; ?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>

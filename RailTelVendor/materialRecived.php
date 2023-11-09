@@ -60,7 +60,7 @@
                     $end_window = min($start_window + $window_size - 1, $total_pages);
                     $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     // }
-                    echo $sql_query;
+                    // echo $sql_query;
 
                     ?>
 
@@ -151,6 +151,18 @@
                                     } else {
                                         $ifExistTrackingUpdate = 0;
                                     }
+                                    
+                                    
+                                    
+                                    $goodsreturnsql = mysqli_query($con,"select * from goodreturn where materialSendID='".$id."' and status=1");
+                                    
+                                    if($goodsreturnsqlResult = mysqli_fetch_assoc($goodsreturnsql)){
+                                        $isGoodFound=1;
+                                    }else{
+                                        $isGoodFound=0;
+                                    }
+                                    
+                                    
 
                                     echo "<tr class='clickable-row' data-toggle='collapse' data-target='#details-$id'>";
                                     echo "<td>$counter</td>";
@@ -187,14 +199,18 @@
                                         echo "<td>No Status</td>";
                                     }
 
-                                    if ($goodsReturn == 1) {
+                                    if ($goodsReturn == 1 && $isGoodFound==0) {
                                         echo "<td>
-                                        <a href='./goodsReturn.php?siteid=$siteid&atmid=$atmid&materialSendId=$id' target='_blank'>Goods Return</a>
+                                        <a href='./goodsReturn.php?siteid=$siteid&atmid=$atmid&materialSendId=$id'>Goods Return</a>
                                         </td>";
-                                    } else {
+                                    } else if($isGoodFound==1) {
                                         echo "<td>
-                                        
+                                            <button class='btn btn-success btn-icon'>✔</button>
                                         </td>";
+                                    }else{
+                                        echo "
+                                        <td></td>
+                                        ";
                                     }
 
 

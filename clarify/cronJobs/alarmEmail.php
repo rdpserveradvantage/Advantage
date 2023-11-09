@@ -23,9 +23,22 @@ if ($inbox) {
             $subject = $overview[0]->subject;
 
             if (strpos($subject, 'Device management platform alarm information') !== false) {
+
+
+                $matches = [];
+
+                // Use regex to extract the number of devices
+                if (preg_match('/The VPN of (\d+) devices in the platform is offline/i', $message, $matches)) {
+                    $vpn = (int) $matches[1];
+                } else {
+                    $vpn = 0;
+                }
+
+
+
                 $dom = new DOMDocument;
-                libxml_use_internal_errors(true); 
-            
+                libxml_use_internal_errors(true);
+
                 $dom->loadHTML(mb_convert_encoding($message, 'HTML-ENTITIES', 'UTF-8'));
 
                 libxml_use_internal_errors(false);
@@ -38,10 +51,7 @@ if ($inbox) {
                     $deviceIDValues = [];
                     $descriptionValues = [];
 
-                    // echo "Subject: $subject<br>";
-                    // echo "SN\tDevice ID\tDescription<br>";
-
-
+                    
                     foreach ($table->getElementsByTagName('tr') as $row) {
                         $cells = $row->getElementsByTagName('td');
 
@@ -54,9 +64,10 @@ if ($inbox) {
 
                             $data = array(
                                 'atmid' => $description,
-                                'message'=>$message,
+                                'message' => $message,
+                                'vpn' => $vpn
                             );
-            
+
                             $options = array(
                                 'http' => array(
                                     'header' => "Content-type: application/x-www-form-urlencoded\r\n",
@@ -64,10 +75,10 @@ if ($inbox) {
                                     'content' => http_build_query($data)
                                 )
                             );
-            
+
                             $context = stream_context_create($options);
                             $result = file_get_contents($nodes, false, $context);
-            
+
 
                             $snValues[] = $sn;
                             $deviceIDValues[] = $deviceID;
@@ -79,9 +90,9 @@ if ($inbox) {
 
                     // echo '<br/>';
 
-                } 
+                }
             }
         }
-    } 
+    }
 }
 imap_close($inbox);

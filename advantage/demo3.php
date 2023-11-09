@@ -1,34 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php include('config.php');
+// Get the user ID and table name from the AJAX request
+$user_id = $userid;
+$table_name = $_GET['tableId'];
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notifications</title>
-</head>
+// Query to retrieve user preferences for the specified user and table
+echo $query = "SELECT column_preferences FROM user_table_preferences WHERE user_id = '$user_id' AND table_name = '$table_name'";
 
-<body>
-  <h1>Real-Time Notifications</h1>
-  <ul id="notificationList"></ul>
-  <script>
-    const notificationList = document.getElementById('notificationList');
-    const socket = new WebSocket('ws://localhost:8080');
-    socket.addEventListener('message', function(event) {
-      const notifications = JSON.parse(event.data);
-      console.log(notifications)
-      addNotifications(notifications);
-    });
+$result = $con->query($query);
 
-    function addNotifications(notifications) {
-      notifications.forEach((data) => {
-        const notificationItem = document.createElement('li');
-        notificationItem.innerHTML = `
-            <strong>${data.user}</strong>: ${data.message} (${data.time})
-        `;
-        notificationList.appendChild(notificationItem);
-      });
-    }
-  </script>
-</body>
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $selectedColumns = $row['column_preferences'];
+    echo $selectedColumns;
+} else {
+    // If no preferences are found, send an empty string as a response
+    echo '';
+}
 
-</html>
+// Close the database connection
+$con->close();

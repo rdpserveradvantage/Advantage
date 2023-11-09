@@ -1,19 +1,42 @@
 <? include('config.php');
 
-
 return ; 
-$sql = mysqli_query($con,"select * from material_send");
-while($sql_result = mysqli_fetch_assoc($sql)){
-    
-    $id = $sql_result['id'];
-    $atmid = $sql_result['atmid'];
-    $siteid = $sql_result['siteid'];
-    
-    
-    mysqli_query($con,"update vendorMaterialSend set materialSendId='".$id."' where atmid='".$atmid."' and siteid='".$siteid."'");
-    
-    
-    
+
+$sql = mysqli_query($con, "SELECT * FROM `inventory` WHERE `material` LIKE 'Lan Cable'");
+$sqlResult = mysqli_fetch_assoc($sql);
+
+$material = $sqlResult['material'];
+$material_make = $sqlResult['material_make'];
+$model_no = $sqlResult['model_no'];
+$serial_no = $sqlResult['serial_no'];
+$challan_no = $sqlResult['challan_no'];
+$amount = $sqlResult['amount'];
+$gst = $sqlResult['gst'];
+$amount_with_gst = $sqlResult['amount_with_gst'];
+$courier_detail = $sqlResult['courier_detail'];
+$tracking_details = $sqlResult['tracking_details'];
+$date_of_receiving = $sqlResult['date_of_receiving'];
+$receiver_name = $sqlResult['receiver_name'];
+$vendor_name = $sqlResult['vendor_name'];
+$vendor_contact = $sqlResult['vendor_contact'];
+$po_date = $sqlResult['po_date'];
+$po_number = $sqlResult['po_number'];
+$created_at = $sqlResult['created_at'];
+$created_by = $sqlResult['created_by'];
+$updated_at = $sqlResult['updated_at'];
+$status = $sqlResult['status'];
+$inventoryType = $sqlResult['inventoryType'];
+$isIPAssign = $sqlResult['isIPAssign'];
+
+
+for ($i = 0; $i < 14; $i++) {
+    echo $sql = "insert into inventory(material,material_make,model_no,serial_no,challan_no,amount,gst,amount_with_gst,courier_detail,tracking_details,date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at,status,inventoryType,isIPAssign)
+    values('" . $material . "','" . $material_make . "','" . $model_no . "','" . $serial_no . "','" . $challan_no . "','" . $amount . "',
+'" . $gst . "','" . $amount_with_gst . "','" . $courier_detail . "','" . $tracking_details . "','" . $date_of_receiving . "',
+'" . $receiver_name . "','" . $vendor_name . "','" . $vendor_contact . "','" . $po_date . "','" . $po_number . "','" . $created_at . "',
+'" . $created_by . "','" . $updated_at . "','" . $status . "','" . $inventoryType . "','" . $isIPAssign . "');
+";
+    mysqli_query($con, $sql);
+
 }
 
-?>

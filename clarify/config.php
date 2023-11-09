@@ -84,12 +84,17 @@ if (!function_exists('getVendorName')) {
     }
 }
 
-
-
 $userid = $_SESSION['SERVICE_userid'];
 $datetime = date('Y-m-d H:i:s');
-$RailTailVendorID = getUsers_Vendor($userid);
-$RailTailVendorName = getUsername($RailTailVendorID, true);
+
+if($_SESSION['advantagePeople']==1){
+    $RailTailVendorID = 4;
+    $RailTailVendorName = 'Advantage';
+}else{
+    $RailTailVendorID = getUsers_Vendor($userid);
+    $RailTailVendorName = getUsername($RailTailVendorID, true);
+}
+
 $getVendorName = getVendorName($RailTailVendorID);
 $SERVICE_LEVEL = $_SESSION['SERVICE_level'];
 $SERVICE_email = $_SESSION['SERVICE_email'];

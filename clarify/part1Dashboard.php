@@ -22,7 +22,9 @@ $titles = [
 ];
 
 $links = [
-    "#", "#", "#", '#'
+    "view_mis.php?status%5B0%5D=open&submit=1",
+    "view_mis.php?status%5B0%5D=close&submit=1",
+    "#", '#'
 ];
 
 $icon = [

@@ -79,7 +79,6 @@ $icon = [
 
 
 
-
 $query = "select * from boq where status=1";
 $result = mysqli_query($con, $query);
 $data = array();
@@ -87,125 +86,114 @@ while ($row = mysqli_fetch_assoc($result)) {
     $materialName[] = trim($row['value']);
 }
 
+
+
 $qty = array(); // Initialize the $qty array
 
 foreach ($materialName as $materialNameKey => $materialNameValue) {
-    $quantitySql = mysqli_query($con, "select count(1) as count from inventory where status=0 and material='" . $materialNameValue . "'");
+
+    $quantitySql = mysqli_query($con, "select count(1) as count from inventory where material='" . trim($materialNameValue) . "'");
     $quantitySqlResult = mysqli_fetch_assoc($quantitySql);
     $qty[] = $quantitySqlResult['count'];
 }
+
 ?>
 
-<div class="col-sm-12">
+
+
+<div class="col-sm-6">
     <div class="card">
         <div class="card-block">
-            <div id="chartdivInventory" style="height: 400px; overflow: hidden; text-align: left;"></div>
+            <div id="donutchart" style="height: 400px; overflow: hidden; text-align: left;"></div>
         </div>
     </div>
 </div>
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
+<div class="col-sm-6">
+    <div class="card">
+        <div class="card-block">
+            <table class="table table-hover table-styling table-xs">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Material</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php for ($i = 0; $i < count($materialName); $i++) : ?>
+                        <tr>
+                            <td class="strong"><?php echo $materialName[$i]; ?></td>
+                            <td><?php echo $qty[$i]; ?></td>
+                        </tr>
+                    <?php $totalqty = $totalqty + $qty[$i];
+                    endfor; ?>
 
-<!-- Chart code -->
+                    <tr class="table-primary">
+                        <th>Total</th>
+                        <th><?php echo $totalqty; ?></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 <script>
-    // Check if the container exists before initializing the chart
-    if (document.getElementById('chartdivInventory')) {
+    // Check if the container exists before initializing the donut chart
+    if (document.getElementById('donutchart')) {
         // Create an array of data points by combining materialName and qty arrays
-        var chartData = [];
+        var donutChartData = [];
         <?php for ($i = 0; $i < count($materialName); $i++) : ?>
-            chartData.push({
-                materialName: "<?php echo $materialName[$i]; ?>",
-                qty: <?php echo $qty[$i]; ?>
+            donutChartData.push({
+                name: "<?php echo $materialName[$i]; ?>",
+                y: <?php echo $qty[$i]; ?>
             });
         <?php endfor; ?>
 
-        // Define custom colors for each column
-        var colors = ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1'];
-
-        // Initialize Highcharts chart with custom options
-        Highcharts.chart('chartdivInventory', {
+        // Initialize Highcharts donut chart with custom options
+        Highcharts.chart('donutchart', {
             chart: {
-                type: 'column'
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 45
+                }
             },
             title: {
                 text: 'Material Quantities In Stocks'
             },
-            xAxis: {
-                categories: chartData.map(item => item.materialName),
-                title: {
-                    text: 'Material Name'
+            plotOptions: {
+                pie: {
+                    innerSize: 100, // Adjust this value to control the size of the hole in the center (donut hole)
+                    depth: 45
                 }
             },
-            yAxis: {
-                title: {
-                    text: 'Quantity'
+            credits: {
+                enabled: false
+            },
+            exporting: { // Enable exporting options
+                buttons: {
+                    contextButton: {
+                        menuItems: ['downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG'] // Add format options
+                    }
                 }
             },
             series: [{
                 name: 'Quantity',
-                data: chartData.map((item, index) => ({
-                    y: item.qty,
-                    color: colors[index] // Assign color from the colors array
-                })),
-                pointPadding: 0.2,
-                borderWidth: 0,
+                data: donutChartData,
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y}', // Display the quantity on top of columns
-                    style: {
-                        fontSize: '12px'
-                    }
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                 }
-            }],
-            plotOptions: {
-                column: {
-                    cursor: 'pointer', // Enable cursor pointer for columns
-                    events: {
-                        click: function (event) {
-                            // Handle click event on columns (add your code here)
-                            console.log('Clicked on column:', event.point.category);
-                        }
-                    }
-                }
-            },
-            tooltip: {
-                formatter: function () {
-                    // Customize the tooltip text
-                    return '<b>' + this.x + '</b><br>Quantity: ' + this.y;
-                }
-            },
-            plotOptions: {
-        column: {
-            pointWidth: 15, // Adjust the width as needed
-            cursor: 'pointer',
-            events: {
-                click: function (event) {
-                    console.log('Clicked on column:', event.point.category);
-                }
-            }
-        }
-    },
-
+            }]
         });
     } else {
-        // Handle the case where the chart container does not exist
-        console.error("Chart container 'chartdiv' not found.");
+        // Handle the case where the donut chart container does not exist
+        console.error("Donut chart container 'donutchart' not found.");
     }
 </script>
-
-
-
-
-
-<!-- });
-
-    window.addEventListener('focus', function () {
-        countInventoryElements.forEach((element, index) => {
-            const startCount = parseFloat(element.textContent);
-            const endCount = updatedInventoryCounts[index];
-            const animationDuration = 4; // Animation duration in seconds (adjust as needed)
-
-            animateCount(endCount, animationDuration, element);
-        });
-    });
-</script> -->

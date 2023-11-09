@@ -1,5 +1,10 @@
 <?php include('header.php'); ?>
+
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">

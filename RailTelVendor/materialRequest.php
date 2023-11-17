@@ -51,17 +51,17 @@
                                     $materialName = $sql_result['materialName'];
                                     $created_at = $sql_result['created_at'];
 
-                                    $checkInventory = mysqli_query($con, "select material,count(1) as materialCount from vendorinventory where material like '" . trim($materialName) . "' and status=1 and vendorId='".$RailTailVendorID."' group by material having count(1) > 0");
-                                            if ($checkInventoryResult = mysqli_fetch_assoc($checkInventory)) {
-                                                $matName = $checkInventoryResult['material'];
-                                                $matCount = $checkInventoryResult['materialCount'];
-                                                $availability = $matCount . ' In Stock ';
-                                                $availabilityStatus = 1;
-                                            } else {
-                                                $availability = 'Not Available';
-                                                $availabilityStatus = 0;
-                                            }
-                                            
+                                    $checkInventory = mysqli_query($con, "select material,count(1) as materialCount from vendorinventory where material like '" . trim($materialName) . "' and status=1 and vendorId='" . $RailTailVendorID . "' group by material having count(1) > 0");
+                                    if ($checkInventoryResult = mysqli_fetch_assoc($checkInventory)) {
+                                        $matName = $checkInventoryResult['material'];
+                                        $matCount = $checkInventoryResult['materialCount'];
+                                        $availability = $matCount . ' In Stock ';
+                                        $availabilityStatus = 1;
+                                    } else {
+                                        $availability = 'Not Available';
+                                        $availabilityStatus = 0;
+                                    }
+
 
                                     echo "<tr>
 <td>$srno</td>
@@ -71,17 +71,17 @@
 <td>$created_at</td>
 <td>";
 
-if ($availabilityStatus == 1) {
-    echo "<button type='button' class='send-from-stock btn btn-primary btn-sm' 
+                                    if ($availabilityStatus == 1) {
+                                        echo "<button type='button' class='send-from-stock btn btn-primary btn-sm' 
             data-materialName='$materialName'
             data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-engineerId='$engineerId'>
             Send From Stock
           </button>";
-}else{
-echo "<button class='btn btn-disabled'>Not In Stock</button>";
-}
+                                    } else {
+                                        echo "<button class='btn btn-disabled'>Not In Stock</button>";
+                                    }
 
-echo "
+                                    echo "
  <button type='button' class='material-request btn btn-primary btn-sm' 
     data-materialName='$materialName'
     data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-engineerId='$engineerId' >
@@ -245,7 +245,7 @@ echo "
 
 
 
-        
+
         $(document).on('click', '#contactPersonName[readonly]', function () {
             return false;
         });

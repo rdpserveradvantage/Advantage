@@ -17,8 +17,7 @@ $sql_app = mysqli_query($con, $exportSql); // Execute the SQL query
 
 function getColumnLabel($index) {
     $base26 = '';
-    
-    // Calculate the first part of the label (A, B, C, ...)
+
     if ($index >= 26) {
         $base26 .= chr(65 + ($index / 26) - 1);
     }

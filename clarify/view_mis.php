@@ -1,8 +1,8 @@
 <?php include('header.php');
 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+
+
+
 
 function get_mis_history($parameter, $type, $id)
 {
@@ -142,59 +142,6 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
     $statement .= " order by b.id desc";
 
 
-    // if ($_REQUEST['atmid'] == '' && $_REQUEST['customer'] == '') {
-
-    //     $date1 = $_REQUEST['fromdt'];
-    //     $date2 = $_REQUEST['todt'];
-
-
-    //     $statement = "select a.remarks,a.id AS misid,a.bank,a.customer,a.location,a.zone,a.state,a.city,a.branch,a.created_by,a.bm,b.id,b.mis_id,
-    //         b.atmid,b.component,b.subcomponent,b.engineer,b.docket_no,b.status,b.created_at,b.ticket_id,b.close_date,b.call_type,b.case_type 
-    //         from mis a
-    //         INNER JOIN mis_details b ON b.mis_id = a.id 
-
-    //         where 1 and
-
-    //         b.mis_id = a.id and
-    //         b.status in($status) ";
-
-
-
-
-
-
-
-
-
-
-
-
-    //     $sqlappCount = "select count(1) as total from
-    //                 mis a
-    //                 INNER JOIN mis_details b ON b.mis_id = a.id 
-
-    //                 where 1 and
-    //                     b.mis_id = a.id and
-    //                     b.status in($status) ";
-
-
-    //     if ($_REQUEST['status'][0] == 'close' && count($_REQUEST['status']) == 1) {
-    //         $statement .= " and CAST(b.close_date AS DATE) >= '" . $date1 . "' and CAST(b.close_date AS DATE) <= '" . $date2 . "'";
-    //         $sqlappCount .= " and CAST(b.close_date AS DATE) >= '" . $date1 . "' and CAST(b.close_date AS DATE) <= '" . $date2 . "'";
-    //     } else {
-    //         $statement .= "and CAST(b.created_at AS DATE) >= '" . $date1 . "' 
-    //                               and CAST(b.created_at AS DATE) <= '" . $date2 . "'";
-
-    //         $sqlappCount .= "and CAST(b.created_at AS DATE) >= '" . $date1 . "' 
-    //                       and CAST(b.created_at AS DATE) <= '" . $date2 . "'";
-    //     }
-
-
-    //     $statement .= " order by b.id desc";
-    // }
-
-
-    // echo $statement;
 
     $result = mysqli_query($con, $sqlappCount);
     $row = mysqli_fetch_assoc($result);
@@ -388,27 +335,24 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                 <th>Component</th>
                                                 <th>Sub Component</th>
                                                 <th>Customer</th>
-
                                                 <th>Bank</th>
                                                 <th>Atm Address</th>
                                                 <th>City</th>
                                                 <th>State</th>
-
                                                 <th>Call Type</th>
                                                 <th>Call Receive From</th>
-
                                                 <th>Current Status</th>
-
-
                                                 <th>Call Log Date</th>
                                                 <th>Call Log By</th>
-
                                                 <th>Aging</th>
                                                 <th>Remark</th>
+                                                <th>Dependency</th>
+                                                <th>Closure Time</th>
+                                                <th>Downtime</th>
 
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody style="font-size: 12px;">
                                             <?php
                                             $date = date('Y-m-d');
                                             $date1 = date_create($date);
@@ -460,11 +404,11 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                 $mis_his_key = 0;
                                                 // echo "select type,created_by,remark,schedule_date,material,material_condition,courier_agency,pod,serial_number,dispatch_date,(SELECT name FROM vendorUsers WHERE id=mis_history.created_by) AS last_action_by from mis_history where mis_id='" . $id . "' order by id desc";
                                                 $lastactionsql = mysqli_query($con, "select type,created_by,remark,schedule_date,material,material_condition,courier_agency,pod,serial_number,dispatch_date,(SELECT name FROM vendorUsers WHERE id=mis_history.created_by) AS last_action_by from mis_history where mis_id='" . $id . "' order by id desc");
+                                                
                                                 if ($lastactionsql_result = mysqli_fetch_assoc($lastactionsql)) {
                                                     // echo '<pre>';print_r($lastactionsql_result);echo '</pre>';die;
                                                     $his_type = $lastactionsql_result['type'];
-
-
+                                                    
                                                     $lastactionuserid = $lastactionsql_result['created_by'];
                                                     $status_remark = $lastactionsql_result['remark'];
 
@@ -476,7 +420,6 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                     if ($his_type == 'schedule') {
                                                         $schedule_date = $lastactionsql_result['schedule_date'];
                                                     }
-
 
                                                     $material = "";
                                                     $material_req_remark = "";
@@ -508,6 +451,61 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                         $attachment = $lastactionsql_result['attachment'];
                                                     }
                                                 }
+                                                
+                                                $dependency = ''; // Initialize the $dependency variable
+                                                $type = array();
+                                                $timeDifference = '';
+                                                $dependencySql = mysqli_query($con, "SELECT * FROM mis_history WHERE mis_id='" . $id . "'");
+                                                while ($dependencySqlResult = mysqli_fetch_assoc($dependencySql)) {
+                                                    
+                                                    $closeType = $dependencySqlResult['type'] ;
+                                                    
+                                                    if($closeType=='close'){
+                                                        $closureTime = $dependencySqlResult['created_at'];  
+                                                        $closureTime = new DateTime($closureTime);
+                                                        $date2 = new DateTime($date2);
+                                                        $difference = $closureTime->diff($date2);
+                                                        
+                                                        $timeDifference = "";
+                                                        $timeDifference .= $difference->d > 0 ? $difference->d . " days " : "";
+                                                        $timeDifference .= $difference->h > 0 ? $difference->h . " hours " : "";
+                                                        $timeDifference .= $difference->i > 0 ? $difference->i . " minutes " : "";
+                                                        $timeDifference .= $difference->s > 0 ? $difference->s . " seconds" : "";   
+                                                    }
+                                                    $type[] = $dependencySqlResult['type'];
+                                                }
+                                                
+                                                
+                                                $dependencySql2 = mysqli_query($con, "SELECT * FROM mis_history WHERE mis_id='" . $id . "' order by id desc");
+                                                if($dependencySqlResult2 = mysqli_fetch_assoc($dependencySql2)){
+                                                        $closureTime2 = $dependencySqlResult2['created_at'];  
+                                                        $closureTime2 = new DateTime($closureTime2);
+
+                                                        $date22 = new DateTime($sql_result['created_at']);
+                                                        $difference2 = $closureTime2->diff($date22);
+                                                        
+                                                        $timeDifference2 = "";
+                                                        $timeDifference2 .= $difference2->d > 0 ? $difference2->d . " days " : "";
+                                                        $timeDifference2 .= $difference2->h > 0 ? $difference2->h . " hours " : "";
+                                                        $timeDifference2 .= $difference2->i > 0 ? $difference2->i . " minutes " : "";
+                                                        $timeDifference2 .= $difference2->s > 0 ? $difference2->s . " seconds" : "";
+                                                        
+                                                }
+                                                
+                                                
+                                                
+                                                if(count($type) > 0 ){
+                                                    if (in_array('reassign', $type)) {
+                                                        $dependency = 'Bank';
+                                                    } else {
+                                                        $dependency = 'Advantage';
+                                                    }
+                                                }else {
+                                                        $dependency = 'Advantage';
+                                                }
+                                                
+                                                
+                                                
                                                 ?>
                                                 <tr <? if ($aging_day > 3 && $status != 'close') { ?>
                                                         style="background:#fe5d70c2;color:white;" <? }
@@ -581,6 +579,12 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                     <td>
                                                         <? echo $sql_result['remarks']; ?>
                                                     </td>
+                                                    <td>
+                                                        <?= $dependency; ?>
+                                                    </td>
+                                                    <td><?= $timeDifference; ?></td>
+                                                    
+                                                    <td><?= $timeDifference2; ?></td>
 
                                                 </tr>
 
@@ -590,40 +594,14 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
 
                                         </tbody>
                                     </table>
-
-
-
-
-
-
                                 </div>
-
-
-
-
+                                
                                 <?
-
-
-
-
-
                                 $customer = $_REQUEST['customer'];
                                 $customer = http_build_query(array('customer' => $customer));
 
-                                // $status = $_REQUEST['status'];
-                                // $status = http_build_query(array('status' => $status));
-                            
-
-                                // $status = $_REQUEST['status'];
-                                // $statusQuery = '';
-                                // foreach ($status as $key => $value) {
-                                //     $statusQuery .= "status%5B{$key}%5D={$value}&";
-                                // }
-                                // $statusQuery = rtrim($statusQuery, '&');
-                            
                                 $status = $_REQUEST['status'];
                                 $statusQuery = http_build_query(array('status' => $status), '', '&', PHP_QUERY_RFC3986);
-
 
                                 $call_receive_from = $_REQUEST['call_receive_from'];
                                 $atmid = $_REQUEST['atmid'];

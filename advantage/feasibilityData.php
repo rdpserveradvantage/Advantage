@@ -29,7 +29,7 @@ UPSAvailable,UPSBateryBackup,UPSWorking1,UPSWorking2,UPSWorking3,backroomDisturb
 backroomKeyNumber,backroomKeyStatus,earthing,earthingVltg,frequentPowerCut,frequentPowerCutFrom,frequentPowerCutRemark,frequentPowerCutTo,
 nearestShopDistance,nearestShopName,nearestShopNumber,powerFluctuationEN,powerFluctuationPE,powerFluctuationPN,powerSocketAvailability,
 routerAntenaPosition,routerAntenaSnap,AntennaRoutingSnap,UPSAvailableSnap,NoOfUpsSnap,upsWorkingSnap,powerSocketAvailabilitySnap,earthingSnap,
-powerFluctuationSnap,remarksSnap,created_at,created_by,feasibilityDone,isVendor from feasibilityCheck where status=1 ";
+powerFluctuationSnap,remarksSnap,created_at,created_by,feasibilityDone,isVendor,operator2,signalStatus2 from feasibilityCheck where status=1 ";
 
                     $sqlappCount = "select count(1) as totalCount from feasibilityCheck where status=1 ";
 
@@ -70,13 +70,8 @@ powerFluctuationSnap,remarksSnap,created_at,created_by,feasibilityDone,isVendor 
                             }
     
                         }
-
-
-
-
                     $statement .= " order by id desc";
 $sqlappCount;
-
 
                     $page_size = 10;
                     $result = mysqli_query($con, $sqlappCount);
@@ -169,8 +164,8 @@ $sqlappCount;
                                 </strong></h5>
 
                             <hr />
-                            <form action="exportsites.php" method="POST">
-                                <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
+                            <form action="exportFeasibiltyData.php" method="POST">
+                                <input type="hidden" name="exportSql" value="<?= $statement; ?>">
                                 <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
                             </form>
 
@@ -193,8 +188,10 @@ $sqlappCount;
                                             <th>atm1 Status</th>
                                             <th>atm2 Status</th>
                                             <th>atm3 Status</th>
-                                            <th>operator</th>
+                                            <th>Operator</th>
                                             <th>signal Status</th>
+                                            <th>Operator 2</th>
+                                            <th>signal Status 2</th>
                                             <th>backroom Network Remark</th>
                                             <th>backroom Network Snap</th>
                                             <th>Antenna Routing detail</th>
@@ -254,7 +251,6 @@ $sqlappCount;
                                             
                                             ?>
 
-
                                             <tr>
                                                 <td>
                                                     <?= $counter; ?>
@@ -298,6 +294,12 @@ $sqlappCount;
                                                 </td>
                                                 <td>
                                                     <?= ($sql_result['signalStatus'] ? $sql_result['signalStatus'] : 'NA'); ?>
+                                                </td>
+                                                <td>
+                                                    <?= ($sql_result['operator2'] ? $sql_result['operator2'] : 'NA'); ?>
+                                                </td>
+                                                <td>
+                                                    <?= ($sql_result['signalStatus2'] ? $sql_result['signalStatus2'] : 'NA'); ?>
                                                 </td>
                                                 <td>
                                                     <?= ($sql_result['backroomNetworkRemark'] ? $sql_result['backroomNetworkRemark'] : 'NA'); ?>

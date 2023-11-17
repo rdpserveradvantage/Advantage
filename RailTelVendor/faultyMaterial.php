@@ -16,10 +16,9 @@
 
                             <?
 
-                            $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestFor='" . $RailTailVendorID . "' and requestForPortal IN ('vendor') 
+                            echo $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestFor='" . $RailTailVendorID . "' and requestForPortal IN ('vendor') 
                             and materialRequestLevel=2 and status=1";
                             $sql = mysqli_query($con, $statement);
-
                             if (mysqli_num_rows($sql) > 0) {
                                 echo '
                                     <table class="table table-bordered table-striped table-hover dataTable js-exportable no-footer table-xs">

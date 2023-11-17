@@ -7,7 +7,7 @@
                     <div class="card">
                         <div class="card-block">
                             <?
-                             echo  $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestBy='" . $SERVICE_email . "' AND requestByPortal IN ('Clarity','Clarify') and materialRequestLevel=3 and status=1";
+                            echo $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestBy='" . $SERVICE_email . "' AND requestByPortal IN ('Clarity','Clarify') and materialRequestLevel=3 and status=1";
                             $sql = mysqli_query($con, $statement);
                             if (mysqli_num_rows($sql) > 0) {
                                 echo '
@@ -69,10 +69,12 @@
 
 
 
-<div class="modal fade" id="dispatchModal" tabindex="-1" role="dialog" aria-labelledby="dispatchModalLabel" aria-hidden="true">
+<div class="modal fade" id="dispatchModal" tabindex="-1" role="dialog" aria-labelledby="dispatchModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="receiversForm">
+            <form id="receiversForm" action="process_faultyMaterial.php" method="POST">
+                
                 <div class="modal-header">
                     <h5 class="modal-title" id="dispatchModalLabel">Enter OEM Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -81,18 +83,43 @@
                 </div>
                 <div class="modal-body">
 
+
                     <div class="row">
-                        <div class="col-sm-12">
-                            form fields
-                            <input type="text" id="vendorName" value="1">
+                        <div class="col-sm-6">
+                            <label>Contact Person Name</label>
+                            <input type="text" name="contactPersonName" id="contactPersonName" class="form-control"
+                                required>
 
                         </div>
+                        <div class="col-sm-6">
+                            <label>Contact Person Number</label>
+                            <input type="text" name="contactPersonNumber" id="contactPersonNumber" class="form-control"
+                                required>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Address</label>
+                            <textarea name="address" class="form-control" id="address" required></textarea>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>POD</label>
+                            <input type="text" name="POD" class="form-control" required />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Courier</label>
+                            <input type="text" name="courier" class="form-control" required />
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Any Other Remark</label>
+                            <input type="text" name="remark" class="form-control" />
+                        </div>
                     </div>
+
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="submitVendorDetails" class="btn btn-primary" id="submitOemDetails">Submit</button>
+                    <button type="button" id="submitVendorDetails" class="btn btn-primary"
+                        id="submitOemDetails">Submit</button>
                 </div>
             </form>
         </div>
@@ -121,12 +148,12 @@
         }
     }
 
-    document.getElementById('submitVendorDetails').addEventListener('click', function() {
+    document.getElementById('submitVendorDetails').addEventListener('click', function () {
         var vendorName = document.getElementById('vendorName').value;
 
         if (selectedItems.length > 0) {
             var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {
                     if (xhr.status == 200) {
                         console.log(xhr.responseText);

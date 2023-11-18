@@ -231,21 +231,28 @@ while ($sql_result = mysqli_fetch_assoc($sql_app)) {
         $type[] = $dependencySqlResult['type'];
     }
     
-      $dependencySql2 = mysqli_query($con, "SELECT * FROM mis_history WHERE mis_id='" . $id . "' order by id desc");
-        if($dependencySqlResult2 = mysqli_fetch_assoc($dependencySql2)){
-                $closureTime2 = $dependencySqlResult2['created_at'];  
-                $closureTime2 = new DateTime($closureTime2);
-    
-                $date22 = new DateTime($sql_result['created_at']);
-                $difference2 = $closureTime2->diff($date22);
-                
-                $timeDifference2 = "";
-                $timeDifference2 .= $difference2->d > 0 ? $difference2->d . " days " : "";
-                $timeDifference2 .= $difference2->h > 0 ? $difference2->h . " hours " : "";
-                $timeDifference2 .= $difference2->i > 0 ? $difference2->i . " minutes " : "";
-                $timeDifference2 .= $difference2->s > 0 ? $difference2->s . " seconds" : "";
-                
-        }
+       $dependencySql2 = mysqli_query($con, "SELECT * FROM mis_history WHERE mis_id='" . $id . "' order by id desc");
+                                                if($dependencySqlResult2 = mysqli_fetch_assoc($dependencySql2)){
+                                                    
+                                                    $misType = $dependencySqlResult2['type'];
+                                                    
+                                                        $closureTime2 = $datetime;  
+                                                        $closureTime2 = new DateTime($closureTime2);
+
+                                                        $date22 = new DateTime($sql_result['created_at']);
+                                                        $difference2 = $closureTime2->diff($date22);
+                                                        
+                                                        $timeDifference2 = "";
+                                                        $timeDifference2 .= $difference2->d > 0 ? $difference2->d . " days " : "";
+                                                        $timeDifference2 .= $difference2->h > 0 ? $difference2->h . " hours " : "";
+                                                        $timeDifference2 .= $difference2->i > 0 ? $difference2->i . " minutes " : "";
+                                                        $timeDifference2 .= $difference2->s > 0 ? $difference2->s . " seconds" : "";
+                                                        
+                                                        if($misType=='close'){
+                                                        $timeDifference2 = $timeDifference ;     
+                                                        }
+                                                        
+                                                }
         
 
     if (count($type) > 0) {

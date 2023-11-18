@@ -1,3 +1,5 @@
+
+
 html {
     /*font-size:13px;*/
 }
@@ -236,6 +238,26 @@ table.table-bordered.dataTable tbody td {
 .pagination li.active a {
     color: white;
 }
+.dataTables_paginate .pagination li.active a {
+    color:blue !important;
+}
+
+.dataTables_paginate .pagination li {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #555;
+    border: 1px solid;
+}
+
+div.dataTables_wrapper div.dataTables_paginate {
+    margin: 0;
+    white-space: nowrap;
+    text-align: right;
+    display: block;
+    width: 100%;
+}
 
 .pagination li:hover:not(.active) {
     background-color: #f5f5f5;
@@ -328,9 +350,9 @@ a {
     padding: .5rem;
 }
 
-/*.rounded-circle i {*/
-/*    color: blue;*/
-/*}*/
+.rounded-circle i {
+    color: white;
+}
 
 .font-size-16 {
     font-size: 16px !important;
@@ -441,4 +463,72 @@ h6 {
 }
 .noRecordsContainer img{
     width:50%;
+}
+
+.line-on-side {
+    border-bottom: 1px solid #dadada;
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+}
+
+.font-small-3 {
+    font-size: 0.9rem !important;
+}
+.text-muted {
+    color: #818a91 !important;
+}
+.text-xs-center {
+    text-align: center !important;
+}
+.pt-2 {
+    padding-top: 1.5rem !important;
+}
+.line-on-side span {
+background:#f6f7fb;
+    padding: 0 10px;
+    font-size:25px;
+}
+
+.pcoded-inner-navbar.main-menu::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Hide the thumb */
+}
+.pcoded-inner-navbar.main-menu::-webkit-scrollbar {
+    width: 0em; /* Adjust the width to your preference */
+}
+.pcoded-inner-navbar{
+    overflow-y: auto;
+}
+.pcoded[theme-layout="vertical"] .pcoded-navbar .pcoded-item>li>a:before , .pcoded .pcoded-navbar .pcoded-item .pcoded-hasmenu .pcoded-submenu li>a:before{
+    border-left-width: 6px !important;
+}
+
+table{
+    margin:10px auto;
+}
+
+.card .card-header span{
+    margin-top: 0px !important;
+}
+
+table.dataTable thead .sorting_asc:after {
+    content: "\f0de" !important;
+    font-family: 'Font Awesome 6 Free' !important;
+}
+
+table.dataTable thead .sorting_desc:after {
+    content: "\f0dd" !important;
+    font-family: 'Font Awesome 6 Free' !important;
+}
+.md-tabs .nav-item {
+    width: calc(100% / 3) !important;
+    text-align: center;
+}
+
+#submitButton:disabled {
+    cursor: not-allowed;
+  }
+
+  
+  .swal2-popup {
+    background: white !important;
 }

@@ -116,9 +116,6 @@ if (verifyToken($token) != 1 || $token == 'NA') {
             visibility: visible;
         }
 
-        .swal2-popup {
-            background: white !important;
-        }
     </style>
 </head>
 

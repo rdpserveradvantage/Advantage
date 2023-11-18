@@ -14,6 +14,7 @@ $con = new mysqli($host, $user, $pass, $dbname);
 
 $ADVANTAGE_level = $_SESSION['ADVANTAGE_level'] ; 
 $ADVANTAGE_uname = $_SESSION['ADVANTAGE_uname'];
+$username = $_SESSION['ADVANTAGE_username'] ; 
 define('PORTAL', 'ADVANTAGE');
 
 

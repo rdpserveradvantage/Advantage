@@ -478,7 +478,10 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                 
                                                 $dependencySql2 = mysqli_query($con, "SELECT * FROM mis_history WHERE mis_id='" . $id . "' order by id desc");
                                                 if($dependencySqlResult2 = mysqli_fetch_assoc($dependencySql2)){
-                                                        $closureTime2 = $dependencySqlResult2['created_at'];  
+                                                    
+                                                    $misType = $dependencySqlResult2['type'];
+                                                    
+                                                        $closureTime2 = $datetime;  
                                                         $closureTime2 = new DateTime($closureTime2);
 
                                                         $date22 = new DateTime($sql_result['created_at']);
@@ -490,9 +493,11 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                         $timeDifference2 .= $difference2->i > 0 ? $difference2->i . " minutes " : "";
                                                         $timeDifference2 .= $difference2->s > 0 ? $difference2->s . " seconds" : "";
                                                         
+                                                        if($misType=='close'){
+                                                        $timeDifference2 = $timeDifference ;     
+                                                        }
+                                                        
                                                 }
-                                                
-                                                
                                                 
                                                 if(count($type) > 0 ){
                                                     if (in_array('reassign', $type)) {

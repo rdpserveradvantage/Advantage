@@ -1,5 +1,11 @@
 <?php include('header.php'); ?>
 
+
+<style>
+    .swal2-popup {
+        background: white !important;
+    }
+</style>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
@@ -33,8 +39,8 @@
                     // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                     
 
-                    $sqlappCount = "SELECT count(1) as total FROM goodreturn where 1  ";
-                    $atm_sql = "SELECT * FROM goodreturn where 1  ";
+                    $sqlappCount = "SELECT count(1) as total FROM goodreturn where 1  and isAccept=0 ";
+                    $atm_sql = "SELECT * FROM goodreturn where 1  and isAccept=0 ";
 
 
 
@@ -48,8 +54,8 @@
                     $atm_sql .= "  order by id desc";
                     $sqlappCount .= " ";
 
-// echo $atm_sql ; 
-
+                    // echo $atm_sql ; 
+                    
                     $page_size = 10;
                     $result = mysqli_query($con, $sqlappCount);
                     $row = mysqli_fetch_assoc($result);
@@ -63,7 +69,7 @@
                     $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     // }
                     // echo $sql_query;
-
+                    
                     ?>
 
 
@@ -84,13 +90,13 @@
                                         </strong>
                                     </h5>
                                     <hr>
-       
+
 
                                     <!-- Add an id attribute to your form for easier targeting with JavaScript -->
-<form id="exportForm" action="exportGoodsReturn.php" method="POST">
-    <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
-    <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
-</form>
+                                    <form id="exportForm" action="exportGoodsReturn.php" method="POST">
+                                        <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
+                                        <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
+                                    </form>
 
                                 </div>
 
@@ -152,18 +158,18 @@
                                     } else {
                                         $ifExistTrackingUpdate = 0;
                                     }
-                                    
-                                    
-                                    
-                                    $goodsreturnsql = mysqli_query($con,"select * from goodreturn where materialSendID='".$id."' and status=1");
-                                    
-                                    if($goodsreturnsqlResult = mysqli_fetch_assoc($goodsreturnsql)){
-                                        $isGoodFound=1;
-                                    }else{
-                                        $isGoodFound=0;
+
+
+
+                                    $goodsreturnsql = mysqli_query($con, "select * from goodreturn where materialSendID='" . $id . "' and status=1");
+
+                                    if ($goodsreturnsqlResult = mysqli_fetch_assoc($goodsreturnsql)) {
+                                        $isGoodFound = 1;
+                                    } else {
+                                        $isGoodFound = 0;
                                     }
-                                    
-                                    
+
+
 
                                     echo "<tr class='clickable-row' data-toggle='collapse' data-target='#details-$id'>";
                                     echo "<td>$counter</td>";
@@ -173,8 +179,9 @@
                                         '<button type="button" style="border:none;" class="view-dispatch-info" data-id=' . $id . '>
                                     View
                                     </button>'
-                                        : "<a href='#?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update Receive</a>") . "</td>";
-                                  echo "<td>" . getusername($contactPerson) . "</td>";
+                                        : "
+                                        <button class='update-receive btn btn-primary btn-sm' data-id='$id' data-siteid='$siteid' data-atmid='$atmid'>Update Receive</button> ") . "</td>";
+                                    echo "<td>" . getusername($contactPerson) . "</td>";
                                     echo "<td>$contactNumber</td>";
                                     // echo "<td>$contactPerson</td>";
                                     echo "<td>$pod</td>";
@@ -265,6 +272,52 @@
 </div>
 
 <script>
+
+
+    // update-receive
+
+    $(".update-receive").on('click', function () {
+        if (confirm('Are you sure this received ?')) {
+
+            var id = $(this).data('id');
+            var siteid = $(this).data('siteid');
+            var atmid = $(this).data('atmid');
+
+            $.ajax({
+
+                type: "POST",
+                url: 'update-receiveGoodsReturn.php',
+                data: 'id=' + id,
+                success: function (msg) {
+
+                    if (msg == '1') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Material Received !',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = './goodReturn.php';
+                            }
+                        });
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Cancelled !',
+                        });
+                    }
+
+
+
+                }
+            });
+        } else {
+            alert('Canceled');
+        }
+    });
+
     $('.view-dispatch-info').click(function () {
         var id = $(this).data('id');
         $.ajax({

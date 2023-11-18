@@ -527,3 +527,8 @@ table.dataTable thead .sorting_desc:after {
 #submitButton:disabled {
     cursor: not-allowed;
   }
+
+  
+  .swal2-popup {
+    background: white !important;
+}

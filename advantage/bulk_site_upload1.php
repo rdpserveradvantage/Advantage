@@ -471,11 +471,6 @@ if (confirm('Are you sure to delete all Records ?')) {
 } else {
     alert('Canceled');
 }
-
-
-
-
-
 });
 
 

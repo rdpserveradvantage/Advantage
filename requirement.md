@@ -182,3 +182,17 @@ clarify
           write submit logic
 
 
+
+
+inventory 
+materialSent
+    material which is sent to tempforce 
+    add 2 things
+    1) 5 metr antenaa - qty 2
+    2) Bi GPS Antenna - qty 1
+
+materialRequest
+    service  - advantage vs inventory records not macthing
+    reject not working
+
+

@@ -10,8 +10,8 @@
     }
 
 
-    .md-tabs .nav-item {
-        width: calc(100% / 2);
+    #materialRequest .nav-item {
+        width: calc(100% / 2) !important;
     }
 </style>
 <div class="pcoded-content">
@@ -36,7 +36,7 @@
                         $offset = ($currentPage - 1) * $recordsPerPage;
                         ?>
 
-                        <ul class="nav nav-tabs md-tabs" role="tablist">
+                        <ul class="nav nav-tabs md-tabs" id="materialRequest" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#fresh-requests" role="tab"
                                     aria-selected="true">Installation Material Requests</a>
@@ -265,9 +265,14 @@
                                             echo "<tr>
                                                     <td>$srno</td>
                                                     <td>
+                                                    
                                                     <button class='send-material btn btn-primary' data-materialName='$materialName'
                                                     data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-vendorid='$vendorId' data-material_qty='$material_qty'>Send Material</button> 
-                                                |   <button class='btn btn-danger'>Request Reject</button>
+                                                |   
+                                                
+                                                <button class='reject-request btn btn-danger' data-materialName='$materialName'
+                                                    data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-vendorid='$vendorId' data-material_qty='$material_qty'>Request Reject</button> 
+                                                
                                                     </td>
                                                     <td>$vendorName</td>
                                                     <td>$atmid</td>
@@ -393,8 +398,55 @@
 
 <script>
     $(document).ready(function () {
-        $('.send-material').click(function () {
 
+        $(".reject-request").on('click', function () {
+            if (confirm('Are you sure to delete this request ?')) {
+
+                var id = $(this).data('id');
+                var siteid = $(this).data('siteid');
+                var atmid = $(this).data('atmid');
+                var materialName = $(this).data('materialname');
+                var vendorId = $(this).data('vendorid');
+                var material_qty = $(this).data('material_qty');
+
+                $.ajax({
+
+                    type: "POST",
+                    url: 'reject-materialRequest.php',
+                    data: 'id='+id,
+                    success: function (msg) {
+
+                        if (msg == '1') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Request Rejected !',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = './materialRequest.php';
+                                }
+                            });
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Cancelled !',
+                            });
+                        }
+
+
+
+                    }
+                });
+            } else {
+                alert('Canceled');
+            }
+        });
+
+
+
+        $('.send-material').click(function () {
             var id = $(this).data('id');
             var siteid = $(this).data('siteid');
             var atmid = $(this).data('atmid');
@@ -409,9 +461,7 @@
             $('#sendFromStockModal').find('[name="vendorId"]').val(vendorId);
             $('#sendFromStockModal').find('[name="attribute"]').val(materialName); //attribute = material_name
             $('#sendFromStockModal').find('[name="material_qty"]').val(material_qty); //attribute = material_name
-
             $('#sendFromStockModal').modal('show');
-
         });
 
 
@@ -435,12 +485,12 @@
                             icon: 'success',
                             title: 'Success',
                             text: responseData.message,
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = './materialRequest.php';
-                                }
-                            });
-                        
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = './materialRequest.php';
+                            }
+                        });
+
                     } else {
                         Swal.fire({
                             icon: 'error',

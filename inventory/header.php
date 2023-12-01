@@ -47,6 +47,7 @@ if(verifyToken($token)!=1 || $site!='advantageInventory'){
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="files/bower_components/bootstrap/dist/css/bootstrap.min.css">
     
+    <link href="http://103.216.208.241/assets/style.css" rel="stylesheet">
     
    <link rel="stylesheet" type="text/css" href="files/assets/icon/feather/css/feather.css">
     

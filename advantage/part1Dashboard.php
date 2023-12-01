@@ -5,14 +5,14 @@ if($assignedLho){
     $query1 = "SELECT COUNT(1) AS count FROM sites WHERE status = 1 and LHO like '".$assignedLho."'";
     $query2 = "SELECT COUNT(1) AS count FROM sites WHERE isDelegated = 1 and LHO like '".$assignedLho."'";
     $query3 = "SELECT COUNT(1) AS count FROM sites WHERE isfeasibiltyDone = 1 and LHO like '".$assignedLho."'";
-    $query5 = "SELECT COUNT(1) AS count FROM projectInstallation a inner join sites b on a.atmid = b.atmid where isDone=1 and LHO like '".$assignedLho."' and a.status=1";
+    $query5 = "SELECT COUNT(distinct a.atmid) AS count FROM projectInstallation a inner join sites b on a.atmid = b.atmid where isDone=1 and LHO like '".$assignedLho."' and a.status=1";
     
 
 }else{
     $query1 = "SELECT COUNT(1) AS count FROM sites WHERE status = 1";
     $query2 = "SELECT COUNT(1) AS count FROM sites WHERE isDelegated = 1";
     $query3 = "SELECT COUNT(1) AS count FROM sites WHERE isfeasibiltyDone = 1";
-    $query5 = "SELECT COUNT(1) AS count FROM projectInstallation where isDone=1 and status=1";    
+    $query5 = "SELECT COUNT(distinct atmid) AS count FROM projectInstallation where isDone=1 and status=1";    
 }
 
 

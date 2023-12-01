@@ -15,7 +15,6 @@
         border: none;
         margin: 10px auto;
     }
-
     .form-control:focus {
         color: #55595c;
         background-color: #fff;

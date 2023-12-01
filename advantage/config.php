@@ -147,13 +147,9 @@ if (!function_exists('remove_special')) {
     		foreach($value as $ke=>$va){
     			$site_remark .= $va . " " ; 
     		} 
-    
     	}
-    
     return clean($site_remark) ; 
-    
     }
-    
 }
 
 
@@ -163,7 +159,9 @@ if (!function_exists('getUsername')) {
         global $con;
         
         if($vendor){
-            $sql = mysqli_query($con,"select * from vendorUsers where id ='".$id."'");
+            // echo "select * from vendorusers where id ='".$id."'" ;
+            
+            $sql = mysqli_query($con,"select * from vendorusers where id ='".$id."'");
             $sql_result = mysqli_fetch_assoc($sql);
             return $sql_result['name'];
         }else{

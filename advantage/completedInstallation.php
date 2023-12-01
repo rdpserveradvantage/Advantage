@@ -10,11 +10,11 @@
 <?
 if($assignedLho){
     $statement = "select * from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.isDone=1 and a.status=1 and s.LHO like '".$assignedLho."'" ; 
-    $sqlappCount = "select count(1) as totalCount from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.isDone=1 and a.status=1  
+    $sqlappCount = "select count(distinct a.atmid) as totalCount from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.isDone=1 and a.status=1  
     and s.LHO like '".$assignedLho."'";
 }else{
     $statement = "select * from projectInstallation a where a.isDone=1 and a.status=1 "; 
-    $sqlappCount = "select count(1) as totalCount from projectInstallation where isDone=1 and status=1 ";
+    $sqlappCount = "select count(distinct atmid) as totalCount from projectInstallation where isDone=1 and status=1 ";
 }             
     
 
@@ -28,7 +28,8 @@ if($assignedLho){
                 if(isset($_POST['submit'])){
                     $_GET['page']=1 ;  
                 }
-                $statement .= "order by a.id desc" ;
+                $statement .= "group by a.atmid order by a.id desc" ;
+                $sqlappCount .= " " ;
                 
                 $page_size = 10;
                 $result = mysqli_query($con, $sqlappCount);
@@ -43,7 +44,7 @@ if($assignedLho){
                 $end_window = min($start_window + $window_size - 1, $total_pages);
                 $sql_query = "$statement LIMIT $offset, $page_size";
 
-// echo $sql_query ; 
+echo $sql_query ; 
 
 
                 ?>
@@ -61,14 +62,11 @@ if($assignedLho){
                                                     <br />
                                                     <input type="submit" name="submit" class="btn btn-primary">
                                                     <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
-
                                                 </div>
-
                                             </div>
                                         </form>
                                     </div>
                                 </div>
-
                                 <div class="card">
                                     <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show
                                         Filters</a>

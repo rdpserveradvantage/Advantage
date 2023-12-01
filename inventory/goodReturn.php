@@ -188,11 +188,29 @@
                                     echo "<td>$courier</td>";
                                     echo "<td>$remark</td>";
                                     echo "<td>$date</td>";
-
-
-
-
                                     echo "</tr>";
+
+                                    echo "<tr id='details-$id' class='collapse'>";
+                                    echo "<td colspan='9'>";
+
+                                    $detailsQuery = "SELECT * FROM goodreturndetails WHERE goodReturnID = $id";
+                                    $detailsResult = mysqli_query($con, $detailsQuery);
+                                    echo "<table class='table table-bordered'>";
+                                    echo "<thead><tr><th>Product Name</th><th>Serial Number</th></tr></thead>";
+                                    echo "<tbody>";
+                                    while ($detailsRow = mysqli_fetch_assoc($detailsResult)) {
+                                        $attribute = $detailsRow['material'];
+                                        $serialNumber = $detailsRow['serialNumber'];
+                                        echo "<tr><td>$attribute</td><td>$serialNumber</td></tr>";
+                                    }
+                                    echo "</tbody>";
+                                    echo "</table>";
+
+                                    echo "</td>";
+                                    echo "</tr>";
+
+
+
                                     $counter++;
                                 }
 

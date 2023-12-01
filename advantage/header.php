@@ -79,12 +79,13 @@ if (verifyToken($token) != 1 || $token == 'NA') {
     <link href="./fa/css/brands.css" rel="stylesheet">
     <link href="./fa/css/solid.css" rel="stylesheet">
 
+    <link href="http://103.216.208.241/assets/style.css" rel="stylesheet">
+
 
     <style>
         label {
             font-weight: 600;
         }
-
         .highlight:required:invalid {
             border: 2px solid red;
         }

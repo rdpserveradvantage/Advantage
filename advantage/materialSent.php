@@ -140,9 +140,10 @@
                                         echo "<tr class='clickable-row' data-toggle='collapse' data-target='#details-$id'>";
                                         echo "<td>$counter</td>";
                                         echo "<td class='strong'>$atmid</td>";
-                                        echo "<td class='strong'>" .
-                                            ($isDelivered == 1 ? 'Delivered' : 'In-Transit') . "</td>";
-
+                                        echo "<td class='strong text-center'>" .
+                                        ($isDelivered == 1 ?
+                                            '<img src="http://103.216.208.241/assets/deliverydone.png" title="Delivered" alt="Delivered" class="deliveredImg" />' :
+                                            'In-Transit') . "</td>";
                                         echo "<td>" . ($ifExistTrackingUpdate == 1 ? 'View' : "<a href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update</a>") . "</td>";
 
                                         echo "<td>$vendorName</td>";

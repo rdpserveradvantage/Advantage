@@ -5,6 +5,9 @@
     .swal2-popup {
         background: white !important;
     }
+    html{
+        text-transform: inherit !important;
+    }
 </style>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
@@ -54,7 +57,7 @@
                     $atm_sql .= "  order by id desc";
                     $sqlappCount .= " ";
 
-                    // echo $atm_sql ; 
+                    echo $atm_sql ; 
                     
                     $page_size = 10;
                     $result = mysqli_query($con, $sqlappCount);
@@ -90,8 +93,6 @@
                                         </strong>
                                     </h5>
                                     <hr>
-
-
                                     <!-- Add an id attribute to your form for easier targeting with JavaScript -->
                                     <form id="exportForm" action="exportGoodsReturn.php" method="POST">
                                         <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
@@ -137,7 +138,6 @@
                                     $remark = $sql_result['remarks'];
                                     $date = $sql_result['created_at'];
 
-
                                     $againSend = mysqli_query($con, "select * from vendorMaterialSend where materialSendId='" . $id . "'");
                                     if ($againSendResult = mysqli_fetch_assoc($againSend)) {
                                         $isAgainSendStatus = 1;
@@ -159,8 +159,6 @@
                                         $ifExistTrackingUpdate = 0;
                                     }
 
-
-
                                     $goodsreturnsql = mysqli_query($con, "select * from goodreturn where materialSendID='" . $id . "' and status=1");
 
                                     if ($goodsreturnsqlResult = mysqli_fetch_assoc($goodsreturnsql)) {
@@ -168,8 +166,6 @@
                                     } else {
                                         $isGoodFound = 0;
                                     }
-
-
 
                                     echo "<tr class='clickable-row' data-toggle='collapse' data-target='#details-$id'>";
                                     echo "<td>$counter</td>";
@@ -192,7 +188,6 @@
 
                                     echo "<tr id='details-$id' class='collapse'>";
                                     echo "<td colspan='9'>";
-
                                     $detailsQuery = "SELECT * FROM goodreturndetails WHERE goodReturnID = $id";
                                     $detailsResult = mysqli_query($con, $detailsQuery);
                                     echo "<table class='table table-bordered'>";
@@ -205,15 +200,10 @@
                                     }
                                     echo "</tbody>";
                                     echo "</table>";
-
                                     echo "</td>";
                                     echo "</tr>";
-
-
-
                                     $counter++;
                                 }
-
                                 echo "</tbody>
                                     </table>";
 
@@ -298,7 +288,7 @@
         if (confirm('Are you sure this received ?')) {
 
             var id = $(this).data('id');
-            var siteid = $(this).data('siteid');
+            var siteid = $(this).data('siteid');    
             var atmid = $(this).data('atmid');
 
             $.ajax({

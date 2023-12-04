@@ -182,6 +182,7 @@
 
                             <?
                             $i = 1;
+                            echo "select * from routerConfiguration where status=1 order by id desc" ; 
                             $sql = mysqli_query($con, "select * from routerConfiguration where status=1 order by id desc");
                             if (mysqli_num_rows($sql) > 0) {
 

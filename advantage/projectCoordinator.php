@@ -2,6 +2,13 @@
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+<style>
+    
+
+.swal2-popup {
+    background: white !important;
+}
+</style>
 
             <div class="pcoded-content">
                 <div class="pcoded-inner-content">
@@ -69,6 +76,7 @@
                                                     <th>Contact Person Email</th>
                                                     <th>Designation</th>
                                                     <th>Escalation Matrix</th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -76,7 +84,7 @@
                                                 $i= 1; 
                                                 $sql = mysqli_query($con,"select * from projectCoordinator where status=1");
                                                 while($sql_result = mysqli_fetch_assoc($sql)){ 
-
+                                                    $id = $sql_result['id'];
                                                 ?>
                                                     <tr>
                                                         <td><? echo $i; ?></td>
@@ -85,6 +93,9 @@
                                                         <td><? echo $sql_result['contactPersonEmail']; ?></td>
                                                         <td><? echo $sql_result['designation']; ?></td>
                                                         <td><? echo $sql_result['esc_matrix']; ?></td>
+                                                        <td>
+                                                            <a href="#" class="delete-link" data-projectCordinatorId="<?= $id; ?>">Delete</a>
+                                                        </td>
                                                     </tr>    
                                                 <? $i++; }?>
                                                 
@@ -100,10 +111,69 @@
                     </div>
                 </div>
             </div>
-                    
+    
+      
+<script>
+    $(document).ready(function () {
+        $(".delete-link").on("click", function (e) {
+            e.preventDefault(); // Prevent the default behavior of the anchor tag
+            
+            var projectCordinatorId = $(this).data('projectcordinatorid');
+
+            alert(projectCordinatorId) ; 
+
+            // Show SweetAlert confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var deleteUrl = "deleteProjectCordinator.php"; // Replace with your actual delete endpoint
+
+                    $.ajax({
+                        url: deleteUrl,
+                        method: 'POST', // Change the method as needed
+                        data: { projectCordinatorId: projectCordinatorId },
+                        success: function (response) {
+                            if(response==1){
+                                Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: 'Your record has been deleted.',
+                            });
+                            }else{
+                                Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while deleting the record.',
+                            });    
+                            }
+                           
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while deleting the record.',
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
                     
     <? include('footer.php'); ?>
+
     
+
     
         <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 

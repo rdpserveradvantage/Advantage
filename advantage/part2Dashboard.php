@@ -125,7 +125,7 @@ $installationDone = $query6_result['count'];
             name: 'Material Send',
             data: data.map(item => item.materialSend)
         }, {
-            name: 'Project Installation',
+            name: 'Live Sites',
             data: data.map(item => item.project)
         }],
         plotOptions: {

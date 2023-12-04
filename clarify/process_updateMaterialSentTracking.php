@@ -28,7 +28,6 @@ $sql = "INSERT INTO trackingDetailsUpdate (materialSendId,atmid, siteid, challan
         VALUES ('$id','$atmid', '$siteid', '$challanNumber', '$receiversName', '$receiversNumber', '$lrCopyPath', '$deliveryChallanPath','Inventory',1,'$receivedDate','$receivedTime')";
 
 if ($con->query($sql) == TRUE) {
-
     $insert_id = $con->insert_id;
     mysqli_query($con, "update vendorMaterialSend set isConfirm=1, confirmID='" . $insert_id . "' where id='" . $id . "'");
     $data = ['status' => 200, 'message' => 'Updated Successfully !'];

@@ -1,6 +1,9 @@
 <?php include('header.php'); ?>
 
 <style>
+    .swal2-popup{
+        background: white !important;
+    }
     .error {
         border: 1px solid red;
     }
@@ -221,6 +224,7 @@
                                 <div class="card-body" style="overflow:auto;">
 
                                     <?
+                                    echo "select * from vendormaterialrequest where status=0 and requestToInventory=1 and sentFromInventory=0" ; 
                                     $serviceRequest = mysqli_query($con, "select * from vendormaterialrequest where status=0 and requestToInventory=1 and sentFromInventory=0");
                                     if (mysqli_num_rows($serviceRequest) > 0) {
 

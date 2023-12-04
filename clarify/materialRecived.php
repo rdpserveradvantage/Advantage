@@ -2,11 +2,9 @@
 
 
 <style>
-
-html{
-    text-transform: inherit !important;
-}
-
+    html {
+        /* text-transform: inherit !important; */
+    }
 </style>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
@@ -19,7 +17,7 @@ html{
 
                             <?
                             $counter = 1;
-                            $statement = "SELECT * FROM vendorMaterialSend where contactPersonName='" . $userid . "' order by id desc" ; 
+                            $statement = "SELECT * FROM vendorMaterialSend where contactPersonName='" . $userid . "' and status=1 order by id desc";
                             $sql = mysqli_query($con, $statement);
                             if (mysqli_num_rows($sql) > 0) {
                                 echo "<table class='table table-hover table-styling table-xs'>
@@ -84,11 +82,29 @@ html{
                                     echo "<td class='strong'>$atmid</td>";
                                     echo "<td class='strong'>" .
                                         ($isDelivered == 1 ? 'Delivered' : 'In-Transit') . "</td>";
-                                    echo "<td>" . ($ifExistTrackingUpdate == 1 ?
-                                        '<button type="button" class="view-dispatch-info btn btn-primary btn-sm" data-id=' . $id . '>
-                                    View
-                                    </button>'
-                                        : "<a class='btn btn-warning btn-sm' href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update Receive</a>") . "</td>";
+
+
+                                    echo "<td>";
+
+                                    if ($ifExistTrackingUpdate == 1) {
+                                        echo '<button type="button" class="view-dispatch-info btn btn-primary btn-sm" data-id=' . $id . '>View</button>';
+
+                                        if ($isDelivered == 0) {
+                                            echo '| <a href="updateMaterialReceived.php?id=' . $id . '"> Update Receive </a>';
+                                        }
+
+                                    } else {
+                                        echo "<a class='btn btn-warning btn-sm' href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update Receive</a>" . "</td>";
+                                    }
+                                    echo "</td>";
+
+                                    //     echo "<td>" . ($ifExistTrackingUpdate == 1 ?
+                                    //     '<button type="button" class="view-dispatch-info btn btn-primary btn-sm" data-id=' . $id . '>
+                                    // View
+                                    // </button> | <a href="updateMaterialReceived.php?id='.$id.'"> Update Receive </a>'
+                                    //     : "<a class='btn btn-warning btn-sm' href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update Receive</a>") . "</td>";
+                            
+
                                     echo "<td>$contactPersonName</td>";
                                     echo "<td>$contactNumber</td>";
                                     // echo "<td>$contactPerson</td>";
@@ -155,7 +171,7 @@ html{
 </div>
 
 <script>
-    $('.view-dispatch-info').click(function() {
+    $('.view-dispatch-info').click(funct ion() {
         var id = $(this).data('id');
         $.ajax({
             type: 'POST',
@@ -163,10 +179,10 @@ html{
             data: {
                 id: id
             },
-            success: function(response) {
+            success: func tion(response) {
                 $("#getDispatchInfo").html(response);
             },
-            error: function(error) {
+            error: fun ction(error) {
                 $("#getDispatchInfo").html('Nothing found here !');
 
             }

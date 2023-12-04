@@ -4,7 +4,7 @@
     $query1 = "SELECT COUNT(1) AS count FROM sites WHERE status = 1 and delegatedToVendorId='".$RailTailVendorID."'";
     $query2 = "SELECT COUNT(1) AS count FROM sites WHERE isDelegated = 1  and delegatedToVendorId='".$RailTailVendorID."'";
     $query3 = "SELECT COUNT(1) AS count FROM sites WHERE isfeasibiltyDone = 1  and delegatedToVendorId='".$RailTailVendorID."'";
-    $query5 = "SELECT COUNT(1) AS count FROM projectInstallation where isDone=1 and status=1 and vendor='".$RailTailVendorID."'";    
+    $query5 = "SELECT COUNT(distinct atmid) AS count FROM projectInstallation where isDone=1 and status=1 and vendor='".$RailTailVendorID."'";    
 
 
 // $queries = [$query1, $query2, $query3, $query4, $query5];
@@ -98,7 +98,7 @@ $query5_result = mysqli_fetch_assoc($query5);
 $materialSend = $query5_result['count']; 
 
 
-$query5 = "SELECT COUNT(1) AS count FROM projectInstallation where isDone=1 and vendor='".$vendorId."' and status=1";
+$query5 = "SELECT COUNT(distinct atmid) AS count FROM projectInstallation where isDone=1 and vendor='".$vendorId."' and status=1";
 $totalInstallationSql = mysqli_query($con,$query5);
 $totalInstallationSqlResult = mysqli_fetch_assoc($totalInstallationSql);
 $totalInstallationDone = $totalInstallationSqlResult['count'];

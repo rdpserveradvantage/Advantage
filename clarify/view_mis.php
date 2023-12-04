@@ -332,6 +332,7 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                 <th>SR</th>
                                                 <th>TicketId</th>
                                                 <th>Atmid</th>
+                                                <th>Current Status</th>
                                                 <th>Component</th>
                                                 <th>Sub Component</th>
                                                 <th>Customer</th>
@@ -532,6 +533,9 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                     <td>
                                                         <? echo $atmid; ?>
                                                     </td>
+
+                                                    <td><?= $his_type;  ?></td>
+                                                    
                                                     <td>
                                                         <? echo $sql_result['component']; ?>
                                                     </td>

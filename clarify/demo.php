@@ -1,4 +1,53 @@
-<?php
+<?php include('config.php');
+
+
+return ; 
+
+$sql = mysqli_query($con,"select * from mis_history where mis_id=0 order by id desc") ; 
+while($sqlResult = mysqli_fetch_assoc($sql)){
+
+$id = $sqlResult['id'];
+$created_at = $sqlResult['created_at'];
+
+$misSql = mysqli_query($con,"select * from mis where created_at='".$created_at."'");
+$misSqlResult = mysqli_fetch_assoc($misSql) ; 
+$misId = $misSqlResult['id'];
+
+
+mysqli_query($con,"update mis_history set mis_id='".$misId."' where id='".$id."'")
+; 
+
+echo '<br />';
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+return ; 
+
+
+
+
+
+
 date_default_timezone_set("Asia/Calcutta"); // India time (GMT+5:30)
 error_reporting(E_ALL); // Enable error reporting for debugging
 

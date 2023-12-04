@@ -72,7 +72,7 @@ if ($atmid) {
 
             if (mysqli_query($con, $statement)) {
                 $mis_id = $con->insert_id;
-
+                $misId = $mis_id ; 
                 $last_sql = mysqli_query($con, "select id from mis_details order by id desc");
                 $last_sql_result = mysqli_fetch_assoc($last_sql);
                 $last = $last_sql_result['id'];

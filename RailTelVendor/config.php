@@ -58,10 +58,17 @@ if (!function_exists('getUsername')) {
     function getUsername($id){
         global $con;
         
-        $sql = mysqli_query($con,"select * from mis_loginusers where id ='".$id."'");
-        $sql_result = mysqli_fetch_assoc($sql);
+        if($id > 10000){
+            $sql = mysqli_query($con,"select * from vendorusers where id ='".$id."'");
+            $sql_result = mysqli_fetch_assoc($sql);
+            return $sql_result['name'];
+        }else{
+            $sql = mysqli_query($con,"select * from mis_loginusers where id ='".$id."'");
+            $sql_result = mysqli_fetch_assoc($sql);
+            return $sql_result['name'];
+        }
         
-        return $sql_result['name'];
+
     }
     
 

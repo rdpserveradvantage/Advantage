@@ -2,11 +2,19 @@
 
 $id = $_REQUEST['id'];
 
+echo "select * from trackingDetailsUpdate where materialSendId='" . $id . "' order by id desc";
 $sql = mysqli_query($con, "select * from trackingDetailsUpdate where materialSendId='" . $id . "' order by id desc");
 if ($sqlResult = mysqli_fetch_assoc($sql)) {
+    $portal = $sqlResult["portal"];
+    
+    if ($portal == 'Vendor') {
+        $url = 'http://vendor.advantagesb.com';
+        
+    } else if ($portal == 'Inventory') {
+        $url = 'http://inventory.advantagesb.com';
 
-
-?>
+    }
+    ?>
 
 
     <div class="card-block task-details">
@@ -19,7 +27,9 @@ if ($sqlResult = mysqli_fetch_assoc($sql)) {
                         ATMID:</td>
                     <td class="text-right">
                         <span class="f-right">
-                            <a href="#"><?= $sqlResult['atmid']; ?> </a>
+                            <a href="#">
+                                <?= $sqlResult['atmid']; ?>
+                            </a>
                         </span>
                     </td>
                 </tr>
@@ -28,14 +38,18 @@ if ($sqlResult = mysqli_fetch_assoc($sql)) {
 
 
                         Challan Number:</td>
-                    <td class="text-right"><?= $sqlResult['challanNumber']; ?></td>
+                    <td class="text-right">
+                        <?= $sqlResult['challanNumber']; ?>
+                    </td>
                 </tr>
                 <tr>
                     <td>
 
                         Receivers Name
                     </td>
-                    <td class="text-right"><?= $sqlResult['receiversName']; ?></td>
+                    <td class="text-right">
+                        <?= $sqlResult['receiversName']; ?>
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -54,8 +68,8 @@ if ($sqlResult = mysqli_fetch_assoc($sql)) {
                     <td class="text-right">
                         <?
                         if ($sqlResult['lrCopyPath']) {
-                        ?>
-                            <a href="http://inventory.advantagesb.com/<?= $sqlResult['lrCopyPath']; ?>" target="_blank">
+                            ?>
+                            <a href="<?= $url.'/'.$sqlResult['lrCopyPath']; ?>" target="_blank">
                                 View
                             </a>
                         <?
@@ -73,10 +87,11 @@ if ($sqlResult = mysqli_fetch_assoc($sql)) {
 
                         Delivery Challan:</td>
                     <td class="text-right">
-                    <?
+                        <?
                         if ($sqlResult['deliveryChallanPath']) {
-                        ?>
-                            <a href="http://inventory.advantagesb.com/<?= $sqlResult['deliveryChallanPath']; ?>" target="_blank">
+                            ?>
+                            <a href="<?= $url.'/'.$sqlResult['deliveryChallanPath']; ?>"
+                                target="_blank">
                                 View
                             </a>
                         <?
@@ -91,7 +106,9 @@ if ($sqlResult = mysqli_fetch_assoc($sql)) {
 
 
                         Updated At:</td>
-                    <td class="text-right"><?= $sqlResult['created_at']; ?></td>
+                    <td class="text-right">
+                        <?= $sqlResult['created_at']; ?>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -9,7 +9,7 @@ $username = $_REQUEST['username'];
 $password = $_REQUEST['password'];
 
 if ($username && $password) {
-    $response = authenticateUser( $username, $password);
+    $response = authenticateUser($username, $password);
 
     if ($response['success']) {
         // Successful authentication
@@ -19,9 +19,9 @@ if ($username && $password) {
         $_SESSION['SERVICE_email'] = $response['user']['uname'];
         $_SESSION['SERVICE_userid'] = $response['user']['id'];
         $_SESSION['SERVICE_level'] = $response['user']['level'];
-        
+
         $_SESSION['SERVICE_userNumber'] = $response['user']['contact'];
-        
+
         $_SESSION['SERVICE_branch'] = $response['user']['branch'];
         $_SESSION['SERVICE_zone'] = $response['user']['zone'];
         $_SESSION['isServicePortalToken'] = $response['jwt'];
@@ -40,11 +40,12 @@ if ($username && $password) {
     echo json_encode($response);
 }
 
-function authenticateUser($username, $password) {
-    global $con ; 
+function authenticateUser($username, $password)
+{
+    global $con;
     $response = array('success' => false);
 
-    $user = getUserFromTable(  $username, $password);
+    $user = getUserFromTable($username, $password);
 
 
     if ($user) {
@@ -82,25 +83,48 @@ function authenticateUser($username, $password) {
     return $response;
 }
 
-function getUserFromTable($username, $password) {
-    global $con; 
+function getUserFromTable($username, $password)
+{
+    global $con;
 
     $table = 'mis_loginusers';
-    $query = "SELECT * FROM $table WHERE (uname = '$username' OR contact = '$username') AND pwd = '$password' AND user_status = 1";    
+    
+    $query = "SELECT * FROM $table WHERE (uname = '$username' OR contact = '$username') AND pwd = '$password' AND user_status = 1";
     $result = mysqli_query($con, $query);
     $user = mysqli_fetch_assoc($result);
-    if($user){
-        $_SESSION['FROM_PORTAL'] = 'Advantage';
-        return $user;
-    }else{
+    if ($user) {
+        $checkuser = mysqli_query($con, "select * from vendorusers where uname='" . $username . "' and password='" . $password . "' and user_status=1");
+        if ($checkuserResult = mysqli_fetch_assoc($checkuser)) {
+            $_SESSION['FROM_PORTAL'] = 'Clarify';
+            return $checkuserResult;
+        }else{
+            $name = $user['name'];
+            $uname = $user['uname'];
+            $pwd = $user['pwd'];
+            $permission = $user['permission'];
+            $contact = $user['contact'];
+
+           mysqli_query($con,"insert into vendorusers(vendorId, name, uname, password, permission, level, contact, user_status, created_at, servicePermission)
+           values('4','".$name."','".$uname."','".$pwd."','".$permission."','4','".$contact."',1,'".$datetime."','5,6,76,85,81,83,84,92')");
+           
+           $table = 'vendorUsers';
+           $query = "SELECT * FROM $table WHERE (uname = '$username' OR contact = '$username') AND password = '$password' AND user_status = 1";
+           $result = mysqli_query($con, $query);
+           $user = mysqli_fetch_assoc($result);
+           $_SESSION['FROM_PORTAL'] = 'Clarify';
+   
+           return $user;
+
+        }
+    } else {
         $table = 'vendorUsers';
-        $query = "SELECT * FROM $table WHERE (uname = '$username' OR contact = '$username') AND password = '$password' AND user_status = 1";    
+        $query = "SELECT * FROM $table WHERE (uname = '$username' OR contact = '$username') AND password = '$password' AND user_status = 1";
         $result = mysqli_query($con, $query);
         $user = mysqli_fetch_assoc($result);
         $_SESSION['FROM_PORTAL'] = 'Clarify';
 
-        return $user ; 
+        return $user;
     }
-    
+
 
 }

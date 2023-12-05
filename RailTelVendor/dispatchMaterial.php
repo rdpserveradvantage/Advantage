@@ -31,40 +31,57 @@
                             ?>
 
                             <h5>Receiver's Details</h5>
-                            <hr>
-                            <p><strong>Vendor Name:</strong> <?php echo $vendorName; ?></p>
+                        
                             <hr />
                             <form id="vendorForm">
                                 <input type="hidden" name="atmid" value="<?php echo $atmid; ?>">
                                 <input type="hidden" name="siteid" value="<?php echo $siteid; ?>">
-                                <input type="hidden" name="vendorId" value="<?php echo $vendorId; ?>">
                                 <input type="hidden" name="materialSendID" value="<?= $materialSendId; ?>">
-                                
 
-                                <input type="hidden" name="attribute" value="<?php echo htmlentities(serialize($attributes)); ?>">
-                                <input type="hidden" name="values" value="<?php echo htmlentities(serialize($values)); ?>">
-                                <input type="hidden" name="serialNumbers" value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
+
+                                <input type="hidden" name="attribute"
+                                    value="<?php echo htmlentities(serialize($attributes)); ?>">
+                                <input type="hidden" name="values"
+                                    value="<?php echo htmlentities(serialize($values)); ?>">
+                                <input type="hidden" name="serialNumbers"
+                                    value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
 
                                 <div class="row">
+
+
+                                    <div class="col-sm-12">
+                                        <label for="Vendor">Contractor</label>
+                                        <select name="vendorId" id="contractor" class="form-control" required>
+                                            <option>--Select Contractor</option>
+
+                                            <?
+                                            $vendorSql = mysqli_query($con, "select * from vendor where status=1");
+                                            while ($vendorSqlResult = mysqli_fetch_assoc($vendorSql)) {
+                                                ?>
+                                                <option value="<?= $vendorSqlResult['id']; ?>">
+                                                    <?= $vendorSqlResult['vendorName']; ?>
+                                                </option>
+
+                                            <?
+                                            }
+                                            ?>
+                                        </select>
+
+
+                                    </div>
+
+
                                     <div class="col-sm-6">
                                         <label>Contact Person Name</label>
-                                        <select class="form-control" name="contactPersonName" id="contactPersonName" required>
-                                            <option value="">Select</option>
-                                            <?
-                                            $vendorUsersSql = mysqli_query($con, "select * from vendorUsers where vendorId='" . $vendorId . "' and user_status=1 order by name asc");
-                                            while ($vendorUsersSqlResult = mysqli_fetch_assoc($vendorUsersSql)) {
-                                                $vendorUserName = $vendorUsersSqlResult['name'];
-                                                $vendorUserId = $vendorUsersSqlResult['id'];
-                                            ?>
-                                                <option value="<?= $vendorUserId; ?>">
-                                                    <?= $vendorUserName; ?>
-                                                </option>
-                                            <? } ?>
+                                        <select class="form-control" name="contactPersonName" id="contactPersonName"
+                                            required>
+
                                         </select>
                                     </div>
                                     <div class="col-sm-6">
                                         <label>Contact Person Number</label>
-                                        <input type="text" name="contactPersonNumber" id="contactPersonNumber" class="form-control" required>
+                                        <input type="text" name="contactPersonNumber" id="contactPersonNumber"
+                                            class="form-control" required>
                                     </div>
                                     <div class="col-sm-12">
                                         <label>Address</label>
@@ -86,13 +103,36 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <br>
-                                        <input type="submit" name="submit" class="btn btn-primary" onclick="submitForm(event);" id="submitButton" value="Submit">
+                                        <input type="submit" name="submit" class="btn btn-primary"
+                                            onclick="submitForm(event);" id="submitButton" value="Submit">
                                     </div>
                                 </div>
                             </form>
 
                             <script>
-                                $(document).on('change', '#contactPersonName', function() {
+
+                                $(document).on('change', '#contractor', function () {
+
+                                    var contractor = $(this).val();
+
+                                    $("#contactPersonName").html('');
+                                    $.ajax({
+                                        type: "POST",
+                                        url: 'getVendorsEngineer.php',
+                                        data: 'vendor=' + contractor,
+                                        async: false,
+                                        success: function (msg) {
+                                            $('#contactPersonName').html(msg);
+                                        }
+                                    });
+
+
+                                })
+
+
+
+
+                                $(document).on('change', '#contactPersonName', function () {
 
                                     var contactPerson = $(this).val();
 
@@ -101,7 +141,7 @@
                                         url: 'getVendorUserInfo.php',
                                         data: 'contactPerson=' + contactPerson,
                                         async: false,
-                                        success: function(msg) {
+                                        success: function (msg) {
                                             var data = JSON.parse(msg);
                                             $('#contactPersonNumber').val(data.contact);
                                             $('#address').val(data.address);
@@ -136,7 +176,7 @@
                                         var xhr = new XMLHttpRequest();
                                         xhr.open('POST', 'processConfirmSendMaterialRequest.php');
                                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                                        xhr.onload = function() {
+                                        xhr.onload = function () {
                                             submitButton.disabled = false;
 
                                             var data = JSON.parse(xhr.responseText);

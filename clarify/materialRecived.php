@@ -3,7 +3,11 @@
 
 <style>
     html {
-        /* text-transform: inherit !important; */
+        text-transform: inherit !important;
+    }
+
+    table {
+        font-size: 14px;
     }
 </style>
 <div class="pcoded-content">
@@ -24,6 +28,7 @@
                                         <thead>
                                             <tr class='table-primary'>
                                                 <th>Srno</th>
+                                                <th>Material</th>
                                                 <th>ATMID</th>
                                                 <th>Status</th>
                                                 <th>Update Action</th>
@@ -51,7 +56,16 @@
                                     $courier = $sql_result['courier'];
                                     $remark = $sql_result['remark'];
                                     $date = $sql_result['created_at'];
-                                    $isDelivered = $sql_result['isDelivered'];
+                                    $isDelivered = $sql_result['isConfirm'];
+                                    $materialSendId = $sql_result['materialSendId'];
+
+
+                                    $matSql = mysqli_query($con, "select * from material_send_details where materialSendId='" . $materialSendId . "'");
+                                    $matSqlResult = mysqli_fetch_assoc($matSql);
+                                    $attribute = $matSqlResult['attribute'];
+
+
+
 
                                     $againSend = mysqli_query($con, "select * from vendorMaterialSend where materialSendId='" . $id . "'");
                                     if ($againSendResult = mysqli_fetch_assoc($againSend)) {
@@ -70,8 +84,8 @@
                                     $contactPersonName = vendorUsersData($contactPerson, 'name');
 
 
-                                    $ifExistTrackingUpdateSql = mysqli_query($con, "select * from trackingDetailsUpdate where atmid='" . $atmid . "' and siteid='" . $siteid . "' and materialSendId='" . $id . "' order by id desc");
-                                    if ($ifExistTrackingUpdateSqlResult = mysqli_fetch_assoc($ifExistTrackingUpdateSql)) {
+                                    $ifExistTrackingUpdateSql = mysqli_query($con, "select * from trackingDetailsUpdate where atmid='" . trim($atmid) . "' and siteid='" . $siteid . "' and materialSendId='" . $id . "' order by id desc");
+                                    if (mysqli_num_rows($ifExistTrackingUpdateSql) > 0  ) {
                                         $ifExistTrackingUpdate = 1;
                                     } else {
                                         $ifExistTrackingUpdate = 0;
@@ -79,35 +93,28 @@
 
                                     echo "<tr class='clickable-row' data-toggle='collapse' data-target='#details-$id'>";
                                     echo "<td>$counter</td>";
-                                    echo "<td class='strong'>$atmid</td>";
+                                    echo "<td>$attribute</td>";
+                                    echo "<td>$atmid</td>";
                                     echo "<td class='strong'>" .
                                         ($isDelivered == 1 ? 'Delivered' : 'In-Transit') . "</td>";
-
-
                                     echo "<td>";
 
                                     if ($ifExistTrackingUpdate == 1) {
-                                        echo '<button type="button" class="view-dispatch-info btn btn-primary btn-sm" data-id=' . $id . '>View</button>';
-
+                                        // echo '<button type="button" class="view-dispatch-info btn btn-primary btn-sm" data-id=' . $id . '>View</button>';
+echo 'Received' ; 
                                         if ($isDelivered == 0) {
                                             echo '| <a href="updateMaterialReceived.php?id=' . $id . '"> Update Receive </a>';
                                         }
 
-                                    } else {
-                                        echo "<a class='btn btn-warning btn-sm' href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update Receive</a>" . "</td>";
+                                    } else if($ifExistTrackingUpdate==0) {
+                                        echo "<a class='btn btn-warning btn-sm' href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>
+                                                Update Receive
+                                        </a>" . "</td>";
                                     }
                                     echo "</td>";
 
-                                    //     echo "<td>" . ($ifExistTrackingUpdate == 1 ?
-                                    //     '<button type="button" class="view-dispatch-info btn btn-primary btn-sm" data-id=' . $id . '>
-                                    // View
-                                    // </button> | <a href="updateMaterialReceived.php?id='.$id.'"> Update Receive </a>'
-                                    //     : "<a class='btn btn-warning btn-sm' href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update Receive</a>") . "</td>";
-                            
-
                                     echo "<td>$contactPersonName</td>";
                                     echo "<td>$contactNumber</td>";
-                                    // echo "<td>$contactPerson</td>";
                                     echo "<td>$pod</td>";
                                     echo "<td>$courier</td>";
                                     echo "<td>$remark</td>";

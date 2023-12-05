@@ -171,7 +171,7 @@ if ($_SESSION['ADVANTAGE_username']) {
                     </a>
                 </li>
                 <li class="">
-                    <a href="http://clarify.advantagesb.com/autoLogin.php?id=<?= $userid; ?>" target="_blank">
+                    <a href="http://clarify.advantagesb.com/" target="_blank">
                         <span class="pcoded-micon"><i class="feather icon-navigation-2" style="color: #4eeffa;"></i></span>
                         <span class="pcoded-mtext">Clarify - Service</span>
                     </a>

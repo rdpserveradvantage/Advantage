@@ -145,15 +145,13 @@
                                         $isAgainSendStatus = 0;
                                     }
 
-                                    $ifExistTrackingUpdateSql = mysqli_query($con, "select * from trackingDetailsUpdate where atmid='" . $atmid . "' and siteid='" . $siteid . "' and materialSendId='" . $id . "' order by id desc");
-                                    if ($ifExistTrackingUpdateSqlResult = mysqli_fetch_assoc($ifExistTrackingUpdateSql)) {
+                                    $ifExistTrackingUpdateSql = mysqli_query($con, "select * from trackingDetailsUpdate where atmid='" . trim($atmid). "' and siteid='" . $siteid . "' and materialSendId='" . $id . "' order by id desc");
+                                    if (mysqli_num_rows($ifExistTrackingUpdateSql) > 0 ) {
                                         $ifExistTrackingUpdate = 1;
                                     } else {
                                         $ifExistTrackingUpdate = 0;
                                     }
-                                    
-                                    
-                                    
+                                                                        
                                     $goodsreturnsql = mysqli_query($con,"select * from goodreturn where materialSendID='".$id."' and status=1");
                                     
                                     if($goodsreturnsqlResult = mysqli_fetch_assoc($goodsreturnsql)){

@@ -3,8 +3,15 @@
 $atmid = $_REQUEST['atmid'];
 $siteid = $_REQUEST['siteid'];
 $id = $_REQUEST['id'];
+
 ?>
 
+
+<style>
+    .swal2-popup {
+        background: white !important;
+    }
+</style>
 
 <div class="pcoded-content">
     <div class="pcoded-inner-content">

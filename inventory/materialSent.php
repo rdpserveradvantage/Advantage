@@ -103,13 +103,13 @@
                                         <th>Status</th>
                                         <th>Actions</th>
                                         <th>Vendor</th>
-                                        <th>Address</th>
                                         <th>Contact Person</th>
                                         <th>Contact Number</th>
                                         <th>POD</th>
                                         <th>Courier</th>
                                         <th>Remark</th>
                                         <th>Date</th>
+                                        <th>Address</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -152,13 +152,13 @@
                                         echo "<td>" . ($ifExistTrackingUpdate == 1 ? 'View' : "<a href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update</a>") . "</td>";
 
                                         echo "<td>$vendorName</td>";
-                                        echo "<td>$address</td>";
                                         echo "<td>$contactPerson</td>";
                                         echo "<td>$contactNumber</td>";
                                         echo "<td>$pod</td>";
                                         echo "<td>$courier</td>";
                                         echo "<td>$remark</td>";
                                         echo "<td>$date</td>";
+                                        echo "<td>$address</td>";
                                         echo "</tr>";
                                         echo "<tr id='details-$id' class='collapse'>";
                                         echo "<td colspan='9'>";

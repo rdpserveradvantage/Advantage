@@ -51,7 +51,7 @@ if ($inbox) {
                     $deviceIDValues = [];
                     $descriptionValues = [];
 
-                    
+
                     foreach ($table->getElementsByTagName('tr') as $row) {
                         $cells = $row->getElementsByTagName('td');
 
@@ -60,7 +60,10 @@ if ($inbox) {
                             $deviceID = trim(html_entity_decode(strip_tags($cells->item(1)->nodeValue)));
                             $description = trim(html_entity_decode(strip_tags($cells->item(2)->nodeValue)));
 
-                            // echo "$sn\t$deviceID\t$description<br>";
+
+                            $description = explode("/", $description);
+
+                            $description = trim($description[0]);
 
                             $data = array(
                                 'atmid' => $description,

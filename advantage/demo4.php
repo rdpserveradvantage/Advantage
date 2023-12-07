@@ -1,24 +1,162 @@
-<? include('config.php');
+<?php
+include('config.php');
 
-$sql = mysqli_query($con, "SELECT * FROM `event_log` WHERE `event_name` LIKE 'Feasibility Approved'");
-while ($sqlResult = mysqli_fetch_assoc($sql)) {
-
-    $event_timestamp = $sqlResult['event_timestamp'];
-    $atmid = $sqlResult['atmid'];
-
-    $dataSql = mysqli_query($con, "SELECT * FROM `datarecords` WHERE `created_at` = '" . $event_timestamp . "'");
-    $dataSqlResult = mysqli_fetch_assoc($dataSql);
-    $sessionData = $dataSqlResult['sessionData'];
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 
-     $data = json_decode($sessionData) ; 
-$userName = $data->ADVANTAGE_username;
+$query = "select * from boq where status=1";
+$result = mysqli_query($con, $query);
+$data = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $materialName[] = trim($row['value']);
+}
 
-$userID = $data->ADVANTAGE_userid;
+$qty = array(); // Initialize the $qty array
 
-mysqli_query($con,"update feasibilitycheck set verificationBy='".$userID."' ,
- verificationByName='".$userName."' where ATMID1 = '".$atmid."'");
+foreach ($materialName as $materialNameKey => $materialNameValue) {
+    $quantitySql = mysqli_query($con, "select count(1) as count from inventory where material='" . trim($materialNameValue) . "'");
+    $quantitySqlResult = mysqli_fetch_assoc($quantitySql);
+    $qty[] = $quantitySqlResult['count'];
+}
 
+$vendorNames = array();
+$vendorQuery = mysqli_query($con, "select DISTINCT(vendorName) as vendorName,id from vendor where status=1");
+while ($vendorRow = mysqli_fetch_assoc($vendorQuery)) {
+    $vendorNames[] = $vendorRow['vendorName'];
+    $vendorIds[] = $vendorRow['id'];
 
 }
+
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Information</title>
+    
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <table class="table table-striped table-hover">
+        <tr>
+            <th colspan="2">Material with Counts</th>
+            <th colspan="<?= count($vendorNames); ?>">Stock assigned to Vendors</th>
+            <th colspan="<?= count($vendorNames); ?>">Live Sites</th>
+            <th colspan="<?= count($vendorNames); ?>">Stock with Vendors</th>
+            <th colspan="2">Balance Stock with Advantage</th>
+        </tr>
+
+        <tr>
+            <th>Material</th>
+            <th>Count</th>
+            <?php
+            foreach ($vendorNames as $vendorName) { ?>
+                <th>
+                    <?= $vendorName; ?>
+                </th>
+            <?php } ?>
+            <?php
+            foreach ($vendorNames as $vendorName) { ?>
+                <th>
+                    <?= $vendorName; ?>
+                </th>
+
+            <?php } ?>
+            <?php
+
+            foreach ($vendorNames as $vendorName) { ?>
+                <th>
+                    <?= $vendorName; ?>
+                </th>
+            <?php } ?>
+
+            <th>Assigned</th>
+            <th>Un-Assigned</th>
+        </tr>
+
+        <?php for ($i = 0; $i < count($materialName); $i++): ?>
+            <tr>
+                <td class="strong">
+                    <?php echo $materialName[$i]; ?>
+                </td>
+                <td>
+                    <?php echo $qty[$i]; ?>
+                </td>
+
+
+                <?php
+
+                foreach ($vendorIds as $vendorId => $vendorKey): ?>
+                    <?php
+
+                    $matCountSql = "SELECT COUNT(1) as assignedCount FROM vendorinventory WHERE material='" . trim($materialName[$i]) . "' AND vendorId=$vendorKey";
+
+                    $assignedCountSql = mysqli_query($con, $matCountSql);
+                    $assignedCountResult = mysqli_fetch_assoc($assignedCountSql);
+                    $assignedCount = $assignedCountResult['assignedCount'];
+                    $unassignedCount = 0 . 'ds';
+                    ?>
+                    <td>
+                        <?= $assignedCount; ?>
+                    </td>
+                    <?php
+
+                endforeach; ?>
+
+
+                <?php
+
+                foreach ($vendorIds as $vendorId => $vendorKey): ?>
+                    <?php
+
+                    $matCountSql = "SELECT COUNT(1) as assignedCount FROM vendorinventory WHERE material='" . trim($materialName[$i]) . "' AND vendorId=$vendorKey";
+
+                    $assignedCountSql = mysqli_query($con, $matCountSql);
+                    $assignedCountResult = mysqli_fetch_assoc($assignedCountSql);
+                    $assignedCount = $assignedCountResult['assignedCount'];
+                    ?>
+                    <td>
+                        <? 
+                        // $assignedCount; 
+                        ?>
+                    </td>
+                    <?php
+
+                endforeach; ?>
+
+
+
+
+
+            </tr>
+        <?php endfor; ?>
+
+    </table>
+
+</body>
+
+</html>

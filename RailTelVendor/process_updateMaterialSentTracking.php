@@ -48,15 +48,40 @@ $sql = "INSERT INTO trackingDetailsUpdate (materialSendId,atmid, siteid, challan
         VALUES ('$id','$atmid', '$siteid', '$challanNumber', '$receiversName', '$receiversNumber', '$lrCopyPath', '$deliveryChallanPath','Vendor',1,'$receivedDate','$receivedTime')";
 
 if ($con->query($sql) === TRUE) {
-    
-    mysqli_query($con,"update material_send set isDelivered=1 where id='".$id."'");
-    $data = ['status'=>200,'response'=>'Updated Succesfully'];
+
+    mysqli_query($con, "update material_send set isDelivered=1 where id='" . $id . "'");
+
+
+    $vendorsql = mysqli_query($con, "Select * from material_send where id ='" . $id . "'");
+    $vendorsqlResult = mysqli_fetch_assoc($vendorsql);
+    $invID = $vendorsqlResult['invID'];
+    $vendorId = $vendorsqlResult['vendorId'];
+
+    $invSql = mysqli_query($con, "select * from inventory where id='" . $invID . "'");
+    $invSqlResult = mysqli_fetch_assoc($invSql);
+    $material = $invSqlResult['material'];
+    $material_make = $invSqlResult['material_make'];
+    $serial_no = $invSqlResult['serial_no'];
+    $amount = $invSqlResult['amount'];
+    $gst = $invSqlResult['gst'];
+    $amount_witd_gst = $invSqlResult['amount_witd_gst'];
+
+    mysqli_query($con, "insert into vendor(vendorId, material, material_make, model_no, serial_no,  amount, gst, amount_with_gst, 
+    date_of_receiving, receiver_name,  created_at, created_by,  status, isSentToEngineer, engineerId, engineerName)
+    values('" . $vendorId . "','" . $material . "','" . $material_make . "','" . $model_no . "','" . $serial_no . "',  '" . $amount . "', '" . $gst . "', '" . $amount_with_gst . "', 
+    '" . $receivedDate . "', '" . $receiversName . "', '" . $datetime . "', '" . $userid . "',  1, 0, 0, '')
+    ");
+
+
+
+
+    $data = ['status' => 200, 'response' => 'Updated Succesfully'];
     echo json_encode($data);
-    confirmMaterialReceive($siteid,$atmid,'');
-    
+    confirmMaterialReceive($siteid, $atmid, '');
+
 } else {
-        $data = ['status'=>500,'response'=>$con->error];
-        echo json_encode($data);
+    $data = ['status' => 500, 'response' => $con->error];
+    echo json_encode($data);
 }
 
 $con->close();

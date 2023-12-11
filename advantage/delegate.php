@@ -1,11 +1,19 @@
 <?php include('header.php'); ?>
 
+<style>
+  .swal2-popup {
+    background: white !important;
+}
+
+
+</style>
+
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
-                    <div class="card" style="display:none;">
+                    <!-- <div class="card" style="display:none;">
                         <div class="card-block">
                             <?php
                             $atmid = $_REQUEST['atmid'];
@@ -45,7 +53,7 @@
                             </form>
 
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="card">
                         <div class="card-block">
@@ -148,57 +156,54 @@
     // }
 
 
-
     function saveForm2() {
-        event.preventDefault();
-        var formData = new FormData($('#myForm2')[0]);
-        var requiredFields = $('#myForm2 :required');
-        var emptyFields = [];
+    event.preventDefault();
+    var formData = new FormData($('#myForm2')[0]);
+    var requiredFields = $('#myForm2 :required');
+    var emptyFields = [];
 
-        // Check for empty required fields
-        requiredFields.each(function () {
-            if ($(this).val() === '') {
-                emptyFields.push($(this).attr('name'));
-            }
-        });
-
-        if (emptyFields.length > 0) {
-            swal("Error", "Please fill in all the required fields!", "error");
-            $('input, select').removeClass('highlight');
-            $.each(emptyFields, function (index, fieldName) {
-                $('[name="' + fieldName + '"]').addClass('highlight');
-            });
-            return; // Exit the function if empty fields exist
+    // Check for empty required fields
+    requiredFields.each(function () {
+        if ($(this).val() === '') {
+            emptyFields.push($(this).attr('name'));
         }
+    });
 
-        $.ajax({
-            url: 'process_delegate.php',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                console.log(response);
-                if (response == 200) {
-                    swal("Success", "Delegated To Vendor Successfully!", "success");
-                    setTimeout(function () {
+    if (emptyFields.length > 0) {
+        Swal.fire("Error", "Please fill in all the required fields!", "error");
+        $('input, select').removeClass('highlight');
+        $.each(emptyFields, function (index, fieldName) {
+            $('[name="' + fieldName + '"]').addClass('highlight');
+        });
+        return; // Exit the function if empty fields exist
+    }
+
+    $.ajax({
+        url: 'process_delegate.php',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response);
+
+            if (response == 200 || response == 202) {
+                Swal.fire("Success", "Delegated To Vendor Successfully!", "success")
+                    .then(function () {
                         window.location.href = "sitestest.php";
-                    }, 3000); // Redirect after 3 seconds
-                } else if (response == 202) {
-                    swal("Success", "Delegated To Vendor Successfully!", "success");
-                    setTimeout(function () {
-                        window.location.href = "sitestest.php";
-                    }, 3000); // Redirect after 3 seconds
-                } else {
-                    alert('Added Error!');
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error(error);
+                    });
+            } else {
+                console.error('Added Error!');
                 alert('Added Error!');
             }
-        });
-    }
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+            alert('Added Error!');
+        }
+    });
+}
+
 </script>
 
 <?php include('footer.php'); ?>

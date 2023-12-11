@@ -1,12 +1,16 @@
 <? include('config.php');
 
-$query = "SELECT v.id,v.vendorName, COUNT(s.delegatedToVendorId) AS siteAllocated, 
-          COALESCE(SUM(s.delegatedByVendor = 1), 0) AS assignEngineer,
-          COALESCE(SUM(s.isFeasibiltyDone = 1), 0) AS feasibiltyDone
-          FROM vendor v
-          INNER JOIN sites s ON v.id = s.delegatedToVendorId
-          where v.status=1
-          GROUP BY v.id";
+// $query = "SELECT v.id,v.vendorName, COUNT(s.delegatedToVendorId) AS siteAllocated, 
+//           COALESCE(SUM(s.delegatedByVendor = 1), 0) AS assignEngineer,
+//           COALESCE(SUM(s.isFeasibiltyDone = 1), 0) AS feasibiltyDone
+//           FROM vendor v
+//           INNER JOIN sites s ON v.id = s.delegatedToVendorId
+//           where v.status=1
+//           GROUP BY v.id";
+
+$query = "SELECT v.id,v.vendorName, COUNT(s.delegatedToVendorId) AS siteAllocated,  COALESCE(SUM(s.delegatedByVendor = 1), 0) AS assignEngineer, COALESCE(SUM(s.isFeasibiltyDone = 1), 0) AS feasibiltyDone FROM vendor v
+INNER JOIN sites s ON v.id = s.delegatedToVendorId where v.status=1 GROUP BY v.id";
+
 $result = mysqli_query($con, $query);
 
 $data = array();
@@ -22,7 +26,8 @@ $query5 = mysqli_query($con,"SELECT COUNT(1) AS count FROM material_send where v
 $query5_result = mysqli_fetch_assoc($query5);
 $materialSend = $query5_result['count']; 
 
-$query6 = mysqli_query($con,"SELECT COUNT(1) AS count FROM projectInstallation where vendor='".$vendorId."' and isDone=1");
+$query6 = mysqli_query($con,"SELECT COUNT(distinct atmid) AS count FROM projectInstallation where vendor='".$vendorId."' and isDone=1 and status=1");
+// $query6 = mysqli_query($con,"SELECT COUNT(1) AS count FROM projectInstallation where vendor='".$vendorId."' and isDone=1");
 $query6_result = mysqli_fetch_assoc($query6);
 $installationDone = $query6_result['count']; 
 

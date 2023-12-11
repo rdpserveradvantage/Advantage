@@ -245,6 +245,7 @@
                                             <thead>
                                                 <tr class="table-primary">
                                                     <th>#</th>
+                                                    <th>atmid </th>
                                                     <th>Actions</th>
                                                     <th>Delegated To</th>
                                                     <th>History</th>
@@ -254,9 +255,6 @@
                                                     <th>activity </th>
                                                     <th>customer </th>
                                                     <th>bank </th>
-                                                    <th>atmid </th>
-                                                    <th>atmid2 </th>
-                                                    <th>atmid3 </th>
                                                     <th>address </th>
                                                     <th>city </th>
                                                     <th>state </th>
@@ -354,6 +352,7 @@
                                                 
                                                  <tr>
                                                     <td><?php echo $counter; ?></td>
+                                                    <td><?php echo !empty($atmid) ? $atmid : 'NA'; ?></td>
                                                     <td>
                                                      <?php
                                                         
@@ -411,9 +410,6 @@
 <td><?php echo !empty($activity) ? $activity : 'NA'; ?></td>
 <td><?php echo !empty($customer) ? $customer : 'NA'; ?></td>
 <td><?php echo !empty($bank) ? $bank : 'NA'; ?></td>
-<td><?php echo !empty($atmid) ? $atmid : 'NA'; ?></td>
-<td><?php echo !empty($atmid2) ? $atmid2 : 'NA'; ?></td>
-<td><?php echo !empty($atmid3) ? $atmid3 : 'NA'; ?></td>
 <td><?php echo !empty($address) ? $address : 'NA'; ?></td>
 <td><?php echo !empty($city) ? $city : 'NA'; ?></td>
 <td><?php echo !empty($state) ? $state : 'NA'; ?></td>

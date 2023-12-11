@@ -6,7 +6,7 @@
 
 $query1 = "select count(1) as count from mis where status='open'";
 $query2 = "select count(1) as count from mis where status='close'";
-$query3 = "SELECT COUNT(1) AS count FROM projectInstallation where isDone=1 and status=1";
+$query3 = "SELECT COUNT(distinct atmid) AS count FROM projectInstallation where isDone=1 and status=1";  
 $query4 = "SELECT COUNT(1) AS count FROM mis where call_receive_from='Customer / Bank'";
 $queries = [$query1, $query2, $query3, $query4];
 $results = [];

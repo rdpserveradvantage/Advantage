@@ -25,6 +25,9 @@ if ($username && $password) {
         $_SESSION['SERVICE_branch'] = $response['user']['branch'];
         $_SESSION['SERVICE_zone'] = $response['user']['zone'];
         $_SESSION['isServicePortalToken'] = $response['jwt'];
+        $_SESSION['vendorId'] =  $response['user']['vendorId'];
+
+
 
         // $_SESSION['SERVICE_RailTailVendorID'] = $response['user']['vendorId'];
 

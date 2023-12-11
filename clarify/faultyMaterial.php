@@ -1,4 +1,12 @@
 <? include('header.php'); ?>
+
+<style>
+    html {
+        text-transform: inherit !important;
+    }
+</style>
+
+
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
@@ -7,7 +15,7 @@
                     <div class="card">
                         <div class="card-block">
                             <?
-                            echo $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestBy='" . $SERVICE_email . "' AND requestByPortal IN ('Clarity','Clarify') and materialRequestLevel=3 and status=1";
+                            $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestBy='" . $SERVICE_email . "' AND requestByPortal IN ('Clarity','Clarify') and materialRequestLevel=3 and status=1";
                             $sql = mysqli_query($con, $statement);
                             if (mysqli_num_rows($sql) > 0) {
                                 echo '
@@ -73,8 +81,9 @@
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+
             <form id="receiversForm" action="process_faultyMaterial.php" method="POST">
-                
+                <input name="vendorName" id="vendorName" type="hidden" value="<?= $_SESSION['vendorId']; ?>" />
                 <div class="modal-header">
                     <h5 class="modal-title" id="dispatchModalLabel">Enter OEM Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -82,8 +91,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
-
                     <div class="row">
                         <div class="col-sm-6">
                             <label>Contact Person Name</label>
@@ -102,15 +109,15 @@
                         </div>
                         <div class="col-sm-6">
                             <label>POD</label>
-                            <input type="text" name="POD" class="form-control" required />
+                            <input type="text" name="POD" id="POD" class="form-control" required />
                         </div>
                         <div class="col-sm-6">
                             <label>Courier</label>
-                            <input type="text" name="courier" class="form-control" required />
+                            <input type="text" name="courier" id="courier" class="form-control" required />
                         </div>
                         <div class="col-sm-12">
                             <label>Any Other Remark</label>
-                            <input type="text" name="remark" class="form-control" />
+                            <input type="text" name="remark" id="remark" class="form-control" />
                         </div>
                     </div>
 
@@ -118,6 +125,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <!-- <input type="submit" name="Submit" value="Submit"/>  -->
                     <button type="button" id="submitVendorDetails" class="btn btn-primary"
                         id="submitOemDetails">Submit</button>
                 </div>
@@ -125,7 +133,6 @@
         </div>
     </div>
 </div>
-
 
 
 <script>
@@ -140,7 +147,6 @@
             }
         }
 
-
         if (selectedItems.length > 0) {
             $('#dispatchModal').modal('show');
         } else {
@@ -151,12 +157,29 @@
     document.getElementById('submitVendorDetails').addEventListener('click', function () {
         var vendorName = document.getElementById('vendorName').value;
 
+        // Get data from the modal form
+        var contactPersonName = document.getElementById('contactPersonName').value;
+        var contactPersonNumber = document.getElementById('contactPersonNumber').value;
+        var address = document.getElementById('address').value;
+        var POD = document.getElementById('POD').value;
+        var courier = document.getElementById('courier').value;
+        var remark = document.getElementById('remark').value;
+
         if (selectedItems.length > 0) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {
                     if (xhr.status == 200) {
-                        console.log(xhr.responseText);
+                        console.log();
+                        if (xhr.responseText == 1) {
+                            Swal.fire("Success", "Material Send Successfully !", "success").then(() => {
+                                location.reload();
+                            });
+
+                        } else {
+                            Swal.fire("Error", "Some error occured", "error");
+
+                        }
                         $('#dispatchModal').modal('hide');
                     } else {
                         console.error('Error: ' + xhr.status);
@@ -166,11 +189,22 @@
 
             xhr.open('POST', 'process_selected_items.php', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.send('vendorName=' + encodeURIComponent(vendorName) + '&selectedItems=' + JSON.stringify(selectedItems));
+
+            // Include modal form data in the request
+            xhr.send('vendorName=' + encodeURIComponent(vendorName) +
+                '&selectedItems=' + JSON.stringify(selectedItems) +
+                '&contactPersonName=' + encodeURIComponent(contactPersonName) +
+                '&contactPersonNumber=' + encodeURIComponent(contactPersonNumber) +
+                '&address=' + encodeURIComponent(address) +
+                '&POD=' + encodeURIComponent(POD) +
+                '&courier=' + encodeURIComponent(courier) +
+                '&remark=' + encodeURIComponent(remark)
+            );
         } else {
             alert('Please select at least one item to dispatch.');
         }
     });
 </script>
+
 
 <? include('footer.php'); ?>

@@ -22,8 +22,9 @@ $vendorName = getVendorName($vendor);
         }
 
     }else{
+        
         loggingRecords('sites', $siteid,'log_before');
-        if(mysqli_query($con,$update = "update sites set isDelegated=1,delegatedToVendorId = '".$vendor."' where id='".$siteid."'")){
+        if(mysqli_query($con,$update = "update sites set isDelegated=1,delegatedToVendorId = '".$vendor."', delegatedToVendorName='".$vendorName."' where id='".$siteid."'")){
         loggingRecords('sites', $siteid,'log_after');
         
         mysqli_query($con,"insert into vendorSitesDelegation(vendorid,vendorName,siteid,amtid,status,created_at,created_by,portal) 

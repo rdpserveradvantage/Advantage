@@ -1,5 +1,15 @@
 <?php include('config.php');
 
+$vendorName = $_REQUEST['vendorName'];
+$contactPersonName = $_REQUEST['contactPersonName'];
+$contactPersonNumber = $_REQUEST['contactPersonNumber'];
+$address = $_REQUEST['address'];
+$POD = $_REQUEST['POD'];
+$courier = $_REQUEST['courier'];
+$remark = $_REQUEST['remark'];
+
+
+
 if (isset($_POST['selectedItems'])) {
     $selectedItems = json_decode($_POST['selectedItems'], true);
 
@@ -27,6 +37,11 @@ if (isset($_POST['selectedItems'])) {
         
         if(mysqli_query($con,$statement)){
             $insertId = $con->insert_id ; 
+
+            mysqli_query($con, "insert into returnfaltymaterial(generatefaultymaterialrequest,portal, atmid, ticketId, contactPersonName, contactPersonNumber, address, pod, courier, remark, status, created_at, created_by) 
+            values('" . $insertId . "','clarify','" . $atmid . "','" . $ticketId . "','" . $contactPersonName . "','" . $contactPersonNumber . "','" . $address . "', '" . $POD . "', '" . $courier . "', '" . $remark . "',1,'" . $datetime . "','" . $userid . "')");
+           
+
             mysqli_query($con,"update generatefaultymaterialrequest set status=0 where id='".$id."'");
             $details_sql = mysqli_query($con,"select * from generatefaultymaterialrequestdetails where requestId='".$id."'");
             while($details_sqlResult = mysqli_fetch_assoc($details_sql)){
@@ -46,11 +61,12 @@ if (isset($_POST['selectedItems'])) {
                 }
 
             }
-        
+        echo 1 ; 
         }
 
     }
 
 } else {
-    echo 'No selected items received.';
+    echo 0 ; 
+
 }

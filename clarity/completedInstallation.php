@@ -9,8 +9,8 @@
 
                     <?
 
-                    $statement = "select * from projectInstallation where isDone=1 and status=1 ";
-                    $sqlappCount = "select count(1) as totalCount from projectInstallation where isDone=1 and status=1 ";
+                    $statement = "SELECT * FROM projectInstallation WHERE isDone=1 AND status=1 ";
+                    $sqlappCount = "select COUNT(distinct atmid) AS totalCount from projectInstallation where isDone=1 and status=1 ";
 
 
                     if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
@@ -23,7 +23,7 @@
                     if (isset($_POST['submit'])) {
                         $_GET['page'] = 1;
                     }
-                    $statement .= "order by id desc";
+                    $statement .= " group by atmid  order by id desc";
 
                     $page_size = 10;
                     $result = mysqli_query($con, $sqlappCount);
@@ -39,6 +39,9 @@
                     $sql_query = "$statement LIMIT $offset, $page_size";
 
 
+                    // echo $sql_query ; 
+                    
+
 
                     ?>
 
@@ -49,12 +52,14 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <label>ATMID</label>
-                                        <input type="text" name="atmid" class="form-control" value="<?= $atmid; ?>" required>
+                                        <input type="text" name="atmid" class="form-control" value="<?= $atmid; ?>"
+                                            required>
                                     </div>
                                     <div class="col-sm-12">
                                         <br />
                                         <input type="submit" name="submit" class="btn btn-primary">
-                                        <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
+                                        <a class="btn btn-warning" id="hide_filter"
+                                            style="color:white;margin:auto 10px;">Hide Filters</a>
 
                                     </div>
 
@@ -127,28 +132,58 @@
                                         $scheduleDate = $sql_result['scheduleDate'];
                                         $scheduleTime = $sql_result['scheduleTime'];
                                         $sbiTicketId = $sql_result['sbiTicketId'];
-                                    ?>
+                                        ?>
                                         <tr>
-                                            <td><?= $counter; ?></td>
-                                            <td class="strong"><?= $atmid; ?></td>
-                                            <td><?= $created_at; ?></td>
-                                            <td><?= getUsername($created_by, true); ?></td>
-                                            <td><?= $remark; ?></td>
-                                            <td><?= getVendorName($vendor); ?></td>
-                                            <td><?= $scheduleAtmEngineerName; ?></td>
-                                            <td><?= $scheduleAtmEngineerNumber; ?></td>
-                                            <td><?= $bankPersonName; ?></td>
-                                            <td><?= $bankPersonNumber; ?></td>
-                                            <td><?= $backRoomKeyPersonName; ?></td>
-                                            <td><?= $backRoomKeyPersonNumber; ?></td>
-                                            <td><?= $scheduleDate; ?></td>
-                                            <td><?= $scheduleTime; ?></td>
-                                            <td><?= $sbiTicketId; ?></td>
+                                            <td>
+                                                <?= $counter; ?>
+                                            </td>
+                                            <td class="strong">
+                                                <?= $atmid; ?>
+                                            </td>
+                                            <td>
+                                                <?= $created_at; ?>
+                                            </td>
+                                            <td>
+                                                <?= getUsername($created_by, true); ?>
+                                            </td>
+                                            <td>
+                                                <?= $remark; ?>
+                                            </td>
+                                            <td>
+                                                <?= getVendorName($vendor); ?>
+                                            </td>
+                                            <td>
+                                                <?= $scheduleAtmEngineerName; ?>
+                                            </td>
+                                            <td>
+                                                <?= $scheduleAtmEngineerNumber; ?>
+                                            </td>
+                                            <td>
+                                                <?= $bankPersonName; ?>
+                                            </td>
+                                            <td>
+                                                <?= $bankPersonNumber; ?>
+                                            </td>
+                                            <td>
+                                                <?= $backRoomKeyPersonName; ?>
+                                            </td>
+                                            <td>
+                                                <?= $backRoomKeyPersonNumber; ?>
+                                            </td>
+                                            <td>
+                                                <?= $scheduleDate; ?>
+                                            </td>
+                                            <td>
+                                                <?= $scheduleTime; ?>
+                                            </td>
+                                            <td>
+                                                <?= $sbiTicketId; ?>
+                                            </td>
 
 
                                         </tr>
 
-                                    <?
+                                        <?
                                         $counter++;
                                     }
 
@@ -172,10 +207,10 @@
                         }
 
                         for ($i = $start_window; $i <= $end_window; $i++) {
-                        ?>
+                            ?>
                             <li class="<? if ($i == $current_page) {
-                                            echo 'active';
-                                        } ?>">
+                                echo 'active';
+                            } ?>">
                                 <a href="?page=<?= $i; ?>&&atmid=<?= $atmid; ?>">
                                     <?= $i; ?>
                                 </a>
@@ -207,11 +242,11 @@
 
 <script>
     $("#show_filter").css('display', 'none');
-    $("#hide_filter").on('click', function() {
+    $("#hide_filter").on('click', function () {
         $("#filter").css('display', 'none');
         $("#show_filter").css('display', 'block');
     });
-    $("#show_filter").on('click', function() {
+    $("#show_filter").on('click', function () {
         $("#filter").css('display', 'block');
         $("#show_filter").css('display', 'none');
     });

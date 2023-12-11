@@ -84,8 +84,8 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
 
 
     if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
-        $statement .= " and b.atmid = '" . $_REQUEST['atmid'] . "'";
-        $sqlappCount .= " and b.atmid = '" . $_REQUEST['atmid'] . "'";
+        $statement .= " and b.atmid like '%" . $_REQUEST['atmid'] . "%'";
+        $sqlappCount .= " and b.atmid like '%" . $_REQUEST['atmid'] . "%'";
     }
 
     if (isset($_REQUEST['call_receive_from']) && $_REQUEST['call_receive_from'] != '') {
@@ -350,7 +350,6 @@ if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                                                 <th>Dependency</th>
                                                 <th>Closure Time</th>
                                                 <th>Downtime</th>
-
                                             </tr>
                                         </thead>
                                         <tbody style="font-size: 12px;">

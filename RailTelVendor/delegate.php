@@ -1,5 +1,14 @@
 <? include('header.php'); ?>
 
+
+<style>
+  .swal2-popup {
+    background: white !important;
+}
+
+
+</style>
+
      
             <div class="pcoded-content">
                 <div class="pcoded-inner-content">
@@ -131,7 +140,7 @@
     });
 
     if (emptyFields.length > 0) {
-        swal("Error", "Please fill in all the required fields!", "error");
+        Swal.fire("Error", "Please fill in all the required fields!", "error");
         $('input, select').removeClass('highlight');
         $.each(emptyFields, function(index, fieldName) {
             $('[name="' + fieldName + '"]').addClass('highlight');
@@ -148,7 +157,7 @@
             success: function(response) {
                 console.log(response);
                 if (response == 200) {
-                    swal("Success", "Delegated Successfully!", "success");
+                    Swal.fire("Success", "Delegated Successfully!", "success");
                     setTimeout(function() {
                         window.location.href = "allLeads.php";
                     }, 3000); // Redirect after 3 seconds
@@ -178,7 +187,7 @@
     });
 
     if (emptyFields.length > 0) {
-        swal("Error", "Please fill in all the required fields!", "error");
+        Swal.fire("Error", "Please fill in all the required fields!", "error");
         $('input, select').removeClass('highlight');
         $.each(emptyFields, function(index, fieldName) {
             $('[name="' + fieldName + '"]').addClass('highlight');
@@ -195,12 +204,12 @@
             success: function(response) {
                 console.log(response);
                 if (response == 200) {
-                    swal("Success", "Delegated Successfully!", "success");
+                    Swal.fire("Success", "Delegated Successfully!", "success");
                     setTimeout(function() {
                         window.location.href = "allLeads.php";
                     }, 3000); // Redirect after 3 seconds
                 } else if (response == 202) {
-                    swal("Success", "Re-Delegated Successfully!", "success");
+                    Swal.fire("Success", "Delegated Successfully!", "success");
                     setTimeout(function() {
                         window.location.href = "allLeads.php";
                     }, 3000); // Redirect after 3 seconds

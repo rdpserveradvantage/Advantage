@@ -1,45 +1,28 @@
-<?php include('header.php'); 
+<?php include('header.php');
 
-function getMaterialRequestInitiatorName($siteid)
-{
-    global $con;
-    $sql = mysqli_query($con, "select * from material_requests where siteid='" . $siteid . "' and isProject=1");
-    $sql_result = mysqli_fetch_assoc($sql);
-    $vendorId = $sql_result['vendorId'];
-    return getVendorName($vendorId);
-}
-
-function getMaterialRequestStatus($siteid)
-{
-    global $con;
-    $sql = mysqli_query($con, "select status from material_requests where siteid='" . $siteid . "' and isProject=1");
-    $sql_result = mysqli_fetch_assoc($sql);
-    return $sql_result['status'];
-}
-
-function getMaterial_requestData($siteid, $parameter)
-{
-    global $con;
-    $sql = mysqli_query($con, "select $parameter from material_requests where siteid='" . $siteid . "' order by id desc");
-    $sql_result = mysqli_fetch_assoc($sql);
-    return $sql_result[$parameter];
-}
-
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 ?>
 
+
 <style>
+    .swal2-popup{
+        background: white !important;
+    }
     .error {
         border: 1px solid red;
     }
-    .nav-tabs .slide{
+
+    .nav-tabs .slide {
+        width: calc(100% / 2);
+    }
+
+
+    #materialRequest .nav-item {
         width: calc(100% / 2) !important;
     }
-    
-
-.md-tabs .nav-item {
-    width: calc(100% / 2) !important;
-}
 </style>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
@@ -63,20 +46,23 @@ function getMaterial_requestData($siteid, $parameter)
                         $offset = ($currentPage - 1) * $recordsPerPage;
                         ?>
 
-                        <ul class="nav nav-tabs md-tabs" role="tablist">
+                        <ul class="nav nav-tabs md-tabs" id="materialRequest" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#fresh-requests" role="tab" aria-selected="true">Installation Requests</a>
+                                <a class="nav-link active" data-toggle="tab" href="#fresh-requests" role="tab"
+                                    aria-selected="true">Installation Material Requests</a>
                                 <div class="slide"></div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#service-requests" role="tab" aria-selected="false">Service Requests</a>
+                                <a class="nav-link" data-toggle="tab" href="#service-requests" role="tab"
+                                    aria-selected="false">Service Material Requests</a>
                                 <div class="slide"></div>
                             </li>
                         </ul>
 
                         <div class="tab-content">
                             <!-- Fresh Requests Tab -->
-                            <div class="tab-pane fade show active" id="fresh-requests" role="tabpanel" aria-labelledby="fresh-requests-tab">
+                            <div class="tab-pane fade show active" id="fresh-requests" role="tabpanel"
+                                aria-labelledby="fresh-requests-tab">
 
                                 <div class="card-body" style="overflow:auto;">
                                     <?
@@ -102,7 +88,6 @@ function getMaterial_requestData($siteid, $parameter)
                                                 <tr class="table-primary">
                                                     <th>Srno</th>
                                                     <th>ATMID</th>
-                                                    <th>Address</th>
                                                     <th>City</th>
                                                     <th>State</th>
                                                     <th>Vendor</th>
@@ -113,6 +98,8 @@ function getMaterial_requestData($siteid, $parameter)
                                                     <th>Action</th>
                                                     <th>Current Status</th>
                                                     <th>Date</th>
+                                                    <th>Address</th>
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -164,16 +151,30 @@ function getMaterial_requestData($siteid, $parameter)
                                                         $configurationError++;
                                                     }
 
-                                                ?>
+                                                    ?>
                                                     <tr>
-                                                        <td><?= $counter; ?></td>
-                                                        <td><?= $atmid; ?></td>
-                                                        <td><?= $address; ?></td>
-                                                        <td><?= $city; ?></td>
-                                                        <td><?= $state; ?></td>
-                                                        <td><?= getMaterialRequestInitiatorName($siteid); ?></td>
-                                                        <td><?= $ipRemark; ?></td>
-                                                        <td><?= $configurationRemark; ?></td>
+                                                        <td>
+                                                            <?= $counter; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $atmid; ?>
+                                                        </td>
+                                                       
+                                                        <td>
+                                                            <?= $city; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $state; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= getMaterialRequestInitiatorName($siteid); ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $ipRemark; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $configurationRemark; ?>
+                                                        </td>
                                                         <td>
                                                             <?php
                                                             if ($configurationError + $error > 0) {
@@ -182,10 +183,17 @@ function getMaterial_requestData($siteid, $parameter)
                                                                 <a href="sendMaterial.php?siteid=<?= $siteid; ?>">Send Material</a>
                                                             <?php } ?>
                                                         </td>
-                                                        <td><?= getMaterialRequestStatus($siteid); ?></td>
-                                                        <td><?= getMaterial_requestData($siteid, 'created_at'); ?></td>
+                                                        <td>
+                                                            <?= getMaterialRequestStatus($siteid); ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= getMaterial_requestData($siteid, 'created_at'); ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $address; ?>
+                                                        </td>
                                                     </tr>
-                                                <?php
+                                                    <?php
                                                     $counter++;
                                                 } ?>
                                             </tbody>
@@ -197,15 +205,18 @@ function getMaterial_requestData($siteid, $parameter)
                                         ?>
                                         <div class="pagination">
                                             <ul>
-                                                <?php for ($page = 1; $page <= $totalPages; $page++) : ?>
-                                                    <li class="<?php if ($page == $currentPage) echo 'active'; ?>">
-                                                        <a href="?page=<?= $page; ?>"><?= $page; ?></a>
+                                                <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                                    <li class="<?php if ($page == $currentPage)
+                                                        echo 'active'; ?>">
+                                                        <a href="?page=<?= $page; ?>">
+                                                            <?= $page; ?>
+                                                        </a>
                                                     </li>
                                                 <?php endfor; ?>
                                             </ul>
                                         </div>
 
-                                    <?php
+                                        <?php
                                     } else {
                                         echo '<div class="noRecordsContainer">
                                         <img src="assets/no_records.jpg">
@@ -216,14 +227,14 @@ function getMaterial_requestData($siteid, $parameter)
                             </div>
 
                             <!-- Service Requests Tab -->
-                            <div class="tab-pane fade" id="service-requests" role="tabpanel" aria-labelledby="service-requests-tab">
+                            <div class="tab-pane fade" id="service-requests" role="tabpanel"
+                                aria-labelledby="service-requests-tab">
 
                                 <div class="card-body" style="overflow:auto;">
 
                                     <?
-                                    echo "select * from vendormaterialrequest where status=0 and requestToInventory=1" ; 
-                                    
-                                    $serviceRequest = mysqli_query($con, "select * from vendormaterialrequest where status=0 and requestToInventory=1");
+                                    echo "select * from vendormaterialrequest where status=0 and requestToInventory=1 and sentFromInventory=0" ; 
+                                    $serviceRequest = mysqli_query($con, "select * from vendormaterialrequest where status=0 and requestToInventory=1 and sentFromInventory=0");
                                     if (mysqli_num_rows($serviceRequest) > 0) {
 
                                         echo "<table class='table table-hover table-styling table-xs'>
@@ -234,6 +245,7 @@ function getMaterial_requestData($siteid, $parameter)
                                             <th>Vendor</th>
                                             <th>ATMID</th>
                                             <th>Material</th>
+                                            <th>Quantity</th>
                                             <th>Condition</th>
                                             <th>Requested At</th>
                                             <th>Availabilty</th>
@@ -252,27 +264,33 @@ function getMaterial_requestData($siteid, $parameter)
                                             $materialName = $serviceRequestResult['materialName'];
                                             $materialCondition = $serviceRequestResult['materialCondition'];
                                             $requestToInventoryDate = $serviceRequestResult['requestToInventoryDate'];
-
+                                            $material_qty = $serviceRequestResult['material_qty'];
                                             $checkInventory = mysqli_query($con, "select material,count(1) as materialCount from inventory where material like '" . trim($materialName) . "' and status=1 group by material having count(1) > 0");
                                             if ($checkInventoryResult = mysqli_fetch_assoc($checkInventory)) {
                                                 $matName = $checkInventoryResult['material'];
                                                 $matCount = $checkInventoryResult['materialCount'];
                                                 $availability = $matCount . ' In Stock ';
-                                                $availabilityStatus=1;
-                                            }else{
+                                                $availabilityStatus = 1;
+                                            } else {
                                                 $availability = 'Not Available';
-                                                $availabilityStatus=0;
+                                                $availabilityStatus = 0;
                                             }
                                             echo "<tr>
                                                     <td>$srno</td>
                                                     <td>
+                                                    
                                                     <button class='send-material btn btn-primary' data-materialName='$materialName'
-                                                    data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-vendorid='$vendorId'>Send Material</button> 
-                                                |   <button class='btn btn-danger'>Request Reject</button>
+                                                    data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-vendorid='$vendorId' data-material_qty='$material_qty'>Send Material</button> 
+                                                |   
+                                                
+                                                <button class='reject-request btn btn-danger' data-materialName='$materialName'
+                                                    data-id='$id' data-siteid='$siteid' data-atmid='$atmid' data-vendorid='$vendorId' data-material_qty='$material_qty'>Request Reject</button> 
+                                                
                                                     </td>
                                                     <td>$vendorName</td>
                                                     <td>$atmid</td>
                                                     <td>$materialName</td>
+                                                    <td>$material_qty</td>
                                                     <td>$materialCondition</td>
                                                     <td>$requestToInventoryDate</td>
                                                     <td>$availability</td>
@@ -323,17 +341,24 @@ function getMaterial_requestData($siteid, $parameter)
                     <input type="hidden" name="vendorId" value="<?php echo $vendorId; ?>">
                     <input type="hidden" name="attribute" value="<?php echo htmlentities(serialize($attributes)); ?>">
                     <input type="hidden" name="values" value="<?php echo htmlentities(serialize($values)); ?>">
-                    <input type="hidden" name="serialNumbers" value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
-
+                    <input type="hidden" name="serialNumbers"
+                        value="<?php echo htmlentities(serialize($serialNumbers)); ?>">
 
                     <div class="row">
                         <div class="col-sm-6">
                             <label for="">Material</label>
                             <input type="text" name="attribute" id="material" class="form-control" value="" readonly>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <label for="">Serial Number</label>
-                            <input type="text" name="serialNumbers" id="serialNumbers" class="form-control" value="" required>
+                            <input type="text" name="serialNumbers" id="serialNumbers" class="form-control" value=""
+                                required>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="">Quantity</label>
+                            <input type="text" name="material_qty" id="material_qty" class="form-control" value=""
+                                required readonly>
                         </div>
 
                     </div>
@@ -368,7 +393,8 @@ function getMaterial_requestData($siteid, $parameter)
                     <div class="row">
                         <div class="col-sm-12">
                             <br>
-                            <input type="submit" name="submit" class="btn btn-primary" onclick="submitForm(event);" id="submitButton" value="Submit">
+                            <input type="submit" name="submit" class="btn btn-primary" onclick="submitForm(event);"
+                                id="submitButton" value="Submit">
                         </div>
                     </div>
                 </form>
@@ -384,23 +410,71 @@ function getMaterial_requestData($siteid, $parameter)
 
 
 <script>
-    $(document).ready(function() {
-        $('.send-material').click(function() {
+    $(document).ready(function () {
 
+        $(".reject-request").on('click', function () {
+            if (confirm('Are you sure to delete this request ?')) {
+
+                var id = $(this).data('id');
+                var siteid = $(this).data('siteid');
+                var atmid = $(this).data('atmid');
+                var materialName = $(this).data('materialname');
+                var vendorId = $(this).data('vendorid');
+                var material_qty = $(this).data('material_qty');
+
+                $.ajax({
+
+                    type: "POST",
+                    url: 'reject-materialRequest.php',
+                    data: 'id='+id,
+                    success: function (msg) {
+
+                        if (msg == '1') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Request Rejected !',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = './materialRequest.php';
+                                }
+                            });
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Cancelled !',
+                            });
+                        }
+
+
+
+                    }
+                });
+            } else {
+                alert('Canceled');
+            }
+        });
+
+
+
+        $('.send-material').click(function () {
             var id = $(this).data('id');
             var siteid = $(this).data('siteid');
             var atmid = $(this).data('atmid');
             var materialName = $(this).data('materialname');
             var vendorId = $(this).data('vendorid');
+            var material_qty = $(this).data('material_qty');
+
 
             $('#sendFromStockModal').find('[name="id"]').val(id);
             $('#sendFromStockModal').find('[name="atmid"]').val(atmid);
             $('#sendFromStockModal').find('[name="siteid"]').val(siteid);
             $('#sendFromStockModal').find('[name="vendorId"]').val(vendorId);
             $('#sendFromStockModal').find('[name="attribute"]').val(materialName); //attribute = material_name
-
+            $('#sendFromStockModal').find('[name="material_qty"]').val(material_qty); //attribute = material_name
             $('#sendFromStockModal').modal('show');
-
         });
 
 
@@ -416,7 +490,7 @@ function getMaterial_requestData($siteid, $parameter)
                 type: 'POST',
                 url: 'process_IndividualMaterialSend.php',
                 data: formData,
-                success: function(response) {
+                success: function (response) {
                     console.log(response);
                     var responseData = JSON.parse(response);
                     if (responseData.status == '200') {
@@ -424,7 +498,12 @@ function getMaterial_requestData($siteid, $parameter)
                             icon: 'success',
                             title: 'Success',
                             text: responseData.message,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = './materialRequest.php';
+                            }
                         });
+
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -433,7 +512,7 @@ function getMaterial_requestData($siteid, $parameter)
                         });
                     }
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                     Swal.fire({
                         icon: 'error',
@@ -449,7 +528,7 @@ function getMaterial_requestData($siteid, $parameter)
 
     function validateForm() {
         var isValid = true;
-        $('#vendorForm [required]').each(function() {
+        $('#vendorForm [required]').each(function () {
             if ($(this).val().trim() == '') {
                 isValid = false;
                 $(this).addClass('error');

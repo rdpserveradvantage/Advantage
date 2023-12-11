@@ -1,6 +1,38 @@
 <? include('config.php');
 
-return ; 
+
+$sql = mysqli_query($con, "SELECT * FROM material_send where vendorId='2'");
+while ($sqlResult = mysqli_fetch_assoc($sql)) {
+    echo $id = $sqlResult['id'];
+    echo '<br>';
+
+    $sq = mysqli_query($con, "select * from material_send_details where materialSendId='" . $id . "'");
+    while ($sqResult = mysqli_fetch_assoc($sq)) {
+        echo $attribute = $sqResult['attribute'];
+        echo ' - ';
+        
+        echo $serialNumber = $sqResult['serialNumber'];
+
+        echo '<br>';
+
+
+        $vendorInventorySql = "insert into vendorInventory(vendorId, material, material_make, model_no, serial_no,  amount, gst, amount_with_gst, 
+        courier_detail, tracking_details,  created_at, created_by, status) 
+        values('2','" . $attribute . "', '" . $material_make . "', '" . $model_no . "', '" . $serial_no . "',  '" . $amount . "',
+        '" . $gst . "', '" . $amount_with_gst . "', '" . $courier . "', '" . $po_number . "', '" . $datetime . "', '" . $userid . "',0)";
+
+
+    }
+
+    echo '<br>';
+    echo '<br>';
+
+}
+
+
+
+
+return;
 
 $sql = mysqli_query($con, "SELECT * FROM `inventory` WHERE `material` LIKE 'Lan Cable'");
 $sqlResult = mysqli_fetch_assoc($sql);

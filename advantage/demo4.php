@@ -6,7 +6,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-$query = "select * from boq where status=1";
+$query = "select * from boq where status=1 and value='Router'";
 $result = mysqli_query($con, $query);
 $data = array();
 while ($row = mysqli_fetch_assoc($result)) {
@@ -132,7 +132,7 @@ while ($vendorRow = mysqli_fetch_assoc($vendorQuery)) {
 
                 foreach ($vendorIds as $vendorId => $vendorKey): ?>
                     <?php
-
+echo 
                     $matCountSql = "SELECT COUNT(1) as assignedCount FROM vendorinventory WHERE material='" . trim($materialName[$i]) . "' AND vendorId=$vendorKey";
 
                     $assignedCountSql = mysqli_query($con, $matCountSql);

@@ -24,14 +24,16 @@
 
                                     <div class="col-sm-12">
                                         <label>ATM ID</label>
-                                        <input type="text" name="atmid" class="form-control" value="<?= $_REQUEST['atmid']; ?>" placeholder="Enter ATM ID ..." />
+                                        <input type="text" name="atmid" class="form-control"
+                                            value="<?= $_REQUEST['atmid']; ?>" placeholder="Enter ATM ID ..." />
                                     </div>
 
                                 </div>
                                 <br>
                                 <div class="col" style="display:flex;justify-content:center;">
                                     <input type="submit" name="submit" value="Filter" class="btn btn-primary">
-                                    <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
+                                    <a class="btn btn-warning" id="hide_filter"
+                                        style="color:white;margin:auto 10px;">Hide Filters</a>
                                 </div>
 
                             </form>
@@ -52,8 +54,8 @@
 
 
 
-                    $atm_sql .=  "  order by id desc";
-                    $sqlappCount .=  " ";
+                    $atm_sql .= "  order by id desc";
+                    $sqlappCount .= " ";
 
                     $page_size = 10;
                     $result = mysqli_query($con, $sqlappCount);
@@ -67,8 +69,8 @@
                     $end_window = min($start_window + $window_size - 1, $total_pages);
                     $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     // }
-                    // echo $sql_query ; 
-
+                    echo $sql_query ; 
+                    
 
 
 
@@ -78,7 +80,9 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h5>Total Records: <strong class="record-count"><? echo $total_records; ?></strong></h5>
+                            <h5>Total Records: <strong class="record-count">
+                                    <? echo $total_records; ?>
+                                </strong></h5>
 
                             <hr>
                             <form action="exportInventorySend.php" method="POST">
@@ -99,13 +103,13 @@
                                         <th>Status</th>
                                         <th>Actions</th>
                                         <th>Vendor</th>
-                                        <th>Address</th>
                                         <th>Contact Person</th>
                                         <th>Contact Number</th>
                                         <th>POD</th>
                                         <th>Courier</th>
                                         <th>Remark</th>
                                         <th>Date</th>
+                                        <th>Address</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -141,19 +145,20 @@
                                         echo "<td>$counter</td>";
                                         echo "<td class='strong'>$atmid</td>";
                                         echo "<td class='strong text-center'>" .
-                                        ($isDelivered == 1 ?
-                                            '<img src="http://103.216.208.241/assets/deliverydone.png" title="Delivered" alt="Delivered" class="deliveredImg" />' :
-                                            'In-Transit') . "</td>";
+                                            ($isDelivered == 1 ?
+                                                '<img src="http://103.216.208.241/assets/deliverydone.png" title="Delivered" alt="Delivered" class="deliveredImg" />' :
+                                                'In-Transit') . "</td>";
+
                                         echo "<td>" . ($ifExistTrackingUpdate == 1 ? 'View' : "<a href='updateMaterialSentTracking.php?id={$id}&siteid={$siteid}&atmid={$atmid}'>Update</a>") . "</td>";
 
                                         echo "<td>$vendorName</td>";
-                                        echo "<td>$address</td>";
                                         echo "<td>$contactPerson</td>";
                                         echo "<td>$contactNumber</td>";
                                         echo "<td>$pod</td>";
                                         echo "<td>$courier</td>";
                                         echo "<td>$remark</td>";
                                         echo "<td>$date</td>";
+                                        echo "<td>$address</td>";
                                         echo "</tr>";
                                         echo "<tr id='details-$id' class='collapse'>";
                                         echo "<td colspan='9'>";
@@ -194,12 +199,12 @@
                             }
 
                             for ($i = $start_window; $i <= $end_window; $i++) {
-                            ?>
+                                ?>
                                 <li class="<? if ($i == $current_page) {
-                                                echo 'active';
-                                            } ?>">
+                                    echo 'active';
+                                } ?>">
                                     <a href="?page=<?= $i; ?>&&atmid=<?= $atmid; ?>">
-                                        <?= $i;  ?>
+                                        <?= $i; ?>
                                     </a>
                                 </li>
 

@@ -96,6 +96,7 @@
                                             <tr class='table-primary'>
                                                 <th>Srno</th>
                                                 <th>ATMID</th>
+                                                <th>Serial Number</th>
                                                 <th>Status</th>
                                                 <th>Update Action</th>
                                                 <th>Contact Person</th>
@@ -116,7 +117,6 @@
                                 $sql_app = mysqli_query($con, $sql_query);
                                 while ($sql_result = mysqli_fetch_assoc($sql_app)) {
 
-                                    // while ($sql_result = mysqli_fetch_assoc($sql)) {
                                     $id = $sql_result['id'];
                                     $siteid = $sql_result['siteid'];
                                     $atmid = $sql_result['atmid'];
@@ -130,6 +130,15 @@
                                     $remark = $sql_result['remark'];
                                     $date = $sql_result['created_at'];
                                     $isDelivered = $sql_result['isDelivered'];
+
+
+
+                                    $detailssql = mysqli_query($con,"select * from material_send_details where materialSendId='".$id."' and attribute='Router'");
+                                    $detailssqlResult = mysqli_fetch_assoc($detailssql) ;
+
+                                    $serialNumber = $detailssqlResult['serialNumber'];
+
+
 
                                     $againSend = mysqli_query($con, "select * from vendorMaterialSend where materialSendId='" . $id . "'");
                                     if ($againSendResult = mysqli_fetch_assoc($againSend)) {
@@ -165,6 +174,7 @@
                                     echo "<tr class='clickable-row' data-toggle='collapse' data-target='#details-$id'>";
                                     echo "<td>$counter</td>";
                                     echo "<td class='strong'>$atmid</td>";
+                                    echo "<td class='strong'>$serialNumber</td>";
                                     echo "<td class='strong'>" .
                                         ($isDelivered == 1 ? 'Delivered' : 'In-Transit') . "</td>";
                                     echo "<td>" . ($ifExistTrackingUpdate == 1 ?

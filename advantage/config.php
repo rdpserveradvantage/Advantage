@@ -349,4 +349,33 @@ function isImageFile($fileName) {
 }
 
 
+
+function getMaterialRequestInitiatorName($siteid)
+{
+    global $con;
+    $sql = mysqli_query($con, "select * from material_requests where siteid='" . $siteid . "' and isProject=1");
+    $sql_result = mysqli_fetch_assoc($sql);
+    $vendorId = $sql_result['vendorId'];
+    return getVendorName($vendorId);
+}
+
+function getMaterialRequestStatus($siteid)
+{
+    global $con;
+    $sql = mysqli_query($con, "select status from material_requests where siteid='" . $siteid . "' and isProject=1");
+    $sql_result = mysqli_fetch_assoc($sql);
+    return $sql_result['status'];
+}
+
+function getMaterial_requestData($siteid, $parameter)
+{
+    global $con;
+    $sql = mysqli_query($con, "select $parameter from material_requests where siteid='" . $siteid . "' order by id desc");
+    $sql_result = mysqli_fetch_assoc($sql);
+    return $sql_result[$parameter];
+}
+
+
+
+
 ?>

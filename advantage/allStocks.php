@@ -1,26 +1,51 @@
 <?php include('header.php'); ?>
 
+<style>
+    .colinfo {
+        border: 1px solid;
+        padding: 10px;
+        text-align: center;
+    }
+    .qty{
+        font-size: 20px;
+    }
+    
+    .colinfo{
+        background-color: #01a9ac;
+        color: white;
+    }
+    .colinfo:hover{
+        background-color: white;
+        color: black;
+    }
+    .material, .qty{
+        font-weight: bolder;
+    }
+</style>
+
 
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
-
                     <div class="card" id="filter">
                         <div class="card-block">
-
                             <form id="sitesForm" action="<?php echo basename(__FILE__); ?>" method="POST">
                                 <div class="row">
 
                                     <div class="col-sm-3">
                                         <label>Stock</label>
                                         <select name="status" class="form-control">
-                                            <option value="0" <? if($_REQUEST['status']=='0') { echo 'selected';} ?> >ALL</option>
-                                            <option value="1" <? if($_REQUEST['status']=='1') { echo 'selected';} ?>>AVAILABLE</option>
+                                            <option value="0" <? if ($_REQUEST['status'] == '0') {
+                                                echo 'selected';
+                                            } ?>>ALL</option>
+                                            <option value="1" <? if ($_REQUEST['status'] == '1') {
+                                                echo 'selected';
+                                            } ?>>AVAILABLE</option>
                                         </select>
                                     </div>
-                                            
+
                                     <div class="col-sm-3">
                                         <label>Material</label>
                                         <select name="material" class="form-control">
@@ -29,11 +54,11 @@
                                             $i = 0;
                                             $materiallist = mysqli_query($con, "SELECT distinct(material) as material from Inventory where status=1 ");
                                             while ($fetch_data = mysqli_fetch_assoc($materiallist)) {
-                                            ?>
+                                                ?>
 
                                                 <option value="<?php echo $fetch_data['material'] ?>" <?php if ($fetch_data['material'] == $_REQUEST['material']) {
-                                                                                                            echo 'selected';
-                                                                                                        }  ?>>
+                                                       echo 'selected';
+                                                   } ?>>
                                                     <?php echo $fetch_data['material']; ?>
                                                 </option>
                                             <?php } ?>
@@ -43,7 +68,9 @@
 
                                     <div class="col-sm-3">
                                         <label>Serial Number</label>
-                                        <input type="text" name="serialNumber" class="form-control" value="<?= $_REQUEST['serialNumber']; ?>" placeholder="Enter Serial Number ..." />
+                                        <input type="text" name="serialNumber" class="form-control"
+                                            value="<?= $_REQUEST['serialNumber']; ?>"
+                                            placeholder="Enter Serial Number ..." />
                                     </div>
 
                                     <div class="col-sm-3">
@@ -59,7 +86,8 @@
                                 <br>
                                 <div class="col" style="display:flex;justify-content:center;">
                                     <input type="submit" name="submit" value="Filter" class="btn btn-primary">
-                                    <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
+                                    <a class="btn btn-warning" id="hide_filter"
+                                        style="color:white;margin:auto 10px;">Hide Filters</a>
                                 </div>
 
                             </form>
@@ -71,7 +99,7 @@
                     // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                     $sqlappCount = "select count(1) as total from Inventory where 1 ";
                     $atm_sql = "select id,material,material_make,model_no,serial_no,challan_no,amount,gst,amount_with_gst,courier_detail,tracking_details,
-                            date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at,inventoryType
+                            date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at,inventoryType,status
                                 from Inventory where 1 ";
 
                     if (isset($_REQUEST['material']) && $_REQUEST['material'] != '') {
@@ -79,21 +107,20 @@
                         $atm_sql .= "and material like '" . $material . "'";
                         $sqlappCount .= "and material like '" . $material . "'";
                     }
-                    
+
                     if (isset($_REQUEST['status']) && $_REQUEST['status'] != '') {
                         $status = $_REQUEST['status'];
-                        if($status=='0'){
+                        if ($status == '0') {
                             $atm_sql .= " and status in (0,1) ";
-                            $sqlappCount .= " and status in(0,1) ";                            
-                        }else if($status=='1'){
+                            $sqlappCount .= " and status in(0,1) ";
+                        } else if ($status == '1') {
                             $atm_sql .= " and status in (1) ";
                             $sqlappCount .= " and status in(1) ";
                         }
-
                     }
-                    
-                    
-                    
+
+
+
                     if (isset($_REQUEST['serialNumber']) && $_REQUEST['serialNumber'] != '') {
                         $serialNumber = $_REQUEST['serialNumber'];
                         $atm_sql .= "and serial_no like '%" . $serialNumber . "%'";
@@ -108,8 +135,8 @@
 
 
 
-                    $atm_sql .=  "  order by id desc";
-                    $sqlappCount .=  " ";
+                    $atm_sql .= "  order by id desc";
+                    $sqlappCount .= " ";
 
                     $page_size = 10;
                     $result = mysqli_query($con, $sqlappCount);
@@ -123,8 +150,8 @@
                     $end_window = min($start_window + $window_size - 1, $total_pages);
                     $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     // }
-                    // echo $sql_query ; 
-
+                    // echo $atm_sql;
+                    
 
 
 
@@ -134,20 +161,48 @@
                     <div class="card">
                         <div class="card-block" style="overflow:auto;">
 
-                        <div class="card-header">
-                                        <h5>Total Records: <strong class="record-count"><? echo $total_records; ?></strong></h5>
+                            <div class="row">
 
-                                        <hr>
-                                        <form action="exportInventoryRecords.php" method="POST">
-                                            <input type="hidden" name="exportSql" value="<?= $atm_sql ; ?>">
-                                            <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
-                                        </form>
+                                <?
 
+                                $groupsql = mysqli_query($con, "select material,count(1) as total from Inventory group by material");
+                                while ($groupsqlResult = mysqli_fetch_assoc($groupsql)) {
+                                    $material = $groupsqlResult['material'];
+                                    $total = $groupsqlResult['total'];
+                                    ?>
+
+                                    <div class="col-sm-2" style="margin: 5px auto;">
+                                        <div class="colinfo">
+                                            <div class="qty">
+                                                <?= $total ?>
+                                            </div>
+                                            <div class="material">
+                                                <?= $material ; ?>
+                                            </div>
+                                        </div>
                                     </div>
+                                <?
+                                }
+                                ?>
+
+                            </div>
+
+                            <hr />
+                            <div class="card-header">
+                                <h5>Total Records: <strong class="record-count">
+                                        <? echo $total_records; ?>
+                                    </strong></h5>
+                                <hr>
+                                <form action="exportInventoryRecords.php" method="POST">
+                                    <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
+                                    <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
+                                </form>
+
+                            </div>
 
 
                             <!-- <div style="display:flex;justify-content:space-around;">
-                                <h5 style="text-align:center;">All Stocks - <p>Total Records- <?= $total_records;  ?></p>
+                                <h5 style="text-align:center;">All Stocks - <p>Total Records- <?= $total_records; ?></p>
                                 </h5>
 
                                 <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show Filters</a>
@@ -155,10 +210,11 @@
 
 
 
-                            <table id="example" class="table table-bordered table-striped table-hover dataTable js-exportable no-footer" style="width:100%">
+                            <table class="table table-hover table-styling table-xs">
                                 <thead>
                                     <tr class="table-primary">
                                         <th>Sr no</th>
+                                        <th>Actions</th>
                                         <th>material</th>
                                         <th>material_make</th>
                                         <th>model_no</th>
@@ -186,7 +242,7 @@
                                     $counter = ($current_page - 1) * $page_size + 1;
                                     $sql_app = mysqli_query($con, $sql_query);
                                     while ($row = mysqli_fetch_assoc($sql_app)) {
-
+                                        $materialId = $row['id'];
                                         $material = $row['material'];
                                         $material_make = $row['material_make'];
                                         $model_no = $row['model_no'];
@@ -204,31 +260,74 @@
                                         $po_date = $row['po_date'];
                                         $po_number = $row['po_number'];
                                         $inventoryType = $row['inventoryType'];
-
+                                        $invstatus = $row['status'];
                                         echo '<tr>';
-                                    ?>
+                                        ?>
+                                        <td>
+                                            <?= $counter; ?>
+                                        </td>
+                                        <td>
+                                            <?
+                                            if ($invstatus == 0) {
+                                            } else if ($invstatus == 1) {
+                                                echo '<a href="sendIndividualMaterial.php?materialId=' . $materialId . '" >Send Material</a>';
+                                            }
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?= $material; ?>
+                                        </td>
+                                        <td>
+                                            <?= $material_make; ?>
+                                        </td>
+                                        <td>
+                                            <?= $model_no; ?>
+                                        </td>
+                                        <td>
+                                            <?= $serial_no; ?>
+                                        </td>
+                                        <td>
+                                            <?= $challan_no; ?>
+                                        </td>
+                                        <td>
+                                            <?= $amount; ?>
+                                        </td>
+                                        <td>
+                                            <?= $gst; ?>
+                                        </td>
+                                        <td>
+                                            <?= $amount_witd_gst; ?>
+                                        </td>
+                                        <td>
+                                            <?= $courier_detail; ?>
+                                        </td>
+                                        <td>
+                                            <?= $tracking_details; ?>
+                                        </td>
+                                        <td>
+                                            <?= $date_of_receiving; ?>
+                                        </td>
+                                        <td>
+                                            <?= $receiver_name; ?>
+                                        </td>
+                                        <td>
+                                            <?= $vendor_name; ?>
+                                        </td>
+                                        <td>
+                                            <?= $vendor_contact; ?>
+                                        </td>
+                                        <td>
+                                            <?= $po_date; ?>
+                                        </td>
+                                        <td>
+                                            <?= $po_number; ?>
+                                        </td>
+                                        <td>
+                                            <?= $inventoryType; ?>
+                                        </td>
 
-                                        <td><?= $counter; ?></td>
-                                        <td class="strong"><?= $material; ?></td>
-                                        <td><?= $material_make; ?></td>
-                                        <td><?= $model_no; ?></td>
-                                        <td><?= $serial_no; ?></td>
-                                        <td><?= $challan_no; ?></td>
-                                        <td><?= $amount; ?></td>
-                                        <td><?= $gst; ?></td>
-                                        <td><?= $amount_witd_gst; ?></td>
-                                        <td><?= $courier_detail; ?></td>
-                                        <td><?= $tracking_details; ?></td>
-                                        <td><?= $date_of_receiving; ?></td>
-                                        <td><?= $receiver_name; ?></td>
-                                        <td><?= $vendor_name; ?></td>
-                                        <td><?= $vendor_contact; ?></td>
-                                        <td><?= $po_date; ?></td>
-                                        <td><?= $po_number; ?></td>
-                                        <td><?= $inventoryType; ?></td>
 
-
-                                    <?
+                                        <?
 
                                         // Display other record fields as table cells
                                         echo '</tr>';
@@ -250,12 +349,12 @@
                             }
 
                             for ($i = $start_window; $i <= $end_window; $i++) {
-                            ?>
+                                ?>
                                 <li class="<? if ($i == $current_page) {
-                                                echo 'active';
-                                            } ?>">
+                                    echo 'active';
+                                } ?>">
                                     <a href="?page=<?= $i; ?>&&material=<?= $material_name; ?>">
-                                        <?= $i;  ?>
+                                        <?= $i; ?>
                                     </a>
                                 </li>
 
@@ -286,11 +385,11 @@
 <script>
     $("#show_filter").css('display', 'none');
 
-    $("#hide_filter").on('click', function() {
+    $("#hide_filter").on('click', function () {
         $("#filter").css('display', 'none');
         $("#show_filter").css('display', 'block');
     });
-    $("#show_filter").on('click', function() {
+    $("#show_filter").on('click', function () {
         $("#filter").css('display', 'block');
         $("#show_filter").css('display', 'none');
     });

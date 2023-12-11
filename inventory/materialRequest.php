@@ -81,7 +81,6 @@
                                                 <tr class="table-primary">
                                                     <th>Srno</th>
                                                     <th>ATMID</th>
-                                                    <th>Address</th>
                                                     <th>City</th>
                                                     <th>State</th>
                                                     <th>Vendor</th>
@@ -92,6 +91,8 @@
                                                     <th>Action</th>
                                                     <th>Current Status</th>
                                                     <th>Date</th>
+                                                    <th>Address</th>
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -151,9 +152,7 @@
                                                         <td>
                                                             <?= $atmid; ?>
                                                         </td>
-                                                        <td>
-                                                            <?= $address; ?>
-                                                        </td>
+                                                       
                                                         <td>
                                                             <?= $city; ?>
                                                         </td>
@@ -182,6 +181,9 @@
                                                         </td>
                                                         <td>
                                                             <?= getMaterial_requestData($siteid, 'created_at'); ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $address; ?>
                                                         </td>
                                                     </tr>
                                                     <?php

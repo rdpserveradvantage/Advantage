@@ -64,7 +64,8 @@
                                         $i = 1;
                                         $materials_sql = mysqli_query($con, "SELECT *  FROM `material_send_details` WHERE `materialSendId` = '" . $materialSendId . "'");
                                         while ($materials_sql_result = mysqli_fetch_assoc($materials_sql)) {
-                                            echo '<b>' . $i . '</b>' . ') ' . $matName = $materials_sql_result['attribute'];
+                                            echo '<b>' . $i . '</b>' . ') ' . $matName = $materials_sql_result['attribute'] ;
+                                            echo ' - ' . $materials_sql_result['serialNumber'];
                                             echo '<br>';
                                             $i++;
                                         }

@@ -16,7 +16,7 @@
 
                             <?
 
-                          $statement = "SELECT * FROM materialRequestId WHERE requestByPortal='vendor' and requestForPortal IN ('advantage','inventory') 
+                          $statement = "SELECT * FROM generatefaultymaterialrequest WHERE requestByPortal='vendor' and requestForPortal IN ('advantage','inventory') 
                             and requestFor=1 and status=1";
                             $sql = mysqli_query($con, $statement);
 
@@ -49,7 +49,7 @@
 
               </tr>";
 
-                                    $detailsSql = mysqli_query($con, "SELECT * FROM materialRequestIddetails WHERE requestId='" . $id . "'");
+                                    $detailsSql = mysqli_query($con, "SELECT * FROM generatefaultymaterialrequestdetails WHERE requestId='" . $id . "'");
                                     $counter2 = 1;
 
                                     while ($detailsSql_result = mysqli_fetch_assoc($detailsSql)) {

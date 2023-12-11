@@ -69,7 +69,7 @@
                     $end_window = min($start_window + $window_size - 1, $total_pages);
                     $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     // }
-                    // echo $sql_query ; 
+                    echo $sql_query ; 
                     
 
 

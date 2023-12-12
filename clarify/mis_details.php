@@ -267,7 +267,7 @@
 
                                         <?php if ($mis_status == 'open' || $mis_status == 'Open') { ?>
                                             <option value="">Select</option>
-                                            <option value="reassign"> Re-assign </option>
+                                            <option value="reassign"> Bank Dependency </option>
                                             <option value="material_requirement">Material Requirement</option>
                                             <option value="close">Close</option>
                                         <?php }

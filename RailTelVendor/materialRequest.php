@@ -22,7 +22,7 @@
                         <div class="card-body" style="overflow:auto;">
 
                             <?
-                            echo "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID . "' and status=1 and requestToInventory=0";
+                            // echo "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID . "' and status=1 and requestToInventory=0";
                             $srno = 1;
                             $sql = mysqli_query($con, "select * from vendormaterialrequest where vendorId='" . $RailTailVendorID . "' and status=1 and requestToInventory=0");
                             if (mysqli_num_rows($sql) > 0) {

@@ -21,6 +21,14 @@ if($uname && $password){
                 $_SESSION['VENDOR_userid'] = $sql_result['id'];
                 $_SESSION['VENDOR_level'] = $sql_result['level'];
                 $_SESSION['VENDOR_RailTailVendorID'] = $sql_result['vendorId'];
+                
+                $vendorId = $sql_result['vendorId'];
+                $vendorsSql= mysqli_query($con,"select * from vendor where id='".$vendorId."'");
+                $vendorsSqlResult = mysqli_fetch_assoc($vendorsSql) ; 
+                $vendorName = $vendorsSqlResult['vendorName'];
+                $_SESSION['VENDOR_RailTailVendorName'] = $vendorName ; 
+
+
                 $_SESSION['VENDOR_branch'] = $sql_result['branch'];
                 $_SESSION['VENDOR_zone'] = $sql_result['zone'];
                 $_SESSION['VENDOR_cust_id'] = $sql_result['cust_id'];

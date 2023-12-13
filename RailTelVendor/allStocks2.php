@@ -1,6 +1,15 @@
-<?php include('header.php'); ?>
+<?php include('header.php'); 
+
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
+?>
 
 <style>
+    html{
+        text-transform: inherit !important;
+    }
     .colinfo {
         border: 1px solid;
         padding: 10px;
@@ -52,7 +61,7 @@
                                             <option value="">-- Select Material --</option>
                                             <?php
                                             $i = 0;
-                                            $materiallist = mysqli_query($con, "SELECT distinct(material) as material from Inventory where status=1 ");
+                                            $materiallist = mysqli_query($con, "SELECT distinct(material) as material from vendorinventory where status=1 ");
                                             while ($fetch_data = mysqli_fetch_assoc($materiallist)) {
                                                 ?>
 
@@ -73,15 +82,7 @@
                                             placeholder="Enter Serial Number ..." />
                                     </div>
 
-                                    <div class="col-sm-3">
-                                        <label>Type</label>
-                                        <select name="thisInventoryType" class="form-control">
-                                            <option value="">--Select--</option>
-                                            <option value="Actual">Actual</option>
-                                            <option value="Internal">Internal</option>
-                                        </select>
-                                    </div>
-
+                                    
                                 </div>
                                 <br>
                                 <div class="col" style="display:flex;justify-content:center;">
@@ -96,11 +97,12 @@
 
 
                     <?php
+
                     // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
-                    $sqlappCount = "select count(1) as total from Inventory where 1 ";
+                    $sqlappCount = "select count(1) as total from vendorinventory where 1 ";
                     $atm_sql = "select id,material,material_make,model_no,serial_no,challan_no,amount,gst,amount_with_gst,courier_detail,tracking_details,
-                            date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at,inventoryType,status
-                                from Inventory where 1 ";
+                            date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at,status
+                                from vendorinventory where 1 ";
 
                     if (isset($_REQUEST['material']) && $_REQUEST['material'] != '') {
                         $material = $_REQUEST['material'];
@@ -125,12 +127,6 @@
                         $serialNumber = $_REQUEST['serialNumber'];
                         $atm_sql .= "and serial_no like '%" . $serialNumber . "%'";
                         $sqlappCount .= "and serial_no like '%" . $serialNumber . "%'";
-                    }
-
-                    if (isset($_REQUEST['thisInventoryType']) && $_REQUEST['thisInventoryType'] != '') {
-                        $thisInventoryType = $_REQUEST['thisInventoryType'];
-                        $atm_sql .= "and inventoryType like '%" . $thisInventoryType . "%'";
-                        $sqlappCount .= "and inventoryType like '%" . $thisInventoryType . "%'";
                     }
 
 
@@ -165,7 +161,7 @@
 
                                 <?
 
-                                $groupsql = mysqli_query($con, "select material,count(1) as total from Inventory group by material");
+                                $groupsql = mysqli_query($con, "select material,count(1) as total from vendorinventory group by material");
                                 while ($groupsqlResult = mysqli_fetch_assoc($groupsql)) {
                                     $material = $groupsqlResult['material'];
                                     $total = $groupsqlResult['total'];
@@ -193,22 +189,12 @@
                                         <? echo $total_records; ?>
                                     </strong></h5>
                                 <hr>
-                                <form action="exportInventoryRecords.php" method="POST">
+                                <!-- <form action="exportInventoryRecords.php" method="POST">
                                     <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
                                     <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
-                                </form>
+                                </form> -->
 
                             </div>
-
-
-                            <!-- <div style="display:flex;justify-content:space-around;">
-                                <h5 style="text-align:center;">All Stocks - <p>Total Records- <?= $total_records; ?></p>
-                                </h5>
-
-                                <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show Filters</a>
-                            </div> -->
-
-
 
                             <table class="table table-hover table-styling table-xs">
                                 <thead>
@@ -220,20 +206,12 @@
                                         <th>model_no</th>
                                         <th>serial_no</th>
                                         <th>challan_no</th>
-                                        <th>amount</th>
-                                        <th>gst</th>
-                                        <th>amount_with_gst</th>
+                                       
                                         <th>courier_detail</th>
                                         <th>tracking_details</th>
                                         <th>date_of_receiving</th>
                                         <th>receiver_name</th>
-                                        <th>vendor_name</th>
-                                        <th>vendor_contact</th>
-                                        <th>po_date</th>
-                                        <th>po_number</th>
-                                        <th>Type</th>
-
-                                        <!-- Add other column headers here -->
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -259,21 +237,31 @@
                                         $vendor_contact = $row['vendor_contact'];
                                         $po_date = $row['po_date'];
                                         $po_number = $row['po_number'];
-                                        $inventoryType = $row['inventoryType'];
                                         $invstatus = $row['status'];
+
+
+
+                                        $vendormaterialsendDetailsSql = mysqli_query($con,"select * from vendormaterialsenddetails where serialNumber='".$serial_no."'");
+                                        $vendormaterialsendDetailsSqlResult = mysqli_fetch_assoc($vendormaterialsendDetailsSql); 
+                                        $vendormaterialsendDetailsSqlID = $vendormaterialsendDetailsSqlResult['materialSendId'];
+
+                                        $vendormaterialsendSql = mysqli_query($con,"select * from vendormaterialsend where id='".$vendormaterialsendDetailsSqlID."'");
+                                        $vendormaterialsendSqlResult = mysqli_fetch_assoc($vendormaterialsendSql);
+
+                                        $contactPersonName = $vendormaterialsendSqlResult['contactPersonName'];
+                                        $contactPersonName = vendorUsersData($contactPersonName, 'name');
+
+
+
+
+
+
                                         echo '<tr>';
                                         ?>
                                         <td>
                                             <?= $counter; ?>
                                         </td>
-                                        <td>
-                                            <?
-                                            if ($invstatus == 0) {
-                                            } else if ($invstatus == 1) {
-                                                echo '<a href="sendIndividualMaterial.php?materialId=' . $materialId . '" >Send Material</a>';
-                                            }
-                                            ?>
-                                        </td>
+                                        <td><?= $contactPersonName; ?></td>
                                         <td>
                                             <?= $material; ?>
                                         </td>
@@ -289,15 +277,7 @@
                                         <td>
                                             <?= $challan_no; ?>
                                         </td>
-                                        <td>
-                                            <?= $amount; ?>
-                                        </td>
-                                        <td>
-                                            <?= $gst; ?>
-                                        </td>
-                                        <td>
-                                            <?= $amount_witd_gst; ?>
-                                        </td>
+                                       
                                         <td>
                                             <?= $courier_detail; ?>
                                         </td>
@@ -310,23 +290,7 @@
                                         <td>
                                             <?= $receiver_name; ?>
                                         </td>
-                                        <td>
-                                            <?= $vendor_name; ?>
-                                        </td>
-                                        <td>
-                                            <?= $vendor_contact; ?>
-                                        </td>
-                                        <td>
-                                            <?= $po_date; ?>
-                                        </td>
-                                        <td>
-                                            <?= $po_number; ?>
-                                        </td>
-                                        <td>
-                                            <?= $inventoryType; ?>
-                                        </td>
-
-
+                                        
                                         <?
 
                                         // Display other record fields as table cells

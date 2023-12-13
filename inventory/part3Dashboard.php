@@ -14,6 +14,7 @@ $qty = array();
 
 foreach ($materialName as $materialNameKey => $materialNameValue) {
 
+    echo "select count(1) as count from vendorinventory where status=0 and material='" . trim($materialNameValue) . "'" ; 
     $quantitySql = mysqli_query($con, "select count(1) as count from vendorinventory where status=0 and material='" . trim($materialNameValue) . "'");
     $quantitySqlResult = mysqli_fetch_assoc($quantitySql);
     $qty[] = $quantitySqlResult['count'];

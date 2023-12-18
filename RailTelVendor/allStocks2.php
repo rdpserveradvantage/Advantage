@@ -99,10 +99,10 @@
                     <?php
 
                     // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
-                    $sqlappCount = "select count(1) as total from vendorinventory where 1 ";
+                    $sqlappCount = "select count(1) as total from vendorinventory where 1 and vendorId='".$RailTailVendorID."'  ";
                     $atm_sql = "select id,material,material_make,model_no,serial_no,challan_no,amount,gst,amount_with_gst,courier_detail,tracking_details,
                             date_of_receiving,receiver_name,vendor_name,vendor_contact,po_date,po_number,created_at,created_by,updated_at,status
-                                from vendorinventory where 1 ";
+                                from vendorinventory where vendorId='".$RailTailVendorID."'   ";
 
                     if (isset($_REQUEST['material']) && $_REQUEST['material'] != '') {
                         $material = $_REQUEST['material'];
@@ -161,7 +161,7 @@
 
                                 <?
 
-                                $groupsql = mysqli_query($con, "select material,count(1) as total from vendorinventory group by material");
+                                $groupsql = mysqli_query($con, "select material,count(1) as total from vendorinventory where vendorId='".$RailTailVendorID."' group by material");
                                 while ($groupsqlResult = mysqli_fetch_assoc($groupsql)) {
                                     $material = $groupsqlResult['material'];
                                     $total = $groupsqlResult['total'];
@@ -189,10 +189,10 @@
                                         <? echo $total_records; ?>
                                     </strong></h5>
                                 <hr>
-                                <!-- <form action="exportInventoryRecords.php" method="POST">
+                                <form action="exportInventoryRecords2.php" method="POST">
                                     <input type="hidden" name="exportSql" value="<?= $atm_sql; ?>">
                                     <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
-                                </form> -->
+                                </form>
 
                             </div>
 

@@ -138,7 +138,7 @@ echo '
     }
 </style>
 <?
-echo '<div class="col-sm-12">
+echo '<div class="col-sm-12" style="display:none;">
     <div class="card">
         <div class="card-header">
             <h5>Call From Bank</h5>

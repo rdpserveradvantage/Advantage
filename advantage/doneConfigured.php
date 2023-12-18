@@ -1,13 +1,23 @@
 <? include('header.php'); ?>
 
+<style>
+    .swal2-popup {
+        background: white !important;
+    }
+
+    .hide {
+        display: none;
+    }
+</style>
+
 
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
                 <div class="page-body">
-                    
-                <div class="card" id="filter">
+
+                    <div class="card" id="filter">
                         <div class="card-block">
 
                             <form id="sitesForm" action="<?php echo basename(__FILE__); ?>" method="POST">
@@ -15,14 +25,17 @@
 
                                     <div class="col-sm-12">
                                         <label>Serial Number</label>
-                                        <input type="text" name="serial_no" class="form-control" value="<?= $_REQUEST['serial_no']; ?>" placeholder="Enter Serial Number ..." />
+                                        <input type="text" name="serial_no" class="form-control"
+                                            value="<?= $_REQUEST['serial_no']; ?>"
+                                            placeholder="Enter Serial Number ..." />
                                     </div>
 
                                 </div>
                                 <br>
                                 <div class="col" style="display:flex;justify-content:center;">
                                     <input type="submit" name="submit" value="Filter" class="btn btn-primary">
-                                    <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
+                                    <a class="btn btn-warning" id="hide_filter"
+                                        style="color:white;margin:auto 10px;">Hide Filters</a>
                                 </div>
 
                             </form>
@@ -34,18 +47,17 @@
                     <?php
                     // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
                     $sqlappCount = "select count(1) as total from ipconfuration where 1 ";
-                    $atm_sql = "select id,serial_no,router_ip,network_ip,atm_ip,subnet_ip,created_at,created_by,status
-                                from ipconfuration where 1 ";
+                    $atm_sql = "select id,serial_no,router_ip,network_ip,atm_ip,subnet_ip,created_at,created_by,status,updated_at,updatedBy from ipconfuration where 1 ";
 
                     if (isset($_REQUEST['serial_no']) && $_REQUEST['serial_no'] != '') {
                         $serial_no = $_REQUEST['serial_no'];
                         $atm_sql .= "and serial_no like '%" . $serial_no . "%'";
                         $sqlappCount .= "and serial_no like '%" . $serial_no . "%'";
                     }
-                    
 
-                    $atm_sql .=  "  order by id desc";
-                    $sqlappCount .=  " ";
+
+                    $atm_sql .= "  order by id desc";
+                    $sqlappCount .= " ";
 
                     $page_size = 10;
                     $result = mysqli_query($con, $sqlappCount);
@@ -59,8 +71,8 @@
                     $end_window = min($start_window + $window_size - 1, $total_pages);
                     $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     // }
-                    // echo $sql_query ; 
-
+                    // echo $sql_query;
+                    
 
 
 
@@ -69,11 +81,13 @@
 
 
 
-                <div class="card">
+                    <div class="card">
 
-                    
-                    <div class="card-header">
-                            <h5>Total Records: <strong class="record-count"><? echo $total_records; ?></strong></h5>
+
+                        <div class="card-header">
+                            <h5>Total Records: <strong class="record-count">
+                                    <? echo $total_records; ?>
+                                </strong></h5>
 
                             <hr />
                             <form action="exportdoneConfigured.php" method="POST">
@@ -83,7 +97,7 @@
 
                         </div>
                         <div class="card-body" style="overflow: auto;">
-<hr>
+                            <hr>
                             <?
                             $i = 1;
                             $sql = mysqli_query($con, "select * from ipconfuration order by id desc");
@@ -102,6 +116,9 @@
                                         <th>Created At</th>
                                         <th>Created By</th>
                                         <th>Status</th>
+                                        <th>Updated By</th>
+                                        <th>Updated At</th>
+                                        
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -114,19 +131,30 @@
                                     $id = $row['id'];
                                     $serialNumber = $row['serial_no'];
                                     $created_at = $row['created_at'];
+                                    $updated_at = $row['updated_at'];
+
+
                                     $created_by = $row['created_by'];
                                     $created_by = getUsername($created_by, false);
+
+                                    $updatedBy = $row['updatedBy'];
+                                    $updatedBy = getUsername($updatedBy, false);
 
                                     $router_ip = $row["router_ip"];
                                     $network_ip = $row["network_ip"];
                                     $atm_ip = $row["atm_ip"];
                                     $subnet_ip = $row["subnet_ip"];
                                     $status = $row['status'];
-                                    
-                                    if($status==1){
-                                       $activityStatus = 'Active' ;  
-                                    }else{
-                                       $activityStatus = 'In-Active' ;  
+
+
+                                    if ($status == 1) {
+                                        $activityStatus = 'Active';
+                                        $activityClass = 'show';
+
+                                    } else {
+                                        $activityStatus = 'In-Active';
+                                        $activityClass = 'hide';
+
                                     }
 
                                     echo "<tr>
@@ -139,7 +167,10 @@
                                             <td>{$created_at}</td>
                                             <td>{$created_by}</td>
                                             <td>{$activityStatus}</td>
-                                            <td><a href='#' data-toggle='modal' data-target='#unbindModal' data-id='{$id}'>Unbind</a></td>
+                                            <td>{$updatedBy}</td>
+                                            <td>{$updated_at}</td>
+
+                                            <td><a href='#' data-toggle='modal' data-target='#unbindModal' class='{$activityClass}' data-id='{$id}'>Unbind</a></td>
 
                                         </tr>";
 
@@ -151,32 +182,32 @@
 
 
 
-                            $serial_no = $_REQUEST['serial_no'];
-                            echo '<div class="pagination"><ul>';
-                            if ($start_window > 1) {
+                                $serial_no = $_REQUEST['serial_no'];
+                                echo '<div class="pagination"><ul>';
+                                if ($start_window > 1) {
 
-                                echo "<li><a href='?page=1&&serial_no=$serial_no'>First</a></li>";
-                                echo '<li><a href="?page=' . ($start_window - 1) . '&&serial_no=' . $serial_no . '">Prev</a></li>';
-                            }
+                                    echo "<li><a href='?page=1&&serial_no=$serial_no'>First</a></li>";
+                                    echo '<li><a href="?page=' . ($start_window - 1) . '&&serial_no=' . $serial_no . '">Prev</a></li>';
+                                }
 
-                            for ($i = $start_window; $i <= $end_window; $i++) {
-                            ?>
-                                <li class="<? if ($i == $current_page) {
-                                                echo 'active';
-                                            } ?>">
-                                    <a href="?page=<?= $i; ?>&&serial_no=<?= $serial_no; ?>">
-                                        <?= $i;  ?>
-                                    </a>
-                                </li>
+                                for ($i = $start_window; $i <= $end_window; $i++) {
+                                    ?>
+                                    <li class="<? if ($i == $current_page) {
+                                        echo 'active';
+                                    } ?>">
+                                        <a href="?page=<?= $i; ?>&&serial_no=<?= $serial_no; ?>">
+                                            <?= $i; ?>
+                                        </a>
+                                    </li>
 
-                            <? }
+                                <? }
 
-                            if ($end_window < $total_pages) {
+                                if ($end_window < $total_pages) {
 
-                                echo '<li><a href="?page=' . ($end_window + 1) . '&&serial_no=' . $serial_no . '">Next</a></li>';
-                                echo '<li><a href="?page=' . $total_pages . '&&serial_no=' . $serial_no . '">Last</a></li>';
-                            }
-                            echo '</ul></div>';
+                                    echo '<li><a href="?page=' . ($end_window + 1) . '&&serial_no=' . $serial_no . '">Next</a></li>';
+                                    echo '<li><a href="?page=' . $total_pages . '&&serial_no=' . $serial_no . '">Last</a></li>';
+                                }
+                                echo '</ul></div>';
 
 
 
@@ -202,7 +233,8 @@
 
 
 
-<div class="modal fade" id="unbindModal" tabindex="-1" role="dialog" aria-labelledby="unbindModalLabel" aria-hidden="true">
+<div class="modal fade" id="unbindModal" tabindex="-1" role="dialog" aria-labelledby="unbindModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -226,22 +258,26 @@
 
 <script>
     function confirmUnbind() {
-        // Retrieve the ID from the hidden input field in the modal
+
         var idToUnbind = document.getElementById("unbindItemId").value;
-        
-        alert(idToUnbind)
-        // Make an AJAX request to unbindIP.php
         $.ajax({
             type: "POST",
             url: "unbindIP.php",
             data: { id: idToUnbind },
-            success: function(response) {
-                // Handle the response from unbindIP.php
-                // You can update your UI or perform any further actions here
-                console.log(response); // Log the response for debugging
+            success: function (response) {
+                if (response == 1) {
+
+                    Swal.fire("Success", "Unbind Successfully !", "success")
+                        .then(function () {
+                            window.location.href = "doneConfigured.php";
+                        });
+
+                } else {
+                    Swal.fire("Error", "Unbind Error !", "error")
+                }
+
             },
-            error: function(xhr, status, error) {
-                // Handle errors here
+            error: function (xhr, status, error) {
                 console.error(xhr.responseText);
             }
         });

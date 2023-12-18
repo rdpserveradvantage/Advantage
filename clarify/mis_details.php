@@ -305,7 +305,7 @@
 
                             <style>
                                 html {
-                                    text-transform: inherit !important;
+                                    /* text-transform: inherit !important; */
                                 }
                             </style>
                             <?

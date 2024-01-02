@@ -1,5 +1,10 @@
 <? include('header.php'); ?>
 
+<style>
+    html {
+        text-transform: inherit !important;
+    }
+</style>
 
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
@@ -9,21 +14,29 @@
 
                     <?
 
-                    $statement = "SELECT * FROM projectInstallation WHERE isDone=1 AND status=1 ";
+                    $statement = "SELECT a.*,b.LHO FROM projectInstallation a INNER JOIN sites b ON a.siteid = b.id WHERE a.isDone=1 AND a.status=1";
+
+                    // $statement = "SELECT * FROM projectInstallation WHERE isDone=1 AND status=1 ";
                     $sqlappCount = "select COUNT(distinct atmid) AS totalCount from projectInstallation where isDone=1 and status=1 ";
 
 
                     if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
                         $atmid = $_REQUEST['atmid'];
-                        $statement .= "and atmid like '%" . trim($atmid) . "%'";
-                        $sqlappCount .= "and atmid like '%" . trim($atmid) . "%'";
+                        $statement .= " and a.atmid like '%" . trim($atmid) . "%'";
+                        $sqlappCount .= " and atmid like '%" . trim($atmid) . "%'";
+                    }
+
+                    if (isset($_REQUEST['vendor']) && $_REQUEST['vendor'] != '') {
+                        $vendorId = $_REQUEST['vendor'];
+                        $statement .= " and a.vendor like '%" . trim($vendorId) . "%'";
+                        $sqlappCount .= " and vendor like '%" . trim($vendorId) . "%'";
                     }
 
 
                     if (isset($_POST['submit'])) {
                         $_GET['page'] = 1;
                     }
-                    $statement .= " group by atmid  order by id desc";
+                    $statement .= " group by a.atmid order by a.id desc";
 
                     $page_size = 10;
                     $result = mysqli_query($con, $sqlappCount);
@@ -39,8 +52,8 @@
                     $sql_query = "$statement LIMIT $offset, $page_size";
 
 
-                    // echo $sql_query ; 
-                    
+                    // echo $sql_query;
+
 
 
                     ?>
@@ -50,11 +63,53 @@
                         <div class="card-block">
                             <form action="<? $_SERVER['PHP_SELF']; ?>" method="POST">
                                 <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-4">
                                         <label>ATMID</label>
-                                        <input type="text" name="atmid" class="form-control" value="<?= $atmid; ?>"
-                                            required>
+                                        <input type="text" name="atmid" class="form-control" value="<?= $atmid; ?>" />
                                     </div>
+                                    <div class="col-sm-4">
+                                        <label>LHO</label>
+                                        <select name="lho" class="form-control">
+                                            <option>Select</option>
+                                            <?
+                                            $lhoSql = mysqli_query($con, "select distinct(LHO) as lho from sites");
+                                            while ($lhoSqlResult = mysqli_fetch_assoc($lhoSql)) {
+                                                $distinctLHO = $lhoSqlResult['lho'];
+                                                ?>
+
+                                                <option value="<?= $distinctLHO; ?>">
+                                                    <?= $distinctLHO; ?>
+                                                </option>
+                                            <?
+
+                                            }
+
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label> Contractor </label>
+                                        <select name="vendor" class="form-control">
+                                            <option>Select</option>
+                                            <?
+                                            $vendorSql = mysqli_query($con, "select * from vendor where status=1");
+                                            while ($vendorSqlResult = mysqli_fetch_assoc($vendorSql)) {
+                                                $vendor = $vendorSqlResult['vendorName'];
+                                                $vendorID = $vendorSqlResult['id'];
+                                                
+                                                ?>
+
+                                                <option value="<?= $vendorID; ?>">
+                                                    <?= $vendor; ?>
+                                                </option>
+                                            <?
+
+                                            }
+
+                                            ?>
+                                        </select>
+                                    </div>
+
                                     <div class="col-sm-12">
                                         <br />
                                         <input type="submit" name="submit" class="btn btn-primary">
@@ -90,6 +145,7 @@
                                     <tr class="table-primary">
                                         <th>Sr No</th>
                                         <th>atmid</th>
+                                        <th>LHO</th>
                                         <th>created_at</th>
                                         <th>created_by</th>
                                         <th>remark</th>
@@ -103,7 +159,7 @@
                                         <th>scheduleDate</th>
                                         <th>scheduleTime</th>
                                         <th>sbiTicketId</th>
-
+                                        <th>Address</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -132,6 +188,10 @@
                                         $scheduleDate = $sql_result['scheduleDate'];
                                         $scheduleTime = $sql_result['scheduleTime'];
                                         $sbiTicketId = $sql_result['sbiTicketId'];
+                                        $lho = $sql_result['LHO'];
+
+
+
                                         ?>
                                         <tr>
                                             <td>
@@ -139,6 +199,9 @@
                                             </td>
                                             <td class="strong">
                                                 <?= $atmid; ?>
+                                            </td>
+                                            <td>
+                                                <?= $lho; ?>
                                             </td>
                                             <td>
                                                 <?= $created_at; ?>
@@ -179,6 +242,10 @@
                                             <td>
                                                 <?= $sbiTicketId; ?>
                                             </td>
+                                            <td>
+                                                <?= $address; ?>
+                                            </td>
+
 
 
                                         </tr>

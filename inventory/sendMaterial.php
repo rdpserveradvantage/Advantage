@@ -186,16 +186,16 @@ function getSitesInfo($siteid, $parameter)
                                     };
                                 }
                                 
+                                    //   <input type="text" name="value[]" placeholder="Value" style="width: 15%;" required>
+                                    //   <select name="serialNumber[]" class="serial-number-list" style="width: 20%;" required>
+                                    //           <option value="">-- select --</option>
+                                    //   </select>
                                 function addAttributeField() {
                                     var attributeFields = document.getElementById("attributeFields");
                                     var attributeField = document.createElement("div");
                                     attributeField.className = "attribute-field";
                                     attributeField.innerHTML = `
                                       <input type="text" name="attribute[]" value="" style="width: 25%;">
-                                      <input type="text" name="value[]" placeholder="Value" style="width: 15%;" required>
-                                      <select name="serialNumber[]" class="serial-number-list" style="width: 20%;" required>
-                                              <option value="">-- select --</option>
-                                      </select>
                                       <button class="remove-field" onclick="removeAttributeField(event)">Remove</button>
                                     `;
                                     attributeFields.appendChild(attributeField);

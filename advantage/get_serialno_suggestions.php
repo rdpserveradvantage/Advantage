@@ -5,7 +5,6 @@ if (isset($_POST['input'])) {
 
      $query = "SELECT distinct(serial_no) as serial_no from inventory 
               WHERE serial_no like '%" . mysqli_real_escape_string($con, $input) . "%' AND isIPAssign = 0 and material='Router'";
-    
     $result = mysqli_query($con, $query);
 
     $suggestions = array();

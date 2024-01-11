@@ -1,62 +1,159 @@
+<?php
+include('config.php');
 
-<? return ;?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        /* Style the divider option to add a visible line */
-        option.divider {
-            border-top: 1px solid black;
-            font-weight: bold;
-            background-color: lightgray;
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
+$username = 'noc@advantagesb.com';
+$password = '4mPZJcl^X@XB';
+$emailServer = 'webmail-b21.web-hosting.com';
+
+mysqli_query($con, "SET SESSION wait_timeout = 300");
+
+$inbox = imap_open("{{$emailServer}:993/imap/ssl}INBOX", $username, $password);
+
+if (!$inbox) {
+    die('Cannot connect to the mailbox: ' . imap_last_error());
+}
+
+$emails = imap_search($inbox, 'UNSEEN');
+
+if ($emails) {
+    foreach ($emails as $email_number) {
+        $header = imap_headerinfo($inbox, $email_number);
+        $structure = imap_fetchstructure($inbox, $email_number);
+        $email_body = imap_body($inbox, $email_number);
+
+        $isReply = isNewEmail($header);
+
+        // $emailQuery = "INSERT INTO emails (subject, content_body, from_email, is_reply) 
+        //    VALUES ('" . addslashes($header->subject) . "', '" . addslashes($email_body) . "', '" . addslashes($header->fromaddress) . "', $isReply)";
+
+        $messageId = isset($header->message_id) ? $header->message_id : '';
+        $isReply = isNewEmail($header);
+
+        $emailQuery = $con->prepare("INSERT INTO emails (subject, content_body, from_email, is_reply,message_id) 
+                             VALUES (?, ?, ?, ?, ?)");
+
+        $emailQuery->bind_param("sssis", $header->subject, $email_body, $header->fromaddress, $isReply, $messageId);
+
+        if ($emailQuery->execute()) {
+            $emailId = $con->insert_id;
+            $attachmentFolder = createDirectoryStructure($emailId);
+
+            echo "Email stored in tables successfully.\n";
+
+            foreach ($header->to as $recipient) {
+                $recipientQuery = "INSERT INTO recipients (email_id, recipient_type, recipient_email) 
+                                   VALUES ('$emailId', 'To', '" . addslashes($recipient->mailbox . "@" . $recipient->host) . "')";
+                mysqli_query($con, $recipientQuery);
+            }
+
+            if (!empty($header->cc)) {
+                foreach ($header->cc as $ccRecipient) {
+                    $ccRecipientQuery = "INSERT INTO recipients (email_id, recipient_type, recipient_email) 
+                                         VALUES ('$emailId', 'Cc', '" . addslashes($ccRecipient->mailbox . "@" . $ccRecipient->host) . "')";
+                    mysqli_query($con, $ccRecipientQuery);
+                }
+            }
+
+            // Process attachments
+            if ($structure->parts) {
+                echo 'if';
+                echo '<pre>';
+                // print_r($structure->parts) ; 
+                echo '</pre>';
+
+                foreach ($structure->parts as $partNumber => $part) {
+                    processAttachment($inbox, $email_number, $part, $emailId, $partNumber);
+                }
+            } else {
+                echo 'else ';
+            }
+        } else {
+            echo "Error: " . mysqli_error($con) . "\n";
         }
-    </style>
-</head>
-<body>
-<select>
+    }
+} else {
+    echo "No unread emails in the INBOX.\n";
+}
 
-    <option class="divider" disabled>---------------------------ADV---------------------------------------------</option> <!-- Divider option -->
-        <option value="spares-replaced">Spares Replaced</option>
-        <option value="antenna-relocated">Antenna Relocated</option>
-        <option value="antenna-replaced">Antenna Replaced</option>
-        <option value="router-rebooted">Router Rebooted</option>
-        <option value="lab-cable-replaced">Lab Cable Replaced or Label Fixed (if damaged)</option>
-        <option value="electrical-wiring-for-router">Electrical Wiring for Router Done</option>
-        <option value="sim-replaced">SIM Replaced</option>
-        <option value="sim-reinserted">SIM Re-Inserted</option>
-        <option value="no-issue-found">No Issue Found</option>
 
-    <option class="divider" disabled>---------------------------BANK---------------------------------------------</option> <!-- Divider option -->
-    <option value="atm-shutter-down">ATM Shutter Down</option>
-        <option value="permission-issue">Permission Issue</option>
-        <option value="back-room-key">Back Room Key</option>
-        <option value="back-room-em-lock">Back Room EM Lock</option>
-        <option value="atm-machine-down">ATM Machine Down</option>
+imap_close($inbox);
 
-        <optgroup label="Power Issue">
-            <option value="area-power-failure">Area Power Failure</option>
-            <option value="atm-power-disconnect">ATM Power Disconnect by EB Department Due Bill Not Paid</option>
-            <option value="main-power-cable-burn">Main Power Cable Burn</option>
-            <option value="meter-faulty">Meter Faulty</option>
-        </optgroup>
-        <optgroup label="Electrical issue">
-            <option value="No-Power-Available-in-Router-Socket">a) No power available in router socket</option>
-            <option value="DB-Box-Short-Circuit">b) DB Box Short Circuit</option>
-            <option value="MCB-Faulty">c) MCB Faulty.</option>
-            <option value="Earthing-Issue">d) Earthing issue</option>
-        </optgroup>
-        <optgroup label="UPS Issue">
-            <option value="UPS-Not-Available">UPS Not available</option>
-            <option value="UPS-Faulty">UPS Faulty</option>
-            <option value="UPS-Battery-Backup-Issue">UPS Battery backup issue</option>
-        </optgroup>
-        <option value="Rodent-Issue">Rodent issue</option>
-        <option value="LL-Rent-Issue">LL rent issue</option>
-        <option value="ATM-Renovation">ATM Renovation</option>
+function isNewEmail($header)
+{
+    $subject = strtolower($header->subject);
+    return (strpos($subject, 're:') === 0 || strpos($subject, 'fwd:') === 0);
+}
 
-</select>
-</body>
-</html>
+function createDirectoryStructure($emailId)
+{
+    $currentDate = date('Y/m/d');
+    $directoryStructure = './emailAttachments/' . $currentDate . '/' . $emailId . '/';
+    if (!file_exists($directoryStructure)) {
+        mkdir($directoryStructure, 0777, true);
+    }
+    return $directoryStructure;
+}
+
+function processAttachment($inbox, $email_number, $part, $emailId, $partNumber)
+{
+    global $attachmentFolder;
+    $attachmentFileName = null;
+
+    if ($part->ifdisposition && strtolower($part->disposition) == "attachment") {
+        if ($part->ifdparameters && $part->dparameters[0]->attribute == 'filename') {
+            $attachmentFileName = $part->dparameters[0]->value;
+        } elseif ($part->ifparameters && $part->parameters[0]->attribute == 'name') {
+            $attachmentFileName = $part->parameters[0]->value;
+        }
+
+        if ($attachmentFileName) {
+            $attachmentContent = imap_fetchbody($inbox, $email_number, $partNumber + 1);
+            $encoding = $part->encoding;
+
+            if ($encoding == 3) { // Base64 encoding
+                $attachmentContent = base64_decode($attachmentContent);
+            } elseif ($encoding == 4) { // Quoted-printable encoding
+                $attachmentContent = quoted_printable_decode($attachmentContent);
+            }
+
+
+            $attachmentFileName = $attachmentFolder . $attachmentFileName;
+
+            if (file_put_contents($attachmentFileName, $attachmentContent) !== false) {
+                global $con;
+                $attachmentQuery = "INSERT INTO attachments (email_id, file_name, file_path) 
+                                       VALUES ('$emailId', '" . addslashes($part->dparameters[0]->value) . "', '" . addslashes($attachmentFileName) . "')";
+                if (mysqli_query($con, $attachmentQuery)) {
+                    echo 'Debug: Attachment saved to database' . "\n";
+                } else {
+                    echo 'Debug: Error inserting attachment information into the database: ' . mysqli_error($con) . "\n";
+                }
+            } else {
+                echo 'Debug: Error saving attachment to file: ' . $attachmentFileName . "\n";
+                echo 'Debug: ' . error_get_last()['message'] . "\n";
+            }
+
+            // if (file_put_contents($attachmentFileName, $attachmentContent) !== false) {
+            //     global $con; 
+            //     $attachmentQuery = "INSERT INTO attachments (email_id, file_name, file_path) 
+            //                            VALUES ('$emailId', '" . addslashes($part->dparameters[0]->value) . "', '" . addslashes($attachmentFileName) . "')";
+            //     if (mysqli_query($con, $attachmentQuery)) {
+            //         echo 'Debug: Attachment saved to database' . "\n";
+            //     } else {
+            //         echo 'Debug: Error inserting attachment information into the database: ' . mysqli_error($con) . "\n";
+            //     }
+            // } else {
+            //     echo 'Debug: Error saving attachment to file: ' . $attachmentFileName . "\n";
+            // }
+        } else {
+            echo 'Debug: Attachment filename is empty' . "\n";
+        }
+    }
+}
+
+?>

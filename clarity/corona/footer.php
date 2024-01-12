@@ -1,13 +1,5 @@
  </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:partials/_footer.html -->
-          <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2021</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
-            </div>
-          </footer>
-          <!-- partial -->
+     
         </div>
         <!-- main-panel ends -->
       </div>
@@ -15,27 +7,26 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> --> -->
+
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    <script src="assets/vendors/chart.js/Chart.min.js"></script>
-    <script src="assets/vendors/progressbar.js/progressbar.min.js"></script>
-    <script src="assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
-    <script src="assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
-    <script src="assets/js/jquery.cookie.js" type="text/javascript"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/vendors/chart.js/Chart.min.js"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/vendors/progressbar.js/progressbar.min.js"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/js/jquery.cookie.js" type="text/javascript"></script>
     <!-- End plugin js for this page -->
     <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="assets/js/dashboard.js"></script>
-    <!-- End custom js for this page -->
-  </body>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/js/off-canvas.js"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/js/hoverable-collapse.js"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/js/misc.js"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/js/settings.js"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/js/todolist.js"></script>
+    <script src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/js/dashboard.js"></script>
 
-<!-- Mirrored from demo.bootstrapdash.com/corona-free/jquery/template/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 10 Jan 2024 17:49:32 GMT -->
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>  -->
+  </body>
 </html>

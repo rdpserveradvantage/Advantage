@@ -135,7 +135,7 @@ function getSitesInfo($siteid, $parameter)
                                                 
                                             ?>
                                             <? } 
-                                                if(trim($material_name)=='Router' || trim($material_name)=='Security seal'){
+                                                if(trim($material_name)=='Router'){
                                                                                                 
                                                 }else{
                                                     echo '<button class="remove-field" onclick="removeAttributeField(event)" >Remove</button>' ;

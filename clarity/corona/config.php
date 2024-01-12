@@ -5,17 +5,58 @@ error_reporting(0);
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
+$base_url = "http://clarity.advantagesb.com/corona/";
+
+
 $host="10.63.21.6";
 $user="advantage";
 $pass="qwerty121";
-$dbname="sarmicrosystems_advantage";
-$con = new mysqli($host, $user, $pass, $dbname);
+$dbname="test_advantage";
+
+
+function connectToDatabase() {
+    global $host, $user, $pass, $dbname;
+
+    $con = new mysqli($host, $user, $pass, $dbname);
+
+    if ($con->connect_error) {
+        die; // You might want to handle the connection error appropriately
+    } else {
+        return $con;
+    }
+}
+
+function getConnectedDatabase() {
+    global $con;
+
+    if (!$con || !$con->ping()) {
+        $con = connectToDatabase();
+    }
+
+    return $con;
+}
+
+// Usage example:
+$con = getConnectedDatabase();
+
+
+
 
 
 $ADVANTAGE_level = $_SESSION['ADVANTAGE_level'] ; 
 $ADVANTAGE_uname = $_SESSION['ADVANTAGE_uname'];
 $username = $_SESSION['ADVANTAGE_username'] ; 
-define('PORTAL', 'ADVANTAGE');
+define('PORTAL', 'CLARITY');
+
+$_GLOBAL_VENDOR_ID = $_SESSION['vendor_id'] ;
+
+if($_GLOBAL_VENDOR_ID!=4){
+    $_VENDOR_LOGIN = true ; 
+}else{
+    $_VENDOR_LOGIN = false ; 
+
+}
+
 
 
 if ($con->connect_error) {
@@ -46,7 +87,7 @@ $server_path = $_SERVER['DOCUMENT_ROOT'].'/css/dash/esir/';
 
 if($userid>0){
                 
-        $assign_cust_sql = mysqli_query($con,"select cust_id,permission from mis_loginusers where id ='".$userid."'");
+        $assign_cust_sql = mysqli_query($con,"select cust_id,permission from user where id ='".$userid."'");
         if($assign_cust_sql_result = mysqli_fetch_assoc($assign_cust_sql)){
           $assigned_customer =   $assign_cust_sql_result['cust_id'];
         }
@@ -155,24 +196,11 @@ if (!function_exists('remove_special')) {
 
 if (!function_exists('getUsername')) {
 
-    function getUsername($id,$vendor){
+    function getUsername($id,$vendor=FALSE){
         global $con;
-        
-        if($vendor){
-            // echo "select * from vendorusers where id ='".$id."'" ;
-            
-            $sql = mysqli_query($con,"select * from vendorusers where id ='".$id."'");
+            $sql = mysqli_query($con,"select * from user where id ='".$id."'");
             $sql_result = mysqli_fetch_assoc($sql);
-            return $sql_result['name'];
-        }else{
-            
-            $sql = mysqli_query($con,"select * from mis_loginusers where id ='".$id."'");
-            $sql_result = mysqli_fetch_assoc($sql);
-            
             return $sql_result['name'];            
-        }
-        
-
     }
 }
 
@@ -308,10 +336,9 @@ function addNotification($senderType, $senderId, $recipientId, $message, $siteId
             VALUES ('".$senderType."', '".$senderId."', '".$recipientId."', '".$message."', '".$siteId."', '".$atmId."','".$datetime."')";
 
     if ($con->query($sql) === true) {
-        $con->close();
+        
         return true;
     } else {
-        $con->close();
         return false;
     }
 }

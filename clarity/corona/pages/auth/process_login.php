@@ -16,7 +16,7 @@ $password = $_REQUEST['password'];
 if($uname && $password){
 
 
-    $sql = mysqli_query($con, "SELECT * FROM mis_loginusers WHERE (uname = '$uname' OR contact = '$uname') AND pwd = '$password' AND user_status = 1");
+    $sql = mysqli_query($con, "SELECT * FROM user WHERE (uname = '$uname' OR contact = '$uname') AND pwd = '$password' AND user_status = 1");
     $result = mysqli_num_rows($sql);
     if($result>0){
         $sql_result = mysqli_fetch_assoc($sql);
@@ -31,6 +31,7 @@ if($uname && $password){
                 $_SESSION['ADVANTAGE_branch'] = $sql_result['branch'];
                 $_SESSION['ADVANTAGE_zone'] = $sql_result['zone'];
                 $_SESSION['ADVANTAGE_cust_id'] = $sql_result['cust_id'];
+                $_SESSION['vendor_id'] = $sql_result['vendorid'];
                 
                 $userid = $sql_result['id'];
                 
@@ -56,7 +57,7 @@ if($uname && $password){
                         "email" => $email,
                 ));
                 $jwt = JWT::encode($token, $secret_key,"HS256");
-                $token_sql = "update mis_loginusers set token='".$jwt."' , updated_at = '".$datetime."' where id='".$userid."'";
+                $token_sql = "update user set token='".$jwt."' , updated_at = '".$datetime."' where id='".$userid."'";
                     mysqli_query($con,$token_sql) ;                
                     
                 

@@ -281,11 +281,7 @@ error_reporting(E_ALL);
                             <ul style="overflow: scroll; max-height: 500px;">
                                 <?php
                                 $statusColumn = 'status';
-                                if ($level == 1) {
-                                    $mainsql = mysqli_query($con, "select * from main_menu where $statusColumn=1");
-                                } else {
-                                    $mainsql = mysqli_query($con, "select * from main_menu where $statusColumn=1 and id<>1");
-                                }
+                                $mainsql = mysqli_query($con, "select * from main_menu where $statusColumn=1");
                                 while ($mainsql_result = mysqli_fetch_assoc($mainsql)) {
                                     $main_id = $mainsql_result['id'];
                                     ?>
@@ -353,14 +349,6 @@ error_reporting(E_ALL);
 
 
     $(document).ready(function () {
-
-
-
-      
-
-
-
-
         $('#vendorSelect').on('change', function () {
             var selectedValue = $(this).val();
             if (selectedValue == 4) {
@@ -369,7 +357,6 @@ error_reporting(E_ALL);
                 $('#lhoDiv').hide().find('select').prop('required', false);
             }
         });
-
 
         $('#emailid').on('change', function () {
             var emailInput = $(this);
@@ -390,8 +377,6 @@ error_reporting(E_ALL);
 
     $(document).on('click', '#edituserbutton', function () {
         var userid = $(this).data('value'); // Use .data() method to access data-value
-
-
         $.ajax({
             type: 'POST',
             url: 'edituser.php',

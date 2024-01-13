@@ -1,19 +1,24 @@
-<?php include('../header.php');
+<?php include('../header.php'); ?>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+
+<?
 
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
-var_dump($_SESSION);
+// var_dump($_SESSION);
 
 // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
-
 if ($_VENDOR_LOGIN) {
     echo 'vendor';
 } else {
     echo 'advantage';
-
 }
+echo '<br />';
 
 $sqlappCount = "select count(1) as total from sites where 1 ";
 $atm_sql = "select po,po_date,id,activity,customer,bank,atmid,address,city,state,zone,LHO,LHO_Contact_Person,LHO_Contact_Person_No,
@@ -97,7 +102,7 @@ $start_window = max(1, $current_page - floor($window_size / 2));
 $end_window = min($start_window + $window_size - 1, $total_pages);
 $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
-echo $sql_query;
+// echo $sql_query;
 
 ?>
 
@@ -404,8 +409,12 @@ echo $sql_query;
                                     ?>
                                 </td>
                                 <td>
-                                    <a href="#" class="history-link" data-toggle="modal" data-target="#historyModal"
+
+                                    <a href="#" data-bs-toggle="modal" class="history-link" data-bs-target="#historyModal" data-act="add"
                                         data-siteid="<?php echo $id; ?>">History</a>
+                                        
+
+
                                 </td>
                                 <td>
                                     <?
@@ -614,31 +623,27 @@ echo $sql_query;
 
 
 
-
-
-<div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModal" aria-hidden="true">
+<div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="ModalLabel" style="display: none;"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="esdModalLabel">History</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <h5 class="modal-title" id="ModalLabel">New message</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div id="historyContent">
-
-                </div>
-
+                <div id="historyContent" style="overflow: scroll;max-height: 70vh;"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default waves-effect " data-dismiss="modal">Close</button>
+
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
 
 
 
@@ -649,18 +654,12 @@ echo $sql_query;
         $(".single_site_delegate").prop('checked', $(this).prop("checked"));
     });
 
-    // Handle form submission
     $("#submitForm").submit(function (e) {
-        // Prevent the form from submitting in the traditional way
         e.preventDefault();
-
-        // Get the checked IDs
         var checkedIds = [];
         $(".single_site_delegate:checked").each(function () {
             checkedIds.push($(this).val());
         });
-
-        // Create a hidden form and submit it dynamically
         var form = $('<form action="delegate.php" method="post"></form>');
         for (var i = 0; i < checkedIds.length; i++) {
             form.append('<input type="hidden" name="checkedIds[]" value="' + checkedIds[i] + '" />');
@@ -671,11 +670,11 @@ echo $sql_query;
 
 
 
-    $(document).ready(function () {
+        $(document).on('click', '.history-link', function () {
 
-
-        $(".history-link").click(function () {
             var siteId = $(this).data("siteid");
+
+            console.log('ds');
             var modal = document.getElementById("historyModal");
             $.ajax({
                 url: "getHistory.php",
@@ -692,7 +691,6 @@ echo $sql_query;
                 }
             });
         });
-    });
 </script>
 
 
@@ -707,5 +705,6 @@ echo $sql_query;
         $("#show_filter").css('display', 'none');
     });
 </script>
+<script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
 
 <?php include('../footer.php'); ?>

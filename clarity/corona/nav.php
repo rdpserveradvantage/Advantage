@@ -19,11 +19,8 @@ if ($_SESSION['ADVANTAGE_username']) {
     $cpermission = "'" . implode("', '", $cpermission) . "'";
     $mainmenu = [];
     foreach ($permission as $key => $val) {
-        if ($level == 1) {
-            $sub_menu_sql = mysqli_query($con, "select * from sub_menu where id='" . $val . "' and status=1");
-        } else {
-            $sub_menu_sql = mysqli_query($con, "select * from sub_menu where id='" . $val . "' and status=1 and main_menu<>1");
-        }
+        $sub_menu_sql = mysqli_query($con, "select * from sub_menu where id='" . $val . "' and status=1");
+
         if (mysqli_num_rows($sub_menu_sql) > 0) {
             $sub_menu_sql_result = mysqli_fetch_assoc($sub_menu_sql);
             $mainmenu[] = $sub_menu_sql_result['main_menu'];
@@ -32,14 +29,17 @@ if ($_SESSION['ADVANTAGE_username']) {
     $mainmenu = array_unique($mainmenu);
     sort($mainmenu);
 
+    
+
     ?>
 
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-            <a class="sidebar-brand brand-logo" href="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/index.php" style="color:white;">
+            <a class="sidebar-brand brand-logo" href="<? $_SERVER["DOCUMENT_ROOT"]; ?>/corona/index.php"
+                style="color:white;">
                 <!-- <img src="http://clarity.advantagesb.com/assets/1601680170_capture.jpg" alt="logo" />
              -->
-            RailTel
+                RailTel
             </a>
             <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg"
                     alt="logo" /></a>
@@ -51,12 +51,15 @@ if ($_SESSION['ADVANTAGE_username']) {
                 <div class="profile-desc">
                     <div class="profile-pic">
                         <div class="count-indicator">
-                            <img class="img-xs rounded-circle " src="<? $_SERVER["DOCUMENT_ROOT"];?>/corona/assets/images/faces/face15.jpg" alt="">
+                            <img class="img-xs rounded-circle "
+                                src="<? $_SERVER["DOCUMENT_ROOT"]; ?>/corona/assets/images/faces/face15.jpg" alt="">
                             <span class="count bg-success"></span>
                         </div>
                         <div class="profile-name">
-                            <h5 class="mb-0 font-weight-normal"><?= ucwords($_SESSION['ADVANTAGE_username']);?></h5>
-                            
+                            <h5 class="mb-0 font-weight-normal">
+                                <?= ucwords($_SESSION['ADVANTAGE_username']); ?>
+                            </h5>
+
                         </div>
                     </div>
                     <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
@@ -105,58 +108,66 @@ if ($_SESSION['ADVANTAGE_username']) {
 
 
 
-<?
+            <?
             foreach ($mainmenu as $menu => $menu_id) {
-    $menu_sql = mysqli_query($con, "select * from main_menu where id='" . $menu_id . "' and status=1");
-    $menu_sql_result = mysqli_fetch_assoc($menu_sql);
-    $main_name = $menu_sql_result['name'];
-    $targetDiv = str_replace(' ', '', $main_name);
-    $icon = $menu_sql_result['icon'];
-    ?>
-
-    <li class="nav-item menu-items">
-        <a class="nav-link" data-bs-toggle="collapse" href="#<?= $targetDiv; ?>" aria-expanded="false" aria-controls="<?= $targetDiv; ?>">
-            <span class="menu-icon">
-                <i class="mdi mdi-laptop"></i>
-            </span>
-            <span class="menu-title"><? echo $main_name; ?></span>
-            <i class="menu-arrow"></i>
-        </a>
-
-        <div class="collapse" id="<?= $targetDiv; ?>">
-            <ul class="nav flex-column sub-menu">
-                <?
-                if ($level != 1) {
-                    $submenu_sql = mysqli_query($con, "select * from sub_menu where main_menu = '" . $menu_id . "' and id in ($cpermission) and status=1 and main_menu<>1 order by sub_menu asc");
-                } else {
-                    $submenu_sql = mysqli_query($con, "select * from sub_menu where main_menu = '" . $menu_id . "' and id in ($cpermission) and status=1 order by sub_menu asc");
-                }
-                while ($submenu_sql_result = mysqli_fetch_assoc($submenu_sql)) {
-                    $page = $submenu_sql_result['page'];
-                    $submenu_name = $submenu_sql_result['sub_menu'];
-                    $folder = $submenu_sql_result['folder'];
-            
-                    if (basename($_SERVER['PHP_SELF'], PATHINFO_BASENAME) == $page) {
-                        $className = 'active';
-                    } else {
-                        $className = '';
-                    }
-                    ?>
-                    <li class="nav-item <? echo $className; ?>">
-                        <a class="nav-link" href="<?= $base_url . $folder . '/' . $page; ?>">
-                            <? echo $submenu_name; ?>
-                        </a>
-                    </li>
-                    <?php
-                }
+                $menu_sql = mysqli_query($con, "select * from main_menu where id='" . $menu_id . "' and status=1");
+                $menu_sql_result = mysqli_fetch_assoc($menu_sql);
+                $main_name = $menu_sql_result['name'];
+                $targetDiv = str_replace(' ', '', $main_name);
+                $icon = $menu_sql_result['icon'];
                 ?>
-            </ul>
-        </div>
-    </li>
 
-<? } ?>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#<?= $targetDiv; ?>" aria-expanded="false"
+                        aria-controls="<?= $targetDiv; ?>">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-laptop"></i>
+                        </span>
+                        <span class="menu-title">
+                            <? echo $main_name; ?>
+                        </span>
+                        <i class="menu-arrow"></i>
+                    </a>
+
+                    <div class="collapse" id="<?= $targetDiv; ?>">
+                        <ul class="nav flex-column sub-menu">
+                            <?
+                            $submenu_sql = mysqli_query($con, "select * from sub_menu where main_menu = '" . $menu_id . "' and id in ($cpermission) and status=1 order by sub_menu asc");
+                            while ($submenu_sql_result = mysqli_fetch_assoc($submenu_sql)) {
+                                $page = $submenu_sql_result['page'];
+                                $submenu_name = $submenu_sql_result['sub_menu'];
+                                $folder = $submenu_sql_result['folder'];
+
+                                if (basename($_SERVER['PHP_SELF'], PATHINFO_BASENAME) == $page) {
+                                    $className = 'active';
+                                } else {
+                                    $className = '';
+                                }
+                                ?>
+                                <li class="nav-item <? echo $className; ?>">
+                                    <a class="nav-link" href="<?= $base_url . $folder . '/' . $page; ?>">
+                                        <? echo $submenu_name; ?>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </li>
+
+            <? } ?>
 
 
+
+            <li class="nav-item menu-items">
+                <a class="nav-link" href="<?= $base_url; ?>/logout.php">
+                    <span class="menu-icon">
+                        <i class="mdi mdi-playlist-play"></i>
+                    </span>
+                    <span class="menu-title">Logout</span>
+                </a>
+            </li>
 
 
         </ul>

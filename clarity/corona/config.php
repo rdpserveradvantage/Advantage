@@ -8,7 +8,7 @@ error_reporting(0);
 $base_url = "http://clarity.advantagesb.com/corona/";
 
 
-$host="10.63.21.6";
+$host="localhost";
 $user="advantage";
 $pass="qwerty121";
 $dbname="test_advantage";

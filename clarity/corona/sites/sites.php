@@ -17,9 +17,6 @@
         return $sql_result['city'];
     }
 
-
-
-
 $sqlappCount = "select count(1) as total from sites a where 1 ";
 $atm_sql = "select a.po,a.po_date,a.id,a.activity,a.customer,a.bank,a.atmid,a.address,a.city,a.state,a.zone,a.LHO,a.LHO_Contact_Person,a.LHO_Contact_Person_No,
 a.LHO_Contact_Person_email,a.LHO_Adv_Person,a.LHO_Adv_Contact,a.LHO_Adv_email,a.Project_Coordinator_Name,a.Project_Coordinator_No,
@@ -375,7 +372,7 @@ echo $sql_query;
                                         echo '<a href="feasibilityReport.php?atmid=' . $atmid . '" target="_blank">Report</a>';
                                     } else {
                                         if ($isDelegated == 0) {
-                                            echo '<a href="delegate.php?id=' . $id . '&atmid=' . $atmid . '">Delegate ➜</a>';
+                                            echo '<a href="singleDelegate.php?id=' . $id . '&atmid=' . $atmid . '">Delegate ➜</a>';
                                         } else {
                                             echo '<button class="btn btn-success btn-icon" style="  width: 20px;height: auto !important;">&#10004;</button> | <a href="delegate.php?id=' . $id . '&atmid=' . $atmid . '&action=redelegate">Redelegate <span style="color:red">⟳</span></a>';
                                         }

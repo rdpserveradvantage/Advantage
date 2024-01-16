@@ -1,7 +1,5 @@
-<? include('../header.php'); ?>
+<? include('../header.php'); 
 
-
-<?php
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["checkedIds"])) {
     $checkedIds = $_POST["checkedIds"];
     foreach ($checkedIds as $id) {
@@ -17,7 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["checkedIds"])) {
 ?>
 <div class="row">
     <div class="col-sm-12">
-
         <div class="card">
             <div class="card-body">
                 <?php
@@ -32,8 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["checkedIds"])) {
 
                 <hr>
                 <form id="myForm2" action="process_delegate.php" enctype="multipart/form-data">
-                    <input type="hidden" name="atmid" value='<?php echo implode(' , ', $all_atmid) ; ?>' />
-                    <input type="hidden" name="siteid" value='<?php echo implode(' , ', $allsiteid) ; ?>' />
+                    <input type="hidden" name="atmid" value='<?php echo implode(' , ', $all_atmid); ?>' />
+                    <input type="hidden" name="siteid" value='<?php echo implode(' , ', $allsiteid); ?>' />
                     <input type="hidden" name="action" value="<?php echo $action; ?>" />
                     <input type="hidden" name="delegateTo" value="vendor" />
 

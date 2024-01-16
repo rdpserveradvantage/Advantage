@@ -11,14 +11,14 @@ if (isset($_POST['submit'])) {
 
     $date = date('Y-m-d h:i:s a', time());
     $only_date = date('Y-m-d');
-    $target_dir = 'PHPExcel/';
-    $file_name = $_FILES["excelFile"]["name"];
+    $target_dir = '../PHPExcel/';
+    echo $file_name = $_FILES["excelFile"]["name"];
     $file_tmp = $_FILES["excelFile"]["tmp_name"];
-    $file =  $target_dir.'/'.$file_name;
+   $file =  $target_dir.'/'.$file_name;
     $created_at = date('Y-m-d H:i:s');
 
     move_uploaded_file($file_tmp, $target_dir.'/'.$file_name);
-    include('PHPExcel/PHPExcel-1.8/Classes/PHPExcel/IOFactory.php');
+    include('../PHPExcel/PHPExcel-1.8/Classes/PHPExcel/IOFactory.php');
     $inputFileName = $file;
 
     try {

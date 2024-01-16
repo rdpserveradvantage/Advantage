@@ -26,7 +26,7 @@
             <div class="card-body">
                 <div class="two_end">
                     <h5>Update Bulk Sites <span style="font-size:12px; color:red;">(Bulk Upload)</span></h5>
-                    <a class="btn btn-primary" href="excelformat/bulk_site_excel.xlsx" download>BULK SITES UPLOAD
+                    <a class="btn btn-primary" href="../excelformats/bulk_site_excel.xlsx" download>BULK SITES UPLOAD
                         FORMAT</a>
                 </div>
                 <hr>

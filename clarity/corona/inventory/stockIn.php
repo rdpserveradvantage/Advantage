@@ -10,7 +10,7 @@
             <div class="card-body">
                 <div class="two_end">
                     <h5>Stock In <span style="font-size:12px; color:red;">(Bulk Upload)</span></h5>
-                    <a class="btn btn-success" href="excelformat/inventoryBulkUploadFormat.xlsx" download>Stock In Bulk
+                    <a class="btn btn-success" href="../excelformats/inventoryBulkUploadFormat.xlsx" download>Stock In Bulk
                         Format </a>
                 </div>
 

@@ -112,6 +112,26 @@ border: 1px solid #ddd;
 .red-border {
   border-color: red !important;
 }
+.displayNone{
+  display: none;
+}
+.swal2-html-container, .form-control[readonly]{
+  color: black !important;
+}
+.nav-tabs .nav-link.active{
+  color: red !important;
+  background-color: white !important;
+}
+.table-hover > tbody > tr:hover > *{
+  color:white !important ; 
+}
+.noRecordsContainer {
+  text-align: center;
+  padding: 5%;
+}
+.noRecordsContainer img {
+  width:50%;
+}
 /*-------------------------------------------------------------------
   ===== Table of Contents =====
 
@@ -17056,9 +17076,9 @@ code {
 /* Cards */
 .card {
   border-radius: 0.25rem; }
-  .card .card-body {
+  .card .card-body, .card .card-block{
     padding: 1.75rem 1.5625rem; }
-    .card .card-body + .card-body {
+    .card .card-body + .card-body, .card .card-block + .card-block {
       padding-top: 1rem; }
   .card .card-title {
     color: #ffffff;

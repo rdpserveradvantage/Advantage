@@ -6,90 +6,138 @@
 
 <?
 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
 
 // var_dump($_SESSION);
 
 // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
+
+        
+// echo '<pre>';
+// print_r($_SESSION);
+// echo '</pre>';
+
+
+$isVendor = $_SESSION['isVendor'];
+$islho = $_SESSION['islho'];
+$ADVANTAGE_level = $_SESSION['ADVANTAGE_level'];
+
+if($islho==0 && $isVendor==0){
+    ?>
+<script>
+    window.location.href="/corona/sites/sites.php";
+</script>
+    <?
+    // header('Location: /');
+        // exit;
+        
+}else if($ADVANTAGE_level==3){
+    ?>
+<script>
+    window.location.href="/corona/sites/engsites.php";
+</script>
+    <?
+}
+
+
+    function getBranchName($id)
+    {
+        global $con;
+        $sql = mysqli_query($con, "select * from mis_city where id='" . $id . "'");
+        $sql_result = mysqli_fetch_assoc($sql);
+        return $sql_result['city'];
+    }
+
+
+
+
+$sqlappCount = "select count(1) as total from sites a ";
+$atm_sql = "select a.po,a.po_date,a.id,a.activity,a.customer,a.bank,a.atmid,a.address,a.city,a.state,a.zone,a.LHO,a.LHO_Contact_Person,a.LHO_Contact_Person_No,
+a.LHO_Contact_Person_email,a.LHO_Adv_Person,a.LHO_Adv_Contact,a.LHO_Adv_email,a.Project_Coordinator_Name,a.Project_Coordinator_No,
+a.Project_Coordinator_email,a.Customer_SLA,a.Our_SLA,a.Vendor,a.Cash_Management,a.CRA_VENDOR,a.ID_on_Make,a.Model,a.SiteType,a.PopulationGroup,
+a.XPNET_RemoteAddress,a.CONNECTIVITY,a.Connectivity_Type,a.Site_data_Received_for_Feasiblity_date,a.isDelegated,a.created_at,a.created_by,
+a.isFeasibiltyDone,a.latitude,a.longitude,a.verificationStatus,a.delegatedtoVendorId,a.ESD,a.ASD
+                                from sites a 
+                               ";
+
+
 if ($_VENDOR_LOGIN) {
     echo 'vendor';
+    
+    $sqlappCount .=" INNER JOIN vendorsitesdelegation b
+    ON a.id = b.siteid " ;
+    $atm_sql .= " INNER JOIN vendorsitesdelegation b
+                                ON a.id = b.siteid
+                                ";
 } else {
     echo 'advantage';
+    
+    $sqlappCount .=" INNER JOIN lhositesdelegation b
+    ON a.id = b.siteid  " ;
+
+    $atm_sql .= " INNER JOIN lhositesdelegation b
+                                ON a.id = b.siteid ";
+
+
 }
-echo '<br />';
 
-$sqlappCount = "select count(1) as total from sites where 1 ";
-$atm_sql = "select po,po_date,id,activity,customer,bank,atmid,address,city,state,zone,LHO,LHO_Contact_Person,LHO_Contact_Person_No,
-                                LHO_Contact_Person_email,LHO_Adv_Person,LHO_Adv_Contact,LHO_Adv_email,Project_Coordinator_Name,Project_Coordinator_No,
-                                Project_Coordinator_email,Customer_SLA,Our_SLA,Vendor,Cash_Management,CRA_VENDOR,ID_on_Make,Model,SiteType,PopulationGroup,
-                                XPNET_RemoteAddress,CONNECTIVITY,Connectivity_Type,Site_data_Received_for_Feasiblity_date,isDelegated,created_at,created_by,
-                                isFeasibiltyDone,latitude,longitude,verificationStatus,delegatedtoVendorId,ESD,ASD
-                                from sites where 1 ";
-
-
+$atm_sql .= " where 1 ";
 
 if (isset($_REQUEST['vendorId']) && $_REQUEST['vendorId'] != '') {
     $vendorId = $_REQUEST['vendorId'];
-    $atm_sql .= "and delegatedToVendorId like '%" . $vendorId . "%'";
-    $sqlappCount .= "and delegatedToVendorId like '%" . $vendorId . "%'";
+    $atm_sql .= "and a.delegatedToVendorId like '%" . $vendorId . "%'";
+    $sqlappCount .= "and a.delegatedToVendorId like '%" . $vendorId . "%'";
 }
 if (isset($_REQUEST['atmid']) && $_REQUEST['atmid'] != '') {
     $atmid = $_REQUEST['atmid'];
-    $atm_sql .= "and atmid like '%" . $atmid . "%'";
-    $sqlappCount .= "and atmid like '%" . $atmid . "%'";
+    $atm_sql .= "and a.atmid like '%" . $atmid . "%'";
+    $sqlappCount .= "and a.atmid like '%" . $atmid . "%'";
 }
 
 if (isset($_REQUEST['isFeasibiltyDone']) && $_REQUEST['isFeasibiltyDone'] != '') {
     $isFeasibiltyDonefilter = $_REQUEST['isFeasibiltyDone'];
-    $atm_sql .= "and isFeasibiltyDone like '%" . $isFeasibiltyDonefilter . "%'";
-    $sqlappCount .= "and isFeasibiltyDone like '%" . $isFeasibiltyDonefilter . "%'";
+    $atm_sql .= "and a.isFeasibiltyDone like '%" . $isFeasibiltyDonefilter . "%'";
+    $sqlappCount .= "and a.isFeasibiltyDone like '%" . $isFeasibiltyDonefilter . "%'";
 }
 if (isset($_REQUEST['isDelegated']) && $_REQUEST['isDelegated'] != '') {
     $isDelegatedFilter = $_REQUEST['isDelegated'];
-    $atm_sql .= "and isDelegated like '%" . $isDelegatedFilter . "%'";
-    $sqlappCount .= "and isDelegated like '%" . $isDelegatedFilter . "%'";
+    $atm_sql .= "and a.isDelegated like '%" . $isDelegatedFilter . "%'";
+    $sqlappCount .= "and a.isDelegated like '%" . $isDelegatedFilter . "%'";
 }
 
 if (isset($_REQUEST['cust']) && $_REQUEST['cust'] != '') {
-    $atm_sql .= "and customer like '%" . $_REQUEST['cust'] . "%' ";
-    $sqlappCount .= "and customer like '%" . $_REQUEST['cust'] . "%' ";
+    $atm_sql .= "and a.customer like '%" . $_REQUEST['cust'] . "%' ";
+    $sqlappCount .= "and a.customer like '%" . $_REQUEST['cust'] . "%' ";
 }
 
 if (isset($_REQUEST['zone']) && $_REQUEST['zone'] != '') {
-    $atm_sql .= "and zone = '" . $_REQUEST['zone'] . "' ";
-    $sqlappCount .= "and zone = '" . $_REQUEST['zone'] . "' ";
+    $atm_sql .= "and a.zone = '" . $_REQUEST['zone'] . "' ";
+    $sqlappCount .= "and a.zone = '" . $_REQUEST['zone'] . "' ";
 }
 
 if (isset($_REQUEST['state']) && $_REQUEST['state'] != '') {
-    $atm_sql .= "and state= '" . $_REQUEST['state'] . "' ";
-    $sqlappCount .= "and state= '" . $_REQUEST['state'] . "' ";
+    $atm_sql .= "and a.state= '" . $_REQUEST['state'] . "' ";
+    $sqlappCount .= "and a.state= '" . $_REQUEST['state'] . "' ";
 }
 
 if ($assignedLho) {
     if ($ADVANTAGE_level == 2 || $ADVANTAGE_level == 5) {
-        $atm_sql .= "and LHO = '" . $assignedLho . "' ";
-        $sqlappCount .= "and LHO= '" . $assignedLho . "' ";
+        $atm_sql .= "and a.LHO = '" . $assignedLho . "' ";
+        $sqlappCount .= "and a.LHO= '" . $assignedLho . "' ";
     }
 
 }
 
-function getBranchName($id)
-{
-    global $con;
-    $sql = mysqli_query($con, "select * from mis_city where id='" . $id . "'");
-    $sql_result = mysqli_fetch_assoc($sql);
-    return $sql_result['city'];
-}
 
 
 
 
 
-$atm_sql .= "and status=1 order by id desc";
-$sqlappCount .= "and status=1";
 
+
+$atm_sql .= "and a.status=1 and b.isPending=0 order by a.id desc";
+$sqlappCount .= "and a.status=1 and b.isPending=0  ";
+
+// echo $sqlappCount ; 
 $page_size = 20;
 $result = mysqli_query($con, $sqlappCount);
 $row = mysqli_fetch_assoc($result);
@@ -204,7 +252,7 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                                 <option value="">Select</option>
                                 <option value="1" <? if (isset($isDelegatedFilter) && $isDelegatedFilter == 1) {
                                     echo 'selected';
-                                } ?>>Yes</option>
+                                } ?>> Yes </option>
                                 <option value="0" <? if (isset($isDelegatedFilter) && $isDelegatedFilter == 0) {
                                     echo 'selected';
                                 } ?>>No</option>
@@ -240,8 +288,8 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
                 </form>
 
-                <form id="submitForm">
-                    <button type="submit">Submit</button>
+                <form id="submitForm" class="<? if($islho==1) { echo 'displayNone'; } ?>">
+                    <button type="submit">Bulk Delegate</button>
                 </form>
 
             </div>
@@ -256,12 +304,13 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     <thead>
                         <tr class="table-primary">
                             <th>#</th>
-                            <th><input type="checkbox" id="check_all">Check All</th>
+                            <th class="<? if($islho==1) { echo 'displayNone'; } ?>"><input type="checkbox" id="check_all">Check All</th>
                             <th>atmid </th>
-                            <th>Delegation</th>
-                            <th>Delegated To</th>
+                            <th class="<? if($islho==1) { echo 'displayNone'; } ?>">Delegation</th>
+                            <th class="<? if($islho==1) { echo 'displayNone'; } ?>">Delegated To</th>
                             <th>History</th>
                             <th>Current Status</th>
+                            <th>Assign</th>
                             <th>PO Number</th>
                             <th>PO Date</th>
                             <th>activity </th>
@@ -356,28 +405,49 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                             $ASD = $atm_sql_result['ASD'];
                             $lastUpdate = getLatestEvent($id, $atmid);
 
-                            $projectInstallationsql = mysqli_query($con, "select * from projectInstallation where siteid = '" . $id . "' and status=1 ");
+                            $projectInstallationsql = mysqli_query($con, "select * from projectInstallation where siteid = '" . $id . "' and status=1 order by id desc");
                             if ($projectInstallationsql_result = mysqli_fetch_assoc($projectInstallationsql)) {
                                 $projectInstallation = true;
                                 $projectInstallationVendor = $projectInstallationsql_result['vendor'];
+                                $projectinstallationID = $projectInstallationsql_result['id'];
                             } else {
                                 $projectInstallation = false;
                             }
 
+
+
+
+
+                            $sql22 = "SELECT a.atmid, a.siteid, MAX(a.created_at) as latest_created_at, MAX(a.isSentToEngineer) as isSentToEngineer,
+                            MAX(a.isDone) as isDone, MAX(b.assignedToId) as assignedToId, MAX(b.assignedToName) as assignedToName FROM projectInstallation a
+                            LEFT JOIN assignedInstallation b ON a.siteid = b.siteid AND a.atmid = b.atmid WHERE a.vendor = '" . $RailTailVendorID . "' AND a.status = 1 
+                            and a.atmid='".$atmid."'
+                            GROUP BY a.atmid, a.siteid";
+                            $result22 = mysqli_query($con, $sql22);
+                            $row22 = mysqli_fetch_assoc($result22);
+
+
+                            $isSentToEngineer = $row['isSentToEngineer'];
+                            $assignedToName = $row['assignedToName'];
+                            $isDone = $row['isDone'];
+
+
+
+// echo ' $isDelegated' .  $isDelegated ; 
                             ?>
 
                             <tr>
                                 <th>
                                     <?php echo $counter; ?>
                                 </th>
-                                <td>
+                                <td class="<? if($islho==1) { echo 'displayNone'; } ?>">
                                     <input type="checkbox" class="single_site_delegate" value="<?= $id; ?>" />
                                 </td>
                                 <td class="strong"> <a href="atmEdit.php?id=<? echo $id; ?>&atmid=<? echo $atmid; ?>"><i
                                             class="mdi mdi-tooltip-edit"></i></a> |
                                     <? echo $atmid; ?>
                                 </td>
-                                <td>
+                                <td class="<? if($islho==1) { echo 'displayNone'; } ?>">
                                     <?php
 
                                     if ($isFeasibiltyDoneRecord) {
@@ -385,7 +455,7 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                                         echo '<a href="feasibilityReport.php?atmid=' . $atmid . '" target="_blank">Report</a>';
                                     } else {
                                         if ($isDelegated == 0) {
-                                            echo '<a href="delegate.php?id=' . $id . '&atmid=' . $atmid . '">Delegate ➜</a>';
+                                            echo '<a href="vendorsDelegation.php?id=' . $id . '&atmid=' . $atmid . '">Delegate ➜</a>';
                                         } else {
                                             echo '<button class="btn btn-success btn-icon" style="  width: 20px;height: auto !important;">&#10004;</button> | <a href="delegate.php?id=' . $id . '&atmid=' . $atmid . '&action=redelegate">Redelegate <span style="color:red">⟳</span></a>';
                                         }
@@ -393,7 +463,7 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                                     ?>
                                 </td>
 
-                                <td>
+                                <td class="<? if($islho==1) { echo 'displayNone'; } ?>">
                                     <?
                                     if ($isDelegated == 1) {
 
@@ -410,9 +480,9 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                                 </td>
                                 <td>
 
-                                    <a href="#" data-bs-toggle="modal" class="history-link" data-bs-target="#historyModal" data-act="add"
-                                        data-siteid="<?php echo $id; ?>">History</a>
-                                        
+                                    <a href="#" data-bs-toggle="modal" class="history-link" data-bs-target="#historyModal"
+                                        data-act="add" data-siteid="<?php echo $id; ?>">History</a>
+
 
 
                                 </td>
@@ -422,7 +492,7 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                                         ? ($verificationStatus === 'Verify' ? '<button class="btn btn-success btn-icon" title="Verification Approved">&#10004;</button>'
                                             : '<button class="btn btn-danger btn-icon" title="Verification Reject ">R</button> | <a href="reopenRejectFeasibility.php?id=' . $id . '&atmid=' . $atmid . '&action=reopen_redelegation&vendor=' . $projectInstallationVendor . '">Reopen <span style="color:red">⟳</span></a>')
                                         . ($projectInstallation
-                                            ? ' | Sent to Vendor for Installation : <u><b>' . getVendorName($projectInstallationVendor) . '</b></u>'
+                                            ? ' '
                                             : ($verificationStatus === 'Verify'
                                                 ? ' | <a href="sendToInstallation.php?id=' . $id . '&atmid=' . $atmid . '">Proceed To Installation</a>'
                                                 : '')
@@ -435,6 +505,26 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
                                     ?>
                                 </td>
+
+
+
+                                <td>
+                                                <?
+                                                if ($isDone == 1) {
+                                                    echo 'Installation Done !';
+                                                } else {
+                                                    if ($isSentToEngineer == 1 && $isFeasibiltyDoneRecord) {
+                                                        echo 'Assigned to <strong>' . $assignedToName . '</strong>';
+                                                    } else if($isFeasibiltyDoneRecord) {
+                                                        echo '<a href="assignProjectInstallation.php?id=' . $projectinstallationID . '&siteid=' . $id . '&atmid=' . $atmid . '">Assigned to Engineer</a>';
+                                                    }else{
+                                                        echo '-';
+                                                    }
+                                                }
+                                                ?>
+                                            </td>
+
+
 
                                 <td>
                                     <?= ($po ? $po : 'NA'); ?>
@@ -670,27 +760,27 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
 
 
-        $(document).on('click', '.history-link', function () {
+    $(document).on('click', '.history-link', function () {
 
-            var siteId = $(this).data("siteid");
+        var siteId = $(this).data("siteid");
 
-            console.log('ds');
-            var modal = document.getElementById("historyModal");
-            $.ajax({
-                url: "getHistory.php",
-                type: "POST",
-                data: {
-                    siteId: siteId
-                },
-                success: function (response) {
-                    $("#historyContent").html(response);
-                    modal.style.display = "block";
-                },
-                error: function () {
-                    alert("Failed to fetch history data.");
-                }
-            });
+        console.log('ds');
+        var modal = document.getElementById("historyModal");
+        $.ajax({
+            url: "getHistory.php",
+            type: "POST",
+            data: {
+                siteId: siteId
+            },
+            success: function (response) {
+                $("#historyContent").html(response);
+                modal.style.display = "block";
+            },
+            error: function () {
+                alert("Failed to fetch history data.");
+            }
         });
+    });
 </script>
 
 

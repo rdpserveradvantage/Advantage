@@ -13,8 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["checkedIds"])) {
         $allsiteid[] = $id;
         $all_atmid[] = $atmid;
     }
-
-
 }
 ?>
 <div class="row">

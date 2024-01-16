@@ -1,9 +1,30 @@
 <? include('../header.php');
 
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
+
+$isVendor = $_SESSION['isVendor'];
+$islho = $_SESSION['islho'];
+
+
+
+if($isVendor==1){
+    
+    ?>
+<script>
+    window.location.href="/corona/admin/vendor_add_user.php";
+</script>
+    <?
+    // header('Location: /');
+        // exit;
+        
+}
+
+
+
 
 ?>
 
@@ -186,6 +207,22 @@ error_reporting(E_ALL);
 
 
                             <div class="row">
+
+                            <div class="col-sm-12 form-group">
+                                    <label>Is Contractor : *</label><br />
+                                    <input type="radio" name="isVendor" value="1"> : Yes
+                                    <input type="radio" name="isVendor" value="0"> : No
+                                </div>
+                                
+                            <div class="col-sm-12 form-group">
+                                    <label>Is LHO : *</label>
+                                    <br />
+                                    <input type="radio" name="islho" value="1"> : Yes
+                                    <input type="radio" name="islho" value="0"> : No
+                                </div>
+                                
+
+
                                 <div class="col-sm-12 form-group">
                                     <label>Name : *</label>
                                     <input type="text" name="name" class="form-control" required>
@@ -221,14 +258,14 @@ error_reporting(E_ALL);
                                         <option value="2">Project Executive</option>
                                         <option value="5">Bank Executive</option>
                                         <option value="6">LHO</option>
-
+                                        
                                     </select>
                                 </div>
 
 
                                 <div class="col-sm-6 form-group">
                                     <label for="">Vendor : *</label>
-                                    <select class="form-control" name="vendorid" id="vendorSelect" required>
+                                    <select class="form-control" name="vendorid" id="vendorSelect" required >
                                         <option value="">Select</option>
                                         <?php
                                         $vendorsql = mysqli_query($con, "select * from vendor where status=1");
@@ -242,6 +279,8 @@ error_reporting(E_ALL);
                                             <?php
                                         }
                                         ?>
+                                        <option value="0">No Vendor</option>
+
                                     </select>
                                 </div>
 
@@ -433,12 +472,17 @@ error_reporting(E_ALL);
                     console.log(response)
                     if (response == 1) {
                         alert('User added successfully!');
+                        window.location.reload();
                     } else {
                         alert('Failed to add user. Please try again.');
+                        window.location.reload();
+
                     }
                 },
                 error: function () {
                     alert('Error submitting the form. Please try again.');
+                    window.location.reload();
+
                 }
             });
         });

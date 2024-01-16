@@ -32,6 +32,9 @@ if($uname && $password){
                 $_SESSION['ADVANTAGE_zone'] = $sql_result['zone'];
                 $_SESSION['ADVANTAGE_cust_id'] = $sql_result['cust_id'];
                 $_SESSION['vendor_id'] = $sql_result['vendorid'];
+
+                $_SESSION['isVendor'] = $sql_result['isVendor'];
+                $_SESSION['islho'] = $sql_result['islho'];
                 
                 $userid = $sql_result['id'];
                 

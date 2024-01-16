@@ -8,7 +8,7 @@ error_reporting(0);
 $base_url = "http://clarity.advantagesb.com/corona/";
 
 
-$host="localhost";
+$host="10.63.21.6";
 $user="advantage";
 $pass="qwerty121";
 $dbname="test_advantage";
@@ -42,6 +42,16 @@ $con = getConnectedDatabase();
 
 
 
+if (!function_exists('getVendorName')) {
+
+    function getVendorName($id){
+        global $con;
+            $sql = mysqli_query($con,"select * from vendor where id ='".$id."'");
+            $sql_result = mysqli_fetch_assoc($sql);
+            return $sql_result['vendorName'];
+
+    }
+}
 
 $ADVANTAGE_level = $_SESSION['ADVANTAGE_level'] ; 
 $ADVANTAGE_uname = $_SESSION['ADVANTAGE_uname'];
@@ -49,6 +59,8 @@ $username = $_SESSION['ADVANTAGE_username'] ;
 define('PORTAL', 'CLARITY');
 
 $_GLOBAL_VENDOR_ID = $_SESSION['vendor_id'] ;
+$RailTailVendorID = $_GLOBAL_VENDOR_ID ; 
+$RailTailVendorName = getVendorName($RailTailVendorID);
 
 if($_GLOBAL_VENDOR_ID!=4){
     $_VENDOR_LOGIN = true ; 
@@ -204,16 +216,6 @@ if (!function_exists('getUsername')) {
     }
 }
 
-if (!function_exists('getVendorName')) {
-
-    function getVendorName($id){
-        global $con;
-            $sql = mysqli_query($con,"select * from vendor where id ='".$id."'");
-            $sql_result = mysqli_fetch_assoc($sql);
-            return $sql_result['vendorName'];
-
-    }
-}
 
 if (!function_exists('get_misstate')) {
 
@@ -403,6 +405,32 @@ function getMaterial_requestData($siteid, $parameter)
 }
 
 
+function engineerASD($siteId,$atmid,$table) {
+    logEvent($siteId,$atmid, 'Project', 'Update ASD', 'Engineer Update Actual Schedule Date',$table);
+}
 
+function addSD($siteid,$atmid,$userid,$type,$scheduleDatetime){
+    global $con,$datetime;
+    
+    mysqli_query($con,"insert into scheduleASDESDHistory(siteid,atmid,userid,portal,type,scheduleDatetime,created_at,status)
+    values('".$siteid."','".$atmid."','".$userid."','Project','".$type."','".$scheduleDatetime."','".$datetime."',1)
+    ");
+}
+
+
+
+if (!function_exists('usersData')) {
+
+    function usersData($id,$parameter){
+        global $con;
+            $sql = mysqli_query($con,"select $parameter from user where id ='".$id."'");
+            $sql_result = mysqli_fetch_assoc($sql);
+            return $sql_result[$parameter];
+
+    }
+}
+function installationProceedFromVendor($siteId,$atmid,$table){
+    logEvent($siteId,$atmid, 'Vendor', 'Proceed Installation', 'Installation Request Sent To Engineer From Vendor',$table);
+}
 
 ?>

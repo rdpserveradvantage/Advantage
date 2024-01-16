@@ -8,16 +8,45 @@
 
     <?php
     $i = 1;
-    $sql = mysqli_query($con, "select * from lhositesdelegation where isPending=1");
-    $numRows = mysqli_num_rows($sql);
+
+
+
+    $vendor_id = $_SESSION['vendor_id'];
+    $isVendor = $_SESSION['isVendor'];
+
+    if ($isVendor == 1 && $vendor_id > 0) {
+
+    }
+
+
+
+
+    if ($assignedLho) {
+        if ($ADVANTAGE_level == 2 || $ADVANTAGE_level == 5) {
+            $atm_sql .= "and a.LHO = '" . $assignedLho . "' ";
+            $sqlappCount .= "and a.LHO= '" . $assignedLho . "' ";
+        }
+        $sql = mysqli_query($con, "select * from lhositesdelegation where isPending=1 and lhoName='" . $assignedLho . "'");
+        $numRows = mysqli_num_rows($sql);
+        $__LHO = true;
+        $acceptance_type = 'lho';
+    } else {
+        $sql = mysqli_query($con, "select * from vendorsitesdelegation where isPending=1 and vendorid='" . $vendor_id . "'");
+        $numRows = mysqli_num_rows($sql);
+        $__LHO = false;
+        $acceptance_type = 'vendor';
+
+    }
+
+
     ?>
 
     <?php if ($numRows > 0): ?>
 
-        
+<br />
         <form id="submitForm">
-                    <button type="submit">Submit</button>
-                </form>
+            <button type="submit">Bulk Acceptance</button>
+        </form>
 
 
         <table id="example" class="table dataTable js-exportable no-footer" style="width:100%">
@@ -31,21 +60,30 @@
             </thead>
             <tbody>
                 <?php
-                $i=1; 
+                $i = 1;
                 while ($sql_result = mysqli_fetch_assoc($sql)) {
                     $id = $sql_result['id'];
-                    $atmid = $sql_result['atmid'];
 
+                    if ($__LHO) {
+                        $atmid = $sql_result['atmid'];
+                    } else {
+                        $atmid = $sql_result['amtid'];
+                    }
                     ?>
                     <tr>
-                        <td><?= $i; ?></td>
+                        <td>
+                            <?= $i; ?>
+                        </td>
                         <td>
                             <input type="checkbox" class="single_site_delegate" value="<?= $id; ?>" />
                         </td>
-                        <td><?= $atmid ; ?></td>
+                        <td>
+                            <?= $atmid; ?>
+                        </td>
                         <td></td>
                     </tr>
-                <? $i++ ; } ?>
+                    <? $i++;
+                } ?>
             </tbody>
         </table>
     <?php else: ?>
@@ -57,14 +95,14 @@
 
 <script>
 
-    
-$("#submitForm").submit(function (e) {
+
+    $("#submitForm").submit(function (e) {
         e.preventDefault();
         var checkedIds = [];
         $(".single_site_delegate:checked").each(function () {
             checkedIds.push($(this).val());
         });
-        var form = $('<form action="accept_sites.php" method="post"></form>');
+        var form = $('<form action="accept_sites.php?acceptance_type=<?= $acceptance_type; ?>" method="post"></form>');
         for (var i = 0; i < checkedIds.length; i++) {
             form.append('<input type="hidden" name="checkedIds[]" value="' + checkedIds[i] + '" />');
         }
@@ -75,7 +113,7 @@ $("#submitForm").submit(function (e) {
 
 
 
-     $("#check_all").change(function () {
+    $("#check_all").change(function () {
         $(".single_site_delegate").prop('checked', $(this).prop("checked"));
     });
 </script>

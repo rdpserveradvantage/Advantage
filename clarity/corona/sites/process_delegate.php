@@ -8,14 +8,13 @@
         <div class="card">
             <div class="card-body">
 
+                <a href="sitestest.php">View Sites</a>
+
                 <?
-
-
                 $response = array();
 
                 $siteids = $_REQUEST['siteid'];
                 $siteidar = explode(',', $siteids);
-
                 $atmid = $_REQUEST['atmid'];
                 $atmid = explode(',', $atmid);
 
@@ -50,7 +49,7 @@
                         $sitessql_result = mysqli_fetch_assoc($sitessql);
                         $lho = $sitessql_result['LHO'];
 
-                        $lhosql = mysqli_query($con, "select * from lho");
+                        $lhosql = mysqli_query($con, "select * from lho where lho='" . $lho . "'");
                         $lhosql_result = mysqli_fetch_assoc($lhosql);
                         $lhoid = $lhosql_result['id'];
 

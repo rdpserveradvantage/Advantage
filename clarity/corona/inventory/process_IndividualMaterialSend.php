@@ -40,12 +40,12 @@ $pod = $_POST['POD'];
 $courier = $_POST['courier'];
 $remark = $_POST['remark'];
 
-$query = "INSERT INTO material_send (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark,material_qty,invID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$lho = mysqli_fetch_assoc(mysqli_query($con,"select LHO from sites where id='".$siteid."'"))['LHO'];
+$query = "INSERT INTO material_send (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark,material_qty,invID,lho) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $con->prepare($query);
-$stmt->bind_param("ssissssssis", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark, $material_qty, $invIdAr);
+$stmt->bind_param("ssissssssis", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark, $material_qty, $invIdAr,$lho);
 $stmt->execute();
 $stmt->close();
-
 $materialSendId = $con->insert_id;
 
 

@@ -11,7 +11,7 @@ $host = "10.63.21.6";
 $user = "advantage";
 $pass = "qwerty121";
 $dbname = "test_advantage";
-// $dbname = "sarmicrosystems_advantage";
+$dbname = "sarmicrosystems_advantage";
 
 
 function connectToDatabase()

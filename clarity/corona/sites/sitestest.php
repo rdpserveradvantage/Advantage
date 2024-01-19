@@ -150,7 +150,7 @@ $start_window = max(1, $current_page - floor($window_size / 2));
 $end_window = min($start_window + $window_size - 1, $total_pages);
 $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
-echo $sql_query;
+// echo $sql_query;
 
 ?>
 
@@ -277,7 +277,7 @@ echo $sql_query;
 
         <div class="card">
 
-            <div class="card-header">
+            <div class="card-body">
                 <h5>Total Records: <strong class="record-count">
                         <? echo $total_records; ?>
                     </strong></h5>
@@ -288,9 +288,9 @@ echo $sql_query;
                     <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
                 </form>
 
-                <form id="submitForm" class="<? if($islho==1) { echo 'displayNone'; } ?>">
+                <!-- <form id="submitForm" class="<? if($islho==1) { echo 'displayNone'; } ?>">
                     <button type="submit">Bulk Delegate</button>
-                </form>
+                </form> -->
 
             </div>
             <div class="card-body" style="overflow:auto;">
@@ -453,7 +453,7 @@ echo $sql_query;
                                         if ($isDelegated == 0) {
                                             echo '<a href="vendorsDelegation.php?id=' . $id . '&atmid=' . $atmid . '">Delegate ➜</a>';
                                         } else {
-                                            echo '<button class="btn btn-success btn-icon" style="  width: 20px;height: auto !important;">&#10004;</button> | <a href="delegate.php?id=' . $id . '&atmid=' . $atmid . '&action=redelegate">Redelegate <span style="color:red">⟳</span></a>';
+                                            echo '<button class="btn btn-success btn-icon" style="  width: 20px;height: auto !important;">&#10004;</button> | <a href="vendorsDelegation.php?id=' . $id . '&atmid=' . $atmid . '&action=redelegate">Redelegate <span style="color:red">⟳</span></a>';
                                         }
                                     }
                                     ?>
@@ -748,7 +748,7 @@ echo $sql_query;
         $(".single_site_delegate:checked").each(function () {
             checkedIds.push($(this).val());
         });
-        var form = $('<form action="delegate.php" method="post"></form>');
+        var form = $('<form action="vendorsDelegation.php" method="post"></form>');
         for (var i = 0; i < checkedIds.length; i++) {
             form.append('<input type="hidden" name="checkedIds[]" value="' + checkedIds[i] + '" />');
         }

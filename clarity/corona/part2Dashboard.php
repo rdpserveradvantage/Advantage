@@ -1,37 +1,8 @@
 <div class="row">
-    <div class="col-md-4 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Transaction History</h4>
-                <canvas id="transaction-history" class="transaction-chart"></canvas>
-                <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                    <div class="text-md-center text-xl-left">
-                        <h6 class="mb-1">Transfer to Paypal</h6>
-                        <p class="text-muted mb-0">07 Jan 2019, 09:12AM</p>
-                    </div>
-                    <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                        <h6 class="font-weight-bold mb-0">$236</h6>
-                    </div>
-                </div>
-                <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                    <div class="text-md-center text-xl-left">
-                        <h6 class="mb-1">Tranfer to Stripe</h6>
-                        <p class="text-muted mb-0">07 Jan 2019, 09:12AM</p>
-                    </div>
-                    <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                        <h6 class="font-weight-bold mb-0">$593</h6>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-6 grid-margin stretch-card">
+        <?php include('part4dashboard.php'); ?>
     </div>
-
-
-
-
-
-
-    <div class="col-md-8 grid-margin stretch-card">
+    <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-row justify-content-between">
@@ -96,8 +67,12 @@
                                                 </p>
                                             </div>
                                             <div class="me-auto text-sm-right pt-2 pt-sm-0">
-                                                <p class="text-muted"><?= $duration ; ?></p>
-                                                <p class="text-muted mb-0"><?= $sbiTicketId; ?> </p>
+                                                <p class="text-muted">
+                                                    <?= $duration; ?>
+                                                </p>
+                                                <p class="text-muted mb-0">
+                                                    <?= $sbiTicketId; ?>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>

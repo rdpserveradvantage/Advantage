@@ -286,7 +286,7 @@ if (verifyToken($token) != 1 || $token == 'NA') {
             function unlockIPs() {
               $.ajax({
                 type: 'GET',
-                url: '../unLockIPs.php',
+                url: '<? $_SERVER["DOCUMENT_ROOT"]; ?>/corona/unLockIPs.php',
                 success: function (response) { },
                 error: function (xhr, status, error) {
                   console.error(xhr.responseText);
@@ -313,7 +313,7 @@ if (verifyToken($token) != 1 || $token == 'NA') {
                   </button>
                 </div>
                 <div class="modal-body">
-                  <div id="historyContent" style="overflow: scroll;max-height: 70vh;"></div>
+                  <div id="atmhistoryContent" style="overflow: scroll;max-height: 70vh;"></div>
                 </div>
                 <div class="modal-footer">
 
@@ -329,19 +329,19 @@ if (verifyToken($token) != 1 || $token == 'NA') {
     document.addEventListener("DOMContentLoaded", function () {
         var searchForm = document.getElementById('searchForm');
         var searchInput = document.getElementById('atmSearchInput');
-        var historyContent = document.getElementById('historyContent');
+        var atmhistoryContent = document.getElementById('atmhistoryContent');
 
         searchForm.addEventListener('submit', function (event) {
             event.preventDefault();
 
             // Fetch data using AJAX
             $.ajax({
-                url: 'getatmHistory.php',
+                url: '<? $_SERVER["DOCUMENT_ROOT"]; ?>/corona/getatmHistory.php',
                 type: 'GET',
                 data: { atmid: searchInput.value },
                 success: function (response) {
-                    // Update #historyContent with the response
-                    historyContent.innerHTML = response;
+                    // Update #atmhistoryContent with the response
+                    atmhistoryContent.innerHTML = response;
 
                     // Trigger modal on form submission
                     var myModal = new bootstrap.Modal(document.getElementById('atmmodal'));
@@ -364,8 +364,8 @@ if (verifyToken($token) != 1 || $token == 'NA') {
                     type: 'GET',
                     data: { atmid: searchInput.value },
                     success: function (response) {
-                        // Update #historyContent with the response
-                        historyContent.innerHTML = response;
+                        // Update #atmhistoryContent with the response
+                        atmhistoryContent.innerHTML = response;
 
                         // Trigger modal on Enter key press
                         var myModal = new bootstrap.Modal(document.getElementById('atmmodal'));

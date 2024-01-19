@@ -34,11 +34,12 @@ foreach ($serialNumbers as $serialNumbersKey => $serialNumbersVal) {
     $serialNumbersValAr[] =  $serialNumbersVal;
 }
 
+$lho = mysqli_fetch_assoc(mysqli_query($con,"select LHO from sites where id='".$siteid."'"))['LHO'];
 
-$query = "INSERT INTO material_send (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark,portal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$query = "INSERT INTO material_send (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark,portal,lho) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $con->prepare($query);
 $portal = 'vendor' ;
-$stmt->bind_param("ssisssssss", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark,$portal);
+$stmt->bind_param("ssisssssss", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark,$portal,$lho);
 $stmt->execute();
 $stmt->close();
 

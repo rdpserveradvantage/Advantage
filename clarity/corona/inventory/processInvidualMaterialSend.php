@@ -23,10 +23,11 @@ if ($getMaterialSqlResult = mysqli_fetch_assoc($getMaterialSql)) {
     $remark = $_POST['remark'];
 
 
+    $lho = mysqli_fetch_assoc(mysqli_query($con,"select LHO from sites where id='".$siteid."'"))['LHO'];
 
-    $query = "INSERT INTO material_send (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO material_send (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark, lho) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $con->prepare($query);
-    $stmt->bind_param("ssissssss", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark);
+    $stmt->bind_param("ssissssss", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark, $lho);
     $stmt->execute();
     $stmt->close();
 

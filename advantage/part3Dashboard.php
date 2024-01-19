@@ -125,7 +125,8 @@ if ($noRecordsFound) {
     }
     
     while ($pendingInstallationSqlResult = mysqli_fetch_assoc($pendingInstallationSql)) {
-        $vendorStatus = (int)$pendingInstallationSqlResult['status']; // Convert to integer (1 for active, 0 for non-active)
+        $vendorStatus = (int)$pendingInstallationSqlResult['status']; 
+        // Convert to integer (1 for active, 0 for non-active)
         if ($vendorStatus === 1) {
             $vendorId = $pendingInstallationSqlResult['vendor'];
             $vendorName = getVendorName($vendorId);

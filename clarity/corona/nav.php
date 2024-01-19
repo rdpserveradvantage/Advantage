@@ -37,11 +37,11 @@ if ($_SESSION['ADVANTAGE_username']) {
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
             <a class="sidebar-brand brand-logo" href="<? $_SERVER["DOCUMENT_ROOT"]; ?>/corona/index.php"
                 style="color:white;">
-                <!-- <img src="http://clarity.advantagesb.com/assets/1601680170_capture.jpg" alt="logo" />
-             -->
-                RailTel
+                 <img src="http://clarity.advantagesb.com/assets/1601680170_capture.jpg" alt="logo" />
+             
+             
             </a>
-            <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg"
+            <a class="sidebar-brand brand-logo-mini" href="index.php"><img src="assets/images/logo-mini.svg"
                     alt="logo" /></a>
         </div>
 
@@ -57,7 +57,7 @@ if ($_SESSION['ADVANTAGE_username']) {
                         </div>
                         <div class="profile-name">
                             <h5 class="mb-0 font-weight-normal">
-                                <?= ucwords($_SESSION['ADVANTAGE_username']); ?>
+                                
                             </h5>
 
                         </div>

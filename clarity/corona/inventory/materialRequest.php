@@ -1,4 +1,6 @@
-<? include('../header.php'); ?>
+<? include('../header.php'); 
+
+?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
@@ -113,22 +115,22 @@
                                         $atmIP = $sql_result['atmIP'];
 
                                         if ($networkIP) {
-                                            $ipRemark .= ' Network IP <i class="fas fa-check" style="color:green;"></i>';
+                                            $ipRemark .= ' Network IP <i class="mdi mdi-checkbox-marked-outline" style="color:green;"></i>';
                                         } else {
-                                            $ipRemark .= ' Network IP <i class="fas fa-window-close" style="color:red;"></i>';
+                                            $ipRemark .= ' Network IP <i class="mdi mdi-close-box" style="color:red;"></i>';
                                             $error++;
                                         }
                                         if ($routerIP) {
-                                            $ipRemark .= ' Router IP <i class="fas fa-check" style="color:green;"></i>';
+                                            $ipRemark .= ' Router IP <i class="mdi mdi-checkbox-marked-outline" style="color:green;"></i>';
                                         } else {
-                                            $ipRemark .= ' Router IP <i class="fas fa-window-close"  style="color:red;"></i>';
+                                            $ipRemark .= ' Router IP <i class="mdi mdi-close-box"  style="color:red;"></i>';
                                             $error++;
                                         }
                                         if ($atmIP) {
-                                            $ipRemark .= ' ATM IP <i class="fas fa-check" style="color:green;"></i>';
+                                            $ipRemark .= ' ATM IP <i class="mdi mdi-checkbox-marked-outline" style="color:green;"></i>';
                                         } else {
                                             $error++;
-                                            $ipRemark .= ' ATM IP <i class="fas fa-window-close"  style="color:red;"></i>';
+                                            $ipRemark .= ' ATM IP <i class="mdi mdi-close-box"  style="color:red;"></i>';
                                         }
 
                                         $routerConfiguration = mysqli_query($con, "select * from routerConfiguration where atmid='" . $atmid . "' and status=1");

@@ -60,7 +60,7 @@ $user_permission = explode (",", $user_permission);
                
                 <div class="col-sm-12 form-group">
                                     <label for="">Vendor</label>
-                                    <select class="form-control" name="vendorid" required>
+                                    <select class="form-control" name="vendorid" >
                                         <option value="">Select</option>
                                         <?php 
                                         $vendorsql = mysqli_query($con,"select * from vendor where status=1");
@@ -127,7 +127,6 @@ $user_permission = explode (",", $user_permission);
      $(document).ready(function () {
         
         $('#editUserForm').submit(function (event) {
-        alert('update event');
             event.preventDefault();
             var formData = $(this).serialize();
             $.ajax({
@@ -137,13 +136,24 @@ $user_permission = explode (",", $user_permission);
                 success: function (response) {
                     console.log(response)
                     if (response == 1) {
-                        alert('User updated successfully!');
+                        Swal.fire('Success','User updated successfully!','success').then(function () {
+                            window.location.reload();
+                             
+                        });
+
                     } else {
-                        alert('Failed to Update user. Please try again.');
+                        Swal.fire('Error','Failed to Update user. Please try again !','error')
+                        .then(function () {
+                            window.location.reload();
+                                                    });
+
                     }
                 },
                 error: function () {
-                    alert('Error submitting the form. Please try again.');
+                    Swal.fire('Error','Failed to Update user. Please try again !','error')
+                        .then(function () {
+                            window.location.reload();
+                            });
                 }
             });
         });

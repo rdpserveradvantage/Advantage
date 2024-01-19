@@ -35,10 +35,7 @@
         $numRows = mysqli_num_rows($sql);
         $__LHO = false;
         $acceptance_type = 'vendor';
-
     }
-
-
     ?>
 
     <?php if ($numRows > 0): ?>

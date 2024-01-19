@@ -8,8 +8,8 @@
         <div class="card">
             <div class="card-body">
 
-                <a href="sitestest.php">View Sites</a>
-
+                <a class="btn btn-primary btn-fw" href="sitestest.php">View Sites</a>
+<br /> 
                 <?
                 $response = array();
 

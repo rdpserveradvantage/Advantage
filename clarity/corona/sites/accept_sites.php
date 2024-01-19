@@ -25,6 +25,7 @@
             $sql_result = mysqli_fetch_assoc($sql);
             $siteid = $sql_result['siteid'];
             $atmid = $sql_result['amtid'];
+            $vendorid = $sql_result['vendorid'];
             $updateSql = "update vendorsitesdelegation set isPending=0, upated_at='" . $datetime . "', 
         updated_by='" . $userid . "' where id='" . $id . "'";
 
@@ -33,7 +34,42 @@
             } else {
                 echo $atmid . ' Acceptance Error !<br />';
             }
-        }
+
+
+
+
+
+
+            $materialQuantities = [];
+            $matsql = "SELECT value, count FROM boq";
+            $result = $con->query($matsql);
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $materialName = $row['value'];
+                    $quantity = $row['count'];
+                    $materialQuantities[$materialName] = $quantity;
+                }
+            }
+
+
+
+
+            // Generate material requests
+    
+
+            foreach ($materialQuantities as $materialName => $quantity) {
+                // Insert the material request into the table
+
+                 echo    $sql = "INSERT INTO material_requests (siteid, feasibility_id, material_name, quantity, status, created_by,created_at,type,vendorId)
+                VALUES ('$siteid', '$feasibiltyId', '$materialName', '$quantity', 'pending', '" . $userid . "','" . $datetime . "','External','".$vendorid."')";
+                    if ($con->query($sql) === false) {
+                        echo "Error: " . $sql . "<br>" . $con->error;
+                }
+            }
+                generatesAutoMaterialRequest($siteid, $atm_id, '');
+            // End Generate material requests
+    }
 
     }
     ?>

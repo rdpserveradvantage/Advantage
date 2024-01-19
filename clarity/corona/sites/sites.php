@@ -9,13 +9,13 @@
 
 
 
-    function getBranchName($id)
-    {
-        global $con;
-        $sql = mysqli_query($con, "select * from mis_city where id='" . $id . "'");
-        $sql_result = mysqli_fetch_assoc($sql);
-        return $sql_result['city'];
-    }
+function getBranchName($id)
+{
+    global $con;
+    $sql = mysqli_query($con, "select * from mis_city where id='" . $id . "'");
+    $sql_result = mysqli_fetch_assoc($sql);
+    return $sql_result['city'];
+}
 
 $sqlappCount = "select count(1) as total from sites a where 1 ";
 $atm_sql = "select a.po,a.po_date,a.id,a.activity,a.customer,a.bank,a.atmid,a.address,a.city,a.state,a.zone,a.LHO,a.LHO_Contact_Person,a.LHO_Contact_Person_No,
@@ -76,7 +76,7 @@ if (isset($_REQUEST['state']) && $_REQUEST['state'] != '') {
 $atm_sql .= "and a.status=1 order by a.id desc";
 $sqlappCount .= "and a.status=1  ";
 
-echo $sqlappCount ; 
+echo $sqlappCount;
 $page_size = 20;
 $result = mysqli_query($con, $sqlappCount);
 $row = mysqli_fetch_assoc($result);
@@ -331,7 +331,7 @@ echo $sql_query;
                             $CONNECTIVITY = $atm_sql_result['CONNECTIVITY'];
                             $Connectivity_Type = $atm_sql_result['Connectivity_Type'];
                             $Site_data_Received_for_Feasiblity_date = $atm_sql_result['Site_data_Received_for_Feasiblity_date'];
-                            $isDelegated = $atm_sql_result['isDelegated'];
+
                             $created_at = $atm_sql_result['created_at'];
                             $created_by = $atm_sql_result['created_by'];
                             $created_by = getUsername($created_by, 0);
@@ -349,6 +349,26 @@ echo $sql_query;
                                 $projectInstallationVendor = $projectInstallationsql_result['vendor'];
                             } else {
                                 $projectInstallation = false;
+                            }
+
+                            $isDelegated = $atm_sql_result['isDelegated'];
+
+                            $delegationsql = mysqli_query($con, "select * from vendorSitesDelegation where siteid='" . $id . "' order by id desc");
+                            if ($delegationsql_result = mysqli_fetch_assoc($delegationsql)) {
+                                $delegationDate = $delegationsql_result['created_at'];
+                                $delegatedVendorid = $delegationsql_result['vendorid'];
+                                $delegatedVendorName = $delegationsql_result['vendorName'];
+                                $delegationStatus = $delegationsql_result['isPending'];
+                                $accepatedDate = $delegationsql_result['upated_at'];
+                                if ($delegationStatus == 1) {
+                                    $delegationStatusRemark = 'Acceptance Pending From ' . $delegatedVendorName;
+                                } else if ($delegationStatus == 0) {
+                                    $delegationStatusRemark = $delegatedVendorName . ' Accepted At ' . $accepatedDate;
+                                    $isDelegated = 1;
+                                }
+
+                            }else{
+                                $isDelegated=0;
                             }
 
                             ?>
@@ -374,7 +394,14 @@ echo $sql_query;
                                         if ($isDelegated == 0) {
                                             echo '<a href="singleDelegate.php?id=' . $id . '&atmid=' . $atmid . '">Delegate ➜</a>';
                                         } else {
-                                            echo '<button class="btn btn-success btn-icon" style="  width: 20px;height: auto !important;">&#10004;</button> | <a href="delegate.php?id=' . $id . '&atmid=' . $atmid . '&action=redelegate">Redelegate <span style="color:red">⟳</span></a>';
+                                            echo '<button class="btn btn-success btn-icon" style="  width: 20px;height: auto !important;">&#10004;</button> 
+                                            | 
+                                            <a href="delegate.php?id=' . $id . '&atmid=' . $atmid . '&action=redelegate">Redelegate <span style="color:red">⟳</span></a>
+                                            |
+                                             ' . $delegationStatusRemark . ' 
+
+                                            ';
+                                            // echo "select * from vendorSitesDelegation where siteid='".$id."' order by id desc" ; 
                                         }
                                     }
                                     ?>
@@ -385,10 +412,8 @@ echo $sql_query;
                                     if ($isDelegated == 1) {
 
                                         //  echo "select * from vendorSitesDelegation where amtid='".$atmid."' order by id desc" ; 
-                                        $delegationsql = mysqli_query($con, "select * from vendorSitesDelegation where amtid='" . $atmid . "' order by id desc");
-                                        $delegationsql_result = mysqli_fetch_assoc($delegationsql);
-                                        $delegationDate = $delegationsql_result['created_at'];
-                                        echo '<span>' . getVendorName($delegatedtoVendorId) . '</span> ' . ' on <span>' . $delegationDate . '</span>';
+                                
+                                        echo '<span>' . getVendorName($delegatedVendorid) . '</span> ' . ' on <span>' . $delegationDate . '</span>';
                                     } else {
                                         echo 'No data';
                                     }

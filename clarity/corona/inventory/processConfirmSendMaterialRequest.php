@@ -39,9 +39,10 @@ foreach ($serialNumbers as $serialNumbersKey => $serialNumbersVal) {
 
 // return ;
 
-$query = "INSERT INTO material_send (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$query = "INSERT INTO material_send (atmid, siteid, vendorId, contactPersonName, contactPersonNumber, address, pod, courier, remark,portal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $con->prepare($query);
-$stmt->bind_param("ssissssss", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark);
+$portal = 'clarity' ;
+$stmt->bind_param("ssisssssss", $atmid, $siteid, $vendorId, $contactPersonName, $contactPersonNumber, $address, $pod, $courier, $remark,$portal);
 $stmt->execute();
 $stmt->close();
 
@@ -96,9 +97,9 @@ if (!empty($serialNumberAr)) {
 
 
         $vendorInventorySql = "insert into vendorInventory(vendorId, material, material_make, model_no, serial_no,  amount, gst, amount_with_gst, 
-        courier_detail, tracking_details,  created_at, created_by, status) 
+        courier_detail, tracking_details,  created_at, created_by, status,material_send_id) 
         values('" . $vendorId . "','" . $material . "', '" . $material_make . "', '" . $model_no . "', '" . $serial_no . "',  '" . $amount . "',
-        '" . $gst . "', '" . $amount_with_gst . "', '" . $courier . "', '" . $po_number . "', '" . $datetime . "', '" . $userid . "',0)";
+        '" . $gst . "', '" . $amount_with_gst . "', '" . $courier . "', '" . $po_number . "', '" . $datetime . "', '" . $userid . "',0,'".$materialSendId."')";
 
         $result = mysqli_query($con, $vendorInventorySql);
 

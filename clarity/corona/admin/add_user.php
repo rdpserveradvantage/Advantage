@@ -89,7 +89,8 @@ if($isVendor==1){
     <i class="mdi mdi-account-plus"></i> &nbsp; Add
 </button>
 
-
+<br />
+<br />
 
 <div class="row">
     <div class="col-12  grid-margin">
@@ -210,8 +211,8 @@ if($isVendor==1){
 
                             <div class="col-sm-12 form-group">
                                     <label>Is Contractor : *</label><br />
-                                    <input type="radio" name="isVendor" value="1"> : Yes
-                                    <input type="radio" name="isVendor" value="0"> : No
+                                    <input type="radio" id="isVendorYes" name="isVendor" value="1"> : Yes
+                                    <input type="radio" id="isVendorNo"  name="isVendor" value="0"> : No
                                 </div>
                                 
                             <div class="col-sm-12 form-group">
@@ -471,11 +472,15 @@ if($isVendor==1){
                 success: function (response) {
                     console.log(response)
                     if (response == 1) {
-                        alert('User added successfully!');
-                        window.location.reload();
+                        Swal.fire('Success','User added successfully !','success')
+                        .then(function () {
+                            window.location.reload();
+                            });
                     } else {
-                        alert('Failed to add user. Please try again.');
-                        window.location.reload();
+                        Swal.fire('Error','Failed to Update user. Please try again !','error')
+                        .then(function () {
+                                window.location.href = "doneConfigured.php";
+                            });
 
                     }
                 },
@@ -491,6 +496,26 @@ if($isVendor==1){
 
 <? include('../footer.php'); ?>
 <script>
+
+$(document).ready(function () {
+        // Initial check of radio button on page load
+        checkVendorRequirement();
+
+        // Handle change event of radio buttons
+        $('input[name="isVendor"]').change(function () {
+            checkVendorRequirement();
+        });
+
+        function checkVendorRequirement() {
+            var isVendorYes = $('#isVendorYes').is(':checked');
+
+            // Set 'required' attribute based on the value of the radio button
+            $('#vendorSelect').prop('required', isVendorYes);
+        }
+    });
+
+
+
     function validInput(e) {
         e = (e) ? e : window.event;
         a = document.getElementById('contact');

@@ -106,7 +106,7 @@ function getSitesInfo($siteid, $parameter)
 
                 <div id="attributeFields">
                     <?php
-                    // echo $statement ; 
+                    echo $statement ; 
                     $sql = mysqli_query($con, $statement);
                     while ($sql_result = mysqli_fetch_assoc($sql)) {
                         $material_name = $sql_result['material_name']; ?>

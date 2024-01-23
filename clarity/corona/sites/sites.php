@@ -76,7 +76,7 @@ if (isset($_REQUEST['state']) && $_REQUEST['state'] != '') {
 $atm_sql .= "and a.status=1 order by a.id desc";
 $sqlappCount .= "and a.status=1  ";
 
-echo $sqlappCount;
+// echo $sqlappCount;
 $page_size = 20;
 $result = mysqli_query($con, $sqlappCount);
 $row = mysqli_fetch_assoc($result);
@@ -89,7 +89,7 @@ $start_window = max(1, $current_page - floor($window_size / 2));
 $end_window = min($start_window + $window_size - 1, $total_pages);
 $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
-echo $sql_query;
+// echo $sql_query;
 
 ?>
 

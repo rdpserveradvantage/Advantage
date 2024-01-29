@@ -260,7 +260,7 @@
                     echo '
                                             
                                 <div class="noRecordsContainer">
-                                    <img src="assets/noRecords.png">
+                                    <img src="../assets/images/noRecords.png">
                                 </div>';
                 }
 

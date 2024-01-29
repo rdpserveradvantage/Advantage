@@ -3,11 +3,10 @@
 if ($_SESSION['ADVANTAGE_username']) {
     $id = $_SESSION['ADVANTAGE_userid'];
 
-    $user = "select * from user where id=" . $id;
+    $user = "select * from user where userid=" . $id;
     $usersql = mysqli_query($con, $user);
     $usersql_result = mysqli_fetch_assoc($usersql);
-
-
+    
     $level = $usersql_result['level'];
     $permission = $usersql_result['permission'];
     $permission = explode(',', $permission);

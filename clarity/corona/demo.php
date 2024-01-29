@@ -7,7 +7,7 @@
 
 
 
-$sql = mysqli_query($con,"select * from vendorusers");
+$sql = mysqli_query($con,"select * from mis_loginusers");
 while($sql_result = mysqli_fetch_assoc($sql)){
 
 

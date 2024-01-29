@@ -1,6 +1,9 @@
-<? include('../header.php'); ?>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<? include('../header.php'); 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+?>
 
 <style>
     .colinfo {
@@ -113,6 +116,8 @@
 
     $atm_sql .= "  order by id desc";
     $sqlappCount .= " ";
+echo $sqlappCount ; 
+
     $page_size = 10;
     $result = mysqli_query($con, $sqlappCount);
     $row = mysqli_fetch_assoc($result);
@@ -309,3 +314,6 @@
     </div>
 </div>
 <? include('../footer.php'); ?>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

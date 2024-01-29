@@ -15,7 +15,7 @@ $password = $_REQUEST['password'];
 
 if($uname && $password){
 
-
+// echo "SELECT * FROM user WHERE (uname = '$uname' OR contact = '$uname') AND pwd = '$password' AND user_status = 1" ; 
     $sql = mysqli_query($con, "SELECT * FROM user WHERE (uname = '$uname' OR contact = '$uname') AND pwd = '$password' AND user_status = 1");
     $result = mysqli_num_rows($sql);
     if($result>0){
@@ -24,7 +24,7 @@ if($uname && $password){
                 $_SESSION['ADVANTAGE_auth']=1;
                 $_SESSION['ADVANTAGE_username']=$sql_result['name'];
                 $_SESSION['ADVANTAGE_designation']=$sql_result['designation'];
-                $_SESSION['ADVANTAGE_userid'] = $sql_result['id'];
+                $_SESSION['ADVANTAGE_userid'] = $sql_result['userid'];
                 $_SESSION['ADVANTAGE_level'] = $sql_result['level'];
                 $_SESSION['ADVANTAGE_uname'] = $sql_result['uname'];
                 

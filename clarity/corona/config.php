@@ -93,7 +93,7 @@ $server_path = $_SERVER['DOCUMENT_ROOT'] . '/css/dash/esir/';
 
 if ($userid > 0) {
 
-    $assign_cust_sql = mysqli_query($con, "select cust_id,permission from user where id ='" . $userid . "'");
+    $assign_cust_sql = mysqli_query($con, "select cust_id,permission from user where userid ='" . $userid . "'");
     if ($assign_cust_sql_result = mysqli_fetch_assoc($assign_cust_sql)) {
         $assigned_customer = $assign_cust_sql_result['cust_id'];
     }

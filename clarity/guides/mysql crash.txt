@@ -1,0 +1,15 @@
+1st Feb 2024
+8:15:38 PM  [mysql] 	Error: MySQL shutdown unexpectedly.
+8:15:38 PM  [mysql] 	This may be due to a blocked port, missing dependencies, 
+8:15:38 PM  [mysql] 	improper privileges, a crash, or a shutdown by another method.
+8:15:38 PM  [mysql] 	Press the Logs button to view error logs and check
+8:15:38 PM  [mysql] 	the Windows Event Viewer for more clues
+8:15:39 PM  [mysql] 	If you need more help, copy and post this
+8:15:39 PM  [mysql] 	entire log window on the forums
+
+if this comes 
+do steps given on link
+https://stackoverflow.com/questions/18022809/how-can-i-solve-error-mysql-shutdown-unexpectedly
+
+
+before flusing the database

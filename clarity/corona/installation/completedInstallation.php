@@ -50,7 +50,6 @@ $sql_query = "$statement LIMIT $offset, $page_size";
 
 
 <div class="col-12  grid-margin">
-
     <div class="card" id="filter">
         <div class="card-block">
             <form action="<? $_SERVER['PHP_SELF']; ?>" method="POST">

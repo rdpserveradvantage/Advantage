@@ -348,16 +348,22 @@ else if($isVendor==1){
                 <?
 
                 $material_name = $_REQUEST['material'];
-                echo '<div class="pagination"><ul>';
+
+                echo '
+                <div class="dataTables_wrapper form-inline dt-bootstrap no-footer" style="margin: auto;"> 
+                <div class="dataTables_paginate paging_simple_numbers" id="example_paginate"><ul class="pagination">';
+
+
+
                 if ($start_window > 1) {
 
-                    echo "<li><a href='?page=1&&material=$material_name'>First</a></li>";
-                    echo '<li><a href="?page=' . ($start_window - 1) . '&&material=' . $material_name . '">Prev</a></li>';
+                    echo "<li class='paginate_button'><a href='?page=1&&material=$material_name'>First</a></li>";
+                    echo '<li class="paginate_button"><a href="?page=' . ($start_window - 1) . '&&material=' . $material_name . '">Prev</a></li>';
                 }
 
                 for ($i = $start_window; $i <= $end_window; $i++) {
                     ?>
-                    <li class="<? if ($i == $current_page) {
+                    <li class="paginate_button <? if ($i == $current_page) {
                         echo 'active';
                     } ?>">
                         <a href="?page=<?= $i; ?>&&material=<?= $material_name; ?>">
@@ -369,10 +375,10 @@ else if($isVendor==1){
 
                 if ($end_window < $total_pages) {
 
-                    echo '<li><a href="?page=' . ($end_window + 1) . '&&material=' . $material_name . '">Next</a></li>';
-                    echo '<li><a href="?page=' . $total_pages . '&&material=' . $material_name . '">Last</a></li>';
+                    echo '<li class="paginate_button"><a href="?page=' . ($end_window + 1) . '&&material=' . $material_name . '">Next</a></li>';
+                    echo '<li class="paginate_button"><a href="?page=' . $total_pages . '&&material=' . $material_name . '">Last</a></li>';
                 }
-                echo '</ul></div>';
+                echo '</ul></div></div>';
 
 
                 ?>

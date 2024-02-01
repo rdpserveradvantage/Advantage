@@ -377,7 +377,17 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                                     <?php echo $counter; ?>
                                 </th>
                                 <td>
-                                    <input type="checkbox" class="single_site_delegate" value="<?= $id; ?>" />
+<?
+if($isDelegated==1){
+
+}else{
+?>
+                                <input type="checkbox" class="single_site_delegate" value="<?= $id; ?>" />
+<? 
+}
+?>
+
+    
                                 </td>
                                 <td class="strong"> <a href="atmEdit.php?id=<? echo $id; ?>&atmid=<? echo $atmid; ?>"><i
                                             class="mdi mdi-tooltip-edit"></i></a> |
@@ -596,16 +606,20 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
 
 
-            echo '<div class="pagination"><ul>';
+           
+
+            echo '
+            <div class="dataTables_wrapper form-inline dt-bootstrap no-footer" style="margin: auto;"> 
+            <div class="dataTables_paginate paging_simple_numbers" id="example_paginate"><ul class="pagination">';
             if ($start_window > 1) {
 
-                echo "<li><a href='?page=1&&atmid=$atmid&&$customer&&page_size=$page_size&&isDelegated=$    &&isFeasibiltyDone=$isFeasibiltyDone&vendorId=$vendorId'&state='.$state.'>First</a></li>";
-                echo '<li><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '&&customer=' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '&vendorId=' . $vendorId . '&state=' . $state . '">Prev</a></li>';
+                echo "<li class='paginate_button'><a href='?page=1&&atmid=$atmid&&$customer&&page_size=$page_size&&isDelegated=$    &&isFeasibiltyDone=$isFeasibiltyDone&vendorId=$vendorId'&state='.$state.'>First</a></li>";
+                echo '<li class="paginate_button"><a href="?page=' . ($start_window - 1) . '&&atmid=' . $atmid . '&&customer=' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '&vendorId=' . $vendorId . '&state=' . $state . '">Prev</a></li>';
             }
 
             for ($i = $start_window; $i <= $end_window; $i++) {
                 ?>
-                <li class="<? if ($i == $current_page) {
+                <li class="paginate_button <? if ($i == $current_page) {
                     echo 'active';
                 } ?>">
                     <a
@@ -618,10 +632,10 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
             if ($end_window < $total_pages) {
 
-                echo '<li><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '&&customer=' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '&vendorId=' . $vendorId . '&state=' . $state . '">Next</a></li>';
-                echo '<li><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '&&customer' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '&vendorId=' . $vendorId . '&state=' . $state . '">Last</a></li>';
+                echo '<li class="paginate_button"><a href="?page=' . ($end_window + 1) . '&&atmid=' . $atmid . '&&customer=' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '&vendorId=' . $vendorId . '&state=' . $state . '">Next</a></li>';
+                echo '<li class="paginate_button"><a href="?page=' . $total_pages . '&&atmid=' . $atmid . '&&customer' . $customer . '&&page_size=' . $page_size . '&&isDelegated=' . $isDelegated . '&&isFeasibiltyDone=' . $isFeasibiltyDone . '&vendorId=' . $vendorId . '&state=' . $state . '">Last</a></li>';
             }
-            echo '</ul></div>';
+            echo '</ul></div></div>';
 
 
             ?>

@@ -53,7 +53,6 @@ if ($row = mysqli_fetch_assoc($result)) {
 }
 ?>
 
-        
 <div class="col-sm-12" >
     <div class="card">
         <div class="card-block">

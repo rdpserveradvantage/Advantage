@@ -1,4 +1,4 @@
-<? include('../header.php'); 
+<? include('../header.php');
 
 
 $isVendor = $_SESSION['isVendor'];
@@ -6,12 +6,12 @@ $islho = $_SESSION['islho'];
 $ADVANTAGE_level = $_SESSION['ADVANTAGE_level'];
 
 
-if($isVendor==1){
+if ($isVendor == 1) {
     ?>
-<script>
-    window.location.href="/corona/inventory/vendor_materialRequest.php";
-</script>
-    <?
+    <script>
+        window.location.href = "/corona/inventory/vendor_materialRequest.php";
+    </script>
+<?
 }
 
 
@@ -212,18 +212,25 @@ if($isVendor==1){
                             $totalRecords = count($siteids_ar);
                             $totalPages = ceil($totalRecords / $recordsPerPage);
                             ?>
-                            <div class="pagination">
-                                <ul>
-                                    <?php for ($page = 1; $page <= $totalPages; $page++): ?>
-                                        <li class="<?php if ($page == $currentPage)
-                                            echo 'active'; ?>">
-                                            <a href="?page=<?= $page; ?>">
-                                                <?= $page; ?>
-                                            </a>
-                                        </li>
-                                    <?php endfor; ?>
-                                </ul>
+
+
+                            <div class="dataTables_wrapper form-inline dt-bootstrap no-footer" style="margin: auto;">
+                                <div class="dataTables_paginate paging_simple_numbers" id="example_paginate">
+                                    <ul class="pagination">';
+
+
+                                        <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                            <li class="paginate_button <?php if ($page == $currentPage)
+                                                echo 'active'; ?>">
+                                                <a href="?page=<?= $page; ?>">
+                                                    <?= $page; ?>
+                                                </a>
+                                            </li>
+                                        <?php endfor; ?>
+                                    </ul>
+                                </div>
                             </div>
+
 
                             <?php
                         } else {

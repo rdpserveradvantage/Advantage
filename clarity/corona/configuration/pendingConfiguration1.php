@@ -248,17 +248,19 @@
 
                                 $serial_no = $_REQUEST['serial_no'];
                                 $atmid = $_REQUEST['atmid'];
-
-                                echo '<div class="pagination"><ul>';
+                                echo '
+                                <div class="dataTables_wrapper form-inline dt-bootstrap no-footer" style="margin: auto;"> 
+                                <div class="dataTables_paginate paging_simple_numbers" id="example_paginate"><ul class="pagination">';
+            
                                 if ($start_window > 1) {
 
-                                    echo "<li><a href='?page=1&&serial_no=$serial_no&&atmid=$atmid'>First</a></li>";
-                                    echo '<li><a href="?page=' . ($start_window - 1) . '&&serial_no=' . $serial_no . '&&atmid=' . $atmid . '">Prev</a></li>';
+                                    echo "<li class='paginate_button'><a href='?page=1&&serial_no=$serial_no&&atmid=$atmid'>First</a></li>";
+                                    echo '<li class="paginate_button"><a href="?page=' . ($start_window - 1) . '&&serial_no=' . $serial_no . '&&atmid=' . $atmid . '">Prev</a></li>';
                                 }
 
                                 for ($i = $start_window; $i <= $end_window; $i++) {
                                     ?>
-                                    <li class="<? if ($i == $current_page) {
+                                    <li  class="paginate_button <? if ($i == $current_page) {
                                         echo 'active';
                                     } ?>">
                                         <a href="?page=<?= $i; ?>&&serial_no=<?= $serial_no; ?>&&atmid=<?= $atmid; ?>">
@@ -270,8 +272,8 @@
 
                                 if ($end_window < $total_pages) {
 
-                                    echo '<li><a href="?page=' . ($end_window + 1) . '&&serial_no=' . $serial_no . '&&atmid=' . $atmid . '">Next</a></li>';
-                                    echo '<li><a href="?page=' . $total_pages . '&&serial_no=' . $serial_no . '&&atmid=' . $atmid . '">Last</a></li>';
+                                    echo '<li class="paginate_button"><a href="?page=' . ($end_window + 1) . '&&serial_no=' . $serial_no . '&&atmid=' . $atmid . '">Next</a></li>';
+                                    echo '<li class="paginate_button"><a href="?page=' . $total_pages . '&&serial_no=' . $serial_no . '&&atmid=' . $atmid . '">Last</a></li>';
                                 }
                                 echo '</ul></div>';
 

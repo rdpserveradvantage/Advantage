@@ -1,4 +1,16 @@
-<? include('../header.php'); ?>
+<? include('../header.php'); 
+
+
+
+if ($assignedLho) {
+
+    echo 'No permission to access this page !' ; 
+
+}else{
+
+
+
+?>
 <link href="files/assets/pages/jquery.filer/css/jquery.filer.css" type="text/css" rel="stylesheet" />
 <link href="files/assets/pages/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css" type="text/css" rel="stylesheet" />
 
@@ -234,7 +246,13 @@ $inputFileName = $file;
                                       </div>
                                 </div>
  
-<? } ?>
+<? } 
+
+
+
+}
+
+?>
 
                     
                     

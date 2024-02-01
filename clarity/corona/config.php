@@ -10,7 +10,7 @@ $base_url = "http://clarity.advantagesb.com/corona/";
 $host = "10.63.21.6";
 $user = "advantage";
 $pass = "qwerty121";
-$dbname = "test_advantage";
+// $dbname = "test_advantage";
 $dbname = "sarmicrosystems_advantage";
 
 
@@ -43,6 +43,16 @@ $con = getConnectedDatabase();
 
 
 
+if (!function_exists('vendorUsersData')) {
+
+    function vendorUsersData($id,$parameter){
+        global $con;
+            $sql = mysqli_query($con,"select $parameter from vendorUsers where id ='".$id."'");
+            $sql_result = mysqli_fetch_assoc($sql);
+            return $sql_result[$parameter];
+
+    }
+}
 
 if (!function_exists('getVendorName')) {
 
@@ -65,9 +75,11 @@ $_GLOBAL_VENDOR_ID = $_SESSION['vendor_id'];
 $RailTailVendorID = $_GLOBAL_VENDOR_ID;
 $RailTailVendorName = getVendorName($RailTailVendorID);
 
-if ($_GLOBAL_VENDOR_ID != 4) {
+
+
+if($_SESSION['isVendor']==1){
     $_VENDOR_LOGIN = true;
-} else {
+}else {
     $_VENDOR_LOGIN = false;
 
 }
@@ -364,6 +376,11 @@ function getMaterial_requestData($siteid, $parameter)
     $sql = mysqli_query($con, "select $parameter from material_requests where siteid='" . $siteid . "' order by id desc");
     $sql_result = mysqli_fetch_assoc($sql);
     return $sql_result[$parameter];
+}
+
+function engineerESD($siteId, $atmid, $table)
+{
+    logEvent($siteId, $atmid, 'Project', 'Update ASD', 'Engineer Update Actual Schedule Date', $table);
 }
 
 

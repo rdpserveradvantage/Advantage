@@ -1,3 +1,4 @@
+
 <?
 if ($assignedLho) {
     $query = "SELECT  COUNT(s.delegatedToVendorId) AS siteAllocated,  COALESCE(SUM(s.delegatedByVendor = 1), 0) AS assignEngineer, COALESCE(SUM(s.isFeasibiltyDone = 1), 0) AS feasibiltyDone FROM 
@@ -52,7 +53,8 @@ if ($row = mysqli_fetch_assoc($result)) {
 }
 ?>
 
-<div class="col-sm-12">
+        
+<div class="col-sm-12" >
     <div class="card">
         <div class="card-block">
             <div id="chartdivpart4" style="height: 300px; overflow: hidden; text-align: left;"></div>

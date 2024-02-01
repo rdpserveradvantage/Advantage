@@ -1,4 +1,17 @@
-<? include('../header.php'); ?>
+<? include('../header.php'); 
+
+
+if ($assignedLho) {
+
+    echo 'No permission to access this page !' ; 
+
+}else{
+
+
+
+
+
+?>
 
 
 
@@ -112,6 +125,7 @@
                     }
                     echo '</div>
             </div>';
+        }
                     ?>
 
 

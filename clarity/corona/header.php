@@ -85,7 +85,7 @@ if (verifyToken($token) != 1 || $token == 'NA') {
                 </form> -->
               <!-- header.php -->
               <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" id="searchForm">
-                <input type="text" name="atmid" class="form-control" placeholder="Search ATMID" id="atmSearchInput">
+                <input type="text" name="atmid" class="form-control" placeholder="Search ATMID" id="atmSearchInput" style="width:100%;">
               </form>
 
             </li>
@@ -134,12 +134,12 @@ if (verifyToken($token) != 1 || $token == 'NA') {
                 <p class="p-3 mb-0 text-center">See all projects</p>
               </div>
             </li>
-            <li class="nav-item nav-settings d-none d-lg-block">
+            <!-- <li class="nav-item nav-settings d-none d-lg-block">
               <a class="nav-link" href="#">
                 <i class="mdi mdi-view-grid"></i>
               </a>
-            </li>
-            <li class="nav-item dropdown border-left">
+            </li> -->
+            <!-- <li class="nav-item dropdown border-left">
               <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="mdi mdi-email"></i>
@@ -181,7 +181,7 @@ if (verifyToken($token) != 1 || $token == 'NA') {
                 <div class="dropdown-divider"></div>
                 <p class="p-3 mb-0 text-center">4 new messages</p>
               </div>
-            </li>
+            </li> -->
             <li class="nav-item dropdown border-left">
               <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
                 data-bs-toggle="dropdown">

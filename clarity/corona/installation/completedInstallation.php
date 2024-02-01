@@ -6,7 +6,14 @@ if($assignedLho){
     $statement = "select * from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.isDone=1 and a.status=1 and s.LHO like '".$assignedLho."'" ; 
     $sqlappCount = "select count(distinct a.atmid) as totalCount from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.isDone=1 and a.status=1  
     and s.LHO like '".$assignedLho."'";
-}else{
+}
+else if ($_SESSION['isVendor'] == 1 && $_SESSION['PROJECT_level'] != 3) {
+
+    $statement = "select * from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.isDone=1 and a.status=1 and s.delegatedToVendorId like '".$_GLOBAL_VENDOR_ID."'" ; 
+    $sqlappCount = "select count(distinct a.atmid) as totalCount from projectInstallation a INNER JOIN sites s ON a.atmid = s.atmid where a.isDone=1 and a.status=1  
+    and s.delegatedToVendorId like '".$_GLOBAL_VENDOR_ID."'";
+}
+else{
     $statement = "select * from projectInstallation a where a.isDone=1 and a.status=1 "; 
     $sqlappCount = "select count(distinct atmid) as totalCount from projectInstallation where isDone=1 and status=1 ";
 }             

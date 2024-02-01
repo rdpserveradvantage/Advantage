@@ -46,7 +46,7 @@ if ($_SESSION['ADVANTAGE_username']) {
 
 
         <ul class="nav">
-            <li class="nav-item profile">
+            <!-- <li class="nav-item profile">
                 <div class="profile-desc">
                     <div class="profile-pic">
                         <div class="count-indicator">
@@ -98,7 +98,7 @@ if ($_SESSION['ADVANTAGE_username']) {
                         </a>
                     </div>
                 </div>
-            </li>
+            </li> -->
             <li class="nav-item nav-category">
                 <span class="nav-link">Navigation</span>
             </li>

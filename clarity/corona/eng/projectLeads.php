@@ -18,7 +18,7 @@
                     <tbody>
                         <?
                         $i = 1;
-                        echo "select * from assignedInstallation where assignedToId='" . $userid . "' and status=1" ; 
+                        // echo "select * from assignedInstallation where assignedToId='" . $userid . "' and status=1" ; 
                         $sql = mysqli_query($con, "select * from assignedInstallation where assignedToId='" . $userid . "' and status=1");
                         while ($sql_result = mysqli_fetch_assoc($sql)) {
                             $atmid = $sql_result['atmid'];

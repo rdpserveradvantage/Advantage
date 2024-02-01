@@ -16774,6 +16774,7 @@ fieldset:disabled .swal2-modal .swal2-buttonswrapper .swal2-styled,
 }
 
 .modal {
+  font-size: 12px;
   position: fixed;
   top: 0;
   left: 0;

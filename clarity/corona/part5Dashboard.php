@@ -6,23 +6,92 @@
 
         $data = array();
 
-        // Query data from the database for ESD and ASD
-        $sql = mysqli_query($con, "
-SELECT
-DATE(ESD) AS ESD_Date,
-COUNT(1) AS ESD_Count,
-DATE(ASD) AS ASD_Date,
-COUNT(1) AS ASD_Count
-FROM
-sites
-WHERE
-(ESD BETWEEN NOW() - INTERVAL 60 DAY AND NOW() + INTERVAL 60 DAY)
-OR (ASD BETWEEN NOW() - INTERVAL 60 DAY AND NOW() + INTERVAL 60 DAY)
-GROUP BY
-ESD_Date, ASD_Date
-ORDER BY
-ESD_Date, ASD_Date;
-");
+
+        if ($assignedLho) {
+            $sql = mysqli_query($con, "
+                            SELECT
+                            DATE(ESD) AS ESD_Date,
+                            COUNT(1) AS ESD_Count,
+                            DATE(ASD) AS ASD_Date,
+                            COUNT(1) AS ASD_Count
+                            FROM
+                            sites
+                            WHERE
+                            (ESD BETWEEN NOW() - INTERVAL 60 DAY AND NOW() + INTERVAL 60 DAY)
+                            OR (ASD BETWEEN NOW() - INTERVAL 60 DAY AND NOW() + INTERVAL 60 DAY)
+                            and LHO like '" . $assignedLho . "'
+                            GROUP BY
+                            ESD_Date, ASD_Date
+                            ORDER BY
+                            ESD_Date, ASD_Date");
+
+        } else if ($_SESSION['PROJECT_level'] == 3) {
+
+
+            $sql = mysqli_query(
+                $con,
+                "SELECT
+    DATE(a.ESD) AS ESD_Date,
+    COUNT(1) AS ESD_Count,
+    DATE(a.ASD) AS ASD_Date,
+    COUNT(1) AS ASD_Count
+    FROM
+    sites a INNER JOIN delegation b 
+    ON a.id = b.siteid
+    WHERE
+    ((a.ESD BETWEEN NOW() - INTERVAL 60 DAY AND NOW() + INTERVAL 60 DAY)
+    OR (a.ASD BETWEEN NOW() - INTERVAL 60 DAY AND NOW() + INTERVAL 60 DAY))
+    and b.engineerId='" . $userid . "'
+    GROUP BY
+    ESD_Date, ASD_Date
+    ORDER BY
+    ESD_Date, ASD_Date
+    "
+            );
+        } 
+        
+        else if ($_SESSION['isVendor'] == 1 && $_SESSION['PROJECT_level'] != 3) {
+        
+
+            $sql = mysqli_query(
+                $con,
+                "SELECT
+            DATE(a.ESD) AS ESD_Date,
+            COUNT(1) AS ESD_Count,
+            DATE(a.ASD) AS ASD_Date,
+            COUNT(1) AS ASD_Count
+            FROM
+            sites a 
+            WHERE
+            ((a.ESD BETWEEN NOW() - INTERVAL 60 DAY AND NOW() + INTERVAL 60 DAY)
+            OR (a.ASD BETWEEN NOW() - INTERVAL 60 DAY AND NOW() + INTERVAL 60 DAY))
+            and a.delegatedToVendorId='" . $_GLOBAL_VENDOR_ID . "'
+            GROUP BY
+            ESD_Date, ASD_Date
+            ORDER BY
+            ESD_Date, ASD_Date
+            " );
+
+
+        }
+        else {
+            $sql = mysqli_query($con, "
+                            SELECT
+                            DATE(ESD) AS ESD_Date,
+                            COUNT(1) AS ESD_Count,
+                            DATE(ASD) AS ASD_Date,
+                            COUNT(1) AS ASD_Count
+                            FROM
+                            sites
+                            WHERE
+                            (ESD BETWEEN NOW() - INTERVAL 60 DAY AND NOW() + INTERVAL 60 DAY)
+                            OR (ASD BETWEEN NOW() - INTERVAL 60 DAY AND NOW() + INTERVAL 60 DAY)
+                            GROUP BY
+                            ESD_Date, ASD_Date
+                            ORDER BY
+                            ESD_Date, ASD_Date");
+
+        }
 
         while ($sql_result = mysqli_fetch_assoc($sql)) {
             $data[] = array(
@@ -110,7 +179,12 @@ ESD_Date, ASD_Date;
 
                         <?
                         $i = 1;
-                        $sql = mysqli_query($con, "select * from lho where status=1");
+                        if ($assignedLho) {
+                            $sql = mysqli_query($con, "select * from lho where status=1 and lho like '" . $assignedLho . "'");
+                        } else {
+                            $sql = mysqli_query($con, "select * from lho where status=1");
+                        }
+
                         while ($sql_result = mysqli_fetch_assoc($sql)) {
 
                             $lho = $sql_result['lho'];

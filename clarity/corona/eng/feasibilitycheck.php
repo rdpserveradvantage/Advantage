@@ -90,8 +90,7 @@
         <h3>Feasibility Check</h3>
         <form id="feasibilityForm" enctype="multipart/form-data">
             <input type="hidden" name="userid" value="<? echo $userid; ?>" />
-            <!--<form method="POST" action="./API/feasibilitycheck.php" enctype="multipart/form-data" >-->
-
+            
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -782,7 +781,7 @@
                     // AJAX request to fetch ATM details
                     $.ajax({
 
-                        url: "http://advantage.advantagesb.com/API/getATMIDInfo.php?ATMID1=" + atmID,
+                        url: "../admin/API/getATMIDInfo.php?ATMID1=" + atmID,
                         type: "GET",
                         dataType: "json",
                         success: function (response) {

@@ -32,7 +32,7 @@
                 <br>
                 <div class="col" style="display:flex;justify-content:center;">
                     <input type="submit" name="submit" value="Filter" class="btn btn-primary">
-                    <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
+                    <!-- <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a> -->
                 </div>
 
             </form>

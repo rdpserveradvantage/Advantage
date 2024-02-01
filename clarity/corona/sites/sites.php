@@ -1,7 +1,6 @@
 <?php include('../header.php'); ?>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 
 <?
@@ -109,7 +108,7 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                         <div class="col-md-2">
                             <label>Feasibilty Done</label>
                             <select name="isFeasibiltyDone" class="form-control">
-                                <option value="">Select</option>
+                                <option value=""> -- Select --</option>
                                 <option value="1" <? if (isset($isFeasibiltyDonefilter) && $isFeasibiltyDonefilter == 1) {
                                     echo 'selected';
                                 } ?>>Yes</option>

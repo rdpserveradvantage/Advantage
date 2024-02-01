@@ -9,8 +9,6 @@
 $isVendor = $_SESSION['isVendor'];
 $islho = $_SESSION['islho'];
 
-
-
 if($isVendor==1){
     
     ?>
@@ -113,9 +111,10 @@ if($isVendor==1){
                             <tr class="table-primary">
                                 <th>SR no</th>
                                 <th>Name</th>
-                                <th>Desgination</th>
                                 <th>Username</th>
                                 <th>Contact No.</th>
+                                <th>Designation</th>
+                                <th>Contractor</th>
                                 <th>Status</th>
                                 <th>Edit</th>
                                 <th>Active / Inactive</th>
@@ -130,6 +129,8 @@ if($isVendor==1){
                                 $status_class = ($sql_result['user_status'] == 0) ? 'text-danger' : 'text-success';
 
                                 $level = $sql_result['level'];
+                                $vendor_id = $sql_result['vendorid'];
+                                $vendorName = getVendorName($vendor_id) ; 
                                 $designation = '';
 
                                 if ($level == 1) {
@@ -148,15 +149,17 @@ if($isVendor==1){
                                     <td class="strong">
                                         <?= $sql_result['name']; ?>
                                     </td>
-                                    <td>
-                                        <?= $designation; ?>
-                                    </td>
+                                    
                                     <td style="text-transform: initial;">
                                         <?= $sql_result['uname']; ?>
                                     </td>
                                     <td style="text-transform: initial;">
                                         <?= $sql_result['contact']; ?>
                                     </td>
+                                    <td>
+                                        <?= $designation; ?>
+                                    </td>
+                                    <td><?= $vendorName ; ?></td>
                                     <td class="<?= $status_class; ?>">
                                         <?= $user_status; ?>
                                     </td>
@@ -195,7 +198,7 @@ if($isVendor==1){
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabel">New message</h5>
+                <h5 class="modal-title" id="ModalLabel">Edit - User</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -321,6 +324,7 @@ if($isVendor==1){
                             <ul style="overflow: scroll; max-height: 500px;">
                                 <?php
                                 $statusColumn = 'status';
+                                echo "select * from main_menu where $statusColumn=1" ; 
                                 $mainsql = mysqli_query($con, "select * from main_menu where $statusColumn=1");
                                 while ($mainsql_result = mysqli_fetch_assoc($mainsql)) {
                                     $main_id = $mainsql_result['id'];
@@ -368,7 +372,7 @@ if($isVendor==1){
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabel">New message</h5>
+                <h5 class="modal-title" id="ModalLabel">Edit - User</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>

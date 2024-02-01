@@ -1,6 +1,14 @@
 <? include('../header.php'); 
 
 
+if ($assignedLho) {
+
+    echo 'No permission to access this page !' ; 
+
+}else{
+
+
+
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
@@ -185,7 +193,10 @@
 </div>
 
 
-<? include('../footer.php'); ?>
+<? 
+
+            }
+include('../footer.php'); ?>
 
 <!-- <script src="files/assets/pages/jquery.filer/js/jquery.filer.min.js"></script>
 <script src="files/assets/pages/filer/custom-filer.js" type="text/javascript"></script>

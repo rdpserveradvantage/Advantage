@@ -1,6 +1,24 @@
-<? include('../header.php'); ?>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<? include('../header.php'); 
+
+
+if ($_SESSION['PROJECT_level'] == 3) {
+?>
+<script>
+    window.location.href="/corona/eng/faultyMaterial.php";
+</script>
+<?
+}
+else if ($_SESSION['isVendor'] == 1 && $_SESSION['PROJECT_level'] != 3) {
+?>
+<script>
+    window.location.href="/corona/contractor/faultyMaterial.php";
+</script>
+<?
+}
+
+
+?>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <div class="row">
 

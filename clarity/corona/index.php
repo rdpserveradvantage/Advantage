@@ -1,11 +1,13 @@
-<?php include('header.php');?>
+<?php include('header.php'); ?>
+
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+
 
 
 <?php include('part1dashboard.php');?>
@@ -22,7 +24,7 @@
 
 
             
-
+<!-- 
             <div class="row">
               <div class="col-sm-4 grid-margin">
                 <div class="card">
@@ -223,6 +225,8 @@
                 </div>
               </div>
             </div>
+
+
             <div class="row">
               <div class="col-md-6 col-xl-4 grid-margin stretch-card">
                 <div class="card">
@@ -383,5 +387,5 @@
                 </div>
               </div>
             </div>
-          
+           -->
             <?php include('footer.php');?>

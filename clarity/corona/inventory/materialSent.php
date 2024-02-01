@@ -1,4 +1,22 @@
-<? include('../header.php'); ?>
+<? include('../header.php');
+
+
+$isVendor = $_SESSION['isVendor'];
+$islho = $_SESSION['islho'];
+$ADVANTAGE_level = $_SESSION['ADVANTAGE_level'];
+
+
+if($isVendor==1){
+    ?>
+<script>
+    window.location.href="/corona/inventory/vendor_materialSent.php";
+</script>
+    <?
+}
+
+
+
+?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 

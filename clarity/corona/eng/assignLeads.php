@@ -62,9 +62,9 @@
 
                                                                     if ($isFeasibiltyDone == 1) {
                                                                         echo 'Feasibility Done!';
-                                                                    } elseif ($isFeasibiltyDone == 0 && $esd=='0000-00-00 00:00:00') {
+                                                                    } elseif ($isFeasibiltyDone == 0 && $esd=='0000-00-00 00:00:00' || $esd=='' ) {
                                                                         echo 'Put ESD';
-                                                                    } elseif ($isFeasibiltyDone == 0 && $asd=='0000-00-00 00:00:00' && $esd!='0000-00-00 00:00:00') {
+                                                                    } elseif ($isFeasibiltyDone == 0 && $asd=='0000-00-00 00:00:00' && $esd!='0000-00-00 00:00:00' || $asd=='') {
                                                                         echo 'PUT ASD';
                                                                     } elseif ($esd !='0000-00-00 00:00:00' && $isFeasibiltyDone == 0) {
                                                                         echo '<a href="feasibilitycheck.php?siteid=' . $siteid . '" target="_blank">Check Feasibility</a>';
@@ -79,22 +79,23 @@
                                                             <button type="button" class="esd-link btn btn-primary" data-bs-toggle="modal"
                                                                 data-bs-target="#esd-link-modal" data-act="add"
                                                                 data-value="<?= $id; ?>"
-                                                                data-siteid="<?php echo $siteid; ?>" data-atmid="<?php echo $atmid; ?>" <? if ($isFeasibiltyDone == 1 || $esd!='0000-00-00 00:00:00') { echo 'disabled'; } ?>>
+                                                                data-siteid="<?php echo $siteid; ?>" data-atmid="<?php echo $atmid; ?>" <? if ($isFeasibiltyDone == 1 || $esd!='0000-00-00 00:00:00' && $esd!='') { echo 'disabled'; } ?>>
                                                                 &nbsp; ETA
+
                                                             </button>
                                                                 <? 
-                                                                if($esd!='0000-00-00 00:00:00'){
+                                                                if($esd!='0000-00-00 00:00:00' || $esd==''){
                                                                         echo $esd ;                                                                    
                                                                 }
 
-                                                                if($esd!='0000-00-00 00:00:00'){
+                                                                if($esd!='0000-00-00 00:00:00' || $asd==''){
                                                                     ?>
                                                                 |   
                                                                 
                                                             <button type="button" class="asd-link btn btn-primary" data-bs-toggle="modal"
                                                                 data-bs-target="#asd-link-modal" data-act="add"
                                                                 data-value="<?= $id; ?>"
-                                                                data-siteid="<?php echo $siteid; ?>" data-atmid="<?php echo $atmid; ?>" <? if ($isFeasibiltyDone == 1 || $asd!='0000-00-00 00:00:00') { echo 'disabled'; } ?>>
+                                                                data-siteid="<?php echo $siteid; ?>" data-atmid="<?php echo $atmid; ?>" <? if ($isFeasibiltyDone == 1 || $asd!='0000-00-00 00:00:00' &&  $asd!='') { echo 'disabled'; } ?>>
                                                                 &nbsp; ATT
                                                             </button>
 
@@ -218,6 +219,7 @@ $(document).ready(function () {
     'type': 'ESD' // Specify the type as ASD
   },
   success: function(response) {
+    console.log(response)
 
     var jsonResponse = JSON.parse(response);
 

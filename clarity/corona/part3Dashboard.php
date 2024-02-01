@@ -2,7 +2,22 @@
 if($assignedLho){
 $query = "SELECT v.id,v.vendorName, COUNT(s.delegatedToVendorId) AS siteAllocated,  COALESCE(SUM(s.delegatedByVendor = 1), 0) AS assignEngineer, COALESCE(SUM(s.isFeasibiltyDone = 1), 0) AS feasibiltyDone FROM vendor v
           INNER JOIN sites s ON v.id = s.delegatedToVendorId where v.status=1  and s.LHO like '".$assignedLho."' GROUP BY v.id";
-}else{
+}
+else if ($_SESSION['isVendor'] == 1 && $_SESSION['PROJECT_level'] != 3) {
+
+
+    
+$query = "SELECT v.id,v.vendorName, COUNT(s.delegatedToVendorId) AS siteAllocated, 
+COALESCE(SUM(s.delegatedByVendor = 1), 0) AS assignEngineer,
+COALESCE(SUM(s.isFeasibiltyDone = 1), 0) AS feasibiltyDone
+FROM vendor v
+LEFT JOIN sites s ON v.id = s.delegatedToVendorId
+where v.id = '".$RailTailVendorID."'
+GROUP BY v.id";
+
+
+}
+else{
 $query = "SELECT v.id,v.vendorName, COUNT(s.delegatedToVendorId) AS siteAllocated,  COALESCE(SUM(s.delegatedByVendor = 1), 0) AS assignEngineer, COALESCE(SUM(s.isFeasibiltyDone = 1), 0) AS feasibiltyDone FROM vendor v
       INNER JOIN sites s ON v.id = s.delegatedToVendorId where v.status=1 GROUP BY v.id";
 }

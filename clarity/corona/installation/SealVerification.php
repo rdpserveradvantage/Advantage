@@ -1,4 +1,15 @@
-<? include('../header.php'); ?>
+<? include('../header.php'); 
+
+
+if ($assignedLho) {
+
+    echo 'No permission to access this page !' ; 
+
+}else{
+
+
+
+?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
 <style>
@@ -40,7 +51,7 @@
                     $start_window = max(1, $current_page - floor($window_size / 2));
                     $end_window = min($start_window + $window_size - 1, $total_pages);
                     $sql_query = "$statement LIMIT $offset, $page_size";
-// echo $statement ; 
+
 
 
                     ?>
@@ -56,8 +67,7 @@
                                     <div class="col-sm-12">
                                         <br />
                                         <input type="submit" name="submit" class="btn btn-primary">
-                                        <a class="btn btn-warning" id="hide_filter" style="color:white;margin:auto 10px;">Hide Filters</a>
-
+                                        
                                     </div>
 
                                 </div>
@@ -65,8 +75,6 @@
                         </div>
                     </div>
                     <div class="card">
-                        <a class="btn btn-warning" id="show_filter" style="color:white;margin:auto 10px;">Show
-                            Filters</a>
                         <div class="card-header">
                             <h5>Total Records: <strong class="record-count">
                                     <?= $total_records; ?>
@@ -217,6 +225,7 @@
 
     viewImagesBtns.forEach(btn => {
         btn.addEventListener('click', function() {
+
             const id = this.dataset.id;
             const atmid = this.dataset.atmid;
             atmIdSpan.textContent = atmid;
@@ -262,4 +271,6 @@
 </script>
 
 
-<? include('../footer.php'); ?>
+<? 
+}
+include('../footer.php'); ?>

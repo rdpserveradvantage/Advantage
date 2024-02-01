@@ -37,7 +37,7 @@
                                     <?
                                     $sql = mysqli_query($con, "select * from user where user_status=1 and vendorId='" . $RailTailVendorID . "' and level=2");
                                     while ($sql_result = mysqli_fetch_assoc($sql)) {
-                                        $projectExecutiveId = $sql_result['id'];
+                                        $projectExecutiveId = $sql_result['userid'];
                                         $projectExecutiveName = $sql_result['name'];
                                         ?>
                                         <option value="<? echo $projectExecutiveId; ?>">
@@ -95,7 +95,7 @@
                                                         <?
                                                         $sql = mysqli_query($con,"select * from user where user_status=1 and vendorId='".$RailTailVendorID."' and level=2");
                                                         while($sql_result = mysqli_fetch_assoc($sql)){
-                                                        $projectExecutiveId = $sql_result['id'];
+                                                        $projectExecutiveId = $sql_result['userid'];
                                                         $projectExecutiveName = $sql_result['name'];
                                                         ?>
                                                         <option value="<? echo $projectExecutiveId; ?>">
@@ -141,7 +141,7 @@
                                                         <?
                                                         $sql = mysqli_query($con,"select * from user where user_status=1 and vendorId='".$RailTailVendorID."' and level=3");
                                                         while($sql_result = mysqli_fetch_assoc($sql)){
-                                                        $engineerid = $sql_result['id'];
+                                                        $engineerid = $sql_result['userid'];
                                                         $name = $sql_result['name'];
                                                         ?>
                                                         <option value="<? echo $engineerid; ?>">

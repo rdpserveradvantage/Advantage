@@ -11,7 +11,7 @@
 
 // if (isset($_REQUEST['submit']) || isset($_GET['page'])) {
 
-        
+
 // echo '<pre>';
 // print_r($_SESSION);
 // echo '</pre>';
@@ -21,31 +21,31 @@ $isVendor = $_SESSION['isVendor'];
 $islho = $_SESSION['islho'];
 $ADVANTAGE_level = $_SESSION['ADVANTAGE_level'];
 
-if($islho==0 && $isVendor==0){
+if ($islho == 0 && $isVendor == 0) {
     ?>
-<script>
-    window.location.href="/corona/sites/sites.php";
-</script>
-    <?
+    <script>
+        window.location.href = "/corona/sites/sites.php";
+    </script>
+<?
     // header('Location: /');
-        // exit;
-        
-}else if($ADVANTAGE_level==3){
+    // exit;
+
+} else if ($ADVANTAGE_level == 3) {
     ?>
-<script>
-    window.location.href="/corona/sites/engsites.php";
-</script>
-    <?
+        <script>
+            window.location.href = "/corona/sites/engsites.php";
+        </script>
+<?
 }
 
 
-    function getBranchName($id)
-    {
-        global $con;
-        $sql = mysqli_query($con, "select * from mis_city where id='" . $id . "'");
-        $sql_result = mysqli_fetch_assoc($sql);
-        return $sql_result['city'];
-    }
+function getBranchName($id)
+{
+    global $con;
+    $sql = mysqli_query($con, "select * from mis_city where id='" . $id . "'");
+    $sql_result = mysqli_fetch_assoc($sql);
+    return $sql_result['city'];
+}
 
 
 
@@ -60,22 +60,30 @@ a.isFeasibiltyDone,a.latitude,a.longitude,a.verificationStatus,a.delegatedtoVend
                                ";
 
 
-if ($_VENDOR_LOGIN) {
+ 
+                               if ($_VENDOR_LOGIN) {
     // echo 'vendor';
-    
-    $sqlappCount .=" INNER JOIN vendorsitesdelegation b
-    ON a.id = b.siteid " ;
+
+    $sqlappCount .= " INNER JOIN vendorsitesdelegation b
+    ON a.id = b.siteid and b.vendorid = '".$_GLOBAL_VENDOR_ID."'";
     $atm_sql .= " INNER JOIN vendorsitesdelegation b
                                 ON a.id = b.siteid
+                                and b.vendorid = '".$_GLOBAL_VENDOR_ID."'
+
                                 ";
 } else {
     // echo 'advantage';
+
+    $sqlappCount .= " INNER JOIN lhositesdelegation b
+    ON a.id = b.siteid  
+    and a.LHO like '".$assignedLho."'
     
-    $sqlappCount .=" INNER JOIN lhositesdelegation b
-    ON a.id = b.siteid  " ;
+    ";
 
     $atm_sql .= " INNER JOIN lhositesdelegation b
-                                ON a.id = b.siteid ";
+                                ON a.id = b.siteid 
+                                and a.LHO like '".$assignedLho."'
+                                ";
 
 
 }
@@ -137,7 +145,7 @@ if ($assignedLho) {
 $atm_sql .= "and a.status=1 and b.isPending=0 order by a.id desc";
 $sqlappCount .= "and a.status=1 and b.isPending=0  ";
 
-// echo $sqlappCount ; 
+// echo $sqlappCount;
 $page_size = 20;
 $result = mysqli_query($con, $sqlappCount);
 $row = mysqli_fetch_assoc($result);
@@ -272,6 +280,8 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
         </div>
     </div>
 
+
+
     <div class="col-12  grid-margin">
 
 
@@ -288,7 +298,9 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                     <input type="submit" name="exportsites" class="btn btn-primary" value="Export">
                 </form>
 
-                <!-- <form id="submitForm" class="<? if($islho==1) { echo 'displayNone'; } ?>">
+                <!-- <form id="submitForm" class="<? if ($islho == 1) {
+                    echo 'displayNone';
+                } ?>">
                     <button type="submit">Bulk Delegate</button>
                 </form> -->
 
@@ -305,8 +317,12 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                         <tr class="table-primary">
                             <th>#</th>
                             <th>atmid </th>
-                            <th class="<? if($islho==1) { echo 'displayNone'; } ?>">Delegation</th>
-                            <th class="<? if($islho==1) { echo 'displayNone'; } ?>">Delegated To</th>
+                            <th class="<? if ($islho == 1) {
+                                echo 'displayNone';
+                            } ?>">Delegation</th>
+                            <th class="<? if ($islho == 1) {
+                                echo 'displayNone';
+                            } ?>">Delegated To</th>
                             <th>History</th>
                             <th>Current Status</th>
                             <th>Assign</th>
@@ -420,7 +436,7 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                             $sql22 = "SELECT a.atmid, a.siteid, MAX(a.created_at) as latest_created_at, MAX(a.isSentToEngineer) as isSentToEngineer,
                             MAX(a.isDone) as isDone, MAX(b.assignedToId) as assignedToId, MAX(b.assignedToName) as assignedToName FROM projectInstallation a
                             LEFT JOIN assignedInstallation b ON a.siteid = b.siteid AND a.atmid = b.atmid WHERE a.vendor = '" . $RailTailVendorID . "' AND a.status = 1 
-                            and a.atmid='".$atmid."'
+                            and a.atmid='" . $atmid . "'
                             GROUP BY a.atmid, a.siteid";
                             $result22 = mysqli_query($con, $sql22);
                             $row22 = mysqli_fetch_assoc($result22);
@@ -432,7 +448,7 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
 
 
-// echo ' $isDelegated' .  $isDelegated ; 
+                            // echo ' $isDelegated' .  $isDelegated ; 
                             ?>
 
                             <tr>
@@ -443,7 +459,9 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                                             class="mdi mdi-tooltip-edit"></i></a> |
                                     <? echo $atmid; ?>
                                 </td>
-                                <td class="<? if($islho==1) { echo 'displayNone'; } ?>">
+                                <td class="<? if ($islho == 1) {
+                                    echo 'displayNone';
+                                } ?>">
                                     <?php
 
                                     if ($isFeasibiltyDoneRecord) {
@@ -459,7 +477,9 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                                     ?>
                                 </td>
 
-                                <td class="<? if($islho==1) { echo 'displayNone'; } ?>">
+                                <td class="<? if ($islho == 1) {
+                                    echo 'displayNone';
+                                } ?>">
                                     <?
                                     if ($isDelegated == 1) {
 
@@ -478,9 +498,6 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
                                     <a href="#" data-bs-toggle="modal" class="history-link" data-bs-target="#historyModal"
                                         data-act="add" data-siteid="<?php echo $id; ?>">History</a>
-
-
-
                                 </td>
                                 <td>
                                     <?
@@ -497,7 +514,7 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
                                     );
 
                                     echo ' | <strong style="    color: #01a9ac;box-shadow: 1px 1px 1px 1px gray;
-    padding: 4px;">' . $lastUpdate . '</strong>';
+                                            padding: 4px;">' . $lastUpdate . '</strong>';
 
                                     ?>
                                 </td>
@@ -505,20 +522,20 @@ $sql_query = "$atm_sql LIMIT $offset, $page_size";
 
 
                                 <td>
-                                                <?
-                                                if ($isDone == 1) {
-                                                    echo 'Installation Done !';
-                                                } else {
-                                                    if ($isSentToEngineer == 1 && $isFeasibiltyDoneRecord) {
-                                                        echo 'Assigned to <strong>' . $assignedToName . '</strong>';
-                                                    } else if($isFeasibiltyDoneRecord) {
-                                                        echo '<a href="assignProjectInstallation.php?id=' . $projectinstallationID . '&siteid=' . $id . '&atmid=' . $atmid . '">Assigned to Engineer</a>';
-                                                    }else{
-                                                        echo '-';
-                                                    }
-                                                }
-                                                ?>
-                                            </td>
+                                    <?
+                                    if ($isDone == 1) {
+                                        echo 'Installation Done !';
+                                    } else {
+                                        if ($isSentToEngineer == 1 && $isFeasibiltyDoneRecord) {
+                                            echo 'Assigned to <strong>' . $assignedToName . '</strong>';
+                                        } else if ($isFeasibiltyDoneRecord) {
+                                            echo '<a href="assignProjectInstallation.php?id=' . $projectinstallationID . '&siteid=' . $id . '&atmid=' . $atmid . '">Assigned to Engineer</a>';
+                                        } else {
+                                            echo '-';
+                                        }
+                                    }
+                                    ?>
+                                </td>
 
 
 

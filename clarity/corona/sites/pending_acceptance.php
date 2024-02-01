@@ -1,4 +1,10 @@
-<? include('../header.php'); ?>
+<? include('../header.php'); 
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+?>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -11,6 +17,7 @@
 
 
 
+
     $vendor_id = $_SESSION['vendor_id'];
     $isVendor = $_SESSION['isVendor'];
 
@@ -20,12 +27,12 @@
 
 
 
-
     if ($assignedLho) {
         if ($ADVANTAGE_level == 2 || $ADVANTAGE_level == 5) {
             $atm_sql .= "and a.LHO = '" . $assignedLho . "' ";
             $sqlappCount .= "and a.LHO= '" . $assignedLho . "' ";
         }
+
         $sql = mysqli_query($con, "select * from lhositesdelegation where isPending=1 and lhoName='" . $assignedLho . "'");
         $numRows = mysqli_num_rows($sql);
         $__LHO = true;
